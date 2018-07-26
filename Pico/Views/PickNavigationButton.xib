@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="PickNavigationButton" customModule="Pico" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="77" height="34"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xsr-6g-XlY">
+                    <rect key="frame" x="0.0" y="6.5" width="52" height="21"/>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="angle-down-solid" translatesAutoresizingMaskIntoConstraints="NO" id="9f4-la-owv">
+                    <rect key="frame" x="53" y="8.5" width="24" height="17"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="17" id="XxP-Ux-mj6"/>
+                        <constraint firstAttribute="width" constant="24" id="iji-fY-OkX"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="Xsr-6g-XlY" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="F6h-wk-hw5"/>
+                <constraint firstItem="9f4-la-owv" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="GXr-Lk-jlE"/>
+                <constraint firstItem="Xsr-6g-XlY" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="JxF-aq-RHY"/>
+                <constraint firstItem="9f4-la-owv" firstAttribute="leading" secondItem="Xsr-6g-XlY" secondAttribute="trailing" constant="1" id="Kha-qP-ctO"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="Xsr-6g-XlY" secondAttribute="bottom" constant="6.5" id="Mch-7N-PCw"/>
+                <constraint firstItem="Xsr-6g-XlY" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="byz-Bh-7RD"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="9f4-la-owv" secondAttribute="trailing" id="cDK-Vl-cCk"/>
+                <constraint firstItem="Xsr-6g-XlY" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="sSi-bG-qKP"/>
+                <constraint firstItem="9f4-la-owv" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="w6c-df-BTP"/>
+                <constraint firstItem="Xsr-6g-XlY" firstAttribute="centerY" secondItem="9f4-la-owv" secondAttribute="centerY" id="zwB-Y8-NKT"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="arrow" destination="9f4-la-owv" id="aod-mn-SYv"/>
+                <outlet property="title" destination="Xsr-6g-XlY" id="93q-Ju-LTw"/>
+            </connections>
+            <point key="canvasLocation" x="-235.5" y="24"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="angle-down-solid" width="12" height="8"/>
+    </resources>
+</document>
