@@ -45,8 +45,7 @@ class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibrary
     @objc func onClickSelectAlbum(_ sender: PickNavigationButton) {
         if let scrollUpAnimation = scrollUpAnimation, let scrollDownAnimation = scrollDownAnimation, scrollUpAnimation.state == .active || scrollDownAnimation.state == .active  {
             return
-        }
-        
+        }        
         
         pickNavigationButton.toggle(sender)
         if (pickNavigationButton.isSelected) {
@@ -113,7 +112,7 @@ class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibrary
         }
     }
     
-    func onImageSelected(selectedImages: [Image]) {
+    fileprivate func updateTabbarItems(_ selectedImages: [Image]) {
         let enabled = selectedImages.count > 1
         cancelItem.isEnabled = enabled
         doneItem.isEnabled = enabled
@@ -122,7 +121,7 @@ class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibrary
             let firstSize = selectedImages.first!
             let equalLength = selectedImages[1..<selectedImages.count].filter{
                 $0.asset.pixelHeight != firstSize.asset.pixelHeight && $0.asset.pixelWidth != firstSize.asset.pixelWidth
-            }.isEmpty
+                }.isEmpty
             
             longScreenShotItem.isEnabled = equalLength
             movieItem.isEnabled = equalLength
@@ -130,6 +129,10 @@ class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibrary
             longScreenShotItem.isEnabled = false
             movieItem.isEnabled = false
         }
+    }
+    
+    func onImageSelected(selectedImages: [Image]) {
+        updateTabbarItems(selectedImages)
     }
     
     @IBAction func onDone(_ sender: UIBarButtonItem) {
@@ -168,10 +171,8 @@ class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibrary
     @IBAction func onClickCanncel(_ sender: UIBarButtonItem) {
         imageGallery.resetSelection()
         sender.isEnabled = false
+        updateTabbarItems(imageGallery.selectImages)
     }
     
 
-    @IBAction func onLongScreenshotClick(_ sender: UIBarButtonItem) {
-    }
-    
 }

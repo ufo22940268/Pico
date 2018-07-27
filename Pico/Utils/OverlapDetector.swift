@@ -124,13 +124,21 @@ class OverlapDetector {
         try! VNImageRequestHandler(cgImage: downImage.cgImage!, options: [:]).perform([downRectReqeust])
 
         group.notify(queue: .global()) {
-            completeHandler(upRect.toRect(size: self.upImage.size), downRect.toRect(size: self.upImage.size))
+            if upRect == nil || downRect == nil {
+                completeHandler(CGRect.zero, CGRect.zero)
+            } else {
+                completeHandler(upRect.toRect(size: self.upImage.size), downRect.toRect(size: self.upImage.size))
+            }
         }
     }
 
     func getMiddleIntersection(completeHandler: @escaping (CGFloat, CGFloat) -> Void) {
         let handleRectangle = {(upRect: CGRect, downRect: CGRect) in
             print(upRect, downRect)
+            guard upRect != CGRect.zero && downRect != CGRect.zero else {
+                completeHandler(0, 0)
+                return
+            }
             
             var upRectInCGImage = upRect
             upRectInCGImage.origin.y = self.upImage.size.height - upRectInCGImage.maxY

@@ -27,17 +27,14 @@
                                 <constraint firstAttribute="height" constant="2" id="40M-qk-jNW"/>
                             </constraints>
                         </view>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8ER-9v-Fki">
-                            <rect key="frame" x="158" y="3.5" width="60" height="23"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8ER-9v-Fki">
+                            <rect key="frame" x="158.5" y="4" width="60" height="23"/>
                             <color key="backgroundColor" red="0.18823529411764706" green="0.51372549019607838" blue="0.98431372549019602" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="23" id="QG5-P5-P93"/>
                                 <constraint firstAttribute="width" constant="60" id="feR-4C-aMD"/>
                             </constraints>
-                            <state key="normal" image="seperator-edit">
-                                <color key="titleColor" red="1" green="0.21595210109999999" blue="0.14619663590000001" alpha="1" colorSpace="calibratedRGB"/>
-                            </state>
-                            <state key="selected" image="check-solid"/>
+                            <state key="normal" image="seperator-edit"/>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="string" keyPath="layer.borderWidth" value="0"/>
                                 <userDefinedRuntimeAttribute type="string" keyPath="layer.cornerRadius" value="11.5"/>

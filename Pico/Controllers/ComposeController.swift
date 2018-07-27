@@ -174,8 +174,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         let topDistance = topConstraint.constant
         let bottomDistance = bottomConstraint.constant
         
-        print("container.frame.height", container.frame.height)
-        print("scroll.frame.height", scroll.frame.height)
         var topInset = CGFloat(0)
         var bottomInset = CGFloat(0)
         if container.frame.height < scroll.frame.height {
@@ -185,15 +183,17 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             } else {
                 topInset = topDistance - halfGap
             }
-            
+
             if bottomDistance < halfGap {
                 bottomConstraint.constant = halfGap
             } else {
                 bottomInset = bottomDistance - halfGap
             }
+        } else {
+            topInset = topDistance
+            bottomInset = bottomDistance
         }
         
-        print(topDistance, bottomDistance)
         scroll.contentInset = UIEdgeInsets(top: -topInset, left: 0, bottom: -bottomInset, right: 0)
     }
     
@@ -241,7 +241,7 @@ extension ComposeController {
     func scaleContainerWrapper(scale: CGFloat) {
         containerWrapperWidthConstraint  = containerWrapperWidthConstraint.setMultiplier(multiplier: containerWrapperWidthConstraint.multiplier * scale)
     }
-        
+    
     @IBAction func onPinchComposeView(_ gestureRecognizer: UIPinchGestureRecognizer) {
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
             let maxScale = maxContainerWidth/containerWrapper.frame.width
