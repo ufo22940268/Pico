@@ -231,9 +231,6 @@
                                     <constraint firstItem="FDD-5R-i7y" firstAttribute="centerX" secondItem="Qfn-Hc-ipw" secondAttribute="centerX" id="bkM-s9-ajj"/>
                                     <constraint firstItem="FDD-5R-i7y" firstAttribute="top" secondItem="Qfn-Hc-ipw" secondAttribute="top" id="gGw-MB-a4S"/>
                                 </constraints>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="H0q-bK-fIP" appends="YES" id="iXk-xO-t8c"/>
-                                </connections>
                             </scrollView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="479-VI-HKL">
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
@@ -284,11 +281,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gbj-Ks-Iyi" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer numberOfTapsRequired="2" id="H0q-bK-fIP">
-                    <connections>
-                        <action selector="onToggleZoom:" destination="h2r-xB-xzJ" id="ULn-H0-HEL"/>
-                    </connections>
-                </tapGestureRecognizer>
                 <panGestureRecognizer enabled="NO" minimumNumberOfTouches="1" id="rOY-HI-ftD">
                     <connections>
                         <action selector="onScroll:" destination="h2r-xB-xzJ" id="wTo-pY-uEq"/>
@@ -583,7 +575,7 @@
         <image name="user-edit-solid" width="24" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="OtZ-v7-gqU"/>
+        <segue reference="fvF-Lz-IAD"/>
         <segue reference="oka-ze-DW4"/>
     </inferredMetricsTieBreakers>
 </document>

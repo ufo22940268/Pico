@@ -89,11 +89,13 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         default:
             self.navigationItem.title = "竖向拼接"
         }
+        
+        container.layoutIfNeeded()
+        self.resetGapToContainer()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         if loadedImages == nil {
             self.configureUIImages([UIImage(named: "short"), UIImage(named: "short2")])
@@ -169,16 +171,30 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     }
 
     fileprivate func resetGapToContainer() {
-        var topDistance = topConstraint.constant
-        var bottomDistance = bottomConstraint.constant
+        let topDistance = topConstraint.constant
+        let bottomDistance = bottomConstraint.constant
         
+        print("container.frame.height", container.frame.height)
+        print("scroll.frame.height", scroll.frame.height)
+        var topInset = CGFloat(0)
+        var bottomInset = CGFloat(0)
         if container.frame.height < scroll.frame.height {
             let halfGap = (scroll.frame.height - container.frame.height)/2
-            topDistance = topDistance - halfGap
-            bottomDistance = bottomDistance - halfGap
+            if topDistance < halfGap {
+                topConstraint.constant = halfGap
+            } else {
+                topInset = topDistance - halfGap
+            }
+            
+            if bottomDistance < halfGap {
+                bottomConstraint.constant = halfGap
+            } else {
+                bottomInset = bottomDistance - halfGap
+            }
         }
         
-        scroll.contentInset = UIEdgeInsets(top: -topDistance, left: 0, bottom: -bottomDistance, right: 0)
+        print(topDistance, bottomDistance)
+        scroll.contentInset = UIEdgeInsets(top: -topInset, left: 0, bottom: -bottomInset, right: 0)
     }
     
     func editStateChanged(state: ComposeContainerView.EditState) {
@@ -192,7 +208,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         }
         
         if case .inactive = state {
-            self.containerWrapper.layoutIfNeeded()
             UIView.animate(withDuration: 0.14, animations: {
                 self.resetGapToContainer()
                 self.containerWrapper.layoutIfNeeded()
@@ -226,16 +241,7 @@ extension ComposeController {
     func scaleContainerWrapper(scale: CGFloat) {
         containerWrapperWidthConstraint  = containerWrapperWidthConstraint.setMultiplier(multiplier: containerWrapperWidthConstraint.multiplier * scale)
     }
-    
-    @IBAction func onToggleZoom(_ sender: UITapGestureRecognizer) {
-        if container.frame.width == minContainerWidth {
-            scaleContainerToWidthWithAnimation(width: maxContainerWidth)
-        } else {
-            scaleContainerToWidthWithAnimation(width: minContainerWidth)
-        }
-    }
-
-    
+        
     @IBAction func onPinchComposeView(_ gestureRecognizer: UIPinchGestureRecognizer) {
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
             let maxScale = maxContainerWidth/containerWrapper.frame.width
@@ -260,8 +266,6 @@ extension ComposeController {
                 gestureRecognizer.scale = 1.0
             }
         }
-        
-        containerWrapper.setNeedsLayout()
     }
     
     func scaleContainerToWidthWithAnimation(width: CGFloat) {

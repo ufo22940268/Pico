@@ -120,11 +120,12 @@ class SeperatorSlider: UIView {
     }
     
     func disableScroll() {
+        validArrows.forEach{$0.isHidden = true}
         animations.forEach { (animator) in
             animator.stopAnimation(false)
             animator.finishAnimation(at: .current)
         }
-        validArrows.forEach{$0.isHidden = true}
+        animations.removeAll()
     }
     
     fileprivate func setupAnimations() {
