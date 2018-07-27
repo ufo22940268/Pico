@@ -189,6 +189,61 @@
             </connections>
             <point key="canvasLocation" x="225" y="62"/>
         </view>
+        <view autoresizesSubviews="NO" contentMode="scaleToFill" restorationIdentifier="left" id="SbF-3v-z2y" userLabel="Left Slider" customClass="SideSlider" customModule="Pico" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="70" height="473"/>
+            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="YZD-Wk-jpK">
+                    <rect key="frame" x="0.0" y="0.0" width="25" height="473"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mqP-DA-OvO" userLabel="line">
+                            <rect key="frame" x="0.0" y="0.0" width="2" height="473"/>
+                            <color key="backgroundColor" name="keyboardFocusIndicatorColor" catalog="System" colorSpace="catalog"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="2" id="wvS-1z-v3W"/>
+                            </constraints>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Sy-2k-fkg">
+                            <rect key="frame" x="2" y="206.5" width="23" height="60"/>
+                            <color key="backgroundColor" red="0.18823529410000001" green="0.51372549020000002" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="60" id="Vpv-7E-QAq"/>
+                                <constraint firstAttribute="width" constant="23" id="cik-Y6-Fwf"/>
+                            </constraints>
+                            <state key="normal" image="seperator-edit">
+                                <color key="titleColor" red="1" green="0.21595210109999999" blue="0.14619663590000001" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <state key="selected" image="check-solid"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="string" keyPath="layer.borderWidth" value="0"/>
+                            </userDefinedRuntimeAttributes>
+                        </button>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="mqP-DA-OvO" firstAttribute="top" secondItem="YZD-Wk-jpK" secondAttribute="top" id="fXY-M8-Q7G"/>
+                        <constraint firstItem="mqP-DA-OvO" firstAttribute="height" secondItem="YZD-Wk-jpK" secondAttribute="height" id="m0Z-Gr-h0N"/>
+                        <constraint firstAttribute="bottom" secondItem="mqP-DA-OvO" secondAttribute="bottom" id="o7x-Fb-BaC"/>
+                    </constraints>
+                </stackView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+            <gestureRecognizers/>
+            <constraints>
+                <constraint firstItem="YZD-Wk-jpK" firstAttribute="top" secondItem="spV-JP-zHd" secondAttribute="top" id="9MR-CY-duT"/>
+                <constraint firstItem="YZD-Wk-jpK" firstAttribute="height" secondItem="spV-JP-zHd" secondAttribute="height" id="Pek-oZ-8cu"/>
+                <constraint firstItem="spV-JP-zHd" firstAttribute="bottom" secondItem="YZD-Wk-jpK" secondAttribute="bottom" id="dd8-1S-hNV"/>
+                <constraint firstItem="YZD-Wk-jpK" firstAttribute="leading" secondItem="SbF-3v-z2y" secondAttribute="leading" id="qtj-ev-U6k"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="spV-JP-zHd"/>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="string" keyPath="position" value="left"/>
+            </userDefinedRuntimeAttributes>
+            <connections>
+                <outlet property="button" destination="1Sy-2k-fkg" id="9Tc-9P-Hqj"/>
+            </connections>
+            <point key="canvasLocation" x="97" y="439.5"/>
+        </view>
     </objects>
     <resources>
         <image name="check-solid" width="15" height="12"/>

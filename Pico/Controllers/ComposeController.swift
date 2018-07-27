@@ -8,6 +8,10 @@
 
 import UIKit
 
+enum SeperatorType {
+    case crop, slide
+}
+
 class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     
     @IBOutlet weak var container: ComposeContainerView!
@@ -21,11 +25,8 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     let maxContainerWidth = UIScreen.main.bounds.width
     var lastScale = CGFloat(1.0)
     
-    
     var editState: ComposeContainerView.EditState = ComposeContainerView.EditState.inactive
-    
     var panView: ComposeCell!
-    
     var loadedImages:[Image]!
     
     @IBOutlet weak var containerWrapperWidthConstraint: NSLayoutConstraint!
@@ -39,6 +40,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     }
     
     var type: ConcatenateType!
+    var seperatorType: SeperatorType? = .crop
     
     fileprivate func concateScreenshot(_ uiImages: ([UIImage?])) {
         let dispatchGroup = DispatchGroup()
@@ -76,6 +78,11 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         }
         
         self.container.addBottomSeperator()
+        
+        if seperatorType == .crop {
+            self.container.addLeftSeperator()
+            self.container.addRightSeperator()
+        }
         
         self.container.subviews.filter{$0.isKind(of: SeperatorSlider.self)}.forEach {self.container.bringSubview(toFront: $0)}
         

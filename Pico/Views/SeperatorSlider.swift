@@ -176,5 +176,4 @@ class SeperatorSlider: UIView {
         addConstraint(NSLayoutConstraint(item: arrow, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: ArrowConstants.height))
         validArrows.append(arrow)
     }
-    
 }
