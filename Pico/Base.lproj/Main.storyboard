@@ -262,7 +262,7 @@
                         <viewLayoutGuide key="safeArea" id="cZ4-cg-Jcn"/>
                     </view>
                     <navigationItem key="navigationItem" largeTitleDisplayMode="always" id="Fea-6E-jSK">
-                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="rUV-Yc-bdN">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="download-solid" id="rUV-Yc-bdN">
                             <connections>
                                 <action selector="download:" destination="h2r-xB-xzJ" id="fWc-gh-Haj"/>
                             </connections>
@@ -482,7 +482,7 @@
                         <viewLayoutGuide key="safeArea" id="BxA-5P-rMi"/>
                     </view>
                     <navigationItem key="navigationItem" title="编辑" id="lUS-XZ-2ZC">
-                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="EWD-cE-aRH">
+                        <barButtonItem key="rightBarButtonItem" image="download-solid" id="EWD-cE-aRH">
                             <connections>
                                 <action selector="onShareClick:" destination="ycZ-tp-DN7" id="3RT-WU-HsX"/>
                             </connections>
@@ -574,6 +574,7 @@
         <image name="ban-solid" width="24" height="24"/>
         <image name="clone-regular" width="22" height="22"/>
         <image name="comments-regular" width="22" height="18"/>
+        <image name="download-solid" width="24" height="24"/>
         <image name="film-solid" width="22" height="17"/>
         <image name="full-frame" width="24" height="24"/>
         <image name="preview_tab_pixellate" width="25" height="25"/>
@@ -582,7 +583,7 @@
         <image name="user-edit-solid" width="24" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="fvF-Lz-IAD"/>
+        <segue reference="OtZ-v7-gqU"/>
         <segue reference="oka-ze-DW4"/>
     </inferredMetricsTieBreakers>
 </document>

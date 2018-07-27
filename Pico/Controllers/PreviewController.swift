@@ -192,8 +192,7 @@ class PreviewController: UIViewController {
     
     @IBAction func onShareClick(_ sender: Any) {
         let image = preview.renderCache()
-        let vc = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-        present(vc, animated: true, completion: nil)
+        ShareManager(viewController: self).saveToPhoto(image: image)
     }
     
     @IBAction func onPixellateItemClick(_ sender: Any) {

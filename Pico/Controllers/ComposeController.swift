@@ -110,8 +110,8 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     @IBAction func download(_ sender: UIBarButtonItem) {
         container.showSeperators(show: false)
         let image = container.exportImageCache()
-        let vc = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-        present(vc, animated: true, completion: {self.container.showSeperators(show: true)})
+        ShareManager(viewController: self).saveToPhoto(image: image!)
+        self.container.showSeperators(show: true)
     }
     
     @IBAction func onScroll(_ sender: UIPanGestureRecognizer) {
