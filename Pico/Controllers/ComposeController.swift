@@ -41,15 +41,25 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     var type: ConcatenateType!
     
     fileprivate func concateScreenshot(_ uiImages: ([UIImage?])) {
-        OverlapDetector(upImage: uiImages[0]!, downImage: uiImages[1]!).detect {upOverlap, downOverlap in
-            DispatchQueue.main.async {
-                if upOverlap > 0 && downOverlap > 0 {
-                    for i in 0..<uiImages.count - 1 {
-                        let imageHeight = uiImages[0]!.size.height
-                        self.container.cells[i].scrollDown(percentage: upOverlap/imageHeight)
-                        self.container.cells[i + 1].scrollUp(percentage: -downOverlap/imageHeight)
+        let dispatchGroup = DispatchGroup()
+        for index in 0..<uiImages.count - 1 {
+            let upImage = uiImages[index]
+            let downImage = uiImages[index + 1]
+            dispatchGroup.enter()
+            OverlapDetector(upImage: upImage!, downImage: downImage!).detect {upOverlap, downOverlap in
+                DispatchQueue.main.async {
+                    if upOverlap > 0 && downOverlap > 0 {
+                        for i in 0..<uiImages.count - 1 {
+                            let imageHeight = uiImages[0]!.size.height
+                            self.container.cells[i].scrollDown(percentage: upOverlap/imageHeight)
+                            self.container.cells[i + 1].scrollUp(percentage: -downOverlap/imageHeight)
+                        }
                     }
+                    dispatchGroup.leave()
                 }
+            }
+
+            dispatchGroup.notify(queue: .main) {                
                 self.resetGapToContainer()
             }
         }
