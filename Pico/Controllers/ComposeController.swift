@@ -105,7 +105,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         super.viewDidLoad()
         
         if loadedImages == nil {
-            self.configureUIImages([UIImage(named: "short"), UIImage(named: "short2")])
+            self.configureUIImages([UIImage(named: "short"), UIImage(named: "short2"), UIImage(named: "short2"), UIImage(named: "short2")])
         } else if loadedImages.count >= 2 {
             Image.resolve(images: loadedImages, completion: {uiImages in
                 self.configureUIImages(uiImages)
@@ -178,25 +178,23 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     }
 
     fileprivate func resetGapToContainer() {
-        let topDistance = topConstraint.constant
-        let bottomDistance = bottomConstraint.constant
+        var topDistance = topConstraint.constant
+        var bottomDistance = bottomConstraint.constant
         
         var topInset = CGFloat(0)
         var bottomInset = CGFloat(0)
-        if container.frame.height < scroll.frame.height {
-            let halfGap = (scroll.frame.height - container.frame.height)/2
-            if topDistance < halfGap {
-                topConstraint.constant = halfGap
-            } else {
-                topInset = topDistance - halfGap
-            }
-
-            if bottomDistance < halfGap {
-                bottomConstraint.constant = halfGap
-            } else {
-                bottomInset = bottomDistance - halfGap
-            }
+        print(container.frame.height, containerWrapper.frame.height, scroll.frame.height)
+        let containerHeight = max(container.frame.height, container.frame.height*(minContainerWidth/container.frame.width))
+        if containerHeight < scroll.frame.height {
+            let halfGap = (scroll.frame.height - containerHeight)/2
+            topDistance = halfGap
+            bottomDistance = halfGap
+            topInset = 0
+            bottomInset = 0
+            topConstraint.constant = topDistance
+            bottomConstraint.constant = bottomDistance
         } else {
+            print("bottom", topDistance)
             topInset = topDistance
             bottomInset = bottomDistance
         }
@@ -260,8 +258,6 @@ extension ComposeController {
             }
             gestureRecognizer.scale = 1.0
         } else if gestureRecognizer.state == .ended {
-
-            resetGapToContainer()
             if containerWrapper.frame.width < minContainerWidth {
                 scaleContainerToWidthWithAnimation(width: minContainerWidth)
                 gestureRecognizer.scale = 1.0
@@ -276,9 +272,13 @@ extension ComposeController {
     }
     
     func scaleContainerToWidthWithAnimation(width: CGFloat) {
-        UIViewPropertyAnimator(duration: 0.3, curve: .easeOut, animations: {
+        let animator = UIViewPropertyAnimator(duration: 0.3, curve: .easeOut, animations: {
             let scale = width/self.containerWrapper.frame.width
             self.scaleContainerWrapper(scale: scale)
-           }).startAnimation()
+        })
+        animator.addCompletion({ pos in
+            self.resetGapToContainer()
+        })
+        animator.startAnimation()
     }
 }
