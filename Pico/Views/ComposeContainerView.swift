@@ -30,6 +30,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     var seperators = [SeperatorSlider]()
     
     var leftSlider: SideSlider!
+    var rightSlider: SideSlider!
 
     func addImage(image: UIImage) {
         // Do any additional setup after loading the view.
@@ -46,7 +47,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     }
     
     func addTopSeperator() {
-        let seperator = UINib(nibName: "SeperatorSlider", bundle: nil).instantiate(withOwner: self, options: nil).map {$0 as! UIView}.filter {$0.restorationIdentifier == "top"}.first as! SeperatorSlider
+        let seperator = UINib(nibName: "Slider", bundle: nil).instantiate(withOwner: self, options: nil).map {$0 as! UIView}.filter {$0.restorationIdentifier == "top"}.first as! SeperatorSlider
         seperator.addEditDelegator(editDelegator: self)
         self.addArrangedSubview(seperator)
 
@@ -55,7 +56,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     }
     
     func addSeperator() {
-        let seperator = UINib(nibName: "SeperatorSlider", bundle: nil).instantiate(withOwner: self, options: nil).first as! SeperatorSlider
+        let seperator = UINib(nibName: "Slider", bundle: nil).instantiate(withOwner: self, options: nil).first as! SeperatorSlider
         seperator.addEditDelegator(editDelegator: self)
         self.addArrangedSubview(seperator)
         
@@ -64,7 +65,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     }
 
     func addBottomSeperator() {
-        let seperator = UINib(nibName: "SeperatorSlider", bundle: nil).instantiate(withOwner: self, options: nil).map {$0 as! UIView}.filter {$0.restorationIdentifier == "bottom"}.first as! SeperatorSlider
+        let seperator = UINib(nibName: "Slider", bundle: nil).instantiate(withOwner: self, options: nil).map {$0 as! UIView}.filter {$0.restorationIdentifier == "bottom"}.first as! SeperatorSlider
         seperator.addEditDelegator(editDelegator: self)
         self.addArrangedSubview(seperator)
         
@@ -73,7 +74,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     }
     
     func addLeftSeperator() {
-        let seperator = UINib(nibName: "SeperatorSlider", bundle: nil).instantiate(withOwner: self, options: nil).map {$0 as! UIView}.filter {$0.restorationIdentifier == "left"}.first as! SideSlider
+        let seperator = UINib(nibName: "Slider", bundle: nil).instantiate(withOwner: self, options: nil).map {$0 as! UIView}.filter {$0.restorationIdentifier == "left"}.first as! SideSlider
         self.addSubview(seperator)
         seperator.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         let topConstraint = seperator.topAnchor.constraint(equalTo: topAnchor)
@@ -87,7 +88,17 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     }
     
     func addRightSeperator() {
+        let seperator = UINib(nibName: "Slider", bundle: nil).instantiate(withOwner: self, options: nil).map {$0 as! UIView}.filter {$0.restorationIdentifier == "right"}.first as! SideSlider
+        self.addSubview(seperator)
+        seperator.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        let topConstraint = seperator.topAnchor.constraint(equalTo: topAnchor)
+        topConstraint.priority = .defaultHigh
+        topConstraint.isActive = true
+        let bottomConstraint = seperator.bottomAnchor.constraint(equalTo: bottomAnchor)
+        bottomConstraint.priority = .defaultHigh
+        bottomConstraint.isActive = true
         
+        rightSlider = seperator
     }
     
     func onCellScroll(translate: Float, cellIndex: Int, position: ComposeCell.Position) {

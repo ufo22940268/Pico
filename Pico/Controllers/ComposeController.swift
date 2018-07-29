@@ -97,8 +97,10 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             self.navigationItem.title = "竖向拼接"
         }
         
-        container.layoutIfNeeded()
+        scroll.layoutIfNeeded()
         self.resetGapToContainer()
+        
+        updateSideButton()
     }
     
     override func viewDidLoad() {
@@ -287,8 +289,13 @@ extension ComposeController {
 }
 
 extension ComposeController: UIScrollViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    fileprivate func updateSideButton() {
         let midPoint = container.leftSlider.convert(CGPoint(x: 0, y:scroll.bounds.midY), from: scroll)
         container.leftSlider.updateSlider(midPoint: midPoint)
+        container.rightSlider.updateSlider(midPoint: midPoint)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        updateSideButton()
     }
 }

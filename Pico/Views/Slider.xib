@@ -256,6 +256,75 @@
             </connections>
             <point key="canvasLocation" x="82" y="439.5"/>
         </view>
+        <view autoresizesSubviews="NO" contentMode="scaleToFill" restorationIdentifier="right" id="GdX-aC-Miv" userLabel="Right Slider" customClass="SideSlider" customModule="Pico" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="40" height="473"/>
+            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="P1H-q3-HwR">
+                    <rect key="frame" x="0.0" y="0.0" width="40" height="473"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gGb-i3-fOx">
+                            <rect key="frame" x="0.0" y="0.0" width="38" height="473"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Oz-1H-aZ8">
+                                    <rect key="frame" x="0.0" y="33.5" width="38" height="60"/>
+                                    <color key="backgroundColor" red="0.18823529410000001" green="0.51372549020000002" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="60" id="I2Z-I9-yg3"/>
+                                    </constraints>
+                                    <state key="normal" image="seperator-edit">
+                                        <color key="titleColor" red="1" green="0.21595210109999999" blue="0.14619663590000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                    <state key="selected" image="check-solid"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="string" keyPath="layer.borderWidth" value="0"/>
+                                    </userDefinedRuntimeAttributes>
+                                </button>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="2Oz-1H-aZ8" firstAttribute="top" secondItem="gGb-i3-fOx" secondAttribute="top" constant="33.5" id="IUa-KN-aN7"/>
+                                <constraint firstAttribute="width" constant="23" id="LvM-IK-1qc"/>
+                                <constraint firstItem="2Oz-1H-aZ8" firstAttribute="leading" secondItem="gGb-i3-fOx" secondAttribute="leading" id="ggG-Sa-Sf0"/>
+                                <constraint firstItem="2Oz-1H-aZ8" firstAttribute="width" secondItem="gGb-i3-fOx" secondAttribute="width" id="ytt-v7-Y6W"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cfM-PM-xaE" userLabel="line">
+                            <rect key="frame" x="38" y="0.0" width="2" height="473"/>
+                            <color key="backgroundColor" name="keyboardFocusIndicatorColor" catalog="System" colorSpace="catalog"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="2" id="56A-66-wPh"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="cfM-PM-xaE" secondAttribute="bottom" id="EDy-US-KUb"/>
+                        <constraint firstItem="gGb-i3-fOx" firstAttribute="height" secondItem="P1H-q3-HwR" secondAttribute="height" id="Kmc-Ic-yxf"/>
+                        <constraint firstItem="cfM-PM-xaE" firstAttribute="top" secondItem="P1H-q3-HwR" secondAttribute="top" id="gWD-0J-hIh"/>
+                        <constraint firstItem="cfM-PM-xaE" firstAttribute="height" secondItem="P1H-q3-HwR" secondAttribute="height" id="q2k-Ej-rFp"/>
+                    </constraints>
+                </stackView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+            <gestureRecognizers/>
+            <constraints>
+                <constraint firstItem="P1H-q3-HwR" firstAttribute="width" secondItem="GdX-aC-Miv" secondAttribute="width" id="G0j-Wl-FGB"/>
+                <constraint firstItem="Lgo-Ve-Avb" firstAttribute="bottom" secondItem="P1H-q3-HwR" secondAttribute="bottom" id="PIY-cx-742"/>
+                <constraint firstItem="P1H-q3-HwR" firstAttribute="top" secondItem="Lgo-Ve-Avb" secondAttribute="top" id="WS1-kp-nph"/>
+                <constraint firstItem="P1H-q3-HwR" firstAttribute="height" secondItem="Lgo-Ve-Avb" secondAttribute="height" id="YHx-2K-iyu"/>
+                <constraint firstItem="P1H-q3-HwR" firstAttribute="leading" secondItem="GdX-aC-Miv" secondAttribute="leading" id="dQg-a6-su9"/>
+                <constraint firstItem="P1H-q3-HwR" firstAttribute="height" secondItem="GdX-aC-Miv" secondAttribute="height" id="rSI-C0-KxO"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="Lgo-Ve-Avb"/>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="string" keyPath="position" value="right"/>
+            </userDefinedRuntimeAttributes>
+            <connections>
+                <outlet property="button" destination="2Oz-1H-aZ8" id="lS2-ux-GCu"/>
+                <outlet property="topConstraint" destination="IUa-KN-aN7" id="SQN-JV-bRK"/>
+            </connections>
+            <point key="canvasLocation" x="372" y="440"/>
+        </view>
     </objects>
     <resources>
         <image name="check-solid" width="15" height="12"/>
