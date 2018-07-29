@@ -114,6 +114,8 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         container.setEditDelegator(delegator: self)
         container.scrollDelegator = self
+        
+        scroll.delegate = self
     }
     
     @IBAction func download(_ sender: UIBarButtonItem) {
@@ -149,6 +151,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         } else if sender.state == .ended {
             container.showSeperators(show: true)
         }
+
     }
     
     func findScrollCell(hitView: UIView) -> ComposeCell? {
@@ -280,5 +283,12 @@ extension ComposeController {
             self.resetGapToContainer()
         })
         animator.startAnimation()
+    }
+}
+
+extension ComposeController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let midPoint = container.leftSlider.convert(CGPoint(x: 0, y:scroll.bounds.midY), from: scroll)
+        container.leftSlider.updateSlider(midPoint: midPoint)
     }
 }

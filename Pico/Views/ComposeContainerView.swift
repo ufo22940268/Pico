@@ -28,6 +28,8 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     var scrollDelegator: OnCellScroll?
     var cells = [ComposeCell]()
     var seperators = [SeperatorSlider]()
+    
+    var leftSlider: SideSlider!
 
     func addImage(image: UIImage) {
         // Do any additional setup after loading the view.
@@ -71,15 +73,17 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     }
     
     func addLeftSeperator() {
-//        let seperator = UINib(nibName: "SeperatorSlider", bundle: nil).instantiate(withOwner: self, options: nil).map {$0 as! UIView}.filter {$0.restorationIdentifier == "left"}.first as! SideSlider
-//        self.addSubview(seperator)
-//        seperator.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-//        let topConstraint = seperator.topAnchor.constraint(equalTo: topAnchor)
-//        topConstraint.priority = .defaultHigh
-//        topConstraint.isActive = true
-//        let bottomConstraint = seperator.bottomAnchor.constraint(equalTo: bottomAnchor)
-//        bottomConstraint.priority = .defaultHigh
-//        bottomConstraint.isActive = true
+        let seperator = UINib(nibName: "SeperatorSlider", bundle: nil).instantiate(withOwner: self, options: nil).map {$0 as! UIView}.filter {$0.restorationIdentifier == "left"}.first as! SideSlider
+        self.addSubview(seperator)
+        seperator.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        let topConstraint = seperator.topAnchor.constraint(equalTo: topAnchor)
+        topConstraint.priority = .defaultHigh
+        topConstraint.isActive = true
+        let bottomConstraint = seperator.bottomAnchor.constraint(equalTo: bottomAnchor)
+        bottomConstraint.priority = .defaultHigh
+        bottomConstraint.isActive = true
+        
+        leftSlider = seperator
     }
     
     func addRightSeperator() {

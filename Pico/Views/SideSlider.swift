@@ -15,6 +15,8 @@ class SideSlider: UIView {
 
     @IBOutlet weak var button: UIButton!
     
+    @IBOutlet weak var topConstraint: NSLayoutConstraint!
+    
     override func awakeFromNib() {
         translatesAutoresizingMaskIntoConstraints = false
         switch position {
@@ -27,4 +29,7 @@ class SideSlider: UIView {
         }
     }
     
+    func updateSlider(midPoint: CGPoint) {
+        topConstraint.constant = midPoint.y
+    }
 }

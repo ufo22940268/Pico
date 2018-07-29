@@ -190,7 +190,7 @@
             <point key="canvasLocation" x="225" y="62"/>
         </view>
         <view autoresizesSubviews="NO" contentMode="scaleToFill" restorationIdentifier="left" id="SbF-3v-z2y" userLabel="Left Slider" customClass="SideSlider" customModule="Pico" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="70" height="473"/>
+            <rect key="frame" x="0.0" y="0.0" width="40" height="473"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="YZD-Wk-jpK">
@@ -203,23 +203,34 @@
                                 <constraint firstAttribute="width" constant="2" id="wvS-1z-v3W"/>
                             </constraints>
                         </view>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Sy-2k-fkg">
-                            <rect key="frame" x="2" y="206.5" width="23" height="60"/>
-                            <color key="backgroundColor" red="0.18823529410000001" green="0.51372549020000002" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xkK-DT-VS0">
+                            <rect key="frame" x="2" y="0.0" width="23" height="473"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Sy-2k-fkg">
+                                    <rect key="frame" x="0.0" y="33.5" width="23" height="60"/>
+                                    <color key="backgroundColor" red="0.18823529410000001" green="0.51372549020000002" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="60" id="Vpv-7E-QAq"/>
+                                    </constraints>
+                                    <state key="normal" image="seperator-edit">
+                                        <color key="titleColor" red="1" green="0.21595210109999999" blue="0.14619663590000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                    <state key="selected" image="check-solid"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="string" keyPath="layer.borderWidth" value="0"/>
+                                    </userDefinedRuntimeAttributes>
+                                </button>
+                            </subviews>
                             <constraints>
-                                <constraint firstAttribute="height" constant="60" id="Vpv-7E-QAq"/>
-                                <constraint firstAttribute="width" constant="23" id="cik-Y6-Fwf"/>
+                                <constraint firstAttribute="width" constant="23" id="6K7-Wv-ME0"/>
+                                <constraint firstItem="1Sy-2k-fkg" firstAttribute="leading" secondItem="xkK-DT-VS0" secondAttribute="leading" id="9vU-oi-HV4"/>
+                                <constraint firstItem="1Sy-2k-fkg" firstAttribute="width" secondItem="xkK-DT-VS0" secondAttribute="width" id="Fly-vg-hkS"/>
+                                <constraint firstItem="1Sy-2k-fkg" firstAttribute="top" secondItem="xkK-DT-VS0" secondAttribute="top" constant="33.5" id="gHx-jM-x9j"/>
                             </constraints>
-                            <state key="normal" image="seperator-edit">
-                                <color key="titleColor" red="1" green="0.21595210109999999" blue="0.14619663590000001" alpha="1" colorSpace="calibratedRGB"/>
-                            </state>
-                            <state key="selected" image="check-solid"/>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="string" keyPath="layer.borderWidth" value="0"/>
-                            </userDefinedRuntimeAttributes>
-                        </button>
+                        </view>
                     </subviews>
                     <constraints>
+                        <constraint firstItem="xkK-DT-VS0" firstAttribute="height" secondItem="YZD-Wk-jpK" secondAttribute="height" id="dUE-li-vNP"/>
                         <constraint firstItem="mqP-DA-OvO" firstAttribute="top" secondItem="YZD-Wk-jpK" secondAttribute="top" id="fXY-M8-Q7G"/>
                         <constraint firstItem="mqP-DA-OvO" firstAttribute="height" secondItem="YZD-Wk-jpK" secondAttribute="height" id="m0Z-Gr-h0N"/>
                         <constraint firstAttribute="bottom" secondItem="mqP-DA-OvO" secondAttribute="bottom" id="o7x-Fb-BaC"/>
@@ -241,8 +252,9 @@
             </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="button" destination="1Sy-2k-fkg" id="9Tc-9P-Hqj"/>
+                <outlet property="topConstraint" destination="gHx-jM-x9j" id="iEb-69-3gx"/>
             </connections>
-            <point key="canvasLocation" x="97" y="439.5"/>
+            <point key="canvasLocation" x="82" y="439.5"/>
         </view>
     </objects>
     <resources>
