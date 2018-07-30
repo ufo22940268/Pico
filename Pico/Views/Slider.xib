@@ -194,7 +194,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="YZD-Wk-jpK">
-                    <rect key="frame" x="0.0" y="0.0" width="25" height="473"/>
+                    <rect key="frame" x="0.0" y="0.0" width="40" height="473"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mqP-DA-OvO" userLabel="line">
                             <rect key="frame" x="0.0" y="0.0" width="2" height="473"/>
@@ -204,12 +204,13 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xkK-DT-VS0">
-                            <rect key="frame" x="2" y="0.0" width="23" height="473"/>
+                            <rect key="frame" x="2" y="0.0" width="38" height="473"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Sy-2k-fkg">
-                                    <rect key="frame" x="0.0" y="33.5" width="23" height="60"/>
+                                    <rect key="frame" x="0.0" y="33.5" width="38" height="60"/>
                                     <color key="backgroundColor" red="0.18823529410000001" green="0.51372549020000002" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
+                                        <constraint firstAttribute="width" constant="23" id="9Zx-Ec-kGq"/>
                                         <constraint firstAttribute="height" constant="60" id="Vpv-7E-QAq"/>
                                     </constraints>
                                     <state key="normal" image="seperator-edit">
@@ -219,10 +220,12 @@
                                     <userDefinedRuntimeAttributes>
                                         <userDefinedRuntimeAttribute type="string" keyPath="layer.borderWidth" value="0"/>
                                     </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <action selector="onToggle:" destination="SbF-3v-z2y" eventType="touchUpInside" id="tLI-KF-KFk"/>
+                                    </connections>
                                 </button>
                             </subviews>
                             <constraints>
-                                <constraint firstAttribute="width" constant="23" id="6K7-Wv-ME0"/>
                                 <constraint firstItem="1Sy-2k-fkg" firstAttribute="leading" secondItem="xkK-DT-VS0" secondAttribute="leading" id="9vU-oi-HV4"/>
                                 <constraint firstItem="1Sy-2k-fkg" firstAttribute="width" secondItem="xkK-DT-VS0" secondAttribute="width" id="Fly-vg-hkS"/>
                                 <constraint firstItem="1Sy-2k-fkg" firstAttribute="top" secondItem="xkK-DT-VS0" secondAttribute="top" constant="33.5" id="gHx-jM-x9j"/>
@@ -241,9 +244,11 @@
             <gestureRecognizers/>
             <constraints>
                 <constraint firstItem="YZD-Wk-jpK" firstAttribute="top" secondItem="spV-JP-zHd" secondAttribute="top" id="9MR-CY-duT"/>
+                <constraint firstItem="YZD-Wk-jpK" firstAttribute="width" secondItem="SbF-3v-z2y" secondAttribute="width" id="LEA-Wb-t9G"/>
                 <constraint firstItem="YZD-Wk-jpK" firstAttribute="height" secondItem="spV-JP-zHd" secondAttribute="height" id="Pek-oZ-8cu"/>
                 <constraint firstItem="spV-JP-zHd" firstAttribute="bottom" secondItem="YZD-Wk-jpK" secondAttribute="bottom" id="dd8-1S-hNV"/>
                 <constraint firstItem="YZD-Wk-jpK" firstAttribute="leading" secondItem="SbF-3v-z2y" secondAttribute="leading" id="qtj-ev-U6k"/>
+                <constraint firstItem="YZD-Wk-jpK" firstAttribute="height" secondItem="SbF-3v-z2y" secondAttribute="height" id="x7C-lh-lw2"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="spV-JP-zHd"/>
@@ -279,6 +284,9 @@
                                     <userDefinedRuntimeAttributes>
                                         <userDefinedRuntimeAttribute type="string" keyPath="layer.borderWidth" value="0"/>
                                     </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <action selector="onToggle:" destination="SbF-3v-z2y" eventType="touchUpInside" id="Q2E-DS-Wc5"/>
+                                    </connections>
                                 </button>
                             </subviews>
                             <constraints>

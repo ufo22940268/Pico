@@ -9,19 +9,20 @@
 import UIKit
 
 protocol EditDelegator {
-    func editStateChanged(state: ComposeContainerView.EditState)
+    func editStateChanged(state: EditState)
 }
 
 protocol OnCellScroll {
     func onCellScroll(translate: Float, cellIndex: Int, position: ComposeCell.Position)
 }
 
+enum EditState {
+    case inactive
+    case editing(direction: String, seperatorIndex: Int?)
+}
+
 class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
 
-    enum EditState {
-        case inactive
-        case editing(seperatorIndex: Int)
-    }
     
     var editState = EditState.inactive
     var editDelegator: EditDelegator?
@@ -84,6 +85,8 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         bottomConstraint.priority = .defaultHigh
         bottomConstraint.isActive = true
         
+        seperator.addEditDelegator(editDelegator: self)
+        
         leftSlider = seperator
     }
     
@@ -97,6 +100,8 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         let bottomConstraint = seperator.bottomAnchor.constraint(equalTo: bottomAnchor)
         bottomConstraint.priority = .defaultHigh
         bottomConstraint.isActive = true
+        
+        seperator.addEditDelegator(editDelegator: self)
         
         rightSlider = seperator
     }
@@ -114,7 +119,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     }
     
     func updateSeperators() {
-        if case let .editing(index) = editState {
+        if case let .editing(direction, index) = editState {
             seperators.forEach { seperator in
                 if seperator.index != index {
                     seperator.isUserInteractionEnabled = false

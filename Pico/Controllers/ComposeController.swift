@@ -25,7 +25,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     let maxContainerWidth = UIScreen.main.bounds.width
     var lastScale = CGFloat(1.0)
     
-    var editState: ComposeContainerView.EditState = ComposeContainerView.EditState.inactive
+    var editState: EditState = EditState.inactive
     var panView: ComposeCell!
     var loadedImages:[Image]!
     
@@ -85,7 +85,10 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         }
         
         self.container.subviews.filter{$0.isKind(of: SeperatorSlider.self)}.forEach {self.container.bringSubview(toFront: $0)}
-        
+        self.container.subviews.filter{$0.isKind(of: SideSlider.self)}.forEach {
+            self.container.bringSubview(toFront: $0)            
+        }
+
         switch self.type {
         case .screenshot:
             self.concateScreenshot(uiImages)
@@ -158,11 +161,13 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     
     func findScrollCell(hitView: UIView) -> ComposeCell? {
         let cellIndex = container.cells.enumerated().filter {$0.element == hitView}.first!.offset
-        if case .editing(let seperatorIndex) = editState {
-            if cellIndex < seperatorIndex {
-                return container.cells[seperatorIndex - 1]
-            } else {
-                return container.cells[seperatorIndex]
+        if case .editing(let direction, let seperatorIndex) = editState {
+            if let seperatorIndex = seperatorIndex, direction == "vertical" {
+                if cellIndex < seperatorIndex {
+                    return container.cells[seperatorIndex - 1]
+                } else {
+                    return container.cells[seperatorIndex]
+                }
             }
         }
         
@@ -207,7 +212,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         scroll.contentInset = UIEdgeInsets(top: -topInset, left: 0, bottom: -bottomInset, right: 0)
     }
     
-    func editStateChanged(state: ComposeContainerView.EditState) {
+    func editStateChanged(state: EditState) {
         editState = state
         if case .inactive = state {
             scroll.isScrollEnabled = true

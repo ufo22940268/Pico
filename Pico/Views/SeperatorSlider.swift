@@ -9,6 +9,14 @@
 import Foundation
 import UIKit
 
+class ArrowConstants {
+    static let gap:CGFloat = 25.0
+    static let width:CGFloat = 24
+    static let height:CGFloat = 30
+    static let translate:CGFloat = 10
+    static let animatorDuration = 0.5
+}
+
 class SeperatorSlider: UIView {
     
     var aboveArrow: UIImageView!
@@ -21,14 +29,6 @@ class SeperatorSlider: UIView {
     @objc var position = "middle"
     @IBOutlet weak var button: UIButton!
     
-    class ArrowConstants {
-        static let gap:CGFloat = -25.0
-        static let width:CGFloat = 24
-        static let height:CGFloat = 30
-        static let translate:CGFloat = 10
-        static let animatorDuration = 0.5
-    }
-    
     fileprivate func showAboveArrow() -> Bool {
         return ["bottom", "middle"].contains(position)
     }
@@ -37,7 +37,6 @@ class SeperatorSlider: UIView {
         return ["top", "middle"].contains(position)
     }
     
-
     
     override func awakeFromNib() {
         aboveArrow = UIImageView(image: UIImage(named: "angle-double-down-solid"))
@@ -101,11 +100,11 @@ class SeperatorSlider: UIView {
             disableScroll()
         }
 
-        var editState: ComposeContainerView.EditState!
+        var editState: EditState!
         if sender.isSelected {
-            editState = ComposeContainerView.EditState.editing(seperatorIndex: index)
+            editState = EditState.editing(direction: "vertical", seperatorIndex: index)
         } else {
-            editState = ComposeContainerView.EditState.inactive
+            editState = EditState.inactive
         }
         
         editDelegators.forEach{ $0.editStateChanged(state: editState) }
@@ -161,7 +160,7 @@ class SeperatorSlider: UIView {
     
     fileprivate func setupAboveArrow(arrow: UIImageView) {
         addSubview(arrow)
-        addConstraint(NSLayoutConstraint(item: arrow, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: ArrowConstants.gap-15))
+        addConstraint(NSLayoutConstraint(item: arrow, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: -ArrowConstants.gap-15))
         addConstraint(NSLayoutConstraint(item: arrow, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0) )
         addConstraint(NSLayoutConstraint(item: arrow, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: ArrowConstants.width))
         addConstraint(NSLayoutConstraint(item: arrow, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: ArrowConstants.height))
@@ -170,7 +169,7 @@ class SeperatorSlider: UIView {
     
     fileprivate func setupBelowArrow(arrow: UIImageView) {
         addSubview(arrow)
-        addConstraint(NSLayoutConstraint(item: arrow, attribute: .top, relatedBy: .equal, toItem: button, attribute: .bottom, multiplier: 1, constant: -ArrowConstants.gap))
+        addConstraint(NSLayoutConstraint(item: arrow, attribute: .top, relatedBy: .equal, toItem: button, attribute: .bottom, multiplier: 1, constant: ArrowConstants.gap))
         addConstraint(NSLayoutConstraint(item: arrow, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0) )
         addConstraint(NSLayoutConstraint(item: arrow, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: ArrowConstants.width))
         addConstraint(NSLayoutConstraint(item: arrow, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: ArrowConstants.height))

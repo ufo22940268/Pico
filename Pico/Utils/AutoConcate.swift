@@ -28,7 +28,6 @@ class AutoConcate {
     
     func scroll(cell:ComposeCell, percentage: CGFloat, adjust: CGFloat = 0) {
         let scrollY = percentage == 0 ? 0 : cell.frame.size.height*percentage + adjust
-        print("scrollY", scrollY)
         if scrollY < 0 {
             cell.scrollY(ComposeCell.Position.below, scrollY)
         } else {

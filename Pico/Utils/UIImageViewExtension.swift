@@ -20,9 +20,7 @@ extension UIImageView {
         if let uiImage = self.image {
             let imageFrame = frame
             var pixelRect = rect.applying(CGAffineTransform(scaleX: uiImage.size.width/imageFrame.size.width, y: uiImage.size.height/imageFrame.size.height))
-            print(rect, pixelRect)
             pixelRect.origin.y = uiImage.size.height - pixelRect.origin.y - pixelRect.size.height
-            print(pixelRect)
             
             DispatchQueue.global(qos: .background).async {
                 let openGLContext = EAGLContext(api: .openGLES3)

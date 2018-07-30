@@ -14,7 +14,7 @@ class ComposeCell: UIView, EditDelegator {
     @IBOutlet weak var image: UIImageView!
     
     var index: Int!
-    var editState = ComposeContainerView.EditState.inactive
+    var editState = EditState.inactive
     var onCellScrollDelegator: OnCellScroll!
     
     var originFrame: CGRect?
@@ -22,7 +22,7 @@ class ComposeCell: UIView, EditDelegator {
     override func awakeFromNib() {
     }
     
-    func editStateChanged(state: ComposeContainerView.EditState) {
+    func editStateChanged(state: EditState) {
         editState = state
     }
     
@@ -32,12 +32,14 @@ class ComposeCell: UIView, EditDelegator {
     
     //        above: -1
     //        below: 1
-    static func getPositionToSeperator(editState: ComposeContainerView.EditState, cellIndex: Int) -> Position? {
-        if case .editing(let seperatorIndex) = editState {
-            if cellIndex - seperatorIndex == 1 || cellIndex - seperatorIndex == -1 {
-                return Position.above
-            } else if cellIndex - seperatorIndex == 0 {
-                return Position.below
+    static func getPositionToSeperator(editState: EditState, cellIndex: Int) -> Position? {
+        if case .editing(let direction, let seperatorIndex) = editState {
+            if direction == "vertical", let seperatorIndex = seperatorIndex {
+                if cellIndex - seperatorIndex == 1 || cellIndex - seperatorIndex == -1 {
+                    return Position.above
+                } else if cellIndex - seperatorIndex == 0 {
+                    return Position.below
+                }
             }
         }
         
