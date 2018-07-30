@@ -18,6 +18,12 @@ protocol OnCellScroll {
 
 enum EditState {
     case inactive
+    /**
+     * direction
+     *  - vertical
+     *  - left
+     *  - right
+    */
     case editing(direction: String, seperatorIndex: Int?)
 }
 

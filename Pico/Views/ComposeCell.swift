@@ -19,6 +19,9 @@ class ComposeCell: UIView, EditDelegator {
     
     var originFrame: CGRect?
     
+    @IBOutlet weak var trailingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var leadingConstraint: NSLayoutConstraint!
+    
     override func awakeFromNib() {
     }
     
@@ -85,7 +88,7 @@ class ComposeCell: UIView, EditDelegator {
         scrollY(.below, convertPercentageToPT(percentage: percentage))
     }
 
-    func onScroll(_ sender: UIPanGestureRecognizer) {
+    func scrollVertical(_ sender: UIPanGestureRecognizer) {
         
         guard case .editing = editState else {
             return
@@ -102,6 +105,53 @@ class ComposeCell: UIView, EditDelegator {
         scrollY(position, translateY)
 
         sender.setTranslation(CGPoint.zero, in: image)
+    }
+    
+    func scrollHorizontal(_ sender: UIPanGestureRecognizer, _ direction: String) {
+        guard case .editing = editState else {
+            return
+        }
+
+        let translate = sender.translation(in: self)
+        let translateX = translate.x
+        scrollX(translateX, direction)
+    }
+    
+    func scrollX(_ translateX: CGFloat, _ direction: String) {
+        guard translateX != 0 else {
+            return
+        }
+  
+        let shrink = (translateX > 0 && direction == "right") || (translateX < 0 && direction == "left")
+        
+        let activeConstraint = direction == "left" ? leadingConstraint! : trailingConstraint!
+        var activeExpectConstraintConstant = activeConstraint.constant + (shrink ? -1 : 1)*abs(translateX)
+        
+        var calibratedTranslateX = translateX
+        if activeExpectConstraintConstant < -frame.width {
+            let calibrate = abs(activeExpectConstraintConstant) - frame.width
+            calibratedTranslateX = calibratedTranslateX/abs(calibratedTranslateX)*(abs(calibratedTranslateX) - calibrate)
+        } else if activeExpectConstraintConstant > 0 {
+            let calibrate = activeExpectConstraintConstant
+            calibratedTranslateX = calibratedTranslateX/abs(calibratedTranslateX)*(abs(calibratedTranslateX) - calibrate)
+        }
+        
+        print(activeExpectConstraintConstant, translateX, calibratedTranslateX)
+        activeExpectConstraintConstant = activeConstraint.constant + (shrink ? -1 : 1)*abs(calibratedTranslateX)
+        
+        guard activeExpectConstraintConstant <= 0 else {
+            return
+        }
+        
+        if direction == "left" {
+            let translateForActiveConstraint = (shrink ? -1 : 1)*abs(calibratedTranslateX)
+            leadingConstraint.constant = leadingConstraint.constant + translateForActiveConstraint
+            trailingConstraint.constant = trailingConstraint.constant - translateForActiveConstraint
+        } else {
+            let translateForActiveConstraint = (shrink ? -1 : +1)*abs(calibratedTranslateX)
+            leadingConstraint.constant = leadingConstraint.constant - translateForActiveConstraint
+            trailingConstraint.constant = trailingConstraint.constant + translateForActiveConstraint
+        }
     }
     
     func setImage(uiImage: UIImage) {

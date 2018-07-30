@@ -22,15 +22,17 @@
             </subviews>
             <gestureRecognizers/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="tNs-5I-7A1" secondAttribute="trailing" id="4E8-UG-FId"/>
+                <constraint firstItem="4xK-rs-47B" firstAttribute="trailing" secondItem="tNs-5I-7A1" secondAttribute="trailing" id="4E8-UG-FId"/>
                 <constraint firstItem="4xK-rs-47B" firstAttribute="bottom" secondItem="tNs-5I-7A1" secondAttribute="bottom" identifier="bottom" id="nni-Ag-ftd"/>
                 <constraint firstItem="4xK-rs-47B" firstAttribute="top" secondItem="tNs-5I-7A1" secondAttribute="top" identifier="top" id="oDI-AI-zwQ"/>
-                <constraint firstItem="tNs-5I-7A1" firstAttribute="leading" secondItem="b7E-zP-gnl" secondAttribute="leading" id="oJF-OS-HCl"/>
+                <constraint firstItem="tNs-5I-7A1" firstAttribute="leading" secondItem="4xK-rs-47B" secondAttribute="leading" id="oJF-OS-HCl"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="4xK-rs-47B"/>
             <connections>
                 <outlet property="image" destination="tNs-5I-7A1" id="S8N-pl-bTS"/>
+                <outlet property="leadingConstraint" destination="oJF-OS-HCl" id="c9K-tC-XPO"/>
+                <outlet property="trailingConstraint" destination="4E8-UG-FId" id="GMD-7T-12j"/>
             </connections>
             <point key="canvasLocation" x="-544.5" y="841"/>
         </view>

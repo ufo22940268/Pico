@@ -130,12 +130,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         self.container.showSeperators(show: true)
     }
     
-    @IBAction func onScroll(_ sender: UIPanGestureRecognizer) {
-        
-        guard case .editing = editState else {
-            return
-        }
-        
+    fileprivate func onScrollVertical(_ sender: UIPanGestureRecognizer) {
         if case .began = sender.state {
             let containerPoint: CGPoint = sender.location(in: container)
             let hitViews = container.cells.filter {
@@ -151,12 +146,34 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             }
             
         } else if case .changed = sender.state {
-            panView.onScroll(sender)
+            panView.scrollVertical(sender)
             container.showSeperators(show: false)
         } else if sender.state == .ended {
             container.showSeperators(show: true)
         }
-
+    }
+    
+    fileprivate func onScrollHorizontal(_ sender: UIPanGestureRecognizer, _ direction: String) {
+        if sender.state == .changed {
+            container.cells.forEach { (cell) in
+                cell.scrollHorizontal(sender, direction)
+            }
+            sender.setTranslation(CGPoint.zero, in: container)
+        }
+    }
+    
+    @IBAction func onScroll(_ sender: UIPanGestureRecognizer) {
+        guard case .editing = editState else {
+            return
+        }
+        
+        if case .editing(let direction, _) = editState {
+            if direction == "vertical" {
+                onScrollVertical(sender)
+            } else {
+                onScrollHorizontal(sender, direction)
+            }
+        }
     }
     
     func findScrollCell(hitView: UIView) -> ComposeCell? {

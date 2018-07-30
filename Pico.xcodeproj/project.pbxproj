@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4201F006210ED73400A6EBA5 /* GestureExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4201F005210ED73400A6EBA5 /* GestureExtension.swift */; };
 		420EF44820F965FA006CCDD3 /* AutoConcate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420EF44720F965FA006CCDD3 /* AutoConcate.swift */; };
 		420EF44A20F9665D006CCDD3 /* MovieConcate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420EF44920F9665D006CCDD3 /* MovieConcate.swift */; };
 		420EF44C20FCA784006CCDD3 /* PreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420EF44B20FCA784006CCDD3 /* PreviewController.swift */; };
@@ -71,6 +72,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4201F005210ED73400A6EBA5 /* GestureExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureExtension.swift; sourceTree = "<group>"; };
 		420EF44720F965FA006CCDD3 /* AutoConcate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoConcate.swift; sourceTree = "<group>"; };
 		420EF44920F9665D006CCDD3 /* MovieConcate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieConcate.swift; sourceTree = "<group>"; };
 		420EF44B20FCA784006CCDD3 /* PreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewController.swift; sourceTree = "<group>"; };
@@ -151,6 +153,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4201F004210ED68B00A6EBA5 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				420EF44D20FCBF2E006CCDD3 /* UIScrollViewExtension.swift */,
+				420EF44F20FCC024006CCDD3 /* UIImageViewExtension.swift */,
+				4266A1712101B92F009F92D6 /* UIViewExtension.swift */,
+				42C89D6E210998AB00792EED /* VNRectangleObservationExtension.swift */,
+				4220E822210AB6FB00ED0BBD /* StringExtension.swift */,
+				4201F005210ED73400A6EBA5 /* GestureExtension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		42A18C3E20EAF5A600DD4AA5 = {
 			isa = PBXGroup;
 			children = (
@@ -232,11 +247,7 @@
 				42143E0120F89D9D00000487 /* MovieDetector.swift */,
 				420EF44720F965FA006CCDD3 /* AutoConcate.swift */,
 				420EF44920F9665D006CCDD3 /* MovieConcate.swift */,
-				420EF44D20FCBF2E006CCDD3 /* UIScrollViewExtension.swift */,
-				420EF44F20FCC024006CCDD3 /* UIImageViewExtension.swift */,
-				4266A1712101B92F009F92D6 /* UIViewExtension.swift */,
-				42C89D6E210998AB00792EED /* VNRectangleObservationExtension.swift */,
-				4220E822210AB6FB00ED0BBD /* StringExtension.swift */,
+				4201F004210ED68B00A6EBA5 /* Extensions */,
 				4220E824210AB93D00ED0BBD /* ShareManager.swift */,
 			);
 			path = Utils;
@@ -441,6 +452,7 @@
 				42C4067120F44E820074B728 /* RGBAImage.swift in Sources */,
 				42A18C4B20EAF5A600DD4AA5 /* AppDelegate.swift in Sources */,
 				42C4066F20F446750074B728 /* OverlapDetector.swift in Sources */,
+				4201F006210ED73400A6EBA5 /* GestureExtension.swift in Sources */,
 				42A18C8820EB047300DD4AA5 /* Image.swift in Sources */,
 				420EF44E20FCBF2E006CCDD3 /* UIScrollViewExtension.swift in Sources */,
 				42F829CA2106FC6B00DCF1A6 /* FrameView.swift in Sources */,
