@@ -274,9 +274,11 @@
                         <outlet property="container" destination="3Jb-z4-kgp" id="M0F-LT-kJO"/>
                         <outlet property="containerWrapper" destination="FDD-5R-i7y" id="Hcy-ki-a2b"/>
                         <outlet property="containerWrapperWidthConstraint" destination="37q-FU-TOZ" id="rI0-Wt-qEB"/>
+                        <outlet property="leadingConstraint" destination="7bH-SJ-Ixx" id="z5u-YE-qbk"/>
                         <outlet property="panGesture" destination="rOY-HI-ftD" id="MOz-FL-lRy"/>
                         <outlet property="scroll" destination="Qfn-Hc-ipw" id="lun-dp-7Ar"/>
                         <outlet property="topConstraint" destination="bre-SP-3Ha" id="ILm-lm-TFt"/>
+                        <outlet property="trailingConstraint" destination="GHB-58-3aE" id="WAB-c7-bNs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gbj-Ks-Iyi" userLabel="First Responder" sceneMemberID="firstResponder"/>

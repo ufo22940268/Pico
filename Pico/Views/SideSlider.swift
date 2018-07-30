@@ -11,7 +11,7 @@ import UIKit
 
 class SideSlider: UIView {
     
-    @objc var position: String!
+    @objc var direction: String!
 
     @IBOutlet weak var button: UIButton!
     
@@ -24,7 +24,7 @@ class SideSlider: UIView {
         translatesAutoresizingMaskIntoConstraints = false
 
         layoutIfNeeded()
-        switch position {
+        switch direction {
         case "left":
             button.roundCorners([.topRight, .bottomRight], radius: 15)
         case "right":
@@ -33,16 +33,16 @@ class SideSlider: UIView {
             break
         }
 
-        let uiImage: UIImage? = position == "left" ? UIImage(named: "angle-double-left-solid") : UIImage(named: "angle-double-right-solid")
+        let uiImage: UIImage? = direction == "left" ? UIImage(named: "angle-double-left-solid") : UIImage(named: "angle-double-right-solid")
         
         arrow = UIImageView(image: uiImage)
         addSubview(arrow)
         arrow.isHidden = true
         arrow.translatesAutoresizingMaskIntoConstraints = false
-        if position == "left" {
+        if direction == "left" {
             arrow.leadingAnchor.constraint(equalTo: button.trailingAnchor, constant: ArrowConstants.gap).isActive = true
             arrow.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
-        } else if position == "right" {
+        } else if direction == "right" {
             arrow.trailingAnchor.constraint(equalTo: button.leadingAnchor, constant: -ArrowConstants.gap).isActive = true
             arrow.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
         }
@@ -60,7 +60,7 @@ class SideSlider: UIView {
             UIView.setAnimationRepeatCount(100000)
             UIView.setAnimationRepeatAutoreverses(true)
             if self != nil {
-                let offsetX = self!.position == "left" ? -ArrowConstants.translate : ArrowConstants.translate
+                let offsetX = self!.direction == "left" ? -ArrowConstants.translate : ArrowConstants.translate
                 self!.arrow.frame = self!.arrow.frame.offsetBy(dx: offsetX, dy: 0)
             }
         })
@@ -71,11 +71,11 @@ class SideSlider: UIView {
     
     @IBAction func onToggle(_ sender: UIButton) {
         if sender.isSelected {
-            delegate?.editStateChanged(state: EditState.inactive)
+            delegate?.editStateChanged(state: EditState.inactive(fromDirections: direction))
             sender.isSelected = false
             stopAnimator()
         } else {
-            delegate?.editStateChanged(state: EditState.editing(direction: position, seperatorIndex: nil))
+            delegate?.editStateChanged(state: EditState.editing(direction: direction, seperatorIndex: nil))
             sender.isSelected = true
             startAnimator()
         }

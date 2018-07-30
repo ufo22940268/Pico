@@ -21,17 +21,21 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     @IBOutlet var topConstraint: NSLayoutConstraint!
     @IBOutlet var bottomConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var leadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var trailingConstraint: NSLayoutConstraint!
+    
     let minContainerWidth = CGFloat(230)
     let maxContainerWidth = UIScreen.main.bounds.width
     var lastScale = CGFloat(1.0)
     
-    var editState: EditState = EditState.inactive
+    var editState: EditState = .inactive(fromDirections: nil)
     var panView: ComposeCell!
     var loadedImages:[Image]!
     
     @IBOutlet weak var containerWrapperWidthConstraint: NSLayoutConstraint!
     
     @IBOutlet var panGesture: UIPanGestureRecognizer!
+    
     
     enum ConcatenateType {
         case screenshot
@@ -81,7 +85,9 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         if seperatorType == .crop {
             self.container.addLeftSeperator()
+            self.container.leftSlider.leadingAnchor.constraint(equalTo: containerWrapper.leadingAnchor).isActive = true
             self.container.addRightSeperator()
+            self.container.rightSlider.trailingAnchor.constraint(equalTo: containerWrapper.trailingAnchor).isActive = true
         }
         
         self.container.subviews.filter{$0.isKind(of: SeperatorSlider.self)}.forEach {self.container.bringSubview(toFront: $0)}
@@ -155,9 +161,48 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     
     fileprivate func onScrollHorizontal(_ sender: UIPanGestureRecognizer, _ direction: String) {
         if sender.state == .changed {
-            container.cells.forEach { (cell) in
-                cell.scrollHorizontal(sender, direction)
+            guard case .editing = editState else {
+                return
             }
+            
+            let translate = sender.translation(in: container)
+            let translateX = translate.x
+            
+            guard translateX != 0 else {
+                return
+            }
+            
+            let shrink = (translateX > 0 && direction == "right") || (translateX < 0 && direction == "left")
+            
+            let activeConstraint = direction == "left" ? leadingConstraint! : trailingConstraint!
+            var activeExpectConstraintConstant = activeConstraint.constant + (shrink ? -1 : 1)*abs(translateX)
+            
+            var calibratedTranslateX = translateX
+            if activeExpectConstraintConstant < -container.frame.width {
+                let calibrate = abs(activeExpectConstraintConstant) - container.frame.width
+                calibratedTranslateX = calibratedTranslateX/abs(calibratedTranslateX)*(abs(calibratedTranslateX) - calibrate)
+            } else if activeExpectConstraintConstant > 0 {
+                let calibrate = activeExpectConstraintConstant
+                calibratedTranslateX = calibratedTranslateX/abs(calibratedTranslateX)*(abs(calibratedTranslateX) - calibrate)
+            }
+            
+            activeExpectConstraintConstant = activeConstraint.constant + (shrink ? -1 : 1)*abs(calibratedTranslateX)
+            
+            guard activeExpectConstraintConstant <= 0 else {
+                return
+            }
+            
+            
+            if direction == "left" {
+                let translateForActiveConstraint = (shrink ? -1 : 1)*abs(calibratedTranslateX)
+                leadingConstraint.constant = leadingConstraint.constant + translateForActiveConstraint
+                trailingConstraint.constant = trailingConstraint.constant - translateForActiveConstraint
+            } else {
+                let translateForActiveConstraint = (shrink ? -1 : +1)*abs(calibratedTranslateX)
+                leadingConstraint.constant = leadingConstraint.constant - translateForActiveConstraint
+                trailingConstraint.constant = trailingConstraint.constant + translateForActiveConstraint
+            }
+                        
             sender.setTranslation(CGPoint.zero, in: container)
         }
     }
@@ -210,7 +255,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         var topInset = CGFloat(0)
         var bottomInset = CGFloat(0)
-        print(container.frame.height, containerWrapper.frame.height, scroll.frame.height)
         let containerHeight = max(container.frame.height, container.frame.height*(minContainerWidth/container.frame.width))
         if containerHeight < scroll.frame.height {
             let halfGap = (scroll.frame.height - containerHeight)/2
@@ -221,11 +265,15 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             topConstraint.constant = topDistance
             bottomConstraint.constant = bottomDistance
         } else {
-            print("bottom", topDistance)
             topInset = topDistance
             bottomInset = bottomDistance
         }
         
+//        let sampleCell = container.cells.first!
+//        let newWidth = sampleCell.frame.width - abs(sampleCell.trailingConstraint.constant) - abs(sampleCell.leadingConstraint.constant)
+//        containerWrapperWidthConstraint.constant = newWidth
+//        print(newWidth)
+
         scroll.contentInset = UIEdgeInsets(top: -topInset, left: 0, bottom: -bottomInset, right: 0)
     }
     
@@ -239,11 +287,13 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             panGesture.isEnabled = true
         }
         
-        if case .inactive = state {
-            UIView.animate(withDuration: 0.14, animations: {
-                self.resetGapToContainer()
-                self.containerWrapper.layoutIfNeeded()
-            })
+        if case .inactive(let fromDirections) = state {
+            if let fromDirections = fromDirections {
+                UIView.animate(withDuration: 0.14, animations: {
+                    self.resetGapToContainer()
+                    self.containerWrapper.layoutIfNeeded()
+                })
+            }
         }
     }
 
@@ -309,6 +359,7 @@ extension ComposeController {
         animator.startAnimation()
     }
 }
+
 
 extension ComposeController: UIScrollViewDelegate {
     fileprivate func updateSideButton() {

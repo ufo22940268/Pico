@@ -17,7 +17,7 @@ protocol OnCellScroll {
 }
 
 enum EditState {
-    case inactive
+    case inactive(fromDirections: String?)
     /**
      * direction
      *  - vertical
@@ -30,7 +30,7 @@ enum EditState {
 class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
 
     
-    var editState = EditState.inactive
+    var editState = EditState.inactive(fromDirections: nil)
     var editDelegator: EditDelegator?
     var scrollDelegator: OnCellScroll?
     var cells = [ComposeCell]()
@@ -83,7 +83,6 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     func addLeftSeperator() {
         let seperator = UINib(nibName: "Slider", bundle: nil).instantiate(withOwner: self, options: nil).map {$0 as! UIView}.filter {$0.restorationIdentifier == "left"}.first as! SideSlider
         self.addSubview(seperator)
-        seperator.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         let topConstraint = seperator.topAnchor.constraint(equalTo: topAnchor)
         topConstraint.priority = .defaultHigh
         topConstraint.isActive = true
@@ -99,7 +98,6 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     func addRightSeperator() {
         let seperator = UINib(nibName: "Slider", bundle: nil).instantiate(withOwner: self, options: nil).map {$0 as! UIView}.filter {$0.restorationIdentifier == "right"}.first as! SideSlider
         self.addSubview(seperator)
-        seperator.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         let topConstraint = seperator.topAnchor.constraint(equalTo: topAnchor)
         topConstraint.priority = .defaultHigh
         topConstraint.isActive = true
@@ -156,5 +154,5 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     
     func setEditDelegator(delegator: EditDelegator) {
         editDelegator = delegator
-    }
+    }    
 }

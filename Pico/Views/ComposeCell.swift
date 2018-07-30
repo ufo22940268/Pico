@@ -14,7 +14,7 @@ class ComposeCell: UIView, EditDelegator {
     @IBOutlet weak var image: UIImageView!
     
     var index: Int!
-    var editState = EditState.inactive
+    var editState = EditState.inactive(fromDirections: nil)
     var onCellScrollDelegator: OnCellScroll!
     
     var originFrame: CGRect?
@@ -136,7 +136,6 @@ class ComposeCell: UIView, EditDelegator {
             calibratedTranslateX = calibratedTranslateX/abs(calibratedTranslateX)*(abs(calibratedTranslateX) - calibrate)
         }
         
-        print(activeExpectConstraintConstant, translateX, calibratedTranslateX)
         activeExpectConstraintConstant = activeConstraint.constant + (shrink ? -1 : 1)*abs(calibratedTranslateX)
         
         guard activeExpectConstraintConstant <= 0 else {

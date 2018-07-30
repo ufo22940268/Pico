@@ -121,7 +121,7 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="V5c-Wf-sHO"/>
             <userDefinedRuntimeAttributes>
-                <userDefinedRuntimeAttribute type="string" keyPath="position" value="top"/>
+                <userDefinedRuntimeAttribute type="string" keyPath="direction" value="top"/>
             </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="button" destination="0M1-nQ-DQC" id="d4e-P9-mAT"/>
@@ -182,7 +182,7 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="2z1-RW-7aG"/>
             <userDefinedRuntimeAttributes>
-                <userDefinedRuntimeAttribute type="string" keyPath="position" value="bottom"/>
+                <userDefinedRuntimeAttribute type="string" keyPath="direction" value="bottom"/>
             </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="button" destination="OxF-rH-3u9" id="lH0-vY-nwF"/>
@@ -253,7 +253,7 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="spV-JP-zHd"/>
             <userDefinedRuntimeAttributes>
-                <userDefinedRuntimeAttribute type="string" keyPath="position" value="left"/>
+                <userDefinedRuntimeAttribute type="string" keyPath="direction" value="left"/>
             </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="button" destination="1Sy-2k-fkg" id="9Tc-9P-Hqj"/>
@@ -325,7 +325,7 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="Lgo-Ve-Avb"/>
             <userDefinedRuntimeAttributes>
-                <userDefinedRuntimeAttribute type="string" keyPath="position" value="right"/>
+                <userDefinedRuntimeAttribute type="string" keyPath="direction" value="right"/>
             </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="button" destination="2Oz-1H-aZ8" id="lS2-ux-GCu"/>

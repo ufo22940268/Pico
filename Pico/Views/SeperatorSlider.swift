@@ -26,15 +26,15 @@ class SeperatorSlider: UIView {
     var editDelegators:[EditDelegator] = [EditDelegator]()
     var validArrows = [UIImageView]()
     
-    @objc var position = "middle"
+    @objc var direction = "middle"
     @IBOutlet weak var button: UIButton!
     
     fileprivate func showAboveArrow() -> Bool {
-        return ["bottom", "middle"].contains(position)
+        return ["bottom", "middle"].contains(direction)
     }
     
     fileprivate func showBelowArrow() -> Bool {
-        return ["top", "middle"].contains(position)
+        return ["top", "middle"].contains(direction)
     }
     
     
@@ -55,7 +55,7 @@ class SeperatorSlider: UIView {
         }
         
         
-        switch position {
+        switch direction {
         case "top":
             button.roundCorners([.bottomLeft, .bottomRight], radius: 15)
         case "middle":            button.roundCorners([.bottomLeft, .bottomRight, .topLeft, .topRight], radius: 15)
@@ -104,7 +104,7 @@ class SeperatorSlider: UIView {
         if sender.isSelected {
             editState = EditState.editing(direction: "vertical", seperatorIndex: index)
         } else {
-            editState = EditState.inactive
+            editState = EditState.inactive(fromDirections: "vertical")
         }
         
         editDelegators.forEach{ $0.editStateChanged(state: editState) }
