@@ -197,7 +197,7 @@
                             <scrollView verifyAmbiguity="off" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qfn-Hc-ipw">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
-                                    <view verifyAmbiguity="off" contentMode="scaleToFill" ambiguous="YES" restorationIdentifier="ContainerWrapper" translatesAutoresizingMaskIntoConstraints="NO" id="FDD-5R-i7y" userLabel="ContainerWrapper">
+                                    <view verifyAmbiguity="off" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" restorationIdentifier="ContainerWrapper" translatesAutoresizingMaskIntoConstraints="NO" id="FDD-5R-i7y" userLabel="ContainerWrapper">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="3Jb-z4-kgp" customClass="ComposeContainerView" customModule="Pico" customModuleProvider="target">
@@ -211,9 +211,8 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="3Jb-z4-kgp" secondAttribute="bottom" priority="750" identifier="bottom to wrapper" id="2Gc-LI-0x1"/>
-                                            <constraint firstItem="3Jb-z4-kgp" firstAttribute="leading" secondItem="FDD-5R-i7y" secondAttribute="leading" id="7bH-SJ-Ixx"/>
-                                            <constraint firstAttribute="trailing" secondItem="3Jb-z4-kgp" secondAttribute="trailing" id="GHB-58-3aE"/>
-                                            <constraint firstItem="3Jb-z4-kgp" firstAttribute="width" secondItem="FDD-5R-i7y" secondAttribute="width" id="UrU-86-kB1"/>
+                                            <constraint firstItem="3Jb-z4-kgp" firstAttribute="leading" secondItem="FDD-5R-i7y" secondAttribute="leading" priority="250" id="7bH-SJ-Ixx"/>
+                                            <constraint firstItem="3Jb-z4-kgp" firstAttribute="trailing" secondItem="FDD-5R-i7y" secondAttribute="trailing" priority="250" id="GHB-58-3aE"/>
                                             <constraint firstItem="3Jb-z4-kgp" firstAttribute="top" secondItem="FDD-5R-i7y" secondAttribute="top" priority="750" identifier="top to wrapper" id="bre-SP-3Ha"/>
                                         </constraints>
                                         <connections>
@@ -224,8 +223,9 @@
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstItem="FDD-5R-i7y" firstAttribute="width" secondItem="Qfn-Hc-ipw" secondAttribute="width" id="37q-FU-TOZ"/>
-                                    <constraint firstAttribute="trailing" secondItem="FDD-5R-i7y" secondAttribute="trailing" priority="750" id="8tj-WS-eFi"/>
-                                    <constraint firstItem="FDD-5R-i7y" firstAttribute="leading" secondItem="Qfn-Hc-ipw" secondAttribute="leading" priority="750" id="GC6-2T-RVc"/>
+                                    <constraint firstItem="3Jb-z4-kgp" firstAttribute="width" secondItem="Qfn-Hc-ipw" secondAttribute="width" id="3nO-d3-sq7"/>
+                                    <constraint firstItem="FDD-5R-i7y" firstAttribute="trailing" secondItem="Qfn-Hc-ipw" secondAttribute="trailing" priority="250" identifier="containerWrapperTrailing" id="8tj-WS-eFi"/>
+                                    <constraint firstItem="FDD-5R-i7y" firstAttribute="leading" secondItem="Qfn-Hc-ipw" secondAttribute="leading" priority="250" identifier="containerWrapperLeading" id="GC6-2T-RVc"/>
                                     <constraint firstAttribute="bottom" secondItem="FDD-5R-i7y" secondAttribute="bottom" id="I0i-Za-MXD"/>
                                     <constraint firstItem="FDD-5R-i7y" firstAttribute="centerX" secondItem="Qfn-Hc-ipw" secondAttribute="centerX" id="bkM-s9-ajj"/>
                                     <constraint firstItem="FDD-5R-i7y" firstAttribute="top" secondItem="Qfn-Hc-ipw" secondAttribute="top" id="gGw-MB-a4S"/>
@@ -248,7 +248,6 @@
                         <constraints>
                             <constraint firstItem="Qfn-Hc-ipw" firstAttribute="leading" secondItem="cZ4-cg-Jcn" secondAttribute="leading" id="3r2-CL-8NU"/>
                             <constraint firstItem="Qfn-Hc-ipw" firstAttribute="bottom" secondItem="479-VI-HKL" secondAttribute="top" id="4dR-Tn-wdv"/>
-                            <constraint firstItem="FDD-5R-i7y" firstAttribute="height" relation="greaterThanOrEqual" secondItem="Qfn-Hc-ipw" secondAttribute="height" id="Hke-mp-m4E"/>
                             <constraint firstItem="479-VI-HKL" firstAttribute="bottom" secondItem="cZ4-cg-Jcn" secondAttribute="bottom" id="Hlx-yi-gKK"/>
                             <constraint firstItem="479-VI-HKL" firstAttribute="trailing" secondItem="Qfn-Hc-ipw" secondAttribute="trailing" id="TTl-Mx-xej"/>
                             <constraint firstItem="Qfn-Hc-ipw" firstAttribute="trailing" secondItem="cZ4-cg-Jcn" secondAttribute="trailing" id="aXH-ul-u6P"/>
@@ -272,13 +271,16 @@
                     <connections>
                         <outlet property="bottomConstraint" destination="2Gc-LI-0x1" id="lvg-t4-Nbw"/>
                         <outlet property="container" destination="3Jb-z4-kgp" id="M0F-LT-kJO"/>
+                        <outlet property="containerLeadingConstraint" destination="7bH-SJ-Ixx" id="rez-I9-IEM"/>
+                        <outlet property="containerTrailingConstraint" destination="GHB-58-3aE" id="W3Z-kD-ujB"/>
                         <outlet property="containerWrapper" destination="FDD-5R-i7y" id="Hcy-ki-a2b"/>
+                        <outlet property="containerWrapperCenterXConstraint" destination="bkM-s9-ajj" id="2mg-qE-HZq"/>
+                        <outlet property="containerWrapperLeadingConstraint" destination="GC6-2T-RVc" id="w4G-0b-WH5"/>
+                        <outlet property="containerWrapperTrailingConstraint" destination="8tj-WS-eFi" id="gQk-t9-RtI"/>
                         <outlet property="containerWrapperWidthConstraint" destination="37q-FU-TOZ" id="rI0-Wt-qEB"/>
-                        <outlet property="leadingConstraint" destination="7bH-SJ-Ixx" id="z5u-YE-qbk"/>
                         <outlet property="panGesture" destination="rOY-HI-ftD" id="MOz-FL-lRy"/>
                         <outlet property="scroll" destination="Qfn-Hc-ipw" id="lun-dp-7Ar"/>
                         <outlet property="topConstraint" destination="bre-SP-3Ha" id="ILm-lm-TFt"/>
-                        <outlet property="trailingConstraint" destination="GHB-58-3aE" id="WAB-c7-bNs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gbj-Ks-Iyi" userLabel="First Responder" sceneMemberID="firstResponder"/>

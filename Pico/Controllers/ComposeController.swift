@@ -21,8 +21,10 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     @IBOutlet var topConstraint: NSLayoutConstraint!
     @IBOutlet var bottomConstraint: NSLayoutConstraint!
     
-    @IBOutlet weak var leadingConstraint: NSLayoutConstraint!
-    @IBOutlet weak var trailingConstraint: NSLayoutConstraint!
+    @IBOutlet var containerLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet var containerTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet var containerWrapperLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet var containerWrapperTrailingConstraint: NSLayoutConstraint!
     
     let minContainerWidth = CGFloat(230)
     let maxContainerWidth = UIScreen.main.bounds.width
@@ -34,8 +36,13 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     
     @IBOutlet weak var containerWrapperWidthConstraint: NSLayoutConstraint!
     
+    @IBOutlet var containerWrapperCenterXConstraint: NSLayoutConstraint!
     @IBOutlet var panGesture: UIPanGestureRecognizer!
     
+    var maskCenterXConstraint: NSLayoutConstraint!
+    var maskHeightToContainerWrapperConstraint: NSLayoutConstraint!
+    var maskCenterXToContainerConstraint: NSLayoutConstraint!
+    var maskCenterXToContainerWrapperConstraint: NSLayoutConstraint!
     
     enum ConcatenateType {
         case screenshot
@@ -174,35 +181,51 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             
             let shrink = (translateX > 0 && direction == "right") || (translateX < 0 && direction == "left")
             
-            let activeConstraint = direction == "left" ? leadingConstraint! : trailingConstraint!
+            let activeConstraint = direction == "left" ? containerLeadingConstraint! : containerTrailingConstraint!
             var activeExpectConstraintConstant = activeConstraint.constant + (shrink ? -1 : 1)*abs(translateX)
             
             var calibratedTranslateX = translateX
-            if activeExpectConstraintConstant < -container.frame.width {
-                let calibrate = abs(activeExpectConstraintConstant) - container.frame.width
-                calibratedTranslateX = calibratedTranslateX/abs(calibratedTranslateX)*(abs(calibratedTranslateX) - calibrate)
-            } else if activeExpectConstraintConstant > 0 {
-                let calibrate = activeExpectConstraintConstant
-                calibratedTranslateX = calibratedTranslateX/abs(calibratedTranslateX)*(abs(calibratedTranslateX) - calibrate)
-            }
-            
-            activeExpectConstraintConstant = activeConstraint.constant + (shrink ? -1 : 1)*abs(calibratedTranslateX)
-            
-            guard activeExpectConstraintConstant <= 0 else {
-                return
-            }
-            
-            
+//            if activeExpectConstraintConstant < -container.frame.width {
+//                let calibrate = abs(activeExpectConstraintConstant) - container.frame.width
+//                calibratedTranslateX = calibratedTranslateX/abs(calibratedTranslateX)*(abs(calibratedTranslateX) - calibrate)
+//            } else if activeExpectConstraintConstant > 0 {
+//                let calibrate = activeExpectConstraintConstant
+//                calibratedTranslateX = calibratedTranslateX/abs(calibratedTranslateX)*(abs(calibratedTranslateX) - calibrate)
+//            }
+//            
+//            activeExpectConstraintConstant = activeConstraint.constant + (shrink ? -1 : 1)*abs(calibratedTranslateX)
+//            
+//            guard activeExpectConstraintConstant <= 0 else {
+//                return
+//            }
+//            
+
+            /// Move container
+            var translateForActiveConstraint: CGFloat!
             if direction == "left" {
-                let translateForActiveConstraint = (shrink ? -1 : 1)*abs(calibratedTranslateX)
-                leadingConstraint.constant = leadingConstraint.constant + translateForActiveConstraint
-                trailingConstraint.constant = trailingConstraint.constant - translateForActiveConstraint
+                translateForActiveConstraint = (shrink ? -1 : 1)*abs(calibratedTranslateX)
+                containerLeadingConstraint.priority = .defaultHigh
+                containerLeadingConstraint.constant = containerLeadingConstraint.constant + translateForActiveConstraint
+                
             } else {
-                let translateForActiveConstraint = (shrink ? -1 : +1)*abs(calibratedTranslateX)
-                leadingConstraint.constant = leadingConstraint.constant - translateForActiveConstraint
-                trailingConstraint.constant = trailingConstraint.constant + translateForActiveConstraint
+                print("shrink", shrink)
+                translateForActiveConstraint = (shrink ? 1 : -1)*abs(calibratedTranslateX)
+                containerTrailingConstraint.priority = .defaultHigh
+                containerTrailingConstraint.constant = containerTrailingConstraint.constant + translateForActiveConstraint
             }
-                        
+            
+            /// Update container wrapper
+            let newWidth = scroll.frame.width - abs(containerLeadingConstraint.constant) - abs(containerTrailingConstraint.constant)
+            containerWrapperWidthConstraint.constant = newWidth - scroll.frame.width
+            switch direction {
+            case "left":
+                containerWrapperTrailingConstraint.constant = containerWrapperTrailingConstraint.constant + (shrink ? 1 : -1)*abs(calibratedTranslateX)
+            case "right":
+                containerWrapperLeadingConstraint.constant = containerWrapperLeadingConstraint.constant + (shrink ? 1 : -1)*abs(calibratedTranslateX)
+            default:
+                break
+            }
+            
             sender.setTranslation(CGPoint.zero, in: container)
         }
     }
@@ -269,11 +292,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             bottomInset = bottomDistance
         }
         
-//        let sampleCell = container.cells.first!
-//        let newWidth = sampleCell.frame.width - abs(sampleCell.trailingConstraint.constant) - abs(sampleCell.leadingConstraint.constant)
-//        containerWrapperWidthConstraint.constant = newWidth
-//        print(newWidth)
-
         scroll.contentInset = UIEdgeInsets(top: -topInset, left: 0, bottom: -bottomInset, right: 0)
     }
     
@@ -287,12 +305,29 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             panGesture.isEnabled = true
         }
         
-        if case .inactive(let fromDirections) = state {
+        if case .editing(let direction, _) = state, ["left", "right"].contains(direction) {
+            containerWrapperCenterXConstraint.isActive = false
+        } else if case .inactive(let fromDirections) = state {
             if let fromDirections = fromDirections {
-                UIView.animate(withDuration: 0.14, animations: {
-                    self.resetGapToContainer()
-                    self.containerWrapper.layoutIfNeeded()
-                })
+                if ["left", "right"].contains(fromDirections) {
+                    containerLeadingConstraint.priority = .defaultLow
+                    containerTrailingConstraint.priority = .defaultLow
+                    containerWrapperLeadingConstraint.priority = .defaultLow
+                    containerWrapperTrailingConstraint.priority = .defaultLow
+                    
+
+                    self.containerWrapperLeadingConstraint.constant = 0
+                    self.containerWrapperTrailingConstraint.constant = 0
+                    UIViewPropertyAnimator(duration: 0.15, curve: .linear, animations: {
+                        self.containerWrapperCenterXConstraint.isActive = true
+                        self.scroll.layoutIfNeeded()
+                    }).startAnimation()
+                } else {
+                    UIView.animate(withDuration: 0.14, animations: {
+                        self.resetGapToContainer()
+                        self.containerWrapper.layoutIfNeeded()
+                    })
+                }
             }
         }
     }
