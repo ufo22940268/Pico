@@ -196,7 +196,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             }
             translateForActiveConstraint = calibrateDirection*abs(calibratedTranslateX)
             
-            var targetConstant = activeConstraint.constant + translateForActiveConstraint
+            let targetConstant = activeConstraint.constant + translateForActiveConstraint
 
             if (direction == "left" && targetConstant > 0) || (direction == "right" && targetConstant < 0) {
                 let delta = abs(targetConstant)
@@ -218,6 +218,12 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                 containerWrapperLeadingConstraint.constant = containerWrapperLeadingConstraint.constant + (shrink ? 1 : -1)*abs(calibratedTranslateX)
             default:
                 break
+            }
+            
+            let midX = (min(container.frame.maxX, containerWrapper.bounds.maxX) - max(container.frame.minX, containerWrapper.bounds.minX)) / 2
+            if let firstSeperator = container.seperators.first {
+                let midPoint = firstSeperator.convert(CGPoint(x: midX, y: 0.0), from: containerWrapper)
+                container.updateVerticalSliderButtons(midPoint: midPoint)
             }
             
             sender.setTranslation(CGPoint.zero, in: container)
@@ -301,6 +307,8 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         if case .editing(let direction, _) = state, ["left", "right"].contains(direction) {
             containerWrapperCenterXConstraint.isActive = false
+            containerWrapperLeadingConstraint.constant = containerWrapper.frame.minX
+            containerWrapperTrailingConstraint.constant = scroll.frame.width - containerWrapper.frame.maxX
         } else if case .inactive(let fromDirections) = state {
             if let fromDirections = fromDirections {
                 if ["left", "right"].contains(fromDirections) {
@@ -316,7 +324,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                         self.scroll.layoutIfNeeded()
                     }).startAnimation()
                 } else {
-                    UIView.animate(withDuration: 0.14, animations: {
+                    UIView.animate(withDuration: 0.15, animations: {
                         self.resetGapToContainer()
                         self.containerWrapper.layoutIfNeeded()
                     })

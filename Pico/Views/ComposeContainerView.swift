@@ -154,5 +154,11 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     
     func setEditDelegator(delegator: EditDelegator) {
         editDelegator = delegator
-    }    
+    }
+    
+    func updateVerticalSliderButtons(midPoint: CGPoint) {
+        seperators.forEach { (slider) in
+            slider.updateButtonPosition(midPoint: midPoint)
+        }
+    }
 }

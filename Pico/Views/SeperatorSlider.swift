@@ -28,6 +28,7 @@ class SeperatorSlider: UIView {
     
     @objc var direction = "middle"
     @IBOutlet weak var button: UIButton!
+    var buttonCenterXConstraint: NSLayoutConstraint!
     
     fileprivate func showAboveArrow() -> Bool {
         return ["bottom", "middle"].contains(direction)
@@ -39,6 +40,9 @@ class SeperatorSlider: UIView {
     
     
     override func awakeFromNib() {
+        buttonCenterXConstraint = button.centerXAnchor.constraint(equalTo: centerXAnchor)
+        buttonCenterXConstraint.isActive = true
+        
         aboveArrow = UIImageView(image: UIImage(named: "angle-double-down-solid"))
         aboveArrow.isHidden = true
         aboveArrow.translatesAutoresizingMaskIntoConstraints = false
@@ -125,6 +129,10 @@ class SeperatorSlider: UIView {
             animator.finishAnimation(at: .current)
         }
         animations.removeAll()
+    }
+    
+    func updateButtonPosition(midPoint: CGPoint) {
+        buttonCenterXConstraint.constant = (midPoint.x - bounds.midX)
     }
     
     fileprivate func setupAnimations() {
