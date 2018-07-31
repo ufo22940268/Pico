@@ -25,6 +25,15 @@ enum EditState {
      *  - right
     */
     case editing(direction: String, seperatorIndex: Int?)
+    
+    func getDirection() -> String {
+        switch self {
+        case .inactive(let fromDirections):
+            return fromDirections ?? ""
+        case .editing(let direction, _):
+            return direction
+        }
+    }
 }
 
 class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
@@ -38,6 +47,8 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     
     var leftSlider: SideSlider!
     var rightSlider: SideSlider!
+    
+    var sliderType: SliderType = .crop
 
     func addImage(image: UIImage) {
         // Do any additional setup after loading the view.
@@ -116,13 +127,13 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
 
     func showSeperators(show: Bool) {
         if show {
-            updateSeperators()
+            updateSlidersWhenEditChanged()
         } else {
             seperators.forEach { $0.alpha = 0.0 }
         }
     }
     
-    func updateSeperators() {
+    fileprivate func updateSliderStateForSlideWhenEditChanged() {
         if case let .editing(direction, index) = editState {
             seperators.forEach { seperator in
                 if seperator.index != index {
@@ -139,7 +150,35 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
                 seperator.isUserInteractionEnabled = true
             }
         }
-    }							    
+    }
+    
+    fileprivate func updateSliderStateForCropWhenEditChanged() {
+        switch editState {
+        case .inactive:
+            leftSlider.isHidden = false
+            rightSlider.isHidden = false
+            seperators.first?.isHidden = false
+            seperators.last?.isHidden = false
+        case .editing:
+            if editState.getDirection() == "left" {
+                leftSlider.isHidden = false
+                rightSlider.isHidden = true
+            } else {
+                leftSlider.isHidden = true
+                rightSlider.isHidden = false
+            }
+            seperators.first?.isHidden = true
+            seperators.last?.isHidden = true
+        }
+    }
+    
+    func updateSlidersWhenEditChanged() {
+        if sliderType == .crop {
+            updateSliderStateForCropWhenEditChanged()
+        } else {
+            updateSliderStateForSlideWhenEditChanged()
+        }
+    }
     
     func updateComposeCells(state: EditState) {
         cells.forEach {$0.editStateChanged(state: state)}
@@ -147,7 +186,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
  
     func editStateChanged(state: EditState) {
         self.editState = state
-        updateSeperators()
+        updateSlidersWhenEditChanged()
         updateComposeCells(state: state)
         editDelegator?.editStateChanged(state: editState)    
     }
@@ -159,6 +198,21 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     func updateVerticalSliderButtons(midPoint: CGPoint) {
         seperators.forEach { (slider) in
             slider.updateButtonPosition(midPoint: midPoint)
+        }
+    }
+    
+    /// Call after slider type changed
+    func updateSliderType() {
+        if sliderType == .crop {
+            seperators[1..<seperators.count - 1].forEach {$0.isHidden = true}
+            seperators.first?.isHidden = false
+            seperators.last?.isHidden = false
+            leftSlider.isHidden = false
+            rightSlider.isHidden = false
+        } else if sliderType == .slide {
+            seperators[0..<seperators.count].forEach {$0.isHidden = false}
+            leftSlider.isHidden = true
+            rightSlider.isHidden = true
         }
     }
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum SeperatorType {
+enum SliderType {
     case crop, slide
 }
 
@@ -51,8 +51,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     }
     
     var type: ConcatenateType!
-    var seperatorType: SeperatorType? = .crop
-    
+
     fileprivate func concateScreenshot(_ uiImages: ([UIImage?])) {
         let dispatchGroup = DispatchGroup()
         for index in 0..<uiImages.count - 1 {
@@ -90,12 +89,10 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         self.container.addBottomSeperator()
         
-        if seperatorType == .crop {
-            self.container.addLeftSeperator()
-            self.container.leftSlider.leadingAnchor.constraint(equalTo: containerWrapper.leadingAnchor).isActive = true
-            self.container.addRightSeperator()
-            self.container.rightSlider.trailingAnchor.constraint(equalTo: containerWrapper.trailingAnchor).isActive = true
-        }
+        self.container.addLeftSeperator()
+        self.container.leftSlider.leadingAnchor.constraint(equalTo: containerWrapper.leadingAnchor).isActive = true
+        self.container.addRightSeperator()
+        self.container.rightSlider.trailingAnchor.constraint(equalTo: containerWrapper.trailingAnchor).isActive = true
         
         self.container.subviews.filter{$0.isKind(of: SeperatorSlider.self)}.forEach {self.container.bringSubview(toFront: $0)}
         self.container.subviews.filter{$0.isKind(of: SideSlider.self)}.forEach {
@@ -117,10 +114,14 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         self.resetGapToContainer()
         
         updateSideButton()
+        
+        container.updateSliderType()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        container.sliderType = .crop
         
         if loadedImages == nil {
             self.configureUIImages([UIImage(named: "short"), UIImage(named: "short2"), UIImage(named: "short2"), UIImage(named: "short2")])
@@ -312,11 +313,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         } else if case .inactive(let fromDirections) = state {
             if let fromDirections = fromDirections {
                 if ["left", "right"].contains(fromDirections) {
-                    containerLeadingConstraint.priority = .defaultLow
-                    containerTrailingConstraint.priority = .defaultLow
-                    containerWrapperLeadingConstraint.priority = .defaultLow
-                    containerWrapperTrailingConstraint.priority = .defaultLow
-                    
                     self.containerWrapperLeadingConstraint.constant = 0
                     self.containerWrapperTrailingConstraint.constant = 0
                     UIViewPropertyAnimator(duration: 0.15, curve: .linear, animations: {
