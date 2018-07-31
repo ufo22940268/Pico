@@ -181,38 +181,32 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             
             let shrink = (translateX > 0 && direction == "right") || (translateX < 0 && direction == "left")
             
-            let activeConstraint = direction == "left" ? containerLeadingConstraint! : containerTrailingConstraint!
-            var activeExpectConstraintConstant = activeConstraint.constant + (shrink ? -1 : 1)*abs(translateX)
-            
             var calibratedTranslateX = translateX
-//            if activeExpectConstraintConstant < -container.frame.width {
-//                let calibrate = abs(activeExpectConstraintConstant) - container.frame.width
-//                calibratedTranslateX = calibratedTranslateX/abs(calibratedTranslateX)*(abs(calibratedTranslateX) - calibrate)
-//            } else if activeExpectConstraintConstant > 0 {
-//                let calibrate = activeExpectConstraintConstant
-//                calibratedTranslateX = calibratedTranslateX/abs(calibratedTranslateX)*(abs(calibratedTranslateX) - calibrate)
-//            }
-//            
-//            activeExpectConstraintConstant = activeConstraint.constant + (shrink ? -1 : 1)*abs(calibratedTranslateX)
-//            
-//            guard activeExpectConstraintConstant <= 0 else {
-//                return
-//            }
-//            
 
             /// Move container
             var translateForActiveConstraint: CGFloat!
+            var calibrateDirection: CGFloat!
+            
+            let activeConstraint = direction == "left" ? containerLeadingConstraint! : containerTrailingConstraint!
+            let alternativeConstraint = direction == "left" ? containerTrailingConstraint! : containerLeadingConstraint!
             if direction == "left" {
-                translateForActiveConstraint = (shrink ? -1 : 1)*abs(calibratedTranslateX)
-                containerLeadingConstraint.priority = .defaultHigh
-                containerLeadingConstraint.constant = containerLeadingConstraint.constant + translateForActiveConstraint
-                
+                calibrateDirection = (shrink ? -1 : 1)
             } else {
-                print("shrink", shrink)
-                translateForActiveConstraint = (shrink ? 1 : -1)*abs(calibratedTranslateX)
-                containerTrailingConstraint.priority = .defaultHigh
-                containerTrailingConstraint.constant = containerTrailingConstraint.constant + translateForActiveConstraint
+                calibrateDirection = (shrink ? 1 : -1)
             }
+            translateForActiveConstraint = calibrateDirection*abs(calibratedTranslateX)
+            
+            var targetConstant = activeConstraint.constant + translateForActiveConstraint
+
+            if (direction == "left" && targetConstant > 0) || (direction == "right" && targetConstant < 0) {
+                let delta = abs(targetConstant)
+                calibratedTranslateX = calibratedTranslateX/abs(calibratedTranslateX)*(abs(calibratedTranslateX) - delta)
+            } else if abs(targetConstant) + abs(alternativeConstraint.constant) > container.frame.width {
+                let delta = abs(targetConstant) + abs(alternativeConstraint.constant) - container.frame.width
+                calibratedTranslateX = calibratedTranslateX/abs(calibratedTranslateX)*(abs(calibratedTranslateX) - delta)
+            }
+            
+            activeConstraint.constant = activeConstraint.constant + calibrateDirection*abs(calibratedTranslateX)
             
             /// Update container wrapper
             let newWidth = scroll.frame.width - abs(containerLeadingConstraint.constant) - abs(containerTrailingConstraint.constant)
@@ -315,7 +309,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                     containerWrapperLeadingConstraint.priority = .defaultLow
                     containerWrapperTrailingConstraint.priority = .defaultLow
                     
-
                     self.containerWrapperLeadingConstraint.constant = 0
                     self.containerWrapperTrailingConstraint.constant = 0
                     UIViewPropertyAnimator(duration: 0.15, curve: .linear, animations: {
