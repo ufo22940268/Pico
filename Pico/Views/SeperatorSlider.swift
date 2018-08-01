@@ -106,9 +106,9 @@ class SeperatorSlider: UIView {
 
         var editState: EditState!
         if sender.isSelected {
-            editState = EditState.editing(direction: "vertical", seperatorIndex: index)
+            editState = EditState.editing(direction: direction, seperatorIndex: index)
         } else {
-            editState = EditState.inactive(fromDirections: "vertical")
+            editState = EditState.inactive(fromDirections: direction)
         }
         
         editDelegators.forEach{ $0.editStateChanged(state: editState) }
@@ -169,7 +169,7 @@ class SeperatorSlider: UIView {
     fileprivate func setupAboveArrow(arrow: UIImageView) {
         addSubview(arrow)
         addConstraint(NSLayoutConstraint(item: arrow, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: -ArrowConstants.gap-15))
-        addConstraint(NSLayoutConstraint(item: arrow, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0) )
+        addConstraint(NSLayoutConstraint(item: arrow, attribute: .centerX, relatedBy: .equal, toItem: button, attribute: .centerX, multiplier: 1, constant: 0) )
         addConstraint(NSLayoutConstraint(item: arrow, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: ArrowConstants.width))
         addConstraint(NSLayoutConstraint(item: arrow, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: ArrowConstants.height))
         validArrows.append(arrow)
@@ -178,7 +178,7 @@ class SeperatorSlider: UIView {
     fileprivate func setupBelowArrow(arrow: UIImageView) {
         addSubview(arrow)
         addConstraint(NSLayoutConstraint(item: arrow, attribute: .top, relatedBy: .equal, toItem: button, attribute: .bottom, multiplier: 1, constant: ArrowConstants.gap))
-        addConstraint(NSLayoutConstraint(item: arrow, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0) )
+        addConstraint(NSLayoutConstraint(item: arrow, attribute: .centerX, relatedBy: .equal, toItem: button, attribute: .centerX, multiplier: 1, constant: 0) )
         addConstraint(NSLayoutConstraint(item: arrow, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: ArrowConstants.width))
         addConstraint(NSLayoutConstraint(item: arrow, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: ArrowConstants.height))
         validArrows.append(arrow)

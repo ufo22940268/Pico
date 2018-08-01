@@ -239,7 +239,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         }
         
         if case .editing(let direction, _) = editState {
-            if direction == "vertical" {
+            if editState.maybeVertical() {
                 onScrollVertical(sender)
             } else {
                 onScrollHorizontal(sender, direction)
@@ -250,7 +250,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     func findScrollCell(hitView: UIView) -> ComposeCell? {
         let cellIndex = container.cells.enumerated().filter {$0.element == hitView}.first!.offset
         if case .editing(let direction, let seperatorIndex) = editState {
-            if let seperatorIndex = seperatorIndex, direction == "vertical" {
+            if let seperatorIndex = seperatorIndex, editState.maybeVertical() {
                 if cellIndex < seperatorIndex {
                     return container.cells[seperatorIndex - 1]
                 } else {

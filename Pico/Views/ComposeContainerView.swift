@@ -20,7 +20,9 @@ enum EditState {
     case inactive(fromDirections: String?)
     /**
      * direction
-     *  - vertical
+     *  - top
+     *  - middle
+     *  - bottom
      *  - left
      *  - right
     */
@@ -33,6 +35,10 @@ enum EditState {
         case .editing(let direction, _):
             return direction
         }
+    }
+    
+    func maybeVertical() -> Bool {
+        return ["top", "middle", "bottom"].contains(getDirection())
     }
 }
 

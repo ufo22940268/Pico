@@ -37,7 +37,7 @@ class ComposeCell: UIView, EditDelegator {
     //        below: 1
     static func getPositionToSeperator(editState: EditState, cellIndex: Int) -> Position? {
         if case .editing(let direction, let seperatorIndex) = editState {
-            if direction == "vertical", let seperatorIndex = seperatorIndex {
+            if editState.maybeVertical(), let seperatorIndex = seperatorIndex {
                 if cellIndex - seperatorIndex == 1 || cellIndex - seperatorIndex == -1 {
                     return Position.above
                 } else if cellIndex - seperatorIndex == 0 {
