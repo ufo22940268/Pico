@@ -163,4 +163,21 @@ class ComposeCell: UIView, EditDelegator {
         self.addConstraint(ratioConstraint)
         image.image = uiImage
     }
+    
+    func exportSnapshot(callback: @escaping (CIImage) -> Void, wrapperBounds: CGRect) {
+        DispatchQueue.main.async {
+            var inter = wrapperBounds.intersection(self.bounds)
+            inter = inter.applying(CGAffineTransform(scaleX: 1.0/self.image.frame.width, y: 1.0/self.image.frame.height))
+            inter.origin.y = 1 - inter.origin.y - inter.height
+            let img = self.image.image!
+            
+            DispatchQueue.global().async {
+                var imageCache = CIImage(image: img)!
+                inter = inter.applying(CGAffineTransform(scaleX: img.size.width, y: img.size.height))
+                imageCache = imageCache.cropped(to: inter)
+                callback(imageCache)
+            }
+        }
+    }
+    
 }

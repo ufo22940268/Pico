@@ -241,4 +241,24 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
             rightSlider.isHidden = true
         }
     }
+    
+    func exportSnapshot(callback: @escaping (UIImage) -> Void, wrapperBounds: CGRect) {
+        let group = DispatchGroup()
+        
+        var images = [CIImage]()
+        cells.forEach { (cell) in
+            group.enter()
+            cell.exportSnapshot(callback: {img in
+                print("append", img)
+                images.append(img)
+                group.leave()
+            }, wrapperBounds: cell.convert(wrapperBounds, from: self))
+        }
+
+        group.notify(queue: .global(), execute: {
+            let snapshotCI = CIImage.concateImages(images: images.reversed())
+            let snapshot = snapshotCI.convertToUIImage()
+            callback(snapshot)
+        })
+    }
 }

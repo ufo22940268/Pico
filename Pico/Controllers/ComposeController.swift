@@ -127,6 +127,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         if loadedImages == nil {
             self.configureUIImages([UIImage(named: "short"), UIImage(named: "short2"), UIImage(named: "short2"), UIImage(named: "short2")])
+//            self.configureUIImages([UIImage(named: "short"), UIImage(named: "short2")])
         } else if loadedImages.count >= 2 {
             Image.resolve(images: loadedImages, completion: {uiImages in
                 self.configureUIImages(uiImages)
@@ -140,10 +141,20 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     }
     
     @IBAction func download(_ sender: UIBarButtonItem) {
-        container.showSeperators(show: false)
-        let image = container.exportImageCache()
-        ShareManager(viewController: self).saveToPhoto(image: image!)
-        self.container.showSeperators(show: true)
+//        container.showSeperators(show: false)
+//        let image = container.exportImageCache()
+//        print("export", image?.size)
+//        ShareManager(viewController: self).saveToPhoto(image: image!)
+//        self.container.showSeperators(show: true)
+        
+        sender.isEnabled = false
+        let rect: CGRect = self.container.convert(self.containerWrapper.bounds, from: self.containerWrapper)
+        self.container.exportSnapshot(callback: {snapshot in
+            DispatchQueue.main.async {
+                sender.isEnabled = true
+                ShareManager(viewController: self).saveToPhoto(image: snapshot)
+            }
+        }, wrapperBounds: rect)
     }
     
     fileprivate func onScrollVertical(_ sender: UIPanGestureRecognizer) {

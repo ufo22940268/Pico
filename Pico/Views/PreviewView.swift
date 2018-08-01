@@ -134,7 +134,6 @@ class PreviewView: GLKView {
         }
         
         image = canvas
-
     }
     
     func renderCache() -> UIImage {
