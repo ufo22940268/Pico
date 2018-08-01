@@ -302,7 +302,7 @@
                         <action selector="onScroll:" destination="h2r-xB-xzJ" id="wTo-pY-uEq"/>
                     </connections>
                 </panGestureRecognizer>
-                <pinchGestureRecognizer id="8Dc-Gq-jGQ">
+                <pinchGestureRecognizer enabled="NO" id="8Dc-Gq-jGQ">
                     <connections>
                         <action selector="onPinchComposeView:" destination="h2r-xB-xzJ" id="Y3K-xy-6o6"/>
                     </connections>

@@ -123,7 +123,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        container.sliderType = .crop
+        container.sliderType = .slide
         
         if loadedImages == nil {
             self.configureUIImages([UIImage(named: "short"), UIImage(named: "short2"), UIImage(named: "short2"), UIImage(named: "short2")])
