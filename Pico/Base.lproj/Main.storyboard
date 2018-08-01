@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="h2r-xB-xzJ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="SDp-bB-QNW">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -234,8 +234,19 @@
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="479-VI-HKL">
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                                 <items>
+                                    <barButtonItem title="Item" image="clone-regular" id="b6H-km-LJ3" userLabel="Slide">
+                                        <connections>
+                                            <action selector="onSlideItemSelected:" destination="h2r-xB-xzJ" id="Pvc-0d-cIc"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="TlW-GN-bKJ"/>
+                                    <barButtonItem title="Item" image="crop-alt-solid" id="Jv1-Pt-f0v" userLabel="Crop">
+                                        <connections>
+                                            <action selector="onCropItemSelected:" destination="h2r-xB-xzJ" id="Ivx-7h-vhh"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="p9b-V3-OEt"/>
-                                    <barButtonItem systemItem="edit" id="axI-r2-f63">
+                                    <barButtonItem image="edit-solid" id="axI-r2-f63">
                                         <connections>
                                             <segue destination="ycZ-tp-DN7" kind="show" identifier="preview" id="fvF-Lz-IAD"/>
                                         </connections>
@@ -281,6 +292,8 @@
                         <outlet property="panGesture" destination="rOY-HI-ftD" id="MOz-FL-lRy"/>
                         <outlet property="scroll" destination="Qfn-Hc-ipw" id="lun-dp-7Ar"/>
                         <outlet property="topConstraint" destination="bre-SP-3Ha" id="ILm-lm-TFt"/>
+                        <outletCollection property="slideTypeItems" destination="b6H-km-LJ3" collectionClass="NSMutableArray" id="dY2-kF-hPD"/>
+                        <outletCollection property="slideTypeItems" destination="Jv1-Pt-f0v" collectionClass="NSMutableArray" id="pRp-mm-16S"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gbj-Ks-Iyi" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -569,7 +582,9 @@
         <image name="ban-solid" width="24" height="24"/>
         <image name="clone-regular" width="22" height="22"/>
         <image name="comments-regular" width="22" height="18"/>
+        <image name="crop-alt-solid" width="24" height="24"/>
         <image name="download-solid" width="24" height="24"/>
+        <image name="edit-solid" width="24" height="22"/>
         <image name="film-solid" width="22" height="17"/>
         <image name="full-frame" width="24" height="24"/>
         <image name="preview_tab_pixellate" width="25" height="25"/>
@@ -578,6 +593,6 @@
         <image name="user-edit-solid" width="24" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="yxL-aV-NMS"/>
+        <segue reference="xve-zr-kTk"/>
     </inferredMetricsTieBreakers>
 </document>

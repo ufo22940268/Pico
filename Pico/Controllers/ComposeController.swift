@@ -26,6 +26,8 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     @IBOutlet var containerWrapperLeadingConstraint: NSLayoutConstraint!
     @IBOutlet var containerWrapperTrailingConstraint: NSLayoutConstraint!
     
+    @IBOutlet var slideTypeItems: [UIBarButtonItem]!
+    
     let minContainerWidth = CGFloat(230)
     let maxContainerWidth = UIScreen.main.bounds.width
     var lastScale = CGFloat(1.0)
@@ -114,7 +116,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         self.resetGapToContainer()
         
         updateSideButton()
-        
+
         container.updateSliderType()
     }
     
@@ -346,6 +348,21 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         default:
             break
         }
+    }
+    
+
+}
+
+// MARK: - Toolbar
+extension ComposeController {
+    @IBAction func onSlideItemSelected(_ sender: UIBarButtonItem) {
+        container.sliderType = .slide
+        container.updateSliderType()
+    }
+    
+    @IBAction func onCropItemSelected(_ sender: Any) {
+        container.sliderType = .crop
+        container.updateSliderType()
     }
 }
 
