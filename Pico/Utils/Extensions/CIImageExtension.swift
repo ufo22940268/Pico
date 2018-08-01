@@ -31,6 +31,8 @@ extension CIImage {
         let canvasHeight = scaledImages.reduce(0) { (r, img)  in
             return r + img.extent.height
         }
+        
+        print("canvasHeight", canvasHeight)
         var canvas = scaledImages.last!
         let canvasRect = canvas.extent.applying(CGAffineTransform(scaleX: 1, y: canvasHeight/canvas.extent.height))
         canvas = canvas.clampedToExtent().cropped(to: canvasRect)

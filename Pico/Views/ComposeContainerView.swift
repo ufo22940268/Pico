@@ -245,18 +245,25 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     func exportSnapshot(callback: @escaping (UIImage) -> Void, wrapperBounds: CGRect) {
         let group = DispatchGroup()
         
-        var images = [CIImage]()
-        cells.forEach { (cell) in
+        var imageMap = [Int: CIImage]()
+        print("cell count", cells.count)
+        for (index, cell) in cells.enumerated() {
+            print("enter")
             group.enter()
             cell.exportSnapshot(callback: {img in
-                print("append", img)
-                images.append(img)
+                print("leave")
+                imageMap[index] = img
                 group.leave()
             }, wrapperBounds: cell.convert(wrapperBounds, from: self))
         }
-
+        
         group.notify(queue: .global(), execute: {
-            let snapshotCI = CIImage.concateImages(images: images.reversed())
+            print("images count", imageMap.count)
+            
+            let images = (imageMap.sorted(by: { (lhs, rhs) -> Bool in
+                return lhs.key < rhs.key
+            })).map {$0.value}
+            let snapshotCI = CIImage.concateImages(images: images)
             let snapshot = snapshotCI.convertToUIImage()
             callback(snapshot)
         })

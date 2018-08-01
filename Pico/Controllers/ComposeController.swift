@@ -141,12 +141,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     }
     
     @IBAction func download(_ sender: UIBarButtonItem) {
-//        container.showSeperators(show: false)
-//        let image = container.exportImageCache()
-//        print("export", image?.size)
-//        ShareManager(viewController: self).saveToPhoto(image: image!)
-//        self.container.showSeperators(show: true)
-        
         sender.isEnabled = false
         let rect: CGRect = self.container.convert(self.containerWrapper.bounds, from: self.containerWrapper)
         self.container.exportSnapshot(callback: {snapshot in
@@ -423,9 +417,11 @@ extension ComposeController {
 
 extension ComposeController: UIScrollViewDelegate {
     fileprivate func updateSideButton() {
-        let midPoint = container.leftSlider.convert(CGPoint(x: 0, y:scroll.bounds.midY), from: scroll)
-        container.leftSlider.updateSlider(midPoint: midPoint)
-        container.rightSlider.updateSlider(midPoint: midPoint)
+        if container.leftSlider != nil {
+            let midPoint = container.leftSlider.convert(CGPoint(x: 0, y:scroll.bounds.midY), from: scroll)
+            container.leftSlider.updateSlider(midPoint: midPoint)
+            container.rightSlider.updateSlider(midPoint: midPoint)
+        }
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
