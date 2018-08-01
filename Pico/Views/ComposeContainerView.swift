@@ -135,7 +135,9 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         if show {
             updateSlidersWhenEditChanged()
         } else {
-            seperators.forEach { $0.alpha = 0.0 }
+            seperators.forEach {$0.isHidden = true}
+            leftSlider.isHidden = true
+            leftSlider.isHidden = true
         }
     }
     
@@ -143,17 +145,14 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         if case let .editing(direction, index) = editState {
             seperators.forEach { seperator in
                 if seperator.index != index {
-                    seperator.isUserInteractionEnabled = false
-                    seperator.alpha = 0.0
+                    seperator.isHidden = true
                 } else {
-                    seperator.isUserInteractionEnabled = true
-                    seperator.alpha = 1.0
+                    seperator.isHidden = false
                 }
             }
         } else {
             seperators.forEach { seperator in
-                seperator.alpha = 1.0
-                seperator.isUserInteractionEnabled = true
+                seperator.isHidden = false
             }
         }
     }
@@ -166,16 +165,37 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
             seperators.first?.isHidden = false
             seperators.last?.isHidden = false
         case .editing:
-            if editState.getDirection() == "left" {
-                leftSlider.isHidden = false
-                rightSlider.isHidden = true
-            } else {
-                leftSlider.isHidden = true
-                rightSlider.isHidden = false
-            }
+            leftSlider.isHidden = true
+            rightSlider.isHidden = true
             seperators.first?.isHidden = true
             seperators.last?.isHidden = true
+            
+            getActiveSlider()?.isHidden = false
         }
+    }
+    
+    func getActiveSlider() -> UIView? {
+        guard case .editing = editState else {
+            return nil
+        }
+        
+        if sliderType == .crop {
+            switch editState.getDirection() {
+            case "left":
+                return leftSlider
+            case "right":
+                return rightSlider
+            case "top":
+                return seperators.first
+            case "bottom":
+                return seperators.first
+            default:
+                break
+            }
+        } else if case .editing(_, let index) = editState, let seperatorIndex = index {
+            return seperators[seperatorIndex]
+        }
+        return nil
     }
     
     func updateSlidersWhenEditChanged() {
