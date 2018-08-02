@@ -146,7 +146,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         self.container.exportSnapshot(callback: {snapshot in
             DispatchQueue.main.async {
                 sender.isEnabled = true
-                ShareManager(viewController: self).saveToPhoto(image: snapshot)
+//                ShareManager(viewController: self).saveToPhoto(image: snapshot)
             }
         }, wrapperBounds: rect)
     }
