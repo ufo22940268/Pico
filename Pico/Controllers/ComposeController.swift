@@ -37,6 +37,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     var loadedImages:[Image]!
     
     @IBOutlet weak var containerWrapperWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var containerWidthConstraint: NSLayoutConstraint!
     
     @IBOutlet var containerWrapperCenterXConstraint: NSLayoutConstraint!
     @IBOutlet var panGesture: UIPanGestureRecognizer!
@@ -376,6 +377,7 @@ extension ComposeController {
     
     func scaleContainerWrapper(scale: CGFloat) {
         containerWrapperWidthConstraint  = containerWrapperWidthConstraint.setMultiplier(multiplier: containerWrapperWidthConstraint.multiplier * scale)
+        containerWidthConstraint  = containerWidthConstraint.setMultiplier(multiplier: containerWidthConstraint.multiplier * scale)
     }
     
     @IBAction func onPinchComposeView(_ gestureRecognizer: UIPinchGestureRecognizer) {

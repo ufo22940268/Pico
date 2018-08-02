@@ -284,6 +284,7 @@
                         <outlet property="container" destination="3Jb-z4-kgp" id="M0F-LT-kJO"/>
                         <outlet property="containerLeadingConstraint" destination="7bH-SJ-Ixx" id="rez-I9-IEM"/>
                         <outlet property="containerTrailingConstraint" destination="GHB-58-3aE" id="W3Z-kD-ujB"/>
+                        <outlet property="containerWidthConstraint" destination="VRi-gu-AyE" id="Kvb-Yq-Bvy"/>
                         <outlet property="containerWrapper" destination="FDD-5R-i7y" id="Hcy-ki-a2b"/>
                         <outlet property="containerWrapperCenterXConstraint" destination="bkM-s9-ajj" id="2mg-qE-HZq"/>
                         <outlet property="containerWrapperLeadingConstraint" destination="GC6-2T-RVc" id="w4G-0b-WH5"/>
@@ -302,7 +303,7 @@
                         <action selector="onScroll:" destination="h2r-xB-xzJ" id="wTo-pY-uEq"/>
                     </connections>
                 </panGestureRecognizer>
-                <pinchGestureRecognizer enabled="NO" id="8Dc-Gq-jGQ">
+                <pinchGestureRecognizer id="8Dc-Gq-jGQ">
                     <connections>
                         <action selector="onPinchComposeView:" destination="h2r-xB-xzJ" id="Y3K-xy-6o6"/>
                     </connections>
