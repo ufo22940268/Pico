@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="MIE-CQ-9z1">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="h2r-xB-xzJ">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -223,10 +223,10 @@
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstItem="FDD-5R-i7y" firstAttribute="width" secondItem="Qfn-Hc-ipw" secondAttribute="width" id="37q-FU-TOZ"/>
-                                    <constraint firstItem="3Jb-z4-kgp" firstAttribute="width" secondItem="Qfn-Hc-ipw" secondAttribute="width" id="3nO-d3-sq7"/>
                                     <constraint firstItem="FDD-5R-i7y" firstAttribute="trailing" secondItem="Qfn-Hc-ipw" secondAttribute="trailing" priority="250" identifier="containerWrapperTrailing" id="8tj-WS-eFi"/>
                                     <constraint firstItem="FDD-5R-i7y" firstAttribute="leading" secondItem="Qfn-Hc-ipw" secondAttribute="leading" priority="250" identifier="containerWrapperLeading" id="GC6-2T-RVc"/>
                                     <constraint firstAttribute="bottom" secondItem="FDD-5R-i7y" secondAttribute="bottom" id="I0i-Za-MXD"/>
+                                    <constraint firstItem="3Jb-z4-kgp" firstAttribute="width" secondItem="Qfn-Hc-ipw" secondAttribute="width" id="VRi-gu-AyE"/>
                                     <constraint firstItem="FDD-5R-i7y" firstAttribute="centerX" secondItem="Qfn-Hc-ipw" secondAttribute="centerX" id="bkM-s9-ajj"/>
                                     <constraint firstItem="FDD-5R-i7y" firstAttribute="top" secondItem="Qfn-Hc-ipw" secondAttribute="top" id="gGw-MB-a4S"/>
                                 </constraints>
