@@ -241,6 +241,7 @@
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="TlW-GN-bKJ"/>
                                     <barButtonItem title="Item" image="crop-alt-solid" id="Jv1-Pt-f0v" userLabel="Crop">
+                                        <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <action selector="onCropItemSelected:" destination="h2r-xB-xzJ" id="Ivx-7h-vhh"/>
                                         </connections>

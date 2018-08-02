@@ -126,6 +126,9 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         container.sliderType = .slide
         
+        toolbarItems?.first?.setBackgroundImage(UIImage(named: "crop-alt-solid-fade"), for: .highlighted, barMetrics: .default)
+        
+        
         if loadedImages == nil {
             self.configureUIImages([UIImage(named: "short"), UIImage(named: "short2"), UIImage(named: "short2"), UIImage(named: "short2")])
 //            self.configureUIImages([UIImage(named: "short"), UIImage(named: "short2")])
@@ -355,18 +358,30 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             break
         }
     }
-    
-
 }
 
 // MARK: - Toolbar
 extension ComposeController {
+    
+    func hightlightSlideItem(index: Int) {
+        for (i, item) in slideTypeItems.enumerated() {
+            let highlight = index == i
+            if highlight {
+                item.tintColor = UIColor.system
+            } else {
+                item.tintColor = UIColor.lightGray
+            }
+        }
+    }
+    
     @IBAction func onSlideItemSelected(_ sender: UIBarButtonItem) {
+        hightlightSlideItem(index: 0)
         container.sliderType = .slide
         container.updateSliderType()
     }
     
     @IBAction func onCropItemSelected(_ sender: Any) {
+        hightlightSlideItem(index: 1)
         container.sliderType = .crop
         container.updateSliderType()
     }
