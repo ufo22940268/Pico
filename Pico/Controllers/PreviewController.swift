@@ -70,7 +70,7 @@ class PreviewController: UIViewController {
     
     var cellFrames: [CGRect] = [CGRect]()
     
-    let sampleImages: [CIImage] = [CIImage(image: UIImage(named: "short")!)!, CIImage(image: UIImage(named: "short")!)!]
+    let sampleImages: [UIImage] = [UIImage(named: "short")!, UIImage(named: "short")!]
     var uiImages: [UIImage]?
     
     @IBOutlet weak var frame: FrameView!
@@ -100,9 +100,11 @@ class PreviewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        preview.concateImages(images: (uiImages?.map({ (uiImage) -> CIImage in
+        uiImages = uiImages ?? sampleImages
+        preview.rawImages = uiImages
+        preview.image = preview.concateImages(images: (uiImages!.map({ (uiImage) -> CIImage in
             return CIImage(image: uiImage)!
-        })) ?? sampleImages)
+        })))
 
         let previewImageSize = preview.image.extent
         let ratio: CGFloat = previewImageSize.width/previewImageSize.height

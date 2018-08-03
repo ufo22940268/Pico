@@ -357,9 +357,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
              previewController.uiImages = container.cells.map({ (cell) -> UIImage in
                 return cell.exportSnapshot(wrapperBounds: cell.convert(containerWrapper.bounds, from: containerWrapper))
              })
-//             container.cells.forEach({ (cell) -> Void in
-//                cell.exportSnapshot(wrapperBounds: cell.convert(containerWrapper.bounds, from: containerWrapper))
-//             })
 
              previewController.cellFrames = cellFrames
              container.showSeperators(show: true)

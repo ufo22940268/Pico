@@ -28,6 +28,7 @@ protocol PreviewViewDelegate {
 class PreviewView: GLKView {
 
     var previousImage: CIImage!
+    var rawImages: [UIImage]!
     static let maximumPixellateScale = 50
     static let minimumPixellateScale = 7
     var pixellateScale = Float(maximumPixellateScale - minimumPixellateScale)*0.5
@@ -88,22 +89,33 @@ class PreviewView: GLKView {
         }
     }
     
+    fileprivate func pixellate(ciImage: inout CIImage, forExport: Bool, transformCrop: CGAffineTransform? = nil) {
+        let pixellateImage = ciImage.applyingFilter("CIPixellate", parameters: ["inputScale": pixellateScale])
+        for index in 0..<crops.count {
+            if !forExport && crops[index].rendered != false {
+                continue
+            }
+            
+            let crop = crops[index]
+            var rect: CGRect = crop.rect
+            if let transformCrop = transformCrop {
+                rect = rect.applying(transformCrop)
+            }
+            ciImage = pixellateImage.cropped(to: rect).applyingFilter("CISourceOverCompositing", parameters: ["inputBackgroundImage": ciImage])
+            crops[index].setRendered(rendered: true)
+        }
+    }
+    
     override func draw(_ rect: CGRect) {
         let contextRect = rect.applying(CGAffineTransform(scaleX: UIScreen.main.scale, y: UIScreen.main.scale))
 
-        let pixellateImage = image.applyingFilter("CIPixellate", parameters: ["inputScale": pixellateScale])
         var result = previousImage!
-        for index in 0..<crops.count where crops[index].rendered == false {
-            let crop = crops[index]
-            result = pixellateImage.cropped(to: crop.rect).applyingFilter("CISourceOverCompositing", parameters: ["inputBackgroundImage": result])
-            crops[index].setRendered(rendered: true)
-        }
         
+        pixellate(ciImage: &result, forExport: false)
         
         previousImage = result
         drawSign(&result)
         ciContext.draw(result, in: contextRect, from: result.extent)
-        
     }
     
     func convertUIRectToCIRect(uiRect: CGRect) -> CGRect {
@@ -113,13 +125,24 @@ class PreviewView: GLKView {
     }
     
    
-    func scalaToFillContainer(image: CIImage) -> CIImage {
-        let scale = UIScreen.main.bounds.width * UIScreen.main.scale / image.extent.width
+    fileprivate func scalaToFill(image: CIImage, width: CGFloat) -> CIImage {
+        let scale = width * UIScreen.main.scale / image.extent.width
         return image.transformed(by: CGAffineTransform(scaleX: scale, y: scale))
     }
 
-    func concateImages(images: [CIImage]) {
-        var scaledImages = images.map { scalaToFillContainer(image: $0) }
+    func concateImages(images: [CIImage], fillContainer: Bool = true) -> CIImage {
+        var fillWidth:CGFloat
+        
+        if fillContainer {
+            /// TODO This is not real container width.
+            fillWidth = UIScreen.main.bounds.width
+        } else {
+            fillWidth = images.max(by: { (c1, c2) -> Bool in
+                return c1.extent.width < c2.extent.width
+            })!.extent.width
+        }
+        
+        var scaledImages = images.map { scalaToFill(image: $0, width: fillWidth) }
         scaledImages.forEach { print($0.extent) }
         let canvasHeight = scaledImages.reduce(0) { (r, img)  in
             return r + img.extent.height
@@ -132,20 +155,27 @@ class PreviewView: GLKView {
             canvas = im.transformed(by: CGAffineTransform(translationX: 0.0, y: height)).composited(over: canvas)
             height = height + im.extent.height
         }
-        
-        image = canvas
+
+        return canvas
     }
     
     func renderCache() -> UIImage {
-        UIGraphicsBeginImageContext(snapshot.size)
-        snapshot.draw(at: CGPoint.zero)
+        var canvas = concateImages(images: rawImages.map{CIImage(image: $0)!}, fillContainer: false)
         
-        let context = UIGraphicsGetCurrentContext()!
-        for subview in subviews {
-            context.translateBy(x: subview.frame.origin.x, y: subview.frame.origin.y)
-            subview.layer.draw(in: context)
-        }
-        
+        UIGraphicsBeginImageContext(canvas.extent.size)
+        let scale = canvas.extent.width/(frame.size.width*UIScreen.main.scale)
+        pixellate(ciImage: &canvas, forExport: true, transformCrop: CGAffineTransform(scaleX: scale, y: scale))
+
+        let canvasImage = canvas.convertToUIImage()
+        canvasImage.draw(at: CGPoint.zero)
+//        snapshot.draw(at: CGPoint.zero)
+//
+//        let context = UIGraphicsGetCurrentContext()!
+//        for subview in subviews {
+//            context.translateBy(x: subview.frame.origin.x, y: subview.frame.origin.y)
+//            subview.layer.draw(in: context)
+//        }
+//
         let cache = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         return cache
