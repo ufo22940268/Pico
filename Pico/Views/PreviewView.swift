@@ -73,19 +73,19 @@ class PreviewView: GLKView {
         labelView.font = UIFont.systemFont(ofSize: 50)
     }
     
-    fileprivate func drawSign(_ result: inout CIImage) {
+    fileprivate func drawSign(canvas: inout CIImage, signImage: CIImage?, scale:CGFloat = 1) {
         if let signImage = signImage {
             var translate:() -> CIImage
-            let resultWidth = result.extent.width
+            let resultWidth = canvas.extent.width
             switch align {
             case .left:
-                translate = {signImage.transformed(by: CGAffineTransform(translationX: 8, y: 8))}
+                translate = {signImage.transformed(by: CGAffineTransform(translationX: 8*scale, y: 8*scale))}
             case .middle:
-                translate = {signImage.transformed(by: CGAffineTransform(translationX: (resultWidth - signImage.extent.width)/2, y: 8))}
+                translate = {signImage.transformed(by: CGAffineTransform(translationX: (resultWidth - signImage.extent.width)/2, y: 8*scale))}
             case .right:
-                translate = {signImage.transformed(by: CGAffineTransform(translationX: resultWidth - signImage.extent.width - 8, y: 8))}
+                translate = {signImage.transformed(by: CGAffineTransform(translationX: (resultWidth - signImage.extent.width - 8*scale), y: 8*scale))}
             }
-            result = translate().composited(over: result)
+            canvas = translate().composited(over: canvas)
         }
     }
     
@@ -114,7 +114,7 @@ class PreviewView: GLKView {
         pixellate(ciImage: &result, forExport: false)
         
         previousImage = result
-        drawSign(&result)
+        drawSign(canvas: &result, signImage: signImage)
         ciContext.draw(result, in: contextRect, from: result.extent)
     }
     
@@ -163,12 +163,20 @@ class PreviewView: GLKView {
         var canvas = concateImages(images: rawImages.map{CIImage(image: $0)!}, fillContainer: false)
         
         UIGraphicsBeginImageContext(canvas.extent.size)
+        
         let scale = canvas.extent.width/(frame.size.width*UIScreen.main.scale)
         pixellate(ciImage: &canvas, forExport: true, transformCrop: CGAffineTransform(scaleX: scale, y: scale))
+        
+        if let sign = sign {
+            let labelView = UILabel()
+            labelView.textColor = UIColor.white
+            labelView.font = UIFont.systemFont(ofSize: 80)
+            labelView.text = sign
+            labelView.sizeToFit()
+            let labelImage = labelView.renderToCIImage()
+            drawSign(canvas: &canvas, signImage: labelImage, scale: scale)
+        }
 
-        let canvasImage = canvas.convertToUIImage()
-        canvasImage.draw(at: CGPoint.zero)
-//        snapshot.draw(at: CGPoint.zero)
 //
 //        let context = UIGraphicsGetCurrentContext()!
 //        for subview in subviews {
@@ -176,6 +184,8 @@ class PreviewView: GLKView {
 //            subview.layer.draw(in: context)
 //        }
 //
+        let canvasImage = canvas.convertToUIImage()
+        canvasImage.draw(at: CGPoint.zero)
         let cache = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         return cache

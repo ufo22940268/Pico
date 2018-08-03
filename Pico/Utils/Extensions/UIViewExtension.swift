@@ -18,6 +18,14 @@ extension UIView {
         UIGraphicsEndImageContext()
         return image
     }
+
+    func renderToCIImage() -> CIImage? {
+        UIGraphicsBeginImageContext(frame.size)
+        layer.render(in: UIGraphicsGetCurrentContext()!)
+        let cache = CIImage(image: UIGraphicsGetImageFromCurrentImageContext()!)
+        UIGraphicsEndImageContext()
+        return cache
+    }
 }
 
 extension NSLayoutConstraint {
