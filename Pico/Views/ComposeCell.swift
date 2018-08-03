@@ -178,7 +178,7 @@ class ComposeCell: UIView, EditDelegator {
         }
     }
     
-    func exportSnapshot(wrapperBounds: CGRect) {
+    func exportSnapshot(wrapperBounds: CGRect) -> UIImage {
         var inter = wrapperBounds.intersection(self.bounds)
         inter = inter.applying(CGAffineTransform(scaleX: 1.0/self.image.frame.width, y: 1.0/self.image.frame.height))
         inter.origin.y = 1 - inter.origin.y - inter.height
@@ -187,8 +187,8 @@ class ComposeCell: UIView, EditDelegator {
         var imageCache = CIImage(image: img)!
         inter = inter.applying(CGAffineTransform(scaleX: img.size.width, y: img.size.height))
         imageCache = imageCache.cropped(to: inter)
-//
-//        return imageCache.convertToUIImage()
+        
+        return imageCache.convertToUIImage()
    }
 
     

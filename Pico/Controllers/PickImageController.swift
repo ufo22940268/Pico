@@ -86,6 +86,10 @@ class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibrary
     
     func reloadAlbums() {
         self.library.reload {
+            guard self.library.albums.count > 0 else {
+                return
+            }
+            
             if self.selectAlbum == nil {
                 self.selectAlbum = self.library.albums.filter { $0.collection.assetCollectionSubtype == .smartAlbumUserLibrary }.first ?? self.library.albums.first!
             } else {
