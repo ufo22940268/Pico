@@ -41,6 +41,7 @@
 		42A18C7D20EB008A00DD4AA5 /* ImagesLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A18C7C20EB008A00DD4AA5 /* ImagesLibrary.swift */; };
 		42A18C8820EB047300DD4AA5 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A18C8620EB047200DD4AA5 /* Image.swift */; };
 		42A18C8920EB047300DD4AA5 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A18C8720EB047200DD4AA5 /* Album.swift */; };
+		42A4D93C2116DA3800BFB777 /* PreviewRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A4D93B2116DA3800BFB777 /* PreviewRenderer.swift */; };
 		42A5BAC120F6037400D9E2A9 /* BasicExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A5BAC020F6037400D9E2A9 /* BasicExtension.swift */; };
 		42A5BAC320F60B1700D9E2A9 /* SelectAlbumController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A5BAC220F60B1700D9E2A9 /* SelectAlbumController.swift */; };
 		42A5BAC520F71F5500D9E2A9 /* AlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A5BAC420F71F5500D9E2A9 /* AlbumCell.swift */; };
@@ -117,6 +118,7 @@
 		42A18C8520EB020800DD4AA5 /* Pico.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Pico.entitlements; sourceTree = "<group>"; };
 		42A18C8620EB047200DD4AA5 /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		42A18C8720EB047200DD4AA5 /* Album.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
+		42A4D93B2116DA3800BFB777 /* PreviewRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewRenderer.swift; sourceTree = "<group>"; };
 		42A5BAC020F6037400D9E2A9 /* BasicExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicExtension.swift; sourceTree = "<group>"; };
 		42A5BAC220F60B1700D9E2A9 /* SelectAlbumController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectAlbumController.swift; sourceTree = "<group>"; };
 		42A5BAC420F71F5500D9E2A9 /* AlbumCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCell.swift; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 				420EF44920F9665D006CCDD3 /* MovieConcate.swift */,
 				4201F004210ED68B00A6EBA5 /* Extensions */,
 				4220E824210AB93D00ED0BBD /* ShareManager.swift */,
+				42A4D93B2116DA3800BFB777 /* PreviewRenderer.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -452,6 +455,7 @@
 				428006F020EB7C610091BE9B /* ComposeController.swift in Sources */,
 				4220E823210AB6FB00ED0BBD /* StringExtension.swift in Sources */,
 				42C4066D20F335550074B728 /* UIView+Style.swift in Sources */,
+				42A4D93C2116DA3800BFB777 /* PreviewRenderer.swift in Sources */,
 				4201F00A211305DA00A6EBA5 /* UIColorExtension.swift in Sources */,
 				42A5BAC120F6037400D9E2A9 /* BasicExtension.swift in Sources */,
 				42F14EF520F5D751009E6716 /* PickNavigationButton.swift in Sources */,

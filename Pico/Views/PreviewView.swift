@@ -159,13 +159,18 @@ class PreviewView: GLKView {
         return canvas
     }
     
-    func renderCache() -> UIImage {
+    func renderCache(frameView: FrameView) -> UIImage {
+        let frameRects = frameView.frameRects
         var canvas = concateImages(images: rawImages.map{CIImage(image: $0)!}, fillContainer: false)
         
         UIGraphicsBeginImageContext(canvas.extent.size)
         
-        let scale = canvas.extent.width/(frame.size.width*UIScreen.main.scale)
-        pixellate(ciImage: &canvas, forExport: true, transformCrop: CGAffineTransform(scaleX: scale, y: scale))
+        let imageScale = canvas.extent.width/(frame.size.width*UIScreen.main.scale)
+        let viewScale = canvas.extent.width/frame.size.width
+        let fromRawToConcateScale = canvas.extent.width/rawImages.min(by: {$0.size.width < $1.size.width})!.size.width
+        
+        let renderer = PreviewRenderer(imageScale: imageScale)
+        pixellate(ciImage: &canvas, forExport: true, transformCrop: CGAffineTransform(scaleX: imageScale, y: imageScale))
         
         if let sign = sign {
             let labelView = UILabel()
@@ -174,18 +179,15 @@ class PreviewView: GLKView {
             labelView.text = sign
             labelView.sizeToFit()
             let labelImage = labelView.renderToCIImage()
-            drawSign(canvas: &canvas, signImage: labelImage, scale: scale)
+            drawSign(canvas: &canvas, signImage: labelImage, scale: imageScale)
         }
-
-//
-//        let context = UIGraphicsGetCurrentContext()!
-//        for subview in subviews {
-//            context.translateBy(x: subview.frame.origin.x, y: subview.frame.origin.y)
-//            subview.layer.draw(in: context)
-//        }
-//
+        
         let canvasImage = canvas.convertToUIImage()
         canvasImage.draw(at: CGPoint.zero)
+        
+        let frameScale = canvas.extent.width/frameView.frame.width
+        renderer.drawFrameRects(rect: canvas.extent, frameType: frameView.frameType, frameRects: frameRects.map{ $0.applying(CGAffineTransform(scaleX: fromRawToConcateScale, y: fromRawToConcateScale))}, scale: frameScale)
+
         let cache = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         return cache

@@ -97,10 +97,22 @@ class PreviewController: UIViewController {
         }
     }
     
+    func forDev() -> Bool {
+        return uiImages == nil
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        uiImages = uiImages ?? sampleImages
+        if forDev() {
+            uiImages = sampleImages
+            var height = CGFloat(0)
+            for uiImage in uiImages! {
+                cellFrames.append(CGRect(origin: CGPoint(x: 0, y: height), size: uiImage.size))
+                height = height + uiImage.size.height
+            }
+        }
+        
         preview.rawImages = uiImages
         preview.image = preview.concateImages(images: (uiImages!.map({ (uiImage) -> CIImage in
             return CIImage(image: uiImage)!
@@ -193,7 +205,7 @@ class PreviewController: UIViewController {
     }
     
     @IBAction func onShareClick(_ sender: Any) {
-        let image = preview.renderCache()
+        let image = preview.renderCache(frameView: frame)
         ShareManager(viewController: self).saveToPhoto(image: image)
     }
     

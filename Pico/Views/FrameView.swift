@@ -12,40 +12,20 @@ class FrameView: UIView {
     
     var frameRects = [CGRect]()
     var frameType: PreviewFrameType = .none
+    var renderer: PreviewRenderer!
     
     override func awakeFromNib() {
         frameRects.append(CGRect(x: 0, y: 0, width: frame.width, height: 50))
+        renderer = PreviewRenderer(imageScale: 1)
     }
     
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-     */
     override func draw(_ rect: CGRect) {
         guard frameType != .none else {
             return
         }
-        
-        // Drawing code
-        let lineWidth = CGFloat(2)
-        UIColor.white.setStroke()
-        
-        let path: UIBezierPath!
-        if frameType == .seperator {
-            path = UIBezierPath()
-        } else {
-            path = UIBezierPath(rect: rect)
-            path.lineWidth = lineWidth*2
-            path.stroke()
-        }
-        
-        for rect in frameRects[0..<frameRects.count-1] {
-            let fromPoint = CGPoint(x: 0, y: rect.maxY)
-            let toPoint = CGPoint(x: rect.maxX, y: rect.maxY)
-            path.move(to: fromPoint)
-            path.addLine(to: toPoint)
-            path.lineWidth = lineWidth
-            path.stroke()
+        if !frameRects.isEmpty {
+            let scale = rect.width/frameRects.first!.width
+            renderer.drawFrameRects(rect: rect, frameType: frameType, frameRects: frameRects.map {$0.applying(CGAffineTransform(scaleX: scale, y: scale))})
         }
     }
     
