@@ -27,7 +27,7 @@
                                 <constraint firstAttribute="height" constant="2" id="40M-qk-jNW"/>
                             </constraints>
                         </view>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8ER-9v-Fki">
+                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8ER-9v-Fki">
                             <rect key="frame" x="147" y="0.5" width="50" height="20"/>
                             <color key="backgroundColor" red="0.18823529410000001" green="0.51372549020000002" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
@@ -52,6 +52,11 @@
                         <constraint firstItem="8ER-9v-Fki" firstAttribute="height" secondItem="Buh-HB-ZaF" secondAttribute="height" id="jxt-TG-6dQ"/>
                         <constraint firstAttribute="trailing" secondItem="ban-IM-6C4" secondAttribute="trailing" id="qpe-ht-DYc"/>
                     </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="fkD-5D-Ath"/>
+                        </mask>
+                    </variation>
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
@@ -82,7 +87,7 @@
                                 <constraint firstAttribute="height" constant="2" id="BBm-94-d8e"/>
                             </constraints>
                         </view>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0M1-nQ-DQC">
+                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0M1-nQ-DQC">
                             <rect key="frame" x="163" y="0.0" width="50" height="20"/>
                             <color key="backgroundColor" red="0.18823529410000001" green="0.51372549020000002" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
@@ -109,6 +114,11 @@
                         <constraint firstItem="0M1-nQ-DQC" firstAttribute="top" secondItem="m8q-Jn-26T" secondAttribute="top" id="p5o-gp-rr9"/>
                         <constraint firstItem="0M1-nQ-DQC" firstAttribute="height" secondItem="9Fx-5S-OMy" secondAttribute="height" id="y5y-87-JHf"/>
                     </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="O4I-Gh-2yh"/>
+                        </mask>
+                    </variation>
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
@@ -142,7 +152,7 @@
                                 <constraint firstAttribute="height" constant="2" id="N3g-wa-M5l"/>
                             </constraints>
                         </view>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OxF-rH-3u9">
+                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OxF-rH-3u9">
                             <rect key="frame" x="163" y="0.0" width="50" height="20"/>
                             <color key="backgroundColor" red="0.18823529410000001" green="0.51372549020000002" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
@@ -169,6 +179,11 @@
                         <constraint firstAttribute="trailing" secondItem="wZH-WN-ppM" secondAttribute="trailing" id="LJw-6J-b2A"/>
                         <constraint firstItem="OxF-rH-3u9" firstAttribute="height" secondItem="B4X-9M-Fgr" secondAttribute="height" id="ddy-iy-ync"/>
                     </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="Jfa-gJ-rMY"/>
+                        </mask>
+                    </variation>
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>

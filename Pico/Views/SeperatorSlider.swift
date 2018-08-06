@@ -31,7 +31,7 @@ class SeperatorSlider: UIView {
     
     @objc var direction = "middle"
     @IBOutlet weak var button: UIButton!
-    var buttonCenterXConstraint: NSLayoutConstraint!
+    @IBOutlet var buttonCenterXConstraint: NSLayoutConstraint!
     
     fileprivate func showAboveArrow() -> Bool {
         return ["bottom", "middle"].contains(direction)

@@ -41,10 +41,10 @@ class SideSlider: UIView {
         arrow.translatesAutoresizingMaskIntoConstraints = false
         if direction == "left" {
             arrow.leadingAnchor.constraint(equalTo: button.trailingAnchor, constant: SliderConstants.gap).isActive = true
-//            arrow.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
+            arrow.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
         } else if direction == "right" {
             arrow.trailingAnchor.constraint(equalTo: button.leadingAnchor, constant: -SliderConstants.gap).isActive = true
-//            arrow.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
+            arrow.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
         }
     }
     
