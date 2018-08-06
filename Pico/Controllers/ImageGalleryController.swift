@@ -151,6 +151,8 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         } else {
             selectImages.append(selectImage)
         }
+        
+        updateAfterSelectionChanged()
     }
     
     func updateAfterSelectionChanged() {
