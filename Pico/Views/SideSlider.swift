@@ -48,7 +48,6 @@ class SideSlider: UIView {
         }
     }
     
-    
     func updateSlider(midPoint: CGPoint) {
         topConstraint.constant = midPoint.y
         setNeedsLayout()

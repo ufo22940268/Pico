@@ -116,7 +116,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         scroll.layoutIfNeeded()
         self.resetGapToContainer()
         
-        updateSideButton()
+        updateSideSliderButtons()
 
         container.updateSliderType()
     }
@@ -125,9 +125,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         super.viewDidLoad()
         
         container.sliderType = .slide
-        
         toolbarItems?.first?.setBackgroundImage(UIImage(named: "crop-alt-solid-fade"), for: .highlighted, barMetrics: .default)
-        
         
         if loadedImages == nil {
             self.configureUIImages([UIImage(named: "short"), UIImage(named: "short2"), UIImage(named: "short2"), UIImage(named: "short2")])
@@ -232,11 +230,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                 break
             }
             
-            let midX = (min(container.frame.maxX, containerWrapper.bounds.maxX) - max(container.frame.minX, containerWrapper.bounds.minX)) / 2
-            if let firstSeperator = container.seperators.first {
-                let midPoint = firstSeperator.convert(CGPoint(x: midX, y: 0.0), from: containerWrapper)
-                container.updateVerticalSliderButtons(midPoint: midPoint)
-            }
+            updateSeperatorSliderButtons()
             
             sender.setTranslation(CGPoint.zero, in: container)
         }
@@ -351,9 +345,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
              container.showSeperators(show: false)
              let cellFrames = container.cells.map{$0.frame}
              let previewController: PreviewController = segue.destination as! PreviewController
-
-//             previewController.uiImages = [container.exportImageCache()!]
-
              previewController.uiImages = container.cells.map({ (cell) -> UIImage in
                 return cell.exportSnapshot(wrapperBounds: cell.convert(containerWrapper.bounds, from: containerWrapper))
              })
@@ -405,49 +396,51 @@ extension ComposeController {
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
             let maxScale = maxContainerWidth/containerWrapper.frame.width
             let scale = min(gestureRecognizer.scale, maxScale)
+            
+            let targetScale = containerWrapperWidthConstraint.multiplier * scale
+            guard targetScale > 0.3 else {
+                return
+            }
+            
             scaleContainerWrapper(scale: scale)
-
+            
             if scale != 1 {
                 lastScale = scale
             }
             gestureRecognizer.scale = 1.0
+            
+            updateSideSliderButtons()
+            updateSeperatorSliderButtons()
         } else if gestureRecognizer.state == .ended {
-            if containerWrapper.frame.width < minContainerWidth {
-                scaleContainerToWidthWithAnimation(width: minContainerWidth)
-                gestureRecognizer.scale = 1.0
-            } else if lastScale < 1 {
-                scaleContainerToWidthWithAnimation(width: minContainerWidth)
-                gestureRecognizer.scale = 1.0
-            } else if lastScale > 1 {
-                scaleContainerToWidthWithAnimation(width: maxContainerWidth)
-                gestureRecognizer.scale = 1.0
-            }
+            updateSideSliderButtons()
+            updateSeperatorSliderButtons()
         }
-    }
-    
-    func scaleContainerToWidthWithAnimation(width: CGFloat) {
-        let animator = UIViewPropertyAnimator(duration: 0.3, curve: .easeOut, animations: {
-            let scale = width/self.containerWrapper.frame.width
-            self.scaleContainerWrapper(scale: scale)
-        })
-        animator.addCompletion({ pos in
-            self.resetGapToContainer()
-        })
-        animator.startAnimation()
     }
 }
 
 
 extension ComposeController: UIScrollViewDelegate {
-    fileprivate func updateSideButton() {
+    
+    fileprivate func updateSeperatorSliderButtons() {
+        let midX = (min(container.frame.maxX, containerWrapper.bounds.maxX) - max(container.frame.minX, containerWrapper.bounds.minX)) / 2
+        if let firstSeperator = container.seperators.first {
+            let midPoint = firstSeperator.convert(CGPoint(x: midX, y: 0.0), from: containerWrapper)
+            container.updateSeperatorSliderButtons(midPoint: midPoint)
+        }
+    }
+    
+    
+    fileprivate func updateSideSliderButtons() {
         if container.leftSlider != nil {
-            let midPoint = container.leftSlider.convert(CGPoint(x: 0, y:scroll.bounds.midY), from: scroll)
+            let fillScrollHeight = containerWrapper.bounds.height >= scroll.bounds.height
+            let scrollMidPoint = containerWrapper.convert(CGPoint(x: 0, y: scroll.bounds.midY), from: scroll)
+            let midPoint = container.leftSlider.convert(CGPoint(x: 0, y: fillScrollHeight ? scrollMidPoint.y : containerWrapper.bounds.midY), from: containerWrapper)
             container.leftSlider.updateSlider(midPoint: midPoint)
             container.rightSlider.updateSlider(midPoint: midPoint)
         }
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        updateSideButton()
+        updateSideSliderButtons()
     }
 }
