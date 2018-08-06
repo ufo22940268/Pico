@@ -42,12 +42,15 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
     var delegate: SelectImageDelegate!
     var stack = ImageCacheStack()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         collection.register(UINib(nibName: "ImageCell", bundle: nil), forCellWithReuseIdentifier: reuseIdentifier)
         registerForPreviewing(with: self, sourceView: collection)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        updateAfterSelectionChanged()
     }
 
     
@@ -118,15 +121,18 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
             })
         {
             let image = images[(collection.indexPath(for: peekCell)?.item)!]
+            controller.imageDate = image.asset.creationDate
             image.resolve { (uiImage) in
                 controller.image.image = uiImage
             }
+            controller.imageEntity = image
+            controller.isSelected = selectImages.contains(image) 
         }
         return controller
     }
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
-        navigationController?.pushViewController(viewControllerToCommit, animated: false)
+        navigationController?.pushViewController(viewControllerToCommit, animated: true)
     }
     
 
@@ -145,14 +151,27 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         } else {
             selectImages.append(selectImage)
         }
-        
+    }
+    
+    func updateAfterSelectionChanged() {
         delegate.onImageSelected(selectedImages: selectImages)
         
         UIView.animate(withDuration: 0.01, animations: {
             self.collection.performBatchUpdates({
-                self.collection.reloadItems(at: collectionView.indexPathsForVisibleItems)
+                self.collection.reloadItems(at: self.collectionView!.indexPathsForVisibleItems)
             }, completion: nil)
         })
     }
 
+    func updateSelection(image: Image, select: Bool) {
+        if select {
+            if !selectImages.contains(image) {
+                selectImages.append(image)
+            }
+        } else {
+            if selectImages.contains(image) {
+                selectImages.remove(at: selectImages.index(of: image)!)
+            }
+        }
+    }
 }

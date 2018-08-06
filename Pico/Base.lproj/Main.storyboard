@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="SDp-bB-QNW">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="MIE-CQ-9z1">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -33,24 +33,44 @@
         <!--Gallery detail-->
         <scene sceneID="mcb-L8-Ls1">
             <objects>
-                <viewController storyboardIdentifier="galleryDetail" id="cUL-RS-b3p" userLabel="Gallery detail" customClass="GalleryDetailController" customModule="Pico" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="galleryDetail" hidesBottomBarWhenPushed="YES" id="cUL-RS-b3p" userLabel="Gallery detail" customClass="GalleryDetailController" customModule="Pico" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ruf-2u-gUc">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView verifyAmbiguity="ignoreSizes" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v7e-oK-rfd">
-                                <rect key="frame" x="0.0" y="215.5" width="375" height="128"/>
+                            <imageView verifyAmbiguity="ignoreSizes" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="v7e-oK-rfd">
+                                <rect key="frame" x="0.0" y="20" width="375" height="495"/>
                             </imageView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lhF-Jh-ejd">
+                                <rect key="frame" x="0.0" y="515" width="375" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="6OO-PL-swq"/>
+                                </constraints>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="CtH-Ty-x3E"/>
+                                    <barButtonItem title="Item" image="check-circle-solid" id="K8t-BO-3ei" userLabel="check">
+                                        <connections>
+                                            <action selector="onCheckItemClicked:" destination="cUL-RS-b3p" id="yMP-Mf-eQg"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="tiN-NI-JN0"/>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="v7e-oK-rfd" firstAttribute="leading" secondItem="yIE-aC-4nt" secondAttribute="leading" id="1VE-zp-1VB"/>
                             <constraint firstItem="yIE-aC-4nt" firstAttribute="trailing" secondItem="v7e-oK-rfd" secondAttribute="trailing" id="45m-6j-KO4"/>
-                            <constraint firstItem="v7e-oK-rfd" firstAttribute="centerY" secondItem="Ruf-2u-gUc" secondAttribute="centerY" id="hr0-g2-GQj"/>
+                            <constraint firstItem="lhF-Jh-ejd" firstAttribute="leading" secondItem="v7e-oK-rfd" secondAttribute="leading" id="GLr-a3-xAB"/>
+                            <constraint firstItem="lhF-Jh-ejd" firstAttribute="bottom" secondItem="yIE-aC-4nt" secondAttribute="bottom" id="J5A-BT-WNi"/>
+                            <constraint firstItem="v7e-oK-rfd" firstAttribute="top" secondItem="yIE-aC-4nt" secondAttribute="top" id="K0n-YZ-afW"/>
+                            <constraint firstItem="v7e-oK-rfd" firstAttribute="bottom" secondItem="lhF-Jh-ejd" secondAttribute="top" id="Qco-ri-5kj"/>
+                            <constraint firstItem="lhF-Jh-ejd" firstAttribute="trailing" secondItem="v7e-oK-rfd" secondAttribute="trailing" id="snA-la-AL1"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="yIE-aC-4nt"/>
                     </view>
                     <connections>
+                        <outlet property="checkItem" destination="K8t-BO-3ei" id="yWW-D5-xnp"/>
                         <outlet property="image" destination="v7e-oK-rfd" id="eoK-ZJ-CSe"/>
                     </connections>
                 </viewController>
@@ -582,6 +602,7 @@
         <image name="align-left-solid" width="24" height="25"/>
         <image name="align-right-solid" width="24" height="25"/>
         <image name="ban-solid" width="24" height="24"/>
+        <image name="check-circle-solid" width="24" height="24"/>
         <image name="clone-regular" width="22" height="22"/>
         <image name="comments-regular" width="22" height="18"/>
         <image name="crop-alt-solid" width="24" height="24"/>
