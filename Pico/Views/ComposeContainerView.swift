@@ -188,7 +188,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
             case "top":
                 return seperators.first
             case "bottom":
-                return seperators.first
+                return seperators.last
             default:
                 break
             }

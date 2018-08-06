@@ -9,13 +9,16 @@
 import Foundation
 import UIKit
 
-class ArrowConstants {
+class SliderConstants {
     static let gap:CGFloat = 25.0
     static let width:CGFloat = 24
     static let height:CGFloat = 30
     static let translate:CGFloat = 10
     static let animatorDuration = 0.5
+    
+    static let buttonHeight = CGFloat(20)
 }
+
 
 class SeperatorSlider: UIView {
     
@@ -61,10 +64,11 @@ class SeperatorSlider: UIView {
         
         switch direction {
         case "top":
-            button.roundCorners([.bottomLeft, .bottomRight], radius: 15)
-        case "middle":            button.roundCorners([.bottomLeft, .bottomRight, .topLeft, .topRight], radius: 15)
+            button.roundCorners([.bottomLeft, .bottomRight], radius: SliderConstants.buttonHeight)
+        case "middle":
+            button.roundCorners([.bottomLeft, .bottomRight, .topLeft, .topRight], radius: SliderConstants.buttonHeight/2)
         case "bottom":
-            button.roundCorners([.topLeft, .topRight], radius: 15)
+            button.roundCorners([.topLeft, .topRight], radius: SliderConstants.buttonHeight)
         default:
             break
         }
@@ -139,10 +143,10 @@ class SeperatorSlider: UIView {
         //Above
         if showAboveArrow() {
             let aboveOriginFrame = self.aboveArrow.frame
-            let animation = UIViewPropertyAnimator(duration: ArrowConstants.animatorDuration, curve: .easeInOut) { [weak self] in
+            let animation = UIViewPropertyAnimator(duration: SliderConstants.animatorDuration, curve: .easeInOut) { [weak self] in
                 UIView.setAnimationRepeatAutoreverses(true)
                 UIView.setAnimationRepeatCount(100000)
-                self?.aboveArrow.frame = self!.aboveArrow.frame.offsetBy(dx: 0, dy: ArrowConstants.translate)
+                self?.aboveArrow.frame = self!.aboveArrow.frame.offsetBy(dx: 0, dy: SliderConstants.translate)
             }
             animation.addCompletion { (_) in
                 self.aboveArrow.frame = aboveOriginFrame
@@ -154,10 +158,10 @@ class SeperatorSlider: UIView {
         //Below
         if showBelowArrow() {
             let belowOriginFrame = self.belowArrow.frame
-            let animation = UIViewPropertyAnimator(duration: ArrowConstants.animatorDuration, curve: .easeInOut) { [weak self] in
+            let animation = UIViewPropertyAnimator(duration: SliderConstants.animatorDuration, curve: .easeInOut) { [weak self] in
                 UIView.setAnimationRepeatAutoreverses(true)
                 UIView.setAnimationRepeatCount(100000)
-                self?.belowArrow.frame = self!.belowArrow.frame.offsetBy(dx: 0, dy: -ArrowConstants.translate)
+                self?.belowArrow.frame = self!.belowArrow.frame.offsetBy(dx: 0, dy: -SliderConstants.translate)
             }
             animation.addCompletion { (_) in
                 self.belowArrow.frame = belowOriginFrame
@@ -168,19 +172,19 @@ class SeperatorSlider: UIView {
     
     fileprivate func setupAboveArrow(arrow: UIImageView) {
         addSubview(arrow)
-        addConstraint(NSLayoutConstraint(item: arrow, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: -ArrowConstants.gap-15))
+        addConstraint(NSLayoutConstraint(item: arrow, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: -SliderConstants.gap-15))
         addConstraint(NSLayoutConstraint(item: arrow, attribute: .centerX, relatedBy: .equal, toItem: button, attribute: .centerX, multiplier: 1, constant: 0) )
-        addConstraint(NSLayoutConstraint(item: arrow, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: ArrowConstants.width))
-        addConstraint(NSLayoutConstraint(item: arrow, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: ArrowConstants.height))
+        addConstraint(NSLayoutConstraint(item: arrow, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: SliderConstants.width))
+        addConstraint(NSLayoutConstraint(item: arrow, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: SliderConstants.height))
         validArrows.append(arrow)
     }
     
     fileprivate func setupBelowArrow(arrow: UIImageView) {
         addSubview(arrow)
-        addConstraint(NSLayoutConstraint(item: arrow, attribute: .top, relatedBy: .equal, toItem: button, attribute: .bottom, multiplier: 1, constant: ArrowConstants.gap))
+        addConstraint(NSLayoutConstraint(item: arrow, attribute: .top, relatedBy: .equal, toItem: button, attribute: .bottom, multiplier: 1, constant: SliderConstants.gap))
         addConstraint(NSLayoutConstraint(item: arrow, attribute: .centerX, relatedBy: .equal, toItem: button, attribute: .centerX, multiplier: 1, constant: 0) )
-        addConstraint(NSLayoutConstraint(item: arrow, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: ArrowConstants.width))
-        addConstraint(NSLayoutConstraint(item: arrow, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: ArrowConstants.height))
+        addConstraint(NSLayoutConstraint(item: arrow, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: SliderConstants.width))
+        addConstraint(NSLayoutConstraint(item: arrow, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: SliderConstants.height))
         validArrows.append(arrow)
     }
 }

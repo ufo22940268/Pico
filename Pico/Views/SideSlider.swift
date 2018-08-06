@@ -26,9 +26,9 @@ class SideSlider: UIView {
         layoutIfNeeded()
         switch direction {
         case "left":
-            button.roundCorners([.topRight, .bottomRight], radius: 15)
+            button.roundCorners([.topRight, .bottomRight], radius: SliderConstants.buttonHeight/2)
         case "right":
-            button.roundCorners([.topLeft, .bottomLeft], radius: 15)
+            button.roundCorners([.topLeft, .bottomLeft], radius: SliderConstants.buttonHeight/2)
         default:
             break
         }
@@ -40,11 +40,11 @@ class SideSlider: UIView {
         arrow.isHidden = true
         arrow.translatesAutoresizingMaskIntoConstraints = false
         if direction == "left" {
-            arrow.leadingAnchor.constraint(equalTo: button.trailingAnchor, constant: ArrowConstants.gap).isActive = true
-            arrow.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
+            arrow.leadingAnchor.constraint(equalTo: button.trailingAnchor, constant: SliderConstants.gap).isActive = true
+//            arrow.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
         } else if direction == "right" {
-            arrow.trailingAnchor.constraint(equalTo: button.leadingAnchor, constant: -ArrowConstants.gap).isActive = true
-            arrow.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
+            arrow.trailingAnchor.constraint(equalTo: button.leadingAnchor, constant: -SliderConstants.gap).isActive = true
+//            arrow.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
         }
     }
     
@@ -56,11 +56,11 @@ class SideSlider: UIView {
     
     func setupAnimation() {
         let originFrame = arrow.frame
-        arrowAnimator = UIViewPropertyAnimator(duration: ArrowConstants.animatorDuration, curve: .easeInOut, animations: {[weak self] in
+        arrowAnimator = UIViewPropertyAnimator(duration: SliderConstants.animatorDuration, curve: .easeInOut, animations: {[weak self] in
             UIView.setAnimationRepeatCount(100000)
             UIView.setAnimationRepeatAutoreverses(true)
             if self != nil {
-                let offsetX = self!.direction == "left" ? -ArrowConstants.translate : ArrowConstants.translate
+                let offsetX = self!.direction == "left" ? -SliderConstants.translate : SliderConstants.translate
                 self!.arrow.frame = self!.arrow.frame.offsetBy(dx: offsetX, dy: 0)
             }
         })
