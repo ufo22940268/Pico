@@ -13,6 +13,8 @@ class ComposeCell: UIView, EditDelegator {
     
     @IBOutlet weak var image: UIImageView!
     
+    var imageEntity: Image!
+    
     var index: Int!
     var editState = EditState.inactive(fromDirections: nil)
     var onCellScrollDelegator: OnCellScroll!
@@ -164,17 +166,29 @@ class ComposeCell: UIView, EditDelegator {
         image.image = uiImage
     }
     
+    func getCropRectForExport(wrapperBounds: CGRect) -> CGRect {
+        var inter = wrapperBounds.intersection(self.bounds)
+        inter = inter.applying(CGAffineTransform(scaleX: 1.0/self.image.frame.width, y: 1.0/self.image.frame.height))
+          inter.origin.y = 1 - inter.origin.y - inter.height
+        return inter
+    }
+    
     func exportSnapshot(callback: @escaping (CIImage) -> Void, wrapperBounds: CGRect) {
         var inter = wrapperBounds.intersection(self.bounds)
         inter = inter.applying(CGAffineTransform(scaleX: 1.0/self.image.frame.width, y: 1.0/self.image.frame.height))
         inter.origin.y = 1 - inter.origin.y - inter.height
-        let img = self.image.image!
         
         DispatchQueue.global().async {
-            var imageCache = CIImage(image: img)!
-            inter = inter.applying(CGAffineTransform(scaleX: img.size.width, y: img.size.height))
-            imageCache = imageCache.cropped(to: inter)
-            callback(imageCache)
+            self.imageEntity.resolve(completion: { (img) in
+                if let img = img {
+                    inter = inter.applying(CGAffineTransform(scaleX: img.size.width, y: img.size.height))
+                    var imageCache = CIImage(image: img)!
+                    imageCache = imageCache.cropped(to: inter)
+                    callback(imageCache)
+                } else {
+                    print("parse \(String(describing: img)) error")
+                }
+            })
         }
     }
     
@@ -190,6 +204,4 @@ class ComposeCell: UIView, EditDelegator {
         
         return imageCache.convertToUIImage()
    }
-
-    
 }

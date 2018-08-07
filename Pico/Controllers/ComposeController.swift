@@ -83,11 +83,11 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     fileprivate func configureUIImages(_ uiImages: ([UIImage?])) {
         self.container.addTopSeperator()
         
-        self.container.addImage(image: uiImages.first!!)
+        self.container.addImage(image: uiImages.first!!, imageEntity: loadedImages.first!)
         
-        uiImages[1..<uiImages.count].forEach { image in
+        for (index, image) in uiImages[1..<uiImages.count].enumerated() {
             self.container.addSeperator()
-            self.container.addImage(image: image!)
+            self.container.addImage(image: image!, imageEntity: loadedImages[index])
         }
         
         self.container.addBottomSeperator()
@@ -128,8 +128,9 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         toolbarItems?.first?.setBackgroundImage(UIImage(named: "crop-alt-solid-fade"), for: .highlighted, barMetrics: .default)
         
         if loadedImages == nil {
-            self.configureUIImages([UIImage(named: "short"), UIImage(named: "short2"), UIImage(named: "short2"), UIImage(named: "short2")])
-//            self.configureUIImages([UIImage(named: "short"), UIImage(named: "short2")])
+            let sampleImages: [UIImage?] = [UIImage(named: "short"), UIImage(named: "short2"), UIImage(named: "short2"), UIImage(named: "short2")]
+            loadedImages = sampleImages.map {ImageMocker(image: $0!)}
+            self.configureUIImages(sampleImages)
         } else if loadedImages.count >= 2 {
             Image.resolve(images: loadedImages, completion: {uiImages in
                 self.configureUIImages(uiImages)

@@ -11,11 +11,6 @@ public class Image: Equatable {
     init(asset: PHAsset) {
         self.asset = asset
     }
-}
-
-// MARK: - UIImage
-
-extension Image {
     
     /// Resolve UIImage synchronously
     ///
@@ -32,7 +27,7 @@ extension Image {
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
         options.deliveryMode = deliveryMode
-
+        
         PHImageManager.default().requestImage(
             for: asset,
             targetSize: size,
@@ -41,7 +36,27 @@ extension Image {
                 completion(image)
         }
     }
+}
+
+class ImageMocker: Image {
     
+    var uiImage: UIImage!
+    
+    init(image: UIImage) {
+        super.init(asset: PHAsset())
+        self.uiImage = image
+    }
+
+    override func resolve(completion: @escaping (UIImage?) -> Void, targetWidth: CGFloat?, deliveryMode: PHImageRequestOptionsDeliveryMode) {
+        completion(uiImage)
+    }
+}
+
+// MARK: - UIImage
+
+extension Image {
+    
+
     
     
     /// Resolve an array of Image

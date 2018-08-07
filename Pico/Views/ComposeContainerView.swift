@@ -56,11 +56,12 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     
     var sliderType: SliderType = .crop
 
-    func addImage(image: UIImage) {
+    func addImage(image: UIImage, imageEntity: Image) {
         // Do any additional setup after loading the view.
         let view = UINib(nibName: "ComposeCell", bundle: nil).instantiate(withOwner: self, options: nil).first as! ComposeCell
         
         view.setImage(uiImage: image)
+        view.imageEntity = imageEntity
         view.index = cells.count
         view.restorationIdentifier = String(view.index)
         view.onCellScrollDelegator = self
