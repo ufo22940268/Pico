@@ -23,7 +23,6 @@ public class Image: Equatable {
         } else {
             size = CGSize(width: targetWidth!, height: CGFloat(asset.pixelHeight)/CGFloat(asset.pixelWidth)*targetWidth!)
         }
-        print("size", size)
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
         options.deliveryMode = deliveryMode

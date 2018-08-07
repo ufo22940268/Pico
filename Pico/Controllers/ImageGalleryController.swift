@@ -41,6 +41,7 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
     
     var delegate: SelectImageDelegate!
     var stack = ImageCacheStack()
+    let maxSelectCount = 2
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -149,6 +150,12 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         if selectImages.contains(selectImage) {
             selectImages.remove(at: selectImages.index(of: selectImage)!)
         } else {
+            guard selectImages.count < maxSelectCount  else {
+                let ac = UIAlertController(title: nil, message: "最多只能选择\(maxSelectCount)张图片", preferredStyle: .alert)
+                ac.addAction(UIAlertAction(title: "ok", style: .default))
+                self.present(ac, animated: true, completion: nil)
+                return
+            }
             selectImages.append(selectImage)
         }
         

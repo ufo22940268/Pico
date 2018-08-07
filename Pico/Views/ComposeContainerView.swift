@@ -260,7 +260,6 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         }
         
         group.notify(queue: .global(), execute: {
-            print(imageMap.count)
             let images = (imageMap.sorted(by: { (lhs, rhs) -> Bool in
                 return lhs.key < rhs.key
             })).map {$0.value}

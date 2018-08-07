@@ -134,7 +134,6 @@ class OverlapDetector {
 
     func getMiddleIntersection(completeHandler: @escaping (CGFloat, CGFloat) -> Void) {
         let handleRectangle = {(upRect: CGRect, downRect: CGRect) in
-            print(upRect, downRect)
             guard upRect != CGRect.zero && downRect != CGRect.zero else {
                 completeHandler(0, 0)
                 return

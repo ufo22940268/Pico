@@ -22,6 +22,7 @@ struct SelectRegion {
     var endPoint: CGPoint!
     var state: SelectRegionState!
     
+    
     func toRect() -> CGRect? {
         guard  startPoint != nil && endPoint != nil else {
             return nil
@@ -72,6 +73,7 @@ class PreviewController: UIViewController {
     
     let sampleImages: [UIImage] = [UIImage(named: "short")!, UIImage(named: "short")!]
     var uiImages: [UIImage]?
+    var imageEntities: [Image]!
     
     @IBOutlet weak var frame: FrameView!
     
@@ -106,6 +108,7 @@ class PreviewController: UIViewController {
 
         if forDev() {
             uiImages = sampleImages
+            imageEntities = sampleImages.map {ImageMocker(image: $0)}
             var height = CGFloat(0)
             for uiImage in uiImages! {
                 cellFrames.append(CGRect(origin: CGPoint(x: 0, y: height), size: uiImage.size))
@@ -113,7 +116,7 @@ class PreviewController: UIViewController {
             }
         }
         
-        preview.rawImages = uiImages
+        preview.uiImages = uiImages
         preview.image = preview.concateImages(images: (uiImages!.map({ (uiImage) -> CIImage in
             return CIImage(image: uiImage)!
         })))
@@ -205,8 +208,9 @@ class PreviewController: UIViewController {
     }
     
     @IBAction func onShareClick(_ sender: Any) {
-        let image = preview.renderCache(frameView: frame)
-        ShareManager(viewController: self).saveToPhoto(image: image)
+        preview.renderCache(frameView: frame, imageEntities: imageEntities, complete: { image in
+            ShareManager(viewController: self).saveToPhoto(image: image)
+        })
     }
     
     @IBAction func onPixellateItemClick(_ sender: Any) {

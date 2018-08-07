@@ -351,8 +351,8 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
              previewController.uiImages = container.cells.map({ (cell) -> UIImage in
                 return cell.exportSnapshot(wrapperBounds: cell.convert(containerWrapper.bounds, from: containerWrapper))
              })
-
              previewController.cellFrames = cellFrames
+             previewController.imageEntities = loadedImages
              container.showSeperators(show: true)
         default:
             break
