@@ -135,9 +135,9 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         if show {
             updateSlidersWhenEditChanged()
         } else {
-            seperators.forEach {$0.isHidden = true}
-            leftSlider.isHidden = true
-            leftSlider.isHidden = true
+            seperators.forEach {$0.hideAndDisable(true)}
+            leftSlider.hideAndDisable(true)
+            rightSlider.hideAndDisable(true)
         }
     }
     
@@ -145,14 +145,14 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         if case let .editing(direction, index) = editState {
             seperators.forEach { seperator in
                 if seperator.index != index {
-                    seperator.isHidden = true
+                    seperator.hideAndDisable(true)
                 } else {
-                    seperator.isHidden = false
+                    seperator.hideAndDisable(false)
                 }
             }
         } else {
             seperators.forEach { seperator in
-                seperator.isHidden = false
+                seperator.hideAndDisable(false)
             }
         }
     }
@@ -160,17 +160,17 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     fileprivate func updateSliderStateForCropWhenEditChanged() {
         switch editState {
         case .inactive:
-            leftSlider.isHidden = false
-            rightSlider.isHidden = false
-            seperators.first?.isHidden = false
-            seperators.last?.isHidden = false
+            leftSlider.hideAndDisable(false)
+            rightSlider.hideAndDisable(false)
+            seperators.first?.hideAndDisable(false)
+            seperators.last?.hideAndDisable(false)
         case .editing:
-            leftSlider.isHidden = true
-            rightSlider.isHidden = true
-            seperators.first?.isHidden = true
-            seperators.last?.isHidden = true
+            leftSlider.hideAndDisable(true)
+            rightSlider.hideAndDisable(true)
+            seperators.first?.hideAndDisable(true)
+            seperators.last?.hideAndDisable(true)
             
-            getActiveSlider()?.isHidden = false
+            getActiveSlider()?.hideAndDisable(false)
         }
     }
     
@@ -267,5 +267,8 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
             let snapshot = snapshotCI.convertToUIImage()
             callback(snapshot)
         })
+    }
+    
+    func setEditStateInvalid() {
     }
 }

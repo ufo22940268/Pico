@@ -20,7 +20,7 @@ class SliderConstants {
 }
 
 
-class SeperatorSlider: UIView {
+class SeperatorSlider: UIView, SliderSelectable {
     
     var aboveArrow: UIImageView!
     var belowArrow: UIImageView!
@@ -60,8 +60,7 @@ class SeperatorSlider: UIView {
         if showAboveArrow() {
             setupAboveArrow(arrow: aboveArrow)
         }
-        
-        
+                
         switch direction {
         case "top":
             button.roundCorners([.bottomLeft, .bottomRight], radius: SliderConstants.buttonHeight)
@@ -99,23 +98,28 @@ class SeperatorSlider: UIView {
     }
     
     
-    @IBAction func onToggle(_ sender: UIButton) {
-        sender.isSelected = !sender.isSelected
-
-        if (sender.isSelected) {
+    func updateSelectState(_ newSelectState: Bool) {
+        button.isSelected = newSelectState
+        
+        if (button.isSelected) {
             enableScroll()
         } else {
             disableScroll()
         }
-
+        
         var editState: EditState!
-        if sender.isSelected {
+        if button.isSelected {
             editState = EditState.editing(direction: direction, seperatorIndex: index)
         } else {
             editState = EditState.inactive(fromDirections: direction)
         }
         
         editDelegators.forEach{ $0.editStateChanged(state: editState) }
+    }
+    
+    @IBAction func onToggle(_ sender: UIButton) {
+        let newSelectState: Bool = !button.isSelected
+        updateSelectState(newSelectState)
     }
     
     func enableScroll() {

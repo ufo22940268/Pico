@@ -26,6 +26,16 @@ extension UIView {
         UIGraphicsEndImageContext()
         return cache
     }
+    
+    func hideAndDisable(_ hide: Bool) {
+        if hide {
+            self.isHidden = true
+            self.isUserInteractionEnabled = false
+        } else {
+            self.isHidden = false
+            self.isUserInteractionEnabled = true
+        }
+    }
 }
 
 extension NSLayoutConstraint {

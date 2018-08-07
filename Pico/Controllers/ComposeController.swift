@@ -133,7 +133,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         } else if loadedImages.count >= 2 {
             Image.resolve(images: loadedImages, completion: {uiImages in
                 self.configureUIImages(uiImages)
-            })
+            }, targetWidth: containerWrapper.bounds.width)
         }
         
         container.setEditDelegator(delegator: self)
@@ -248,6 +248,8 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                 onScrollHorizontal(sender, direction)
             }
         }
+        
+        updateAfterWrapperResize()
     }
     
     func findScrollCell(hitView: UIView) -> ComposeCell? {
@@ -375,12 +377,16 @@ extension ComposeController {
         hightlightSlideItem(index: 0)
         container.sliderType = .slide
         container.updateSliderType()
+        container.setEditStateInvalid()
+        container.showSeperators(show: true)
     }
     
     @IBAction func onCropItemSelected(_ sender: Any) {
         hightlightSlideItem(index: 1)
         container.sliderType = .crop
         container.updateSliderType()
+        container.setEditStateInvalid()
+        container.showSeperators(show: true)
     }
 }
 
@@ -392,13 +398,18 @@ extension ComposeController {
         containerWidthConstraint  = containerWidthConstraint.setMultiplier(multiplier: containerWidthConstraint.multiplier * scale)
     }
     
+    fileprivate func updateAfterWrapperResize() {
+        updateSideSliderButtons()
+        updateSeperatorSliderButtons()
+    }
+    
     @IBAction func onPinchComposeView(_ gestureRecognizer: UIPinchGestureRecognizer) {
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
             let maxScale = maxContainerWidth/containerWrapper.frame.width
             let scale = min(gestureRecognizer.scale, maxScale)
             
             let targetScale = containerWrapperWidthConstraint.multiplier * scale
-            guard targetScale > 0.3 else {
+            guard targetScale > 0.5 else {
                 return
             }
             
@@ -409,11 +420,9 @@ extension ComposeController {
             }
             gestureRecognizer.scale = 1.0
             
-            updateSideSliderButtons()
-            updateSeperatorSliderButtons()
+            updateAfterWrapperResize()
         } else if gestureRecognizer.state == .ended {
-            updateSideSliderButtons()
-            updateSeperatorSliderButtons()
+            updateAfterWrapperResize()
         }
     }
 }
@@ -428,7 +437,6 @@ extension ComposeController: UIScrollViewDelegate {
             container.updateSeperatorSliderButtons(midPoint: midPoint)
         }
     }
-    
     
     fileprivate func updateSideSliderButtons() {
         if container.leftSlider != nil {

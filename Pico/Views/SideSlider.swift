@@ -9,8 +9,7 @@
 import Foundation
 import UIKit
 
-class SideSlider: UIView {
-    
+class SideSlider: UIView, SliderSelectable {
     @objc var direction: String!
 
     @IBOutlet weak var button: UIButton!
@@ -69,16 +68,22 @@ class SideSlider: UIView {
     }
     
     @IBAction func onToggle(_ sender: UIButton) {
-        if sender.isSelected {
+        let newSelectState = !button.isSelected
+        updateSelectState(newSelectState)
+    }
+    
+    func updateSelectState(_ newSelectState: Bool) {
+        if !newSelectState {
             delegate?.editStateChanged(state: EditState.inactive(fromDirections: direction))
-            sender.isSelected = false
+            button.isSelected = newSelectState
             stopAnimator()
         } else {
             delegate?.editStateChanged(state: EditState.editing(direction: direction, seperatorIndex: nil))
-            sender.isSelected = true
+            button.isSelected = newSelectState
             startAnimator()
         }
     }
+    
     
     func startAnimator() {
         arrow.isHidden = false

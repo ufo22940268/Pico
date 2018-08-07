@@ -122,9 +122,9 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         {
             let image = images[(collection.indexPath(for: peekCell)?.item)!]
             controller.imageDate = image.asset.creationDate
-            image.resolve { (uiImage) in
+            image.resolve(completion:  { (uiImage) in
                 controller.image.image = uiImage
-            }
+            })
             controller.imageEntity = image
             controller.isSelected = selectImages.contains(image) 
         }
