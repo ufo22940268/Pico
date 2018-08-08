@@ -31,8 +31,6 @@
             <viewLayoutGuide key="safeArea" id="4xK-rs-47B"/>
             <connections>
                 <outlet property="image" destination="tNs-5I-7A1" id="S8N-pl-bTS"/>
-                <outlet property="leadingConstraint" destination="oJF-OS-HCl" id="c9K-tC-XPO"/>
-                <outlet property="trailingConstraint" destination="4E8-UG-FId" id="GMD-7T-12j"/>
             </connections>
             <point key="canvasLocation" x="-544.5" y="841"/>
         </view>

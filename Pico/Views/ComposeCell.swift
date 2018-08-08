@@ -9,6 +9,25 @@
 import Foundation
 import UIKit
 
+struct ScalableConstant {
+    var scale = CGFloat(1)
+    var constant = CGFloat(0)
+    
+    mutating func addConstant(delta: CGFloat) -> CGFloat {
+        constant = constant + delta
+        return finalConstant()
+    }
+    
+    mutating func multiplyScale(_ scale: CGFloat) -> CGFloat {
+        self.scale = self.scale * scale
+        return finalConstant()
+    }
+    
+    func finalConstant() -> CGFloat {
+        return scale*constant
+    }
+}
+
 class ComposeCell: UIView, EditDelegator {
     
     @IBOutlet weak var image: UIImageView!
@@ -21,9 +40,9 @@ class ComposeCell: UIView, EditDelegator {
     
     var originFrame: CGRect?
     
-    @IBOutlet weak var trailingConstraint: NSLayoutConstraint!
-    @IBOutlet weak var leadingConstraint: NSLayoutConstraint!
-    
+    var bottomConstant = ScalableConstant()
+    var topConstant = ScalableConstant()
+
     override func awakeFromNib() {
     }
     
@@ -60,18 +79,20 @@ class ComposeCell: UIView, EditDelegator {
         
         let deltaTranslateY = (shrink ? -1 : 1) * absTranslateY
         if case .above = position {
-            let newContraint: CGFloat = bottomConstraint.constant + deltaTranslateY
+            let newContraint: CGFloat = bottomConstant.constant + deltaTranslateY
             if newContraint < 0 {
                 if !(shrink && frame.height - absTranslateY < 60) {
-                    bottomConstraint.constant = newContraint
+                    bottomConstant.constant = newContraint
+                    bottomConstraint.constant = bottomConstant.finalConstant()
                     onCellScrollDelegator?.onCellScroll(translate: Float(translateY), cellIndex: index, position: position)
                 }
             }
         } else if case .below = position {
-            let newContraint: CGFloat = topConstraint.constant - deltaTranslateY
+            let newContraint: CGFloat = topConstant.constant - deltaTranslateY
             if newContraint > 0 {
                 if !(shrink && frame.height - absTranslateY < 10) {
-                    topConstraint.constant = newContraint
+                    topConstant.constant = newContraint
+                    topConstraint.constant = topConstant.finalConstant()
                     onCellScrollDelegator?.onCellScroll(translate: Float(translateY), cellIndex: index, position: position)
                 }
             }
@@ -107,52 +128,6 @@ class ComposeCell: UIView, EditDelegator {
         scrollY(position, translateY)
 
         sender.setTranslation(CGPoint.zero, in: image)
-    }
-    
-    func scrollHorizontal(_ sender: UIPanGestureRecognizer, _ direction: String) {
-        guard case .editing = editState else {
-            return
-        }
-
-        let translate = sender.translation(in: self)
-        let translateX = translate.x
-        scrollX(translateX, direction)
-    }
-    
-    func scrollX(_ translateX: CGFloat, _ direction: String) {
-        guard translateX != 0 else {
-            return
-        }
-  
-        let shrink = (translateX > 0 && direction == "right") || (translateX < 0 && direction == "left")
-        
-        let activeConstraint = direction == "left" ? leadingConstraint! : trailingConstraint!
-        var activeExpectConstraintConstant = activeConstraint.constant + (shrink ? -1 : 1)*abs(translateX)
-        
-        var calibratedTranslateX = translateX
-        if activeExpectConstraintConstant < -frame.width {
-            let calibrate = abs(activeExpectConstraintConstant) - frame.width
-            calibratedTranslateX = calibratedTranslateX/abs(calibratedTranslateX)*(abs(calibratedTranslateX) - calibrate)
-        } else if activeExpectConstraintConstant > 0 {
-            let calibrate = activeExpectConstraintConstant
-            calibratedTranslateX = calibratedTranslateX/abs(calibratedTranslateX)*(abs(calibratedTranslateX) - calibrate)
-        }
-        
-        activeExpectConstraintConstant = activeConstraint.constant + (shrink ? -1 : 1)*abs(calibratedTranslateX)
-        
-        guard activeExpectConstraintConstant <= 0 else {
-            return
-        }
-        
-        if direction == "left" {
-            let translateForActiveConstraint = (shrink ? -1 : 1)*abs(calibratedTranslateX)
-            leadingConstraint.constant = leadingConstraint.constant + translateForActiveConstraint
-            trailingConstraint.constant = trailingConstraint.constant - translateForActiveConstraint
-        } else {
-            let translateForActiveConstraint = (shrink ? -1 : +1)*abs(calibratedTranslateX)
-            leadingConstraint.constant = leadingConstraint.constant - translateForActiveConstraint
-            trailingConstraint.constant = trailingConstraint.constant + translateForActiveConstraint
-        }
     }
     
     func setImage(uiImage: UIImage) {
@@ -204,4 +179,14 @@ class ComposeCell: UIView, EditDelegator {
         
         return imageCache.convertToUIImage()
    }
+    
+    func multiplyScale(scale: CGFloat) {
+        let topConstraint = self.constraints.filter {$0.identifier == "top"}.first!
+        topConstant.scale = topConstant.scale*scale
+        topConstraint.constant = topConstant.finalConstant()
+        
+        let bottomConstraint = self.constraints.filter {$0.identifier == "bottom"}.first!
+        bottomConstant.scale = bottomConstant.scale*scale
+        bottomConstraint.constant = bottomConstant.finalConstant()
+    }
 }
