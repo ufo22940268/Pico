@@ -146,10 +146,12 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     @IBAction func download(_ sender: UIBarButtonItem) {
         sender.isEnabled = false
         let rect: CGRect = self.container.convert(self.containerWrapper.bounds, from: self.containerWrapper)
+        let shareManager: ShareManager = ShareManager(viewController: self)
+        shareManager.startSavingPhoto()
         self.container.exportSnapshot(callback: {snapshot in
             DispatchQueue.main.async {
                 sender.isEnabled = true
-                ShareManager(viewController: self).saveToPhoto(image: snapshot)
+                shareManager.saveToPhoto(image: snapshot)                
             }
         }, wrapperBounds: rect)
     }

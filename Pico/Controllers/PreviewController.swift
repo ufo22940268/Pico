@@ -208,8 +208,10 @@ class PreviewController: UIViewController {
     }
     
     @IBAction func onShareClick(_ sender: Any) {
+        let shareManager: ShareManager = ShareManager(viewController: self)
+        shareManager.startSavingPhoto()
         preview.renderCache(frameView: frame, imageEntities: imageEntities, complete: { image in
-            ShareManager(viewController: self).saveToPhoto(image: image)
+            shareManager.saveToPhoto(image: image)
         })
     }
     

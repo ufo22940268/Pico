@@ -26,7 +26,7 @@ class SeperatorSlider: UIView, SliderSelectable {
     var belowArrow: UIImageView!
     var animations = [UIViewPropertyAnimator]()
     var index: Int!
-    var editDelegators:[EditDelegator] = [EditDelegator]()
+    weak var editDelegator:EditDelegator?
     var validArrows = [UIImageView]()
     
     @objc var direction = "middle"
@@ -75,11 +75,7 @@ class SeperatorSlider: UIView, SliderSelectable {
         addConstraint(NSLayoutConstraint(item: self, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 0))
         backgroundColor = UIColor.yellow
     }
-    
-    func addEditDelegator(editDelegator: EditDelegator) {
-        self.editDelegators.append(editDelegator)
-    }
-        
+            
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         
         guard isUserInteractionEnabled else {
@@ -114,7 +110,7 @@ class SeperatorSlider: UIView, SliderSelectable {
             editState = EditState.inactive(fromDirections: direction)
         }
         
-        editDelegators.forEach{ $0.editStateChanged(state: editState) }
+        editDelegator?.editStateChanged(state: editState)
     }
     
     @IBAction func onToggle(_ sender: UIButton) {

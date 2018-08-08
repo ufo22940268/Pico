@@ -15,7 +15,7 @@ class SideSlider: UIView, SliderSelectable {
     @IBOutlet weak var button: UIButton!
     
     @IBOutlet weak var topConstraint: NSLayoutConstraint!
-    var delegate: EditDelegator?
+    weak var delegate: EditDelegator?
     var arrow: UIImageView!
     var arrowAnimator: UIViewPropertyAnimator!
     

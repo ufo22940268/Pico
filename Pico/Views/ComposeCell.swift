@@ -17,7 +17,7 @@ class ComposeCell: UIView, EditDelegator {
     
     var index: Int!
     var editState = EditState.inactive(fromDirections: nil)
-    var onCellScrollDelegator: OnCellScroll!
+    weak var onCellScrollDelegator: OnCellScroll?
     
     var originFrame: CGRect?
     
@@ -64,7 +64,7 @@ class ComposeCell: UIView, EditDelegator {
             if newContraint < 0 {
                 if !(shrink && frame.height - absTranslateY < 60) {
                     bottomConstraint.constant = newContraint
-                    onCellScrollDelegator.onCellScroll(translate: Float(translateY), cellIndex: index, position: position)
+                    onCellScrollDelegator?.onCellScroll(translate: Float(translateY), cellIndex: index, position: position)
                 }
             }
         } else if case .below = position {
@@ -72,7 +72,7 @@ class ComposeCell: UIView, EditDelegator {
             if newContraint > 0 {
                 if !(shrink && frame.height - absTranslateY < 10) {
                     topConstraint.constant = newContraint
-                    onCellScrollDelegator.onCellScroll(translate: Float(translateY), cellIndex: index, position: position)
+                    onCellScrollDelegator?.onCellScroll(translate: Float(translateY), cellIndex: index, position: position)
                 }
             }
         }

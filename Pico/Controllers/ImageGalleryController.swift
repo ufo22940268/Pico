@@ -41,7 +41,7 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
     
     var delegate: SelectImageDelegate!
     var stack = ImageCacheStack()
-    let maxSelectCount = 2
+    let maxSelectCount = 10
     
     override func viewDidLoad() {
         super.viewDidLoad()

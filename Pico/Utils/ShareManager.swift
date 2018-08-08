@@ -11,10 +11,20 @@ import UIKit
 
 class ShareManager: NSObject {
     
-    let viewController: UIViewController!
+    weak var viewController: UIViewController?
+    let alertVC: UIAlertController!
+    let okAction: UIAlertAction!
     
     init(viewController: UIViewController) {
         self.viewController = viewController
+        alertVC = UIAlertController(title: "保存", message: "保存中", preferredStyle: .alert)
+        okAction = UIAlertAction(title: "OK", style: .default)
+        okAction.isEnabled = false
+        alertVC.addAction(okAction)
+    }
+    
+    func startSavingPhoto() {
+        viewController?.present(alertVC, animated: true, completion: nil)
     }
     
     func saveToPhoto(image: UIImage) {
@@ -22,14 +32,11 @@ class ShareManager: NSObject {
     }
     
     @objc func afterSaveToPhoto(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
-        if let error = error {
-            let ac = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "OK", style: .default))
-            viewController.present(ac, animated: true)
+        if error == nil {
+            alertVC.message = "图片已经保存到相册"
+            okAction.isEnabled = true
         } else {
-            let ac = UIAlertController(title: "保存成功", message: "图片已经保存到相册", preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "OK", style: .default))
-            viewController.present(ac, animated: true)
+            alertVC.dismiss(animated: true, completion: nil)
         }
     }
 

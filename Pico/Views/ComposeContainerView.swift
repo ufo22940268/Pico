@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol EditDelegator {
+protocol EditDelegator: class {
     func editStateChanged(state: EditState)
 }
 
-protocol OnCellScroll {
+protocol OnCellScroll: class {
     func onCellScroll(translate: Float, cellIndex: Int, position: ComposeCell.Position)
 }
 
@@ -46,8 +46,8 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
 
     
     var editState = EditState.inactive(fromDirections: nil)
-    var editDelegator: EditDelegator?
-    var scrollDelegator: OnCellScroll?
+    weak var editDelegator: EditDelegator?
+    weak var scrollDelegator: OnCellScroll?
     var cells = [ComposeCell]()
     var seperators = [SeperatorSlider]()
     
@@ -73,7 +73,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     
     func addTopSeperator() {
         let seperator = UINib(nibName: "Slider", bundle: nil).instantiate(withOwner: self, options: nil).map {$0 as! UIView}.filter {$0.restorationIdentifier == "top"}.first as! SeperatorSlider
-        seperator.addEditDelegator(editDelegator: self)
+        seperator.editDelegator = self
         self.addArrangedSubview(seperator)
 
         seperator.index = seperators.count
@@ -82,7 +82,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     
     func addSeperator() {
         let seperator = UINib(nibName: "Slider", bundle: nil).instantiate(withOwner: self, options: nil).first as! SeperatorSlider
-        seperator.addEditDelegator(editDelegator: self)
+        seperator.editDelegator = self
         self.addArrangedSubview(seperator)
         
         seperator.index = seperators.count
@@ -91,7 +91,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
 
     func addBottomSeperator() {
         let seperator = UINib(nibName: "Slider", bundle: nil).instantiate(withOwner: self, options: nil).map {$0 as! UIView}.filter {$0.restorationIdentifier == "bottom"}.first as! SeperatorSlider
-        seperator.addEditDelegator(editDelegator: self)
+        seperator.editDelegator = self
         self.addArrangedSubview(seperator)
         
         seperator.index = seperators.count
