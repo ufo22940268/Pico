@@ -98,7 +98,9 @@ class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibrary
             
             self.reloadSelectAlbum()
             
-            self.selectAlbumController.albums = self.library.albums
+            self.selectAlbumController.albums = self.library.albums.sorted(by: { (a1, a2) -> Bool in
+                return a1.collection.localizedTitle == "所有照片"
+            })
             self.selectAlbumController.tableView.reloadData()
         }
     }
