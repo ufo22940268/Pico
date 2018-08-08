@@ -21,7 +21,7 @@ struct CropArea {
     }
 }
 
-protocol PreviewViewDelegate {
+protocol PreviewViewDelegate: class {
     func onSignChanged(sign: String?)
 }
 
@@ -50,7 +50,7 @@ class PreviewView: GLKView {
         }
     }
     var align = PreviewAlignMode.middle
-    var previewDelegate: PreviewViewDelegate?
+    weak var previewDelegate: PreviewViewDelegate?
     var signImage: CIImage?
     
     var image: CIImage! {

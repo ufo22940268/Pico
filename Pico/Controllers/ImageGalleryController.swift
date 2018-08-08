@@ -94,8 +94,10 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
             cell.image.image = cacheImage
         } else {
             let id = PHImageManager.default().requestImage(for: image.asset, targetSize: imageSize, contentMode: .default, options: options) { [weak self] (uiImage, _) in
-                cell.image.image = uiImage
-                self?.stack.push(bundle: (image, uiImage!))
+                if let uiImage = uiImage {
+                    cell.image.image = uiImage
+                    self?.stack.push(bundle: (image, uiImage))
+                }
             }
             cell.tag = Int(id)
         }

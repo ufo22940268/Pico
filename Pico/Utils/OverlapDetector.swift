@@ -23,8 +23,8 @@ class OverlapDetector {
         
         self.upImage = upImage
         self.downImage = downImage
-        self.upRGB = RGBAImage(image: upImage)!
-        self.downRGB = RGBAImage(image: downImage)!
+//        self.upRGB = RGBAImage(image: upImage)!
+//        self.downRGB = RGBAImage(image: downImage)!
     }
     
     enum Position: String {
