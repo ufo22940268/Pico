@@ -25,9 +25,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     @IBOutlet var containerTrailingConstraint: NSLayoutConstraint!
     @IBOutlet var containerWrapperLeadingConstraint: NSLayoutConstraint!
     @IBOutlet var containerWrapperTrailingConstraint: NSLayoutConstraint!
-    
-    var containerWrapperLeadingConstant = ScalableConstant()
-    var containerWrapperTrailingConstant = ScalableConstant()
 
     @IBOutlet var slideTypeItems: [UIBarButtonItem]!
     
@@ -228,12 +225,11 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             /// Update container wrapper
             let newWidth = scroll.frame.width - abs(containerLeadingConstraint.constant) - abs(containerTrailingConstraint.constant)
             containerWrapperWidthConstraint.constant = newWidth - scroll.frame.width
-            
             switch direction {
             case "left":
-                containerWrapperTrailingConstraint.constant = containerWrapperTrailingConstant.addConstant(delta: (shrink ? 1 : -1)*abs(calibratedTranslateX))
+                containerWrapperTrailingConstraint.constant = containerWrapperTrailingConstraint.constant + (shrink ? 1 : -1)*abs(calibratedTranslateX)
             case "right":
-                containerWrapperLeadingConstraint.constant = containerWrapperLeadingConstant.addConstant(delta: (shrink ? 1 : -1)*abs(calibratedTranslateX))
+                containerWrapperLeadingConstraint.constant = containerWrapperLeadingConstraint.constant + (shrink ? 1 : -1)*abs(calibratedTranslateX)
             default:
                 break
             }
@@ -405,9 +401,6 @@ extension ComposeController {
         containerWrapperWidthConstraint  = containerWrapperWidthConstraint.setMultiplier(multiplier: containerWrapperWidthConstraint.multiplier * scale)
         containerWidthConstraint  = containerWidthConstraint.setMultiplier(multiplier: containerWidthConstraint.multiplier * scale)
         container.cells.forEach {$0.multiplyScale(scale: scale)}
-        print(containerWrapperTrailingConstant)
-        containerWrapperTrailingConstraint.constant = containerWrapperTrailingConstant.multiplyScale(scale)
-        containerWrapperLeadingConstraint.constant =  containerWrapperLeadingConstant.multiplyScale(scale)
     }
     
     fileprivate func updateAfterWrapperResize() {
