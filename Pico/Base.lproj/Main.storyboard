@@ -338,14 +338,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView verifyAmbiguity="off" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QGp-s0-rHz">
+                            <scrollView verifyAmbiguity="off" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QGp-s0-rHz">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
                                 <subviews>
-                                    <view verifyAmbiguity="off" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bEx-xN-zR0" customClass="PreviewView" customModule="Pico" customModuleProvider="target">
+                                    <view verifyAmbiguity="off" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bEx-xN-zR0" customClass="PreviewView" customModule="Pico" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
                                         <subviews>
-                                            <view opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BrR-tC-eTg" userLabel="Frame" customClass="FrameView" customModule="Pico" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="2" width="375" height="128"/>
+                                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BrR-tC-eTg" userLabel="Frame" customClass="FrameView" customModule="Pico" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
                                             </view>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -366,12 +366,6 @@
                                     <constraint firstItem="bEx-xN-zR0" firstAttribute="width" secondItem="QGp-s0-rHz" secondAttribute="width" id="wbk-L3-pKL"/>
                                     <constraint firstItem="bEx-xN-zR0" firstAttribute="leading" secondItem="QGp-s0-rHz" secondAttribute="leading" priority="750" id="yqh-mR-IfS"/>
                                 </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="P7J-hE-jQG"/>
-                                        <exclude reference="VdV-Xp-vVp"/>
-                                    </mask>
-                                </variation>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="aWq-W0-JZr" appends="YES" id="45w-Ps-kp8"/>
                                 </connections>
