@@ -32,9 +32,18 @@ struct ImageCacheStack {
 }
 
 class ImageGalleryController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UIViewControllerPreviewingDelegate {
-    
 
-    var images = [Image]()
+    let imageCellSize = 100*UIScreen.main.scale
+
+    var images = [Image]() {
+        willSet(newImages) {
+            imageManager.stopCachingImagesForAllAssets()
+            imageManager.startCachingImages(for: newImages.map {$0.asset},
+                                            targetSize: CGSize(width: imageCellSize, height: imageCellSize),
+                                            contentMode: .default,
+                                            options: options)
+        }
+    }
     var selectImages = [Image]() 
     
     @IBOutlet var collection: UICollectionView!
@@ -42,6 +51,15 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
     var delegate: SelectImageDelegate!
     var stack = ImageCacheStack()
     let maxSelectCount = 10
+    
+    let imageManager = PHCachingImageManager.default() as! PHCachingImageManager
+    let options: PHImageRequestOptions = {
+        let ops = PHImageRequestOptions()
+        ops.deliveryMode = .highQualityFormat
+        return ops
+    }()
+
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,18 +100,16 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PickImageCell
         
         if cell.tag != 0 {
-            PHImageManager.default().cancelImageRequest(PHImageRequestID(cell.tag))
+            imageManager.cancelImageRequest(PHImageRequestID(cell.tag))
         }
     
         let image = images[indexPath.item]
-        let imageSize = CGSize(width: cell.image.frame.size.width*UIScreen.main.scale, height: cell.image.frame.size.height*UIScreen.main.scale)
-        let options = PHImageRequestOptions()
-        options.deliveryMode = .highQualityFormat
+        let imageSize = CGSize(width: imageCellSize, height: imageCellSize)
         
         if let cacheImage = stack.find(image: image) {
             cell.image.image = cacheImage
         } else {
-            let id = PHImageManager.default().requestImage(for: image.asset, targetSize: imageSize, contentMode: .default, options: options) { [weak self] (uiImage, _) in
+            let id = imageManager.requestImage(for: image.asset, targetSize: imageSize, contentMode: .default, options: options) { [weak self] (uiImage, _) in
                 if let uiImage = uiImage {
                     cell.image.image = uiImage
                     self?.stack.push(bundle: (image, uiImage))
