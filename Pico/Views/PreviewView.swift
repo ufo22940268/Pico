@@ -240,6 +240,11 @@ extension PreviewView {
         crops.append(CropArea(rect: ciRect))
     }
     
+    fileprivate func refreshPixelImage() {
+        let selectedPixelImage = pixellateImages[selectedPixelScale]!
+        pixellateImage = pixellate(ciImage: image, forExport: false, pixellateImage: selectedPixelImage)
+    }
+    
     func updatePixellate(uiRect: CGRect) {
         if crops.count == 0 {
             addPixellate(uiRect: uiRect)
@@ -248,8 +253,7 @@ extension PreviewView {
         crops[crops.count - 1].rect = convertUIRectToCIRect(uiRect: uiRect)
         crops[crops.count - 1].rendered = false
         
-        let selectedPixelImage = pixellateImages[selectedPixelScale]!
-        pixellateImage = pixellate(ciImage: image, forExport: false, pixellateImage: selectedPixelImage)
+        refreshPixelImage()
     }
     
     func updatePixellateSize(percent: Float) {
@@ -261,6 +265,8 @@ extension PreviewView {
         for index in 0..<crops.count {
             crops[index].rendered = false
         }
+        
+        refreshPixelImage()
     }
     
 }
