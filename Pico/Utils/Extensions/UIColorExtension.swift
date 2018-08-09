@@ -11,4 +11,6 @@ import UIKit
 
 extension UIColor {
     static let system = UIView().tintColor!
+    
+    static let guidelinePink = UIColor(red: 90/255.0, green: 200/255.0, blue: 250/255.0, alpha: 1)
 }

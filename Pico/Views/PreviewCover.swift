@@ -26,7 +26,7 @@ class PreviewCover: UIView {
     override func draw(_ rect: CGRect) {
         if let selection = selection {
             let context = UIGraphicsGetCurrentContext()
-            context?.setStrokeColor(UIColor.red.cgColor)
+            context?.setStrokeColor(UIColor.guidelinePink.cgColor)
             context?.addRect(selection)
             context?.strokePath()
         }
