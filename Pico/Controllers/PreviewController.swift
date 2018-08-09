@@ -187,11 +187,6 @@ class PreviewController: UIViewController {
 
     }
     
-    @IBAction func onChangePixellateSize(_ sender: UISlider) {
-        preview.updatePixellateSize(percent: sender.value)
-        preview.setNeedsDisplay()
-    }
-    
     @IBAction func onUndo(_ sender: Any) {
         preview.undo()
         preview.setNeedsDisplay()
@@ -257,6 +252,18 @@ class PreviewController: UIViewController {
         self.preview.clearSign()
         self.preview.setNeedsDisplay()
     } 
+
+    @IBAction func onPixelItemClick(_ sender: UIBarButtonItem) {
+        let tagToScale = [
+            0: PreviewPixellateScale.small,
+            1: .middle,
+            2: .large
+        ]
+        
+        preview.selectedPixelScale = tagToScale[sender.tag]!
+        preview.refreshPixelImage()
+        preview.setNeedsDisplay()
+    }
 }
 
 extension PreviewController: PreviewViewDelegate {
