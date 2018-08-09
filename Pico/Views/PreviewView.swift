@@ -267,8 +267,7 @@ extension PreviewView {
         }
         
         refreshPixelImage()
-    }
-    
+    }    
 }
 
 // MARK: - Signature
