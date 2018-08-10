@@ -31,6 +31,7 @@
 		4266A1722101B92F009F92D6 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4266A1712101B92F009F92D6 /* UIViewExtension.swift */; };
 		428006F020EB7C610091BE9B /* ComposeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428006EF20EB7C610091BE9B /* ComposeController.swift */; };
 		428006F420EB99610091BE9B /* ComposeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 428006F320EB99610091BE9B /* ComposeCell.xib */; };
+		428C51F4211D6D5700A34E9B /* CGRectExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428C51F3211D6D5700A34E9B /* CGRectExtensions.swift */; };
 		42A18C4B20EAF5A600DD4AA5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A18C4A20EAF5A600DD4AA5 /* AppDelegate.swift */; };
 		42A18C4D20EAF5A600DD4AA5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A18C4C20EAF5A600DD4AA5 /* ViewController.swift */; };
 		42A18C5020EAF5A600DD4AA5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42A18C4E20EAF5A600DD4AA5 /* Main.storyboard */; };
@@ -102,6 +103,7 @@
 		4266A1712101B92F009F92D6 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		428006EF20EB7C610091BE9B /* ComposeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeController.swift; sourceTree = "<group>"; };
 		428006F320EB99610091BE9B /* ComposeCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ComposeCell.xib; sourceTree = "<group>"; };
+		428C51F3211D6D5700A34E9B /* CGRectExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectExtensions.swift; sourceTree = "<group>"; };
 		42A18C4720EAF5A600DD4AA5 /* Pico.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pico.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42A18C4A20EAF5A600DD4AA5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		42A18C4C20EAF5A600DD4AA5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -172,6 +174,7 @@
 				4201F005210ED73400A6EBA5 /* GestureExtension.swift */,
 				4201F00721119A0700A6EBA5 /* CIImageExtension.swift */,
 				4201F009211305DA00A6EBA5 /* UIColorExtension.swift */,
+				428C51F3211D6D5700A34E9B /* CGRectExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -447,6 +450,7 @@
 				420EF45020FCC024006CCDD3 /* UIImageViewExtension.swift in Sources */,
 				423F1C1420EBB4530083DB6D /* ComposeCell.swift in Sources */,
 				425F9B3C20EB66AF00B0F2CF /* PickImageController.swift in Sources */,
+				428C51F4211D6D5700A34E9B /* CGRectExtensions.swift in Sources */,
 				42B3665820F5A5F900CF12CA /* Errors.swift in Sources */,
 				42A18C7D20EB008A00DD4AA5 /* ImagesLibrary.swift in Sources */,
 				421BC84B20FE0C9600F8C89F /* PreviewView.swift in Sources */,

@@ -89,7 +89,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         for (index, image) in uiImages[1..<uiImages.count].enumerated() {
             self.container.addSeperator()
-            self.container.addImage(image: image!, imageEntity: loadedImages[index])
+            self.container.addImage(image: image!, imageEntity: loadedImages[index + 1])
         }
         
         self.container.addBottomSeperator()
