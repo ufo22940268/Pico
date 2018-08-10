@@ -70,7 +70,7 @@ class PreviewView: GLKView {
     var pixellateImages = [PreviewPixellateScale: CIImage]()
     
     var pixellateImage: CIImage?
-    
+    var signFontSize = CGFloat(20)
     
     override func awakeFromNib() {
         context = EAGLContext(api: .openGLES3)!
@@ -78,20 +78,23 @@ class PreviewView: GLKView {
         
         labelView = UILabel()
         labelView.textColor = UIColor.white
-        labelView.font = UIFont.systemFont(ofSize: 50)
+        labelView.font = UIFont.systemFont(ofSize: signFontSize*UIScreen.main.scale)
     }
     
-    fileprivate func drawSign(canvas: inout CIImage, signImage: CIImage?, scale:CGFloat = 1) {
-        if let signImage = signImage {
+    fileprivate func drawSign(canvas: inout CIImage, signImage: CIImage?, viewScale:CGFloat = 1, forExport: Bool = false) {
+        if var signImage = signImage {
             var translate:() -> CIImage
             let resultWidth = canvas.extent.width
+            if !forExport {
+                signImage = signImage.transformed(by: CGAffineTransform(scaleX: 1/UIScreen.main.scale, y: 1/UIScreen.main.scale))
+            }
             switch align {
             case .left:
-                translate = {signImage.transformed(by: CGAffineTransform(translationX: 8*scale, y: 8*scale))}
+                translate = {signImage.transformed(by: CGAffineTransform(translationX: 8*viewScale, y: 8*viewScale))}
             case .middle:
-                translate = {signImage.transformed(by: CGAffineTransform(translationX: (resultWidth - signImage.extent.width)/2, y: 8*scale))}
+                translate = {signImage.transformed(by: CGAffineTransform(translationX: (resultWidth - signImage.extent.width)/2, y: 8*viewScale))}
             case .right:
-                translate = {signImage.transformed(by: CGAffineTransform(translationX: (resultWidth - signImage.extent.width - 8*scale), y: 8*scale))}
+                translate = {signImage.transformed(by: CGAffineTransform(translationX: (resultWidth - signImage.extent.width - 8*viewScale), y: 8*viewScale))}
             }
             canvas = translate().composited(over: canvas)
         }
@@ -201,11 +204,11 @@ class PreviewView: GLKView {
             if let sign = self.sign {
                 let labelView = UILabel()
                 labelView.textColor = UIColor.white
-                labelView.font = UIFont.systemFont(ofSize: 80)
+                labelView.font = UIFont.systemFont(ofSize: viewScale * self.signFontSize)
                 labelView.text = sign
                 labelView.sizeToFit()
                 let labelImage = labelView.renderToCIImage()
-                self.drawSign(canvas: &canvas, signImage: labelImage, scale: imageScale)
+                self.drawSign(canvas: &canvas, signImage: labelImage, viewScale: viewScale, forExport: true)
             }
             
             let canvasImage = canvas.convertToUIImage()
