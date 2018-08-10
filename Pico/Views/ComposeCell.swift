@@ -154,7 +154,7 @@ class ComposeCell: UIView, EditDelegator {
         inter.origin.y = 1 - inter.origin.y - inter.height
         return inter
     }
-    
+        
     func exportSnapshot(callback: @escaping (CIImage) -> Void, wrapperBounds: CGRect) {
         var inter = getIntersection(wrapperBounds: wrapperBounds)
         DispatchQueue.global().async {
@@ -163,8 +163,6 @@ class ComposeCell: UIView, EditDelegator {
                     inter = inter.applying(CGAffineTransform(scaleX: img.size.width, y: img.size.height))
                     var imageCache = CIImage(image: img)!
                     imageCache = imageCache.cropped(to: inter)
-                    print("cache extent", imageCache.extent)
-                    
                     callback(imageCache)
                 } else {
                     print("parse \(String(describing: img)) error")
