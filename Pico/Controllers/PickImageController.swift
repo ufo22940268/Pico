@@ -145,9 +145,6 @@ class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibrary
         performSegue(withIdentifier: "compose", sender: self)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-    }
-
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
@@ -158,14 +155,17 @@ class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibrary
             let compose = segue.destination as! ComposeController
             compose.type = .normal
             compose.loadedImages = imageGallery.selectImages
+            compose.loadedUIImages = imageGallery.getImagesFromViewCache()
         case "composeLong":
             let compose = segue.destination as! ComposeController
             compose.type = .screenshot
             compose.loadedImages = imageGallery.selectImages
+            compose.loadedUIImages = imageGallery.getImagesFromViewCache()
         case "composeMovie":
             let compose = segue.destination as! ComposeController
             compose.type = .movie
             compose.loadedImages = imageGallery.selectImages
+            compose.loadedUIImages = imageGallery.getImagesFromViewCache()
         case "selectAlbum":
             selectAlbumController = segue.destination as! SelectAlbumController
             selectAlbumController.selectDelegator = self

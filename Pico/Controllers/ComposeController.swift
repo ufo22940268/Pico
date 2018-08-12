@@ -37,7 +37,10 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     
     var editState: EditState = .inactive(fromDirections: nil)
     var panView: ComposeCell!
+    
+    /// Useless, remove in future.
     var loadedImages:[Image]!
+    var loadedUIImages: [UIImage] = [UIImage]()
     
     @IBOutlet weak var containerWidthConstraint: NSLayoutConstraint!
     
@@ -129,14 +132,13 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         toolbarItems?.first?.setBackgroundImage(UIImage(named: "crop-alt-solid-fade"), for: .highlighted, barMetrics: .default)
         
         if loadedImages == nil {
-//            let sampleImages: [UIImage?] = [UIImage(named: "short"), UIImage(named: "short2"), UIImage(named: "short2"), UIImage(named: "short2")]
+//            let sampleImages: [UIImage?
             let sampleImages: [UIImage?] = [UIImage(named: "short"), UIImage(named: "short2")]
             loadedImages = sampleImages.map {ImageMocker(image: $0!)}
             self.configureUIImages(sampleImages)
         } else if loadedImages.count >= 2 {
-            Image.resolve(images: loadedImages, completion: {uiImages in
-                self.configureUIImages(uiImages)
-            }, targetWidth: containerWrapper.bounds.width)
+            self.configureUIImages(loadedUIImages)
+            loadedImages = loadedUIImages.map {ImageMocker(image: $0)}
         }
         
         container.setEditDelegator(delegator: self)

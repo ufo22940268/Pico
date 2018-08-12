@@ -52,6 +52,13 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
     var stack = ImageCacheStack()
     let maxSelectCount = 10
     
+    let viewImageCache: NSCache<Image, UIImage> = { () -> NSCache<Image, UIImage> in
+        let cache = NSCache<Image, UIImage>()
+        cache.countLimit = 20
+        return cache
+    } ()
+    
+    
     let imageManager = PHCachingImageManager.default() as! PHCachingImageManager
     let options: PHImageRequestOptions = {
         let ops = PHImageRequestOptions()
@@ -118,6 +125,7 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
             cell.tag = Int(id)
         }
         
+        
         let sequence = getSelectSequence(image: images[indexPath.item])
         if let sequence = sequence  {
             cell.select(number: sequence)
@@ -126,6 +134,14 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         }
         
         return cell
+    }
+    
+    func loadForfViewImageCache(image: Image) {
+        let scale = UIScreen.main.bounds.width/CGFloat(image.asset.pixelWidth)
+        let imageSize = CGSize(width: image.asset.pixelWidth, height: image.asset.pixelHeight).applying(CGAffineTransform(scaleX: scale, y: scale))
+        PHImageManager.default().requestImage(for: image.asset, targetSize: imageSize, contentMode: .default, options: options) { [weak self] (uiImage, _) in
+            self?.viewImageCache.setObject(uiImage!, forKey: image)
+        }
     }
     
     func getSelectSequence(image: Image) -> Int? {
@@ -162,11 +178,21 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         return CGSize(width: size, height: size)
     }
     
+    func getImagesFromViewCache() -> [UIImage] {
+        var images = [UIImage]()
+        for selectImage in selectImages {
+            if let image = viewImageCache.object(forKey: selectImage) {
+                images.append(image)
+            }
+        }
+        return images
+    }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectImage = images[indexPath.item]
         if selectImages.contains(selectImage) {
             selectImages.remove(at: selectImages.index(of: selectImage)!)
+            viewImageCache.removeObject(forKey: selectImage)
         } else {
             guard selectImages.count < maxSelectCount  else {
                 let ac = UIAlertController(title: nil, message: "最多只能选择\(maxSelectCount)张图片", preferredStyle: .alert)
@@ -175,6 +201,8 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
                 return
             }
             selectImages.append(selectImage)
+            
+            loadForfViewImageCache(image: selectImage)
         }
         
         updateAfterSelectionChanged()
