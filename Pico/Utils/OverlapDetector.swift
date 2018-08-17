@@ -147,11 +147,8 @@ class OverlapDetector {
             let downRectImage = self.downImage.cgImage!.cropping(to: downRectInCGImage)
             let request = VNTranslationalImageRegistrationRequest(targetedCGImage: downRectImage!, options: [:], completionHandler: {(request, error) in
                 let imageOverlap = abs((request.results?.first as? VNImageTranslationAlignmentObservation)?.alignmentTransform.ty ?? 0)
-                let upOverlap = self.upImage.size.height - (upRectInCGImage.minY + imageOverlap)
-                print("upOverlap", upOverlap)
-                
+                let upOverlap = self.upImage.size.height - (upRectInCGImage.minY + imageOverlap)                
                 let downOverlap = downRectInCGImage.minY
-                print("downOverlap", downOverlap)
                 
                 completeHandler(upOverlap, downOverlap)
             })
