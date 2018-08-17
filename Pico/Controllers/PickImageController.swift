@@ -22,11 +22,13 @@ class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibrary
     let library = ImagesLibrary()
     var selectAlbum: Album!
     var photoLibrary:PHPhotoLibrary!
+    var recentScreenshots: [Image]!
     
     @IBOutlet weak var selectAlbumContainer: UIView!
     
     var scrollUpAnimation: UIViewPropertyAnimator?
     var scrollDownAnimation: UIViewPropertyAnimator?
+    @IBOutlet weak var recentScreenshotItem: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,7 +41,7 @@ class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibrary
         }
         
         photoLibrary = PHPhotoLibrary.shared()
-        photoLibrary.register(self)
+        photoLibrary.register(self)                
     }
     
     @objc func onClickSelectAlbum(_ sender: PickNavigationButton) {
@@ -94,6 +96,13 @@ class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibrary
                 self.selectAlbum = self.library.albums.filter { $0.collection.assetCollectionSubtype == .smartAlbumUserLibrary }.first ?? self.library.albums.first!
             } else {
                 self.selectAlbum = self.library.albums.filter { $0.collection.localIdentifier == self.selectAlbum.collection.localIdentifier}.first ?? self.selectAlbum
+            }
+            
+            let screenshots = Album.selectAllPhotoAlbum(albums: self.library.albums)?.getRecentScreenshots()
+            self.recentScreenshotItem.isEnabled = (screenshots?.count ?? 0) >= 2
+            self.recentScreenshots = screenshots
+            if let recentScreenshots = self.recentScreenshots {
+                recentScreenshots.forEach {self.imageGallery.loadForfViewImageCache(image: $0, toCache: self.imageGallery.screenshotImageCache)}
             }
             
             self.reloadSelectAlbum()
@@ -156,11 +165,16 @@ class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibrary
             compose.type = .normal
             compose.loadedImages = imageGallery.selectImages
             compose.loadedUIImages = imageGallery.getImagesFromViewCache()
-        case "composeLong":
+        case "composeScreenshot":
             let compose = segue.destination as! ComposeController
             compose.type = .screenshot
             compose.loadedImages = imageGallery.selectImages
             compose.loadedUIImages = imageGallery.getImagesFromViewCache()
+        case "composeRecentScreenshot":
+            let compose = segue.destination as! ComposeController
+            compose.type = .screenshot
+            compose.loadedImages = recentScreenshots
+            compose.loadedUIImages = imageGallery.getImagesFromScreenshotCache(images: recentScreenshots)
         case "composeMovie":
             let compose = segue.destination as! ComposeController
             compose.type = .movie
