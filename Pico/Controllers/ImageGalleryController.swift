@@ -204,7 +204,6 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         return ar
     }
     
-
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectImage = images[indexPath.item]
         if selectImages.contains(selectImage) {
