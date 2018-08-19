@@ -23,8 +23,6 @@ class OverlapDetector {
         
         self.upImage = upImage
         self.downImage = downImage
-//        self.upRGB = RGBAImage(image: upImage)!
-//        self.downRGB = RGBAImage(image: downImage)!
     }
     
     enum Position: String {
@@ -84,8 +82,10 @@ class OverlapDetector {
     
     func setupRectRequest(request: VNDetectRectanglesRequest) {
         request.maximumObservations = 8 // Vision currently supports up to 16.
-        request.minimumConfidence = 0.4 // Be confident.
+        request.minimumConfidence = 0.2 // Be confident.
         request.minimumAspectRatio = 0.01 // height / width
+        request.maximumAspectRatio = 1.0
+        request.minimumSize = 0.01
     }
     
     func getRectangleMayOverlap(completeHandler: @escaping (CGRect, CGRect) -> Void) {
@@ -162,9 +162,6 @@ class OverlapDetector {
         if upImage.size != downImage.size {
             return completeHandler(0, 0)
         }
-        
-//        let bottomOverlapForUpImage = getOverlapFromBottomOfUpImage()
-//        let topOverlapForDownImage = getOverlapFromTopOfDownImage()
         
         getMiddleIntersection(completeHandler: completeHandler)
     }
