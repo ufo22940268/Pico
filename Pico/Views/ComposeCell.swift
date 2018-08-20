@@ -84,6 +84,7 @@ class ComposeCell: UIView, EditDelegator {
                 if !(shrink && frame.height - absTranslateY < 60) {
                     bottomConstant.constant = newContraint
                     bottomConstraint.constant = bottomConstant.finalConstant()
+                    print("bottomConstraint.constant", bottomConstraint.constant)
                     onCellScrollDelegator?.onCellScroll(translate: Float(translateY), cellIndex: index, position: position)
                 }
             }
@@ -100,7 +101,8 @@ class ComposeCell: UIView, EditDelegator {
     }
     
     func convertPercentageToPT(percentage: CGFloat) -> CGFloat {
-        return frame.height * percentage
+        print(index, frame.height)
+        return image.bounds.height * percentage
     }
     
     func scrollDown(percentage: CGFloat) {
