@@ -18,6 +18,8 @@ class OverlapDetector {
     var downRGB: RGBAImage!
     
     let invalidPercentThreshold = Float(0.05)
+    
+    let tolerateDiffSize = CGFloat(0.01)
 
     init(upImage: UIImage, downImage: UIImage) {
         
@@ -82,25 +84,25 @@ class OverlapDetector {
     
     func setupRectRequest(request: VNDetectRectanglesRequest) {
         request.maximumObservations = 8 // Vision currently supports up to 16.
-        request.minimumConfidence = 0.2 // Be confident.
-        request.minimumAspectRatio = 0.01 // height / width
+        request.minimumConfidence = 0.2
+        // Be confident.
+        request.minimumAspectRatio = 0.1 // height / width
         request.maximumAspectRatio = 1.0
-        request.minimumSize = 0.01
+        request.minimumSize = 0.05
     }
     
     func getRectangleMayOverlap(completeHandler: @escaping (CGRect, CGRect) -> Void) {
         let group = DispatchGroup()
-        var upRect: VNRectangleObservation!
         
+        var upRectObs = [VNRectangleObservation]()
+        var downRectObs = [VNRectangleObservation]()
+
         //Handle up image
         group.enter()
         let upRectReqeust = VNDetectRectanglesRequest(completionHandler: {(request, error) in
             if let results = request.results, !results.isEmpty {
-                let rectResults = results as! [VNRectangleObservation]
-                let bottomLeftRect = rectResults.min(by: { (lhs, rhs) -> Bool in
-                    return lhs.bottomLeft.y < rhs.bottomLeft.y
-                })
-                upRect = bottomLeftRect
+                upRectObs = results as! [VNRectangleObservation]
+                
             }
             group.leave()
         })
@@ -108,15 +110,10 @@ class OverlapDetector {
         try! VNImageRequestHandler(cgImage: upImage.cgImage!, options: [:]).perform([upRectReqeust])
 
         //Handle down image
-        var downRect: VNRectangleObservation!
         group.enter()
         let downRectReqeust = VNDetectRectanglesRequest(completionHandler: {(request, error) in
             if let results = request.results, !results.isEmpty {
-                let rectResults = results as! [VNRectangleObservation]
-                let bottomLeftRect = rectResults.max(by: { (lhs, rhs) -> Bool in
-                    return lhs.bottomLeft.y < rhs.bottomLeft.y
-                })
-                downRect = bottomLeftRect
+                downRectObs = results as! [VNRectangleObservation]
             }
             group.leave()
         })
@@ -124,12 +121,45 @@ class OverlapDetector {
         try! VNImageRequestHandler(cgImage: downImage.cgImage!, options: [:]).perform([downRectReqeust])
 
         group.notify(queue: .global()) {
-            if upRect == nil || downRect == nil {
-                completeHandler(CGRect.zero, CGRect.zero)
+            print("upObs", upRectObs.map {$0.toRect().size})
+            print("downObs", downRectObs.map {$0.toRect().size})
+            if let (upObs, downObs) = self.findMatchingObsBetween(up: upRectObs, down: downRectObs) {
+                print(upObs.toRect(), downObs.toRect())
+                completeHandler(upObs.toRect(size: self.upImage.size), downObs.toRect(size: self.downImage.size))
             } else {
-                completeHandler(upRect.toRect(size: self.upImage.size), downRect.toRect(size: self.upImage.size))
+                completeHandler(CGRect.zero, CGRect.zero)
             }
         }
+    }
+    
+    func isSizeToleratable(_ size1: CGFloat, _ size2: CGFloat) -> Bool {
+        return abs(size1 - size2) < tolerateDiffSize
+    }
+    
+    func findMatchingObsBetween(up: [VNRectangleObservation], down: [VNRectangleObservation]) -> (VNRectangleObservation,VNRectangleObservation)? {
+        let sortedUp = up.sorted(by: { (l, r) -> Bool in
+            return l.bottomLeft.y < r.bottomLeft.y
+        })
+        let sortedDown = down.sorted(by: { (l, r) -> Bool in
+            return l.bottomLeft.y > r.bottomLeft.y
+        })
+
+        for upObs in (sortedUp.filter { $0.bottomLeft.y < 0.5 }) {
+            for downObs in (sortedDown.filter {$0.bottomLeft.y > 0.5}) {
+                if isSizeToleratable(upObs.toRect().width, downObs.toRect().width) && isSizeToleratable(upObs.toRect().height, downObs.toRect().height) {
+                    return (upObs, downObs)
+                }
+            }
+        }
+
+        for upObs in (sortedUp.filter { $0.bottomLeft.y >= 0.5 }) {
+            for downObs in (sortedDown.filter {$0.bottomLeft.y <= 0.5}) {
+                if isSizeToleratable(upObs.toRect().width, downObs.toRect().width) && isSizeToleratable(upObs.toRect().height, downObs.toRect().height) {
+                    return (upObs, downObs)
+                }
+            }
+        }
+        return nil
     }
 
     func getMiddleIntersection(completeHandler: @escaping (CGFloat, CGFloat) -> Void) {
@@ -142,7 +172,7 @@ class OverlapDetector {
             var upRectInCGImage = upRect
             upRectInCGImage.origin.y = self.upImage.size.height - upRectInCGImage.maxY
             var downRectInCGImage = downRect
-            downRectInCGImage.origin.y = self.upImage.size.height - downRectInCGImage.maxY + 20
+            downRectInCGImage.origin.y = self.upImage.size.height - downRectInCGImage.maxY
             let upRectImage = self.upImage.cgImage!.cropping(to: upRectInCGImage)
             let downRectImage = self.downImage.cgImage!.cropping(to: downRectInCGImage)
             let request = VNTranslationalImageRegistrationRequest(targetedCGImage: downRectImage!, options: [:], completionHandler: {(request, error) in
