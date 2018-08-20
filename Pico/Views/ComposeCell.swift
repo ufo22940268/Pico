@@ -101,7 +101,6 @@ class ComposeCell: UIView, EditDelegator {
     }
     
     func convertPercentageToPT(percentage: CGFloat) -> CGFloat {
-        print(index, frame.height)
         return image.bounds.height * percentage
     }
     
