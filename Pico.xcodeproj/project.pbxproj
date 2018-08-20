@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		420186F1212ABFD300EF903F /* CGSizeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420186F0212ABFD300EF903F /* CGSizeExtension.swift */; };
 		4201F006210ED73400A6EBA5 /* GestureExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4201F005210ED73400A6EBA5 /* GestureExtension.swift */; };
 		4201F00821119A0700A6EBA5 /* CIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4201F00721119A0700A6EBA5 /* CIImageExtension.swift */; };
 		4201F00A211305DA00A6EBA5 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4201F009211305DA00A6EBA5 /* UIColorExtension.swift */; };
@@ -77,6 +78,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		420186F0212ABFD300EF903F /* CGSizeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGSizeExtension.swift; sourceTree = "<group>"; };
 		4201F005210ED73400A6EBA5 /* GestureExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureExtension.swift; sourceTree = "<group>"; };
 		4201F00721119A0700A6EBA5 /* CIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CIImageExtension.swift; sourceTree = "<group>"; };
 		4201F009211305DA00A6EBA5 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 				4201F00721119A0700A6EBA5 /* CIImageExtension.swift */,
 				4201F009211305DA00A6EBA5 /* UIColorExtension.swift */,
 				428C51F3211D6D5700A34E9B /* CGRectExtensions.swift */,
+				420186F0212ABFD300EF903F /* CGSizeExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -440,6 +443,7 @@
 			files = (
 				4266A1722101B92F009F92D6 /* UIViewExtension.swift in Sources */,
 				42DA302A210B551A00C19AB8 /* SideSlider.swift in Sources */,
+				420186F1212ABFD300EF903F /* CGSizeExtension.swift in Sources */,
 				420EF44820F965FA006CCDD3 /* AutoConcate.swift in Sources */,
 				42143E0020F83D7900000487 /* GalleryDetailController.swift in Sources */,
 				420EF45220FD5665006CCDD3 /* PreviewCover.swift in Sources */,

@@ -118,7 +118,13 @@ class OverlapDetector {
             group.leave()
         })
         setupRectRequest(request: downRectReqeust)
-        try! VNImageRequestHandler(cgImage: downImage.cgImage!, options: [:]).perform([downRectReqeust])
+        
+        do {
+            try VNImageRequestHandler(cgImage: downImage.cgImage!, options: [:]).perform([downRectReqeust])
+        } catch {
+            print("VNImageRequestHandler error: \(error)")
+            return completeHandler(CGRect.zero, CGRect.zero)
+        }
 
         group.notify(queue: .global()) {
 //            print("upObs", upRectObs.map {$0.toRect().size})
