@@ -70,6 +70,7 @@ class PreviewController: UIViewController {
     @IBOutlet var centerYConstraint: NSLayoutConstraint!
     
     var cellFrames: [CGRect] = [CGRect]()
+    var cropRects: [CGRect] = [CGRect]()
     
     let sampleImages: [UIImage] = [UIImage(named: "short")!, UIImage(named: "short")!]
     var uiImages: [UIImage]?
@@ -209,7 +210,7 @@ class PreviewController: UIViewController {
     @IBAction func onShareClick(_ sender: Any) {
         let shareManager: ShareManager = ShareManager(viewController: self)
         shareManager.startSavingPhoto()
-        preview.renderCache(frameView: frame, imageEntities: imageEntities, complete: { image in
+        preview.renderCache(frameView: frame, imageEntities: imageEntities, cropRects: cropRects, complete: { image in
             shareManager.saveToPhoto(image: image)
         })
     }

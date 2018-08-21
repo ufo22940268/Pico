@@ -17,5 +17,14 @@ extension CGRect {
     
     func extentHeight() -> CGFloat {
         return height - origin.y
-    }    
+    }
+    
+    
+    /// Convert left top coordinate to left bottom coordinate
+    ///
+    /// - Parameter frameHeight: height of frame
+    mutating func convertLTCToLBC(frameHeight: CGFloat) -> CGRect {
+        self.origin.y = frameHeight - self.origin.y - self.height
+        return self
+    }
 }
