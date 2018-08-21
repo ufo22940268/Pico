@@ -148,9 +148,8 @@ class PreviewController: UIViewController {
     
     /// Set constraints when view initialized or after zoom operation.
     func refreshConstraint() {
-        let inside = scroll.bounds.contains(preview.frame)
-        centerXConstraint.isActive = inside
-        centerYConstraint.isActive = inside
+        centerXConstraint.isActive = scroll.bounds.width > preview.frame.width
+        centerYConstraint.isActive = scroll.bounds.height > preview.frame.height
     }
     
     
