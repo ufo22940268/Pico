@@ -137,7 +137,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         if loadedImages == nil {
             type = .screenshot
-            let sampleImages: [UIImage?] = [UIImage(named: "IMG_3146"), UIImage(named: "IMG_3147")]
+            let sampleImages: [UIImage?] = [UIImage(named: "IMG_3180"), UIImage(named: "IMG_3181")]
             loadedImages = sampleImages.map {ImageMocker(image: $0!)}
             self.configureUIImages(sampleImages)
         } else if loadedImages.count >= 2 {
