@@ -142,29 +142,33 @@ class OverlapDetector {
         return abs(size1 - size2) < tolerateDiffSize
     }
     
+    ///
+    ///
+    /// - Parameters:
+    ///   - up: In Left-Bottom-Coordinate.
+    ///   - down: In Left-Bottom-Coordinate.
     func findMatchingObsBetween(up: [VNRectangleObservation], down: [VNRectangleObservation]) -> (VNRectangleObservation,VNRectangleObservation)? {
+        
+        let clampYRange = {(obs: VNRectangleObservation) -> Bool in
+            return obs.topLeft.y < (1 - 0.1) && obs.bottomLeft.y > 0.1
+        }
+        
         let sortedUp = up.sorted(by: { (l, r) -> Bool in
             return l.bottomLeft.y < r.bottomLeft.y
-        })
+        }).filter(clampYRange)
+        
         let sortedDown = down.sorted(by: { (l, r) -> Bool in
             return l.bottomLeft.y > r.bottomLeft.y
-        })
-
-        for upObs in (sortedUp.filter { $0.bottomLeft.y < 0.5 }) {
-            for downObs in (sortedDown.filter {$0.bottomLeft.y > 0.5}) {
+        }).filter(clampYRange)
+        
+        for upObs in sortedUp {
+            for downObs in sortedDown {
                 if isSizeToleratable(upObs.toRect().width, downObs.toRect().width) && isSizeToleratable(upObs.toRect().height, downObs.toRect().height) {
                     return (upObs, downObs)
                 }
             }
         }
 
-        for upObs in (sortedUp.filter { $0.bottomLeft.y >= 0.5 }) {
-            for downObs in (sortedDown.filter {$0.bottomLeft.y <= 0.5}) {
-                if isSizeToleratable(upObs.toRect().width, downObs.toRect().width) && isSizeToleratable(upObs.toRect().height, downObs.toRect().height) {
-                    return (upObs, downObs)
-                }
-            }
-        }
         return nil
     }
 

@@ -127,7 +127,13 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        container.sliderType = .slide
+        
+        if type == .screenshot {
+            container.sliderType = .crop
+        } else {
+            container.sliderType = .slide
+        }
+        
         toolbarItems?.first?.setBackgroundImage(UIImage(named: "crop-alt-solid-fade"), for: .highlighted, barMetrics: .default)
         
         container.setEditDelegator(delegator: self)
@@ -143,6 +149,13 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         } else if loadedImages.count >= 2 {
             loadedImages = loadedUIImages.map {ImageMocker(image: $0)}
             self.configureUIImages(loadedUIImages)
+        }
+        
+        switch container.sliderType {
+        case .slide:
+            activeSlideMode()
+        case .crop:
+            activeCropMode()
         }
         
     }
@@ -394,7 +407,7 @@ extension ComposeController {
         }
     }
     
-    @IBAction func onSlideItemSelected(_ sender: UIBarButtonItem) {
+    fileprivate func activeSlideMode() {
         hightlightSlideItem(index: 0)
         container.sliderType = .slide
         container.updateSliderType()
@@ -402,12 +415,20 @@ extension ComposeController {
         container.showSeperators(show: true)
     }
     
-    @IBAction func onCropItemSelected(_ sender: Any) {
+    @IBAction func onSlideItemSelected(_ sender: UIBarButtonItem) {
+        activeSlideMode()
+    }
+    
+    fileprivate func activeCropMode() {
         hightlightSlideItem(index: 1)
         container.sliderType = .crop
         container.updateSliderType()
         container.setEditStateInvalid()
         container.showSeperators(show: true)
+    }
+    
+    @IBAction func onCropItemSelected(_ sender: Any) {
+        activeCropMode()
     }
 }
 
