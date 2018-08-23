@@ -166,7 +166,7 @@ class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibrary
             let compose = segue.destination as! ComposeController
             compose.type = .normal
             compose.loadedImages = imageGallery.selectImages
-            compose.loadedUIImages = imageGallery.getImagesFromViewCache()
+            compose.loadedUIImages = imageGallery.getImagesFromViewCache(images: imageGallery.selectImages)
         case "composeScreenshot":
             let compose = segue.destination as! ComposeController
             compose.type = .screenshot
@@ -182,12 +182,12 @@ class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibrary
             let compose = segue.destination as! ComposeController
             compose.type = .screenshot
             compose.loadedImages = recentScreenshots
-            compose.loadedUIImages = imageGallery.getImagesFromScreenshotCache(images: recentScreenshots)
+            compose.loadedUIImages = imageGallery.getImagesFromViewCache(images: recentScreenshots)
         case "composeMovie":
             let compose = segue.destination as! ComposeController
             compose.type = .movie
             compose.loadedImages = imageGallery.selectImages
-            compose.loadedUIImages = imageGallery.getImagesFromViewCache()
+            compose.loadedUIImages = imageGallery.getImagesFromViewCache(images: imageGallery.selectImages)
         case "selectAlbum":
             selectAlbumController = segue.destination as! SelectAlbumController
             selectAlbumController.selectDelegator = self

@@ -185,26 +185,16 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
     }
     
     func getImagesFromViewCache(images: [Image]? = nil) -> [UIImage] {
-        let finalImages = images ?? selectImages
+        let finalImages = images as! [Image]
         var images = [UIImage]()
         for selectImage in finalImages {
-            if let image = viewImageCache.object(forKey: selectImage) {
+            if let image = (viewImageCache.object(forKey: selectImage) ?? screenshotImageCache.object(forKey: selectImage)) {
                 images.append(image)
             }
         }
         return images
     }
-    
-    func getImagesFromScreenshotCache(images: [Image]) -> [UIImage] {
-        var ar = [UIImage]()
-        for selectImage in images {
-            if let image = screenshotImageCache.object(forKey: selectImage) {
-                ar.append(image)
-            }
-        }
-        return ar
-    }
-    
+        
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectImage = images[indexPath.item]
         if selectImages.contains(selectImage) {
