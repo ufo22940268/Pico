@@ -108,7 +108,7 @@ class PreviewView: GLKView {
             }
             
             let crop = crops[index]
-            var rect: CGRect = crop.rect
+            var rect: CGRect = crop.rect.applying(transform.scaledBy(x: bounds.width, y: bounds.height))
             if let transformCrop = transformCrop {
                 rect = rect.applying(transformCrop)
             }
@@ -133,9 +133,7 @@ class PreviewView: GLKView {
     }
     
     func convertUIRectToCIRect(uiRect: CGRect) -> CGRect {
-        var ciRect = uiRect.applying(CGAffineTransform(scaleX: CGFloat(image.extent.width)/frame.size.width, y: CGFloat(image.extent.height)/frame.size.height))
-        ciRect.origin.y = CGFloat(image.extent.height) - ciRect.origin.y - ciRect.size.height
-        return ciRect
+        return uiRect.convertLTCToLBC(frameHeight: 1)
     }
     
    

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="MIE-CQ-9z1">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="SDp-bB-QNW">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -345,13 +345,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView verifyAmbiguity="off" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QGp-s0-rHz">
+                            <scrollView verifyAmbiguity="off" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QGp-s0-rHz">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
                                 <subviews>
-                                    <view verifyAmbiguity="off" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bEx-xN-zR0" customClass="PreviewView" customModule="Pico" customModuleProvider="target">
+                                    <view verifyAmbiguity="off" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bEx-xN-zR0" customClass="PreviewView" customModule="Pico" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
                                         <subviews>
-                                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BrR-tC-eTg" userLabel="Frame" customClass="FrameView" customModule="Pico" customModuleProvider="target">
+                                            <view opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BrR-tC-eTg" userLabel="Frame" customClass="FrameView" customModule="Pico" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
                                             </view>
                                         </subviews>
@@ -366,16 +366,11 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="bEx-xN-zR0" secondAttribute="trailing" priority="750" id="3G5-9S-ckG"/>
-                                    <constraint firstItem="bEx-xN-zR0" firstAttribute="centerY" secondItem="QGp-s0-rHz" secondAttribute="centerY" id="P7J-hE-jQG"/>
-                                    <constraint firstItem="bEx-xN-zR0" firstAttribute="centerX" secondItem="QGp-s0-rHz" secondAttribute="centerX" id="VdV-Xp-vVp"/>
                                     <constraint firstAttribute="bottom" secondItem="bEx-xN-zR0" secondAttribute="bottom" priority="750" id="ibO-wZ-yay"/>
                                     <constraint firstItem="bEx-xN-zR0" firstAttribute="top" secondItem="QGp-s0-rHz" secondAttribute="top" priority="750" id="lq3-w1-zGo"/>
                                     <constraint firstItem="bEx-xN-zR0" firstAttribute="width" secondItem="QGp-s0-rHz" secondAttribute="width" id="wbk-L3-pKL"/>
                                     <constraint firstItem="bEx-xN-zR0" firstAttribute="leading" secondItem="QGp-s0-rHz" secondAttribute="leading" priority="750" id="yqh-mR-IfS"/>
                                 </constraints>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="aWq-W0-JZr" appends="YES" id="45w-Ps-kp8"/>
-                                </connections>
                             </scrollView>
                             <view opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hT0-KK-yMI" customClass="PreviewCover" customModule="Pico" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="-44" width="375" height="711"/>
@@ -527,8 +522,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="centerXConstraint" destination="VdV-Xp-vVp" id="l2Z-2s-epP"/>
-                        <outlet property="centerYConstraint" destination="P7J-hE-jQG" id="fnk-wj-vgp"/>
                         <outlet property="cover" destination="hT0-KK-yMI" id="XjQ-Ag-9yL"/>
                         <outlet property="frame" destination="BrR-tC-eTg" id="YLI-Pa-8cu"/>
                         <outlet property="frameToolbar" destination="sVd-lL-Emf" id="pmU-15-yCA"/>
@@ -554,11 +547,6 @@
                         <outlet property="delegate" destination="bEx-xN-zR0" id="yps-5a-UzZ"/>
                     </connections>
                 </panGestureRecognizer>
-                <pinchGestureRecognizer id="aWq-W0-JZr" userLabel="Zoom Gesture Recognizer">
-                    <connections>
-                        <action selector="onZoom:" destination="ycZ-tp-DN7" id="ZLs-hO-9IQ"/>
-                    </connections>
-                </pinchGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="3464.8000000000002" y="-182.15892053973016"/>
         </scene>
@@ -571,7 +559,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="h2r-xB-xzJ" kind="relationship" relationship="rootViewController" id="tVu-9e-CHw"/>
+                        <segue destination="ycZ-tp-DN7" kind="relationship" relationship="rootViewController" id="oOs-vT-aOB"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BqK-2l-fzQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -630,6 +618,7 @@
         <image name="user-edit-solid" width="24" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="p86-VW-Pye"/>
+        <segue reference="oOs-vT-aOB"/>
+        <segue reference="oka-ze-DW4"/>
     </inferredMetricsTieBreakers>
 </document>
