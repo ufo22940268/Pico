@@ -166,8 +166,11 @@ class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibrary
             let compose = segue.destination as! ComposeController
             compose.type = .normal
             compose.loadedImages = imageGallery.selectImages
-            imageGallery.getImagesFromViewCache(images: imageGallery.selectImages) {
-                compose.loadedUIImages = $0
+            
+            compose.loadUIImageHandler = { [weak self] () -> Void in
+                self?.imageGallery.getImagesFromViewCache(images: self?.imageGallery.selectImages) {
+                    compose.loadedUIImages = $0
+                }
             }
         case "composeScreenshot":
             let compose = segue.destination as! ComposeController
@@ -179,22 +182,29 @@ class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibrary
                     return true
                 }
             }) 
-            imageGallery.getImagesFromViewCache(images: compose.loadedImages)  {
-                compose.loadedUIImages = $0
+ 
+            compose.loadUIImageHandler = { [weak self] () -> Void in
+                self?.imageGallery.getImagesFromViewCache(images: compose.loadedImages) {
+                    compose.loadedUIImages = $0
+                }
             }
         case "composeRecentScreenshot":
             let compose = segue.destination as! ComposeController
             compose.type = .screenshot
             compose.loadedImages = recentScreenshots
-            imageGallery.getImagesFromViewCache(images: recentScreenshots)  {
-                compose.loadedUIImages = $0
+            compose.loadUIImageHandler = { [weak self] () -> Void in
+                self?.imageGallery.getImagesFromViewCache(images: self?.recentScreenshots) {
+                    compose.loadedUIImages = $0
+                }
             }
         case "composeMovie":
             let compose = segue.destination as! ComposeController
             compose.type = .movie
             compose.loadedImages = imageGallery.selectImages
-            imageGallery.getImagesFromViewCache(images: imageGallery.selectImages)  {
-                compose.loadedUIImages = $0
+            compose.loadUIImageHandler = { [weak self] () -> Void in
+                self?.imageGallery.getImagesFromViewCache(images: self?.imageGallery.selectImages) {
+                    compose.loadedUIImages = $0
+                }
             }
         case "selectAlbum":
             selectAlbumController = segue.destination as! SelectAlbumController
