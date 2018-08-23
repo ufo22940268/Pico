@@ -141,12 +141,14 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         return cell
     }
     
-    func loadForfViewImageCache(image: Image, toCache:  NSCache<Image, UIImage>? = nil) {
+    func loadForfViewImageCache(image: Image, toCache:  NSCache<Image, UIImage>? = nil, _ complete: ((UIImage) -> Void)? = nil) {
         let scale = UIScreen.main.bounds.width/CGFloat(image.asset.pixelWidth)
         let imageSize = CGSize(width: image.asset.pixelWidth, height: image.asset.pixelHeight).applying(CGAffineTransform(scaleX: scale, y: scale))
         PHImageManager.default().requestImage(for: image.asset, targetSize: imageSize, contentMode: .default, options: options) { [weak self] (uiImage, _) in
             let cache = toCache ?? self?.viewImageCache
             cache?.setObject(uiImage!, forKey: image)
+            
+            complete?(uiImage!)
         }
     }
     
@@ -184,15 +186,24 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         return CGSize(width: size, height: size)
     }
     
-    func getImagesFromViewCache(images: [Image]? = nil) -> [UIImage] {
-        let finalImages = images as! [Image]
-        var images = [UIImage]()
-        for selectImage in finalImages {
+    func getImagesFromViewCache(images inputImages: [Image]? = nil,  _ callback: @escaping ([UIImage]) -> Void) {
+        let finalImages = inputImages as! [Image]
+        var images = [UIImage?](repeating: nil, count: finalImages.count)
+        let group = DispatchGroup()
+        for (index, selectImage) in finalImages.enumerated() {
             if let image = (viewImageCache.object(forKey: selectImage) ?? screenshotImageCache.object(forKey: selectImage)) {
-                images.append(image)
+                images[index] = image
+            } else {
+                group.enter()
+                loadForfViewImageCache(image: selectImage, toCache: viewImageCache) {
+                    images[index] = $0
+                    group.leave()
+                }
             }
         }
-        return images
+        group.notify(queue: .main, execute: {
+            callback(images as! [UIImage])
+        })
     }
         
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

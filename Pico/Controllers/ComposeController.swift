@@ -40,7 +40,21 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     
     /// Useless, remove in future.
     var loadedImages:[Image]!
-    var loadedUIImages: [UIImage] = [UIImage]()
+    var loadedUIImages: [UIImage] = [UIImage]() {
+        willSet(uiImages) {
+//            if uiImages == nil {
+//                type = .screenshot
+//                let sampleImages: [UIImage?] = [UIImage(named: "IMG_3180"), UIImage(named: "IMG_3181")]
+//                loadedImages = sampleImages.map {ImageMocker(image: $0!)}
+//                self.configureUIImages(sampleImages)
+//            }
+            
+            if uiImages.count >= 2 {
+                loadedImages = uiImages.map {ImageMocker(image: $0)}
+                self.configureUIImages(uiImages)
+            }
+        }
+    }
     
     @IBOutlet weak var containerWidthConstraint: NSLayoutConstraint!
     
@@ -140,24 +154,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         container.scrollDelegator = self
         
         scroll.delegate = self
-        
-        if loadedImages == nil {
-            type = .screenshot
-            let sampleImages: [UIImage?] = [UIImage(named: "IMG_3180"), UIImage(named: "IMG_3181")]
-            loadedImages = sampleImages.map {ImageMocker(image: $0!)}
-            self.configureUIImages(sampleImages)
-        } else if loadedImages.count >= 2 {
-            loadedImages = loadedUIImages.map {ImageMocker(image: $0)}
-            self.configureUIImages(loadedUIImages)
-        }
-        
-        switch container.sliderType {
-        case .slide:
-            activeSlideMode()
-        case .crop:
-            activeCropMode()
-        }
-        
     }
     
     @IBAction func download(_ sender: UIBarButtonItem) {
