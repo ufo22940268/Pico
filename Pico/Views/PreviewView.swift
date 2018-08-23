@@ -100,7 +100,7 @@ class PreviewView: GLKView {
         }
     }
     
-    fileprivate func pixellate(ciImage: CIImage, forExport: Bool, transformCrop: CGAffineTransform? = nil, pixellateImage: CIImage) -> CIImage {
+    fileprivate func pixellate(ciImage: CIImage, forExport: Bool, pixellateImage: CIImage) -> CIImage {
         var prev = ciImage
         for index in 0..<crops.count {
             if !forExport && crops[index].rendered != false {
@@ -108,10 +108,13 @@ class PreviewView: GLKView {
             }
             
             let crop = crops[index]
-            var rect: CGRect = crop.rect.applying(transform.scaledBy(x: bounds.width, y: bounds.height))
-            if let transformCrop = transformCrop {
-                rect = rect.applying(transformCrop)
+            var rect: CGRect = crop.rect
+            if forExport {
+                rect = rect.applying(transform.scaledBy(x: prev.extent.width, y: prev.extent.height))
+            } else {
+                rect = rect.applying(transform.scaledBy(x: bounds.width, y: bounds.height))
             }
+            
             prev = pixellateImage.cropped(to: rect).applyingFilter("CISourceOverCompositing", parameters: ["inputBackgroundImage": prev])
         }
         return prev
@@ -191,7 +194,7 @@ class PreviewView: GLKView {
         return CIImage.concateImages(images: croppedImages)
     }
     
-    func renderCache(frameView: FrameView, imageEntities: [Image], cropRects: [CGRect], complete:  @escaping (UIImage) -> Void) {
+    func renderImageForExport(frameView: FrameView, imageEntities: [Image], cropRects: [CGRect], complete:  @escaping (UIImage) -> Void) {
         Image.resolve(images: imageEntities, completion: { originalImages in
             let filteredOriginalImages = originalImages as! [UIImage]
             let frameRects = frameView.frameRects
@@ -206,7 +209,7 @@ class PreviewView: GLKView {
             let renderer = PreviewRenderer(imageScale: imageScale)
             
             let pixelImage = self.applyPixel(image: canvas, pixelScale: self.selectedPixelScale)
-            canvas = self.pixellate(ciImage: canvas, forExport: true, transformCrop: CGAffineTransform(scaleX: canvas.extent.width/self.frame.size.width, y: canvas.extent.width/self.frame.size.width), pixellateImage: pixelImage)
+            canvas = self.pixellate(ciImage: canvas, forExport: true, pixellateImage: pixelImage)
 
             if let sign = self.sign {
                 let labelView = UILabel()
