@@ -70,11 +70,12 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
 
     fileprivate func concateScreenshot(_ uiImages: ([UIImage?])) {
         let dispatchGroup = DispatchGroup()
+        let frameResult = FrameDetector(upImage: uiImages.first!!, downImage: uiImages[1]!).detect()
         for index in 0..<uiImages.count - 1 {
             let upImage = uiImages[index]
             let downImage = uiImages[index + 1]
             dispatchGroup.enter()
-            OverlapDetector(upImage: upImage!, downImage: downImage!).detect {upOverlap, downOverlap in
+            OverlapDetector(upImage: upImage!, downImage: downImage!, frameResult: frameResult).detect {upOverlap, downOverlap in
                 DispatchQueue.main.async {
                     if upOverlap > 0 && downOverlap > 0 {
                         let imageHeight = uiImages[0]!.size.height
@@ -142,9 +143,11 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         if isDev() {
             type = .screenshot
-//            let sampleImages: [UIImage] = [UIImage(named: "IMG_2647")!, UIImage(named: "IMG_2648")!]
+//            let sampleImages: [UIImage] = [UIImage(named: "IMG_01")!, UIImage(named: "IMG_02")!]
+            let sampleImages: [UIImage] = [UIImage(named: "IMG_2647")!, UIImage(named: "IMG_2648")!]
 //            let sampleImages: [UIImage] = [UIImage(named: "IMG_3311")!, UIImage(named: "IMG_3312")!]
-            let sampleImages: [UIImage] = [UIImage(named: "IMG_3314")!, UIImage(named: "IMG_3315")!]
+//            let sampleImages: [UIImage] = [UIImage(named: "IMG_3314")!, UIImage(named: "IMG_3315")!]
+//            let sampleImages: [UIImage] = [UIImage(named: "half_1")!, UIImage(named: "half_2")!]
             loadedImages = sampleImages.map {ImageMocker(image: $0)}
             loadedUIImages = sampleImages
         }
