@@ -38,6 +38,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        OverlapDetector(upImage: UIImage(named: "IMG_3146")!, downImage: UIImage(named: "IMG_3147")!).detect { (up, down) -> Void in
 //            print("move", up, down)
 //        }
+        
+//        Test().run()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

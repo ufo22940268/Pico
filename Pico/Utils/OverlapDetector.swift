@@ -1,4 +1,4 @@
-//
+ //
 //  OverlapDetector.swift
 //  Pico
 //
@@ -9,6 +9,15 @@
 import Foundation
 import UIKit
 import Vision
+
+struct RectangleResult {
+    var bundle: (VNRectangleObservation, VNRectangleObservation)?
+    var strictBundle: (VNRectangleObservation, VNRectangleObservation)?
+    
+    static func empty() -> RectangleResult {
+        return self.init(bundle: nil, strictBundle: nil)
+    }
+}
 
 class OverlapDetector {
     
@@ -83,15 +92,15 @@ class OverlapDetector {
     }
     
     func setupRectRequest(request: VNDetectRectanglesRequest) {
-        request.maximumObservations = 8 // Vision currently supports up to 16.
-        request.minimumConfidence = 0.2
-        // Be confident.
+        request.maximumObservations = 16 // Vision currently supports up to 16.
+        request.minimumConfidence = 0.1
         request.minimumAspectRatio = 0.1 // height / width
         request.maximumAspectRatio = 1.0
-        request.minimumSize = 0.05
+        request.minimumSize = 0.13
+        request.quadratureTolerance = 10
     }
     
-    func getRectangleMayOverlap(completeHandler: @escaping (CGRect, CGRect) -> Void) {
+    func detectOverlapRectangles(completeHandler: @escaping (RectangleResult) -> Void) {
         let group = DispatchGroup()
         
         var upRectObs = [VNRectangleObservation]()
@@ -123,18 +132,12 @@ class OverlapDetector {
             try VNImageRequestHandler(cgImage: downImage.cgImage!, options: [:]).perform([downRectReqeust])
         } catch {
             print("VNImageRequestHandler error: \(error)")
-            return completeHandler(CGRect.zero, CGRect.zero)
+            return completeHandler(RectangleResult.empty())
         }
 
         group.notify(queue: .global()) {
-//            print("upObs", upRectObs.map {$0.toRect().size})
-//            print("downObs", downRectObs.map {$0.toRect().size})
-            if let (upObs, downObs) = self.findMatchingObsBetween(up: upRectObs, down: downRectObs) {
-//                print(upObs.toRect(), downObs.toRect())
-                completeHandler(upObs.toRect(size: self.upImage.size), downObs.toRect(size: self.downImage.size))
-            } else {
-                completeHandler(CGRect.zero, CGRect.zero)
-            }
+            let result = self.findMatchingObsBetween(up: upRectObs, down: downRectObs)
+            completeHandler(result)
         }
     }
     
@@ -147,11 +150,15 @@ class OverlapDetector {
     /// - Parameters:
     ///   - up: In Left-Bottom-Coordinate.
     ///   - down: In Left-Bottom-Coordinate.
-    func findMatchingObsBetween(up: [VNRectangleObservation], down: [VNRectangleObservation]) -> (VNRectangleObservation,VNRectangleObservation)? {
+    func findMatchingObsBetween(up: [VNRectangleObservation], down: [VNRectangleObservation]) -> RectangleResult {
         
         let clampYRange = {(obs: VNRectangleObservation) -> Bool in
             return obs.topLeft.y < (1 - 0.1) && obs.bottomLeft.y > 0.1
         }
+        
+//        debug(image: self.upImage, obsList: up)
+        debug(image: self.downImage, obsList: down)
+
         
         let sortedUp = up.sorted(by: { (l, r) -> Bool in
             return l.bottomLeft.y < r.bottomLeft.y
@@ -161,41 +168,106 @@ class OverlapDetector {
             return l.bottomLeft.y > r.bottomLeft.y
         }).filter(clampYRange)
         
+        var obsBundle: (VNRectangleObservation, VNRectangleObservation)?
+        var strictObsBundle: (VNRectangleObservation, VNRectangleObservation)?
+        
         for upObs in sortedUp {
             for downObs in sortedDown {
-                if isSizeToleratable(upObs.toRect().width, downObs.toRect().width) && isSizeToleratable(upObs.toRect().height, downObs.toRect().height) {
-                    return (upObs, downObs)
+                if strictObsBundle == nil && isSizeToleratable(upObs.toRect().width, downObs.toRect().width) && isSizeToleratable(upObs.toRect().height, downObs.toRect().height) {
+                    strictObsBundle = (upObs, downObs)
+                }
+                if obsBundle == nil && isSizeToleratable(upObs.toRect().width, downObs.toRect().width){
+                    obsBundle = (upObs, downObs)
                 }
             }
         }
-
-        return nil
+        
+        return RectangleResult(bundle: obsBundle, strictBundle: strictObsBundle)
+    }
+    
+    
+    func debug(image: UIImage, obsList: [VNRectangleObservation]) {
+        let map = obsList.map { obs -> (CGRect, CGImage) in
+            let rect = VNImageRectForNormalizedRect(obs.toRect(), Int(image.size.width), Int(image.size.height)).convertLTCToLBC(frameHeight: image.size.height)
+            return (rect, image.cgImage!.cropping(to: rect)!)
+            
+        }
+        print("ok")
+    }
+    
+    func convertToLTC(rect: CGRect) -> CGRect {
+        var newRect = rect
+        newRect.origin.y = self.upImage.size.height - newRect.maxY
+        return newRect
+    }
+    
+    func extentToTop(rect: CGRect) -> CGRect {
+        var newRect = rect
+        newRect.origin.y = 0
+        newRect.origin.x = 0
+        newRect.size.width = upImage.size.width
+        newRect.size.height = rect.origin.y + rect.height
+        return newRect
+    }
+    
+    func extentToBottom(rect: CGRect) -> CGRect {
+        var newRect = rect
+        newRect.origin.x = 0
+        newRect.size.width = upImage.size.width
+        newRect.size.height = upImage.size.height - newRect.origin.y
+        return newRect
     }
 
     func getMiddleIntersection(completeHandler: @escaping (CGFloat, CGFloat) -> Void) {
-        let handleRectangle = {(upRect: CGRect, downRect: CGRect) in
-            guard upRect != CGRect.zero && downRect != CGRect.zero else {
+        let handleRectangle = {(rectangleResult: RectangleResult) in
+            guard rectangleResult.bundle != nil else {
                 completeHandler(0, 0)
                 return
             }
             
-            var upRectInCGImage = upRect
-            upRectInCGImage.origin.y = self.upImage.size.height - upRectInCGImage.maxY
-            var downRectInCGImage = downRect
-            downRectInCGImage.origin.y = self.upImage.size.height - downRectInCGImage.maxY
-            let upRectImage = self.upImage.cgImage!.cropping(to: upRectInCGImage)
-            let downRectImage = self.downImage.cgImage!.cropping(to: downRectInCGImage)
+            let (upObs, downObs) = rectangleResult.bundle!
+            var upRectInLTC = self.convertToLTC(rect: upObs.toRect(size: self.upImage.size))
+            var downRectInLTC = self.convertToLTC(rect: downObs.toRect(size: self.upImage.size))
+            
+            if upRectInLTC.height > downRectInLTC.height {
+                downRectInLTC.size.height = upRectInLTC.height
+            } else if upRectInLTC.height < downRectInLTC.height {
+                upRectInLTC.origin.y = upRectInLTC.origin.y - (downRectInLTC.height - upRectInLTC.height)
+                upRectInLTC.size.height = downRectInLTC.height
+            }
+            
+            let upRectImage = self.upImage.cgImage!.cropping(to: upRectInLTC)
+            let downRectImage = self.downImage.cgImage!.cropping(to: downRectInLTC)
+            
             let request = VNTranslationalImageRegistrationRequest(targetedCGImage: downRectImage!, options: [:], completionHandler: {(request, error) in
-                let imageOverlap = abs((request.results?.first as? VNImageTranslationAlignmentObservation)?.alignmentTransform.ty ?? 0)
-                let upOverlap = self.upImage.size.height - (upRectInCGImage.minY + imageOverlap)                
-                let downOverlap = downRectInCGImage.minY
+                let imageOverlap = (request.results?.first as? VNImageTranslationAlignmentObservation)?.alignmentTransform.ty ?? 0
+                
+                print("compose alignment", (request.results!.first as! VNImageTranslationAlignmentObservation).alignmentTransform)
+                
+                if imageOverlap > 0 {
+                    //imageOverlap being positive means translation detection failed.
+                    if rectangleResult.strictBundle == nil {
+                        return completeHandler(0, 0)
+                    } else {
+                        let (strictUpObs, strictDownObs) = rectangleResult.strictBundle!
+                        let strictUpRectInLTC = self.convertToLTC(rect: strictUpObs.toRect(size: self.upImage.size))
+                        let strictDownRectInLTC = self.convertToLTC(rect: strictDownObs.toRect(size: self.downImage.size))
+                        return completeHandler(strictDownRectInLTC.minY, self.upImage.size.height - strictUpRectInLTC.minY)
+                    }
+                }
+                
+                
+                // upRectInCGImage coordinate is LTC
+                let upOverlap = self.upImage.size.height - (upRectInLTC.origin.y + abs(imageOverlap))
+                
+                let downOverlap = downRectInLTC.minY
                 
                 completeHandler(upOverlap, downOverlap)
             })
             
             try! VNImageRequestHandler(cgImage: upRectImage!, options: [:]).perform([request])
         }
-        getRectangleMayOverlap(completeHandler: handleRectangle)
+        detectOverlapRectangles(completeHandler: handleRectangle)
     }
     
     func detect(completeHandler: @escaping (CGFloat, CGFloat) -> Void) {
