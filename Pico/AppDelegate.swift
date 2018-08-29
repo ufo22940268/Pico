@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            print("move", up, down)
 //        }
         
-//        Test().run()
+        Test().run()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

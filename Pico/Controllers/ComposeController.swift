@@ -142,8 +142,9 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         if isDev() {
             type = .screenshot
-//            let sampleImages: [UIImage] = [UIImage(named: "IMG_3180")!, UIImage(named: "IMG_3181")!]
-            let sampleImages: [UIImage] = [UIImage(named: "IMG_2647")!, UIImage(named: "IMG_2648")!]
+//            let sampleImages: [UIImage] = [UIImage(named: "IMG_2647")!, UIImage(named: "IMG_2648")!]
+//            let sampleImages: [UIImage] = [UIImage(named: "IMG_3311")!, UIImage(named: "IMG_3312")!]
+            let sampleImages: [UIImage] = [UIImage(named: "IMG_3314")!, UIImage(named: "IMG_3315")!]
             loadedImages = sampleImages.map {ImageMocker(image: $0)}
             loadedUIImages = sampleImages
         }
