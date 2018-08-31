@@ -110,7 +110,7 @@ class PreviewController: UIViewController {
         super.viewDidLoad()
 
         if forDev() {
-            uiImages = sampleImages
+            uiImages = Array(0..<30).map {sampleImages[$0%2]}
             imageEntities = sampleImages.map {ImageMocker(image: $0)}
             var height = CGFloat(0)
             for uiImage in uiImages! {

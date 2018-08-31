@@ -100,6 +100,10 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         let image = images[indexPath.item]
         let imageSize = CGSize(width: imageCellSize, height: imageCellSize)
         
+        if cell.tag != 0 {
+            imageManager.cancelImageRequest(PHImageRequestID(cell.tag))
+        }
+        
         let id = imageManager.requestImage(for: image.asset, targetSize: imageSize, contentMode: .default, options: options) { [weak self] (uiImage, _) in
             if let uiImage = uiImage {
                 cell.image.image = uiImage
