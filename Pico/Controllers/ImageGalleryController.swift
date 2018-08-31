@@ -15,69 +15,55 @@ protocol SelectImageDelegate {
     func onImageSelected(selectedImages: [Image])
 }
 
-struct ImageCacheStack {
-    
-    var cacheImages = [(Image, UIImage)]()
-
-    mutating func push(bundle: (Image, UIImage)) {
-        cacheImages.append(bundle)
-        if cacheImages.count > 40  {
-            cacheImages.remove(at: 0)
-        }
-    }
-    
-    func find(image: Image) -> UIImage? {
-        return (cacheImages.filter {$0.0 == image}).first?.1
-    }
-}
-
 class ImageGalleryController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UIViewControllerPreviewingDelegate {
 
     let imageCellSize = 100*UIScreen.main.scale
-
+    
     var images = [Image]() {
         willSet(newImages) {
-            imageManager.stopCachingImagesForAllAssets()
+//            imageManager.stopCachingImagesForAllAssets()
             imageManager.startCachingImages(for: newImages.map {$0.asset},
                                             targetSize: CGSize(width: imageCellSize, height: imageCellSize),
                                             contentMode: .default,
                                             options: options)
         }
     }
+    
     var selectImages = [Image]() 
     
     @IBOutlet var collection: UICollectionView!
     
     var delegate: SelectImageDelegate!
-    var stack = ImageCacheStack()
     let maxSelectCount = 10
     
-    let viewImageCache: NSCache<Image, UIImage> = { () -> NSCache<Image, UIImage> in
-        let cache = NSCache<Image, UIImage>()
-        cache.countLimit = 20
-        return cache
-    } ()
-    
-    let screenshotImageCache: NSCache<Image, UIImage> = { () -> NSCache<Image, UIImage> in
-        let cache = NSCache<Image, UIImage>()
-        cache.countLimit = 20
-        return cache
-    } ()
-
     let imageManager = PHCachingImageManager.default() as! PHCachingImageManager
+    let fullsizeImageManager = PHImageManager()
+    
     let options: PHImageRequestOptions = {
         let ops = PHImageRequestOptions()
         ops.deliveryMode = .highQualityFormat
+        ops.isNetworkAccessAllowed = true
         return ops
     }()
-
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         collection.register(UINib(nibName: "ImageCell", bundle: nil), forCellWithReuseIdentifier: reuseIdentifier)
         registerForPreviewing(with: self, sourceView: collection)
+    }
+    
+    func updateSelectImages() -> Bool {
+        let newSelectImages = selectImages.filter {images.contains($0)}
+        let updated = newSelectImages.count != selectImages.count
+        selectImages = newSelectImages
+        return updated
+    }
+    
+    func refreshSelectImageCells() {
+        collectionView?.reloadItems(at: selectImages.map {getIndexPath(image: $0)}.filter {
+            collectionView!.indexPathsForVisibleItems.contains($0)
+        })
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -111,24 +97,15 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PickImageCell
         
-        if cell.tag != 0 {
-            imageManager.cancelImageRequest(PHImageRequestID(cell.tag))
-        }
-    
         let image = images[indexPath.item]
         let imageSize = CGSize(width: imageCellSize, height: imageCellSize)
         
-        if let cacheImage = stack.find(image: image) {
-            cell.image.image = cacheImage
-        } else {
-            let id = imageManager.requestImage(for: image.asset, targetSize: imageSize, contentMode: .default, options: options) { [weak self] (uiImage, _) in
-                if let uiImage = uiImage {
-                    cell.image.image = uiImage
-                    self?.stack.push(bundle: (image, uiImage))
-                }
+        let id = imageManager.requestImage(for: image.asset, targetSize: imageSize, contentMode: .default, options: options) { [weak self] (uiImage, _) in
+            if let uiImage = uiImage {
+                cell.image.image = uiImage
             }
-            cell.tag = Int(id)
         }
+        cell.tag = Int(id)
         
         
         let sequence = getSelectSequence(image: images[indexPath.item])
@@ -141,19 +118,24 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         return cell
     }
     
-    func loadForfViewImageCache(image: Image, toCache:  NSCache<Image, UIImage>? = nil, _ complete: ((UIImage) -> Void)? = nil) {
+    func loadForfViewImageCache(image: Image, isSync: Bool = false, _ complete: ((UIImage) -> Void)? = nil) {
         let scale = UIScreen.main.bounds.width/CGFloat(image.asset.pixelWidth)
         let imageSize = CGSize(width: image.asset.pixelWidth, height: image.asset.pixelHeight).applying(CGAffineTransform(scaleX: scale, y: scale))
-        PHImageManager.default().requestImage(for: image.asset, targetSize: imageSize, contentMode: .default, options: options) { [weak self] (uiImage, _) in
-            let cache = toCache ?? self?.viewImageCache
-            cache?.setObject(uiImage!, forKey: image)
-            
-            complete?(uiImage!)
+        if let complete = complete {
+            imageManager.requestImage(for: image.asset, targetSize: imageSize, contentMode: .default, options: options) { [weak self] (uiImage, info) in
+                complete(uiImage!)
+            }
+        } else {
+            imageManager.startCachingImages(for: [image.asset], targetSize: imageSize, contentMode: .default, options: options)
         }
     }
     
     func getSelectSequence(image: Image) -> Int? {
         return selectImages.index(of: image)
+    }
+    
+    func getIndexPath(image: Image) -> IndexPath {
+        return IndexPath(item: images.index(of: image)!, section: 0)
     }
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
@@ -191,14 +173,10 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         var images = [UIImage?](repeating: nil, count: finalImages.count)
         let group = DispatchGroup()
         for (index, selectImage) in finalImages.enumerated() {
-            if let image = (viewImageCache.object(forKey: selectImage) ?? screenshotImageCache.object(forKey: selectImage)) {
-                images[index] = image
-            } else {
-                group.enter()
-                loadForfViewImageCache(image: selectImage, toCache: viewImageCache) {
-                    images[index] = $0
-                    group.leave()
-                }
+            group.enter()
+            self.loadForfViewImageCache(image: selectImage) {
+                images[index] = $0
+                group.leave()
             }
         }
         group.notify(queue: .main, execute: {
@@ -210,7 +188,6 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         let selectImage = images[indexPath.item]
         if selectImages.contains(selectImage) {
             selectImages.remove(at: selectImages.index(of: selectImage)!)
-            viewImageCache.removeObject(forKey: selectImage)
         } else {
             guard selectImages.count < maxSelectCount  else {
                 let ac = UIAlertController(title: nil, message: "最多只能选择\(maxSelectCount)张图片", preferredStyle: .alert)
@@ -226,14 +203,18 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         updateAfterSelectionChanged()
     }
     
-    func updateAfterSelectionChanged() {
+    func updateAfterSelectionChanged(reloadAll: Bool = false) {
         delegate.onImageSelected(selectedImages: selectImages)
         
-        UIView.animate(withDuration: 0.01, animations: {
-            self.collection.performBatchUpdates({
-                self.collection.reloadItems(at: self.collectionView!.indexPathsForVisibleItems)
-            }, completion: nil)
-        })
+        if reloadAll {
+            self.collectionView?.reloadData()
+        } else {
+            UIView.animate(withDuration: 0.01, animations: {
+                self.collection.performBatchUpdates({
+                    self.collection.reloadItems(at: self.collectionView!.indexPathsForVisibleItems)
+                }, completion: nil)
+            })
+        }
     }
 
     func updateSelection(image: Image, select: Bool) {

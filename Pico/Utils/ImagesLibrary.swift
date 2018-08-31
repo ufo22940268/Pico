@@ -7,6 +7,8 @@ class ImagesLibrary {
     var albumsFetchResults = [PHFetchResult<PHAssetCollection>]()
     var images: [Image] = []
     
+    let reloadQueue = DispatchQueue(label: "pico.imagelibrary.reloadQueue")
+    
     // MARK: - Initialization
     
     init() {
@@ -16,7 +18,7 @@ class ImagesLibrary {
     // MARK: - Logic
     
     func reload(_ completion: @escaping () -> Void) {
-        DispatchQueue.global().async {
+        reloadQueue.async {
             self.reloadSync()
             DispatchQueue.main.async {
                 completion()
