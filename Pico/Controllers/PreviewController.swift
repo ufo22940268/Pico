@@ -132,8 +132,6 @@ class PreviewController: UIViewController {
         scroll.centerImage(imageViewHeight: imageViewHeight)
         
         preview.heightAnchor.constraint(equalToConstant: imageViewHeight)
-        
-        preview.previewDelegate = self
         preview.sign = nil
         
         scroll.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 44, right: 0)
@@ -146,6 +144,8 @@ class PreviewController: UIViewController {
         scroll.maximumZoomScale = 2.0
         scroll.minimumZoomScale = 0.5
         scroll.delegate = self
+
+        onSignChanged(sign: nil)
     }
     
 
@@ -233,30 +233,6 @@ class PreviewController: UIViewController {
     }
 
     
-    @IBAction func onEditSign(_ sender: Any) {
-        let alert = UIAlertController(title: "签名编辑", message: "请输入你的签名", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
-            if let sign = alert.textFields!.first!.text  {
-                self.preview.setSign(sign: sign)
-                self.preview.setNeedsDisplay()
-            }
-        }))
-        
-        alert.addTextField { (textField) in
-        }
-        self.present(alert, animated: true, completion: nil)
-    }
-    
-    @IBAction func onAlignClick(_ sender: UIBarButtonItem) {
-        preview.setAlign(align: PreviewAlignMode(rawValue: sender.tag)!)
-        preview.setNeedsDisplay()
-    }
-    
-    @IBAction func clearSign(_ sender: Any) {
-        self.preview.clearSign()
-        self.preview.setNeedsDisplay()
-    } 
-
     @IBAction func onPixelItemClick(_ sender: UIBarButtonItem) {
         let tagToScale = [
             0: PreviewPixellateScale.small,
@@ -281,16 +257,6 @@ class PreviewController: UIViewController {
                 item.tintColor = UIColor.lightGray
             }
         }
-    }
-}
-
-extension PreviewController: PreviewViewDelegate {
-    func onSignChanged(sign: String?) {
-        let showItems = sign != nil
-        signCancelItem.isEnabled = showItems
-        signAlignLeftItem.isEnabled = showItems
-        signAlignMiddleItem.isEnabled = showItems
-        signAlignRightItem.isEnabled = showItems
     }
 }
 
@@ -326,17 +292,54 @@ extension PreviewController {
     }
     
     @IBAction func onFrameCancelClick(_ sender: UIBarButtonItem) {
-        frame.frameType = .none
+        preview.updateFrame(.none)
         frame.setNeedsDisplay()
     }
     
+    
     @IBAction func onFrameSeperatorModeClick(_ sender: Any) {
-        frame.frameType = .seperator
+        preview.updateFrame(.seperator)
         frame.setNeedsDisplay()
     }
     
     @IBAction func onFrameFullModeClick(_ sender: Any) {
-        frame.frameType = .full
+        preview.updateFrame(.full)
         frame.setNeedsDisplay()
+    }
+}
+
+// MARK: - Sign
+extension PreviewController {
+    
+    func onSignChanged(sign: String?) {
+        let showItems = sign != nil
+        signCancelItem.isEnabled = showItems
+        signAlignLeftItem.isEnabled = showItems
+        signAlignMiddleItem.isEnabled = showItems
+        signAlignRightItem.isEnabled = showItems
+    }
+
+    @IBAction func onEditSign(_ sender: Any) {
+        let alert = UIAlertController(title: "签名编辑", message: "请输入你的签名", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
+            if let sign = alert.textFields!.first!.text  {
+                self.preview.setSign(sign: sign)
+                self.onSignChanged(sign: sign)
+                self.preview.setNeedsDisplay()
+            }
+        }))
+        
+        alert.addTextField { (textField) in
+        }
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func onAlignClick(_ sender: UIBarButtonItem) {
+        preview.setAlign(align: PreviewAlignMode(rawValue: sender.tag)!)
+    }
+    
+    @IBAction func clearSign(_ sender: Any) {
+        self.preview.clearSign()
+        onSignChanged(sign: nil)
     }
 }

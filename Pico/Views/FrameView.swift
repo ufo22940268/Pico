@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// Deprecated
 class FrameView: UIView {
     
     var frameRects = [CGRect]()
