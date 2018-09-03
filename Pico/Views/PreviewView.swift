@@ -9,7 +9,15 @@
 import UIKit
 import GLKit
 
-struct CropArea {
+struct CropArea: Hashable {
+    var hashValue: Int {
+        return Int(rect.width*rect.height)
+    }
+    
+    static func == (lhs: CropArea, rhs: CropArea) -> Bool {
+        return lhs.rect == rhs.rect && lhs.rendered == rhs.rendered
+    }
+    
     init(rect: CGRect) {
         self.rect = rect
     }
@@ -31,11 +39,11 @@ enum PreviewPixellateScale: Int {
     case large = 21
 }
 
-class PreviewView: GLKView {
+class PreviewView: UIStackView {
 
     var previousImage: CIImage!
     var uiImages: [UIImage]!
-    var selectedPixelScale = PreviewPixellateScale.small
+    
     var sign: String? {
         willSet(newSign) {
             previewDelegate?.onSignChanged(sign: newSign)
@@ -56,6 +64,7 @@ class PreviewView: GLKView {
     var align = PreviewAlignMode.middle
     weak var previewDelegate: PreviewViewDelegate?
     var signImage: CIImage?
+    var cells: [PreviewCell]!
     
     var image: CIImage! {
         willSet(newImage) {
@@ -73,12 +82,12 @@ class PreviewView: GLKView {
     var signFontSize = CGFloat(20)
     
     override func awakeFromNib() {
-        context = EAGLContext(api: .openGLES3)!
-        ciContext = CIContext(eaglContext: context)
         
         labelView = UILabel()
         labelView.textColor = UIColor.white
         labelView.font = UIFont.systemFont(ofSize: signFontSize*UIScreen.main.scale)
+        
+        axis = .vertical
     }
     
     fileprivate func drawSign(canvas: inout CIImage, signImage: CIImage?, viewScale:CGFloat = 1, forExport: Bool = false) {
@@ -100,40 +109,45 @@ class PreviewView: GLKView {
         }
     }
     
-    fileprivate func pixellate(ciImage: CIImage, forExport: Bool, pixellateImage: CIImage) -> CIImage {
+    fileprivate func findInstersectCells(with rect: CGRect) -> [PreviewCell]? {
+        return cells.filter {$0.frame.intersects(rect)}
+    }
+    
+    fileprivate func pixellate(ciImage: CIImage, forExport: Bool) -> CIImage {
         var prev = ciImage
         for index in 0..<crops.count {
             if !forExport && crops[index].rendered != false {
                 continue
             }
             
-            let crop = crops[index]
-            var rect: CGRect = crop.rect
-            if forExport {
-                rect = rect.applying(transform.scaledBy(x: prev.extent.width, y: prev.extent.height))
-            } else {
-                rect = rect.applying(transform.scaledBy(x: bounds.width, y: bounds.height))
-            }
+            let viewCrop = crops[index]
+            var viewRect: CGRect = viewCrop.rect
             
-            prev = pixellateImage.cropped(to: rect).applyingFilter("CISourceOverCompositing", parameters: ["inputBackgroundImage": prev])
+            let rectInUICoordinate = viewRect.applying(transform.scaledBy(x: bounds.width, y: bounds.height))
+            findInstersectCells(with: rectInUICoordinate)?.forEach { cell in
+                let intersectionCrop = cell.convert(rectInUICoordinate.intersection(cell.frame), from: self).applying(CGAffineTransform(scaleX: 1/CGFloat(cell.bounds.width), y: 1/CGFloat(cell.bounds.height)))
+                cell.updateCrop(with: intersectionCrop, identifier: viewCrop)
+            }
+            crops[index].rendered = true
+
         }
         return prev
     }
     
-    override func draw(_ rect: CGRect) {
-        let contextRect = rect.applying(CGAffineTransform(scaleX: UIScreen.main.scale, y: UIScreen.main.scale))
-
-        var result = previousImage!
-        
-        previousImage = result
-        
-        drawSign(canvas: &result, signImage: signImage)
-        ciContext.draw(result, in: contextRect, from: result.extent)
-        
-        if let pixellateImage = pixellateImage {
-            ciContext.draw(pixellateImage, in: contextRect, from: pixellateImage.extent)
-        }
-    }
+//    override func draw(_ rect: CGRect) {
+//        let contextRect = rect.applying(CGAffineTransform(scaleX: UIScreen.main.scale, y: UIScreen.main.scale))
+//
+//        var result = previousImage!
+//
+//        previousImage = result
+//
+//        drawSign(canvas: &result, signImage: signImage)
+//        ciContext.draw(result, in: contextRect, from: result.extent)
+//
+//        if let pixellateImage = pixellateImage {
+//            ciContext.draw(pixellateImage, in: contextRect, from: pixellateImage.extent)
+//        }
+//    }
     
     func convertUIRectToCIRect(uiRect: CGRect) -> CGRect {
         return uiRect.convertLTCToLBC(frameHeight: 1)
@@ -144,8 +158,14 @@ class PreviewView: GLKView {
         let scale = width / image.extent.width
         return image.transformed(by: CGAffineTransform(scaleX: scale, y: scale))
     }
+    
+    func addCell(with image: CIImage) -> PreviewCell {
+        let cell = PreviewCell(image: image)
+        addArrangedSubview(cell)
+        return cell
+    }
 
-    func concateImages(images: [CIImage], fillContainer: Bool = true) -> CIImage {
+    func setupCells(images: [CIImage], fillContainer: Bool = true) -> CIImage {
         var fillWidth:CGFloat
         
         if fillContainer {
@@ -158,18 +178,9 @@ class PreviewView: GLKView {
         }
         
         var scaledImages = images.map { scalaToFill(image: $0, width: fillWidth) }
-        let canvasHeight = scaledImages.reduce(0) { (r, img)  in
-            return r + img.extent.height
-        }
-        var canvas = scaledImages.last!
-        let canvasRect = canvas.extent.applying(CGAffineTransform(scaleX: 1, y: canvasHeight/canvas.extent.height))
-        canvas = canvas.clampedToExtent().cropped(to: canvasRect)
-        var height = scaledImages.last!.extent.height
-        for im in scaledImages[0..<images.count - 1].reversed() {
-            canvas = im.transformed(by: CGAffineTransform(translationX: 0.0, y: height)).composited(over: canvas)
-            height = height + im.extent.height
-        }
+        cells = scaledImages.map {addCell(with: $0)}
         
+        var canvas = scaledImages.last!
         preparePixellateImages(canvas)
 
         return canvas
@@ -208,8 +219,8 @@ class PreviewView: GLKView {
 
             let renderer = PreviewRenderer(imageScale: imageScale)
             
-            let pixelImage = self.applyPixel(image: canvas, pixelScale: self.selectedPixelScale)
-            canvas = self.pixellate(ciImage: canvas, forExport: true, pixellateImage: pixelImage)
+//            let pixelImage = self.applyPixel(image: canvas, pixelScale: self.selectedPixelScale)
+//            canvas = self.pixellate(ciImage: canvas, forExport: true, pixellateImage: pixelImage)
 
             if let sign = self.sign {
                 let labelView = UILabel()
@@ -253,8 +264,11 @@ extension PreviewView {
     }
     
     func refreshPixelImage() {
-        let selectedPixelImage = pixellateImages[selectedPixelScale]!
-        pixellateImage = pixellate(ciImage: image, forExport: false, pixellateImage: selectedPixelImage)
+        pixellateImage = pixellate(ciImage: image, forExport: false)
+    }
+    
+    func setPixelScale(scale: PreviewPixellateScale) {
+        cells.map {$0.setPixelScale(scale)}
     }
     
     func updatePixellate(uiRect: CGRect) {
@@ -262,7 +276,7 @@ extension PreviewView {
             addPixellate(uiRect: uiRect)
         }
         
-        crops[crops.count - 1].rect = convertUIRectToCIRect(uiRect: uiRect)
+        crops[crops.count - 1].rect = uiRect
         crops[crops.count - 1].rendered = false
         
         refreshPixelImage()
@@ -273,6 +287,8 @@ extension PreviewView {
         for index in 0..<crops.count {
             crops[index].rendered = false
         }
+        
+        cells.forEach {$0.resetPixel()}
         
         refreshPixelImage()
     }    

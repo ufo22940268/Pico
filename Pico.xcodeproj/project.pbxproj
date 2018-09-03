@@ -51,6 +51,7 @@
 		42A5BAC520F71F5500D9E2A9 /* AlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A5BAC420F71F5500D9E2A9 /* AlbumCell.swift */; };
 		42B1EFAB20EE53BA00086460 /* ComposeContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B1EFAA20EE53BA00086460 /* ComposeContainerView.swift */; };
 		42B3665820F5A5F900CF12CA /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B3665720F5A5F900CF12CA /* Errors.swift */; };
+		42BF6E1B213C87B500458E78 /* PreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BF6E1A213C87B500458E78 /* PreviewCell.swift */; };
 		42C4066D20F335550074B728 /* UIView+Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C4066C20F335550074B728 /* UIView+Style.swift */; };
 		42C4066F20F446750074B728 /* OverlapDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C4066E20F446750074B728 /* OverlapDetector.swift */; };
 		42C4067120F44E820074B728 /* RGBAImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C4067020F44E810074B728 /* RGBAImage.swift */; };
@@ -153,6 +154,7 @@
 		42A5BAC420F71F5500D9E2A9 /* AlbumCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCell.swift; sourceTree = "<group>"; };
 		42B1EFAA20EE53BA00086460 /* ComposeContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeContainerView.swift; sourceTree = "<group>"; };
 		42B3665720F5A5F900CF12CA /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		42BF6E1A213C87B500458E78 /* PreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewCell.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		42C4066C20F335550074B728 /* UIView+Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Style.swift"; sourceTree = "<group>"; };
 		42C4066E20F446750074B728 /* OverlapDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlapDetector.swift; sourceTree = "<group>"; };
 		42C4067020F44E810074B728 /* RGBAImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBAImage.swift; sourceTree = "<group>"; };
@@ -338,6 +340,7 @@
 				421BC84A20FE0C9600F8C89F /* PreviewView.swift */,
 				42F829C92106FC6B00DCF1A6 /* FrameView.swift */,
 				4242142C21192E7F0079E61D /* SliderProtocal.swift */,
+				42BF6E1A213C87B500458E78 /* PreviewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -519,6 +522,7 @@
 				42C4066F20F446750074B728 /* OverlapDetector.swift in Sources */,
 				4201F006210ED73400A6EBA5 /* GestureExtension.swift in Sources */,
 				42A18C8820EB047300DD4AA5 /* Image.swift in Sources */,
+				42BF6E1B213C87B500458E78 /* PreviewCell.swift in Sources */,
 				420EF44E20FCBF2E006CCDD3 /* UIScrollViewExtension.swift in Sources */,
 				4201F00821119A0700A6EBA5 /* CIImageExtension.swift in Sources */,
 				42F829CA2106FC6B00DCF1A6 /* FrameView.swift in Sources */,
