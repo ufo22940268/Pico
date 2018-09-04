@@ -43,4 +43,15 @@ extension CIImage {
 
         return canvas
     }
+    
+    static func resizeToSameWidth(images: [CIImage]) -> [CIImage] {
+        let minWidth = images.min { (c1, c2) -> Bool in
+            return c1.extent.width < c2.extent.width
+            }!.extent.width
+        let scaledImages = images.map { img -> CIImage in
+            let scale = minWidth/img.extent.width
+            return img.transformed(by: CGAffineTransform(scaleX: scale, y: scale))
+        }
+        return scaledImages
+    }
 }
