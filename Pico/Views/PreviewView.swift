@@ -90,21 +90,6 @@ class PreviewView: UIStackView {
         directionalLayoutMargins = NSDirectionalEdgeInsets.zero
     }
     
-//    override func draw(_ rect: CGRect) {
-//        let contextRect = rect.applying(CGAffineTransform(scaleX: UIScreen.main.scale, y: UIScreen.main.scale))
-//
-//        var result = previousImage!
-//
-//        previousImage = result
-//
-//        drawSign(canvas: &result, signImage: signImage)
-//        ciContext.draw(result, in: contextRect, from: result.extent)
-//
-//        if let pixellateImage = pixellateImage {
-//            ciContext.draw(pixellateImage, in: contextRect, from: pixellateImage.extent)
-//        }
-//    }
-    
     func convertUIRectToCIRect(uiRect: CGRect) -> CGRect {
         return uiRect.convertLTCToLBC(frameHeight: 1)
     }

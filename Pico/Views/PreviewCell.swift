@@ -92,6 +92,7 @@ class PreviewCellDecorator {
     var sign: String?
     var signAlign:PreviewAlignMode = .middle
     var signImage: CIImage?
+    var fontSize = PreviewConstants.signFontSize
     
     /// Constructor for view
     init(image: CIImage, scale: PreviewPixellateScale) {
@@ -114,6 +115,7 @@ class PreviewCellDecorator {
         }
         
         cropRects = cell.decorator.cropRects
+        fontSize = PreviewConstants.signFontSize*(image.extent.width/UIScreen.main.bounds.width)
     }
     
     func toUICoordinate(from rect: CGRect) -> CGRect {
@@ -178,15 +180,16 @@ class PreviewCellDecorator {
     }
     
     func composeImageForExport() -> CIImage {
-        return rerenderAllPixelCrops()
+        rerenderAllPixelCrops()
+        updateSignImage()
+        return composeLastImageWithSign()
     }
     
-    func rerenderAllPixelCrops() -> CIImage {
+    func rerenderAllPixelCrops() {
         resetPixel()
         for (_, cropRect) in cropRects {
             renderCrop(with: cropRect)
         }
-        return composeLastImageWithSign()
     }
     
     func updateSignImage() {
@@ -197,8 +200,7 @@ class PreviewCellDecorator {
         
         let labelView = UILabel()
         labelView.textColor = UIColor.white
-//        labelView.textColor = UIColor.red
-        labelView.font = UIFont.systemFont(ofSize: PreviewConstants.signFontSize)
+        labelView.font = UIFont.systemFont(ofSize: fontSize)
         labelView.text = sign
         labelView.sizeToFit()
         signImage = labelView.renderToCIImage()
