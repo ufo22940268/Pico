@@ -152,54 +152,31 @@ class PreviewView: UIStackView {
         }
     }
     
-    fileprivate func buildCanvasForRenderCache(images: [UIImage], frameView: FrameView, cropRects: [CGRect]) -> CIImage {
+    fileprivate func cropImagesForExport(images: [UIImage], frameView: FrameView, cropRects: [CGRect]) -> [CIImage] {
         var imageCrops = cropRects.enumerated().map { (index, rect) -> CGRect in
             let img = images[index]
             return rect.applying(CGAffineTransform(scaleX: img.size.width, y: img.size.height))
         }
         var croppedImages = images.map{CIImage(image: $0)!}.enumerated().map({(index, img) in img.cropped(to: imageCrops[index])})
-        return CIImage.concateImages(images: croppedImages)
+        return croppedImages
     }
     
     func renderImageForExport(frameView: FrameView, imageEntities: [Image], cropRects: [CGRect], complete:  @escaping (UIImage) -> Void) {
         Image.resolve(images: imageEntities, completion: { originalImages in
             let filteredOriginalImages = originalImages as! [UIImage]
-            let frameRects = frameView.frameRects
-            var canvas = self.buildCanvasForRenderCache(images: filteredOriginalImages, frameView: frameView, cropRects: cropRects)
             
-            UIGraphicsBeginImageContext(canvas.extent.size)
+            let croppedImages = self.cropImagesForExport(images: filteredOriginalImages, frameView: frameView, cropRects: cropRects)
             
-            let imageScale = canvas.extent.width/(self.frame.size.width*UIScreen.main.scale)
-            let viewScale = canvas.extent.width/self.frame.size.width
-            let fromRawToConcateScale = canvas.extent.width/filteredOriginalImages.min(by: {$0.size.width < $1.size.width})!.size.width
-
-            let renderer = PreviewRenderer(imageScale: imageScale)
-            
-//            let pixelImage = self.applyPixel(image: canvas, pixelScale: self.selectedPixelScale)
-//            canvas = self.pixellate(ciImage: canvas, forExport: true, pixellateImage: pixelImage)
-
-            if let sign = self.sign {
-                let labelView = UILabel()
-                labelView.textColor = UIColor.white
-                labelView.font = UIFont.systemFont(ofSize: viewScale * self.signFontSize)
-                labelView.text = sign
-                labelView.sizeToFit()
-                let labelImage = labelView.renderToCIImage()
-                self.drawSign(canvas: &canvas, signImage: labelImage, viewScale: viewScale, forExport: true)
+            var finalImages = [CIImage]()
+            for (index, croppedImage) in croppedImages.enumerated() {
+                let cell = self.cells[index]
+                finalImages.append(PreviewCellDecorator(image: croppedImage, cell: cell).composeImageForExport())
             }
             
-            let canvasImage = canvas.convertToUIImage()
-            canvasImage.draw(at: CGPoint.zero)
+            let canvas = CIImage.concateImages(images: finalImages)
+            let uiCanvas = canvas.convertToUIImage()
             
-            if frameView.frameType != .none {
-                let frameScale = canvas.extent.width/frameView.frame.width
-                renderer.drawFrameRects(rect: canvas.extent, frameType: frameView.frameType, frameRects: frameRects.map{ $0.applying(CGAffineTransform(scaleX: fromRawToConcateScale, y: fromRawToConcateScale))}, scale: frameScale)
-            }
-            
-            let cache = UIGraphicsGetImageFromCurrentImageContext()!
-            UIGraphicsEndImageContext()
-            
-            complete(cache)
+            complete(uiCanvas)
         })
     }
 }
