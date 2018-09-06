@@ -32,22 +32,22 @@ class Album {
         populateItems()
     }
     
-    func isScreenshot(image: Image) -> Bool {
+    static func isScreenshot(image: Image) -> Bool {
         return image.asset.pixelWidth == Int(UIScreen.main.bounds.width*UIScreen.main.scale) &&  image.asset.pixelHeight == Int(UIScreen.main.bounds.height*UIScreen.main.scale)
     }
     
     
-    func getRecentScreenshots() -> [Image] {
-        var images = items
-        images = images
+    static func getRecentScreenshots(images: [Image]) -> [Image] {
+        var screenshots = images
+        screenshots = screenshots
             .filter { $0.asset.creationDate != nil }
             .filter { image in
             return (image.asset.creationDate ?? Date(timeIntervalSince1970: 0)) > Date() - TimeInterval(60*20)
         }.filter(isScreenshot)
-        images = images.sorted(by: { (i1, i2) -> Bool in
+        screenshots = screenshots.sorted(by: { (i1, i2) -> Bool in
             return i1.asset.creationDate! < i2.asset.creationDate!
         })
-        return images
+        return screenshots
     }
     
     static func selectAllPhotoAlbum(albums: [Album]) -> Album? {

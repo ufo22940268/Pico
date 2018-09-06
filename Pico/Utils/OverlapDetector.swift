@@ -35,7 +35,6 @@ class OverlapDetector {
         self.downImage = downImage
         self.frameResult = frameResult
         
-        
         print("gap: \(frameResult.topGap) ----------- \(frameResult.bottomGap)")
     }
     
@@ -109,8 +108,6 @@ class OverlapDetector {
             return obs.topLeft.y < (1 - 0.1) && obs.bottomLeft.y > 0.1
         }
         
-        
-        
         let sortedUp = up.sorted(by: { (l, r) -> Bool in
             return l.bottomLeft.y < r.bottomLeft.y
         }).filter(clampYRange)
@@ -122,7 +119,7 @@ class OverlapDetector {
         var obsBundle: (VNRectangleObservation, VNRectangleObservation)?
         var strictObsBundle: (VNRectangleObservation, VNRectangleObservation)?
         
-        debug(image: self.upImage, obsList: sortedUp)
+//        debug(image: self.upImage, obsList: sortedUp)
 //        debug(image: self.downImage, obsList: sortedDown)
 
         for upObs in sortedUp {
@@ -175,34 +172,50 @@ class OverlapDetector {
         newRect.size.height = upImage.size.height - newRect.origin.y
         return newRect
     }
+    
+    func isTransformValid(_ transform: CGAffineTransform) -> Bool {
+        return abs(transform.tx) == 0 && transform.ty < 0
+    }
 
-    func getMiddleIntersection(completeHandler: @escaping (CGFloat, CGFloat) -> Void) {
+    func getTopAndBottomTranslsation(completeHandler: @escaping (CGFloat, CGFloat) -> Void) {
         let handleRectangle = {(rectangleResult: RectangleResult) in
             guard rectangleResult.bundle != nil else {
                 completeHandler(0, 0)
                 return
             }
             
-            let prepares = [self.prepareTranlsate(rectangleResult: rectangleResult, minClip: true), self.prepareTranlsate(rectangleResult: rectangleResult, minClip: false)]
+            var prepares = stride(from: 1, through: 10, by: 2).reversed().map { self.prepareTranlsate(rectangleResult: rectangleResult, clipPercent: $0/CGFloat(10)) }
+            prepares.insert(self.prepareTranlsate(rectangleResult: rectangleResult, minClip: true), at: 0)
             
+            //Not well tested
+            prepares.insert(self.prepareTranlsate(rectangleResult: rectangleResult, clipPercent: 0.4, downShift: 0.2), at: 0)
+            
+            prepares = prepares.sorted(by: { (tp1, tp2) -> Bool in
+                tp1.upRect.height < tp2.upRect.height
+            })
+
             let group = DispatchGroup()
-            var imageOverlaps = [TranslationPrepare: CGFloat]()
-            for prepare in prepares {
+            var imageOverlaps = [Int: (TranslationPrepare, CGFloat)]()
+            for (index, prepare) in prepares.enumerated() {
                 group.enter()
                 let request = VNTranslationalImageRegistrationRequest(targetedCGImage: prepare.downImage, options: [:], completionHandler: {(request, error) in
-                    let imageOverlap = (request.results?.first as? VNImageTranslationAlignmentObservation)?.alignmentTransform.ty ?? 0
-                    imageOverlaps[prepare] = imageOverlap
+                    if let alignTransform = (request.results?.first as? VNImageTranslationAlignmentObservation)?.alignmentTransform, self.isTransformValid(alignTransform) {
+//                        print("index: \(index) clipHeight: \(prepare.upRect.height) \t \(alignTransform)")
+                        let imageOverlap = alignTransform.ty
+                        imageOverlaps[index] = (prepare, imageOverlap)
+                    }
                     group.leave()
                 })
                 try! VNImageRequestHandler(cgImage: prepare.upImage, options: [:]).perform([request])
             }
             
             group.notify(queue: .main, execute: {
-                let overlapBundle = imageOverlaps.first(where: { (prepare, overlap) -> Bool in
-                    overlap < 0
-                })
+                let overlapBundle = imageOverlaps.sorted(by: {$0.0 < $1.0}).map{$0.value}.min(by: {(l, r) -> Bool in l.1 < r.1})
                 
                 guard let bundle = overlapBundle else {
+                    
+                    print("Overlap not found")
+                    
                     //imageOverlap being positive means translation detection failed.
                     if rectangleResult.strictBundle == nil {
                         return completeHandler(0, 0)
@@ -214,8 +227,8 @@ class OverlapDetector {
                     }
                 }
                 
-                let prepare = bundle.key
-                let imageOverlap = bundle.value
+                let prepare = bundle.0
+                let imageOverlap = bundle.1
 
                 // upRectInCGImage coordinate is LTC
                 let upOverlap = self.upImage.size.height - (prepare.upRect.origin.y + abs(imageOverlap))
@@ -240,19 +253,22 @@ class OverlapDetector {
         var downRect: CGRect
     }
     
-    func prepareTranlsate(rectangleResult: RectangleResult, minClip: Bool) -> TranslationPrepare {
+    func prepareTranlsate(rectangleResult: RectangleResult, clipPercent: CGFloat = 0, downShift: CGFloat = 0, minClip: Bool = false) -> TranslationPrepare {
         let topGap = self.frameResult.topGap!
         let bottomGap = self.frameResult.bottomGap!
 
-        let rectangleLargestHeight: CGFloat = rectangleResult.largestRect!.height
         var upRectInLTC = CGRect(x: 0, y: 0, width: self.upImage.size.width, height: self.upImage.size.height - bottomGap)
-        var downRectInLTC = CGRect(x: 0, y: topGap, width: self.upImage.size.width, height: self.upImage.size.height - topGap)
+        var downRectInLTC = CGRect(x: 0, y: topGap + downShift*self.upImage.size.height, width: self.upImage.size.width, height: self.upImage.size.height - topGap)
         var clipHeight:CGFloat
+        
         if minClip {
+            let rectangleLargestHeight: CGFloat = rectangleResult.largestRect!.height
             clipHeight = min(CGFloat(600), rectangleLargestHeight*self.upImage.size.height + 50)
         } else {
-            clipHeight = max(CGFloat(600), rectangleLargestHeight*self.upImage.size.height + 50)
+            let maxClipThreshold = min(upRectInLTC.height, downRectInLTC.height)*clipPercent
+            clipHeight = maxClipThreshold
         }
+        
         upRectInLTC.origin.y = upRectInLTC.origin.y + (upRectInLTC.height - clipHeight)
         upRectInLTC.size.height = clipHeight
         downRectInLTC.size.height = clipHeight
@@ -268,6 +284,6 @@ class OverlapDetector {
             return completeHandler(0, 0)
         }
         
-        getMiddleIntersection(completeHandler: completeHandler)
+        getTopAndBottomTranslsation(completeHandler: completeHandler)
     }
 }

@@ -221,13 +221,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView verifyAmbiguity="off" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qfn-Hc-ipw">
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="3fT-eg-GIo">
+                                <rect key="frame" x="170" y="316" width="37" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="color" name="headerColor" catalog="System" colorSpace="catalog"/>
+                            </activityIndicatorView>
+                            <scrollView hidden="YES" verifyAmbiguity="off" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qfn-Hc-ipw">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
                                     <view verifyAmbiguity="off" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" restorationIdentifier="ContainerWrapper" translatesAutoresizingMaskIntoConstraints="NO" id="FDD-5R-i7y" userLabel="ContainerWrapper">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="3Jb-z4-kgp" customClass="ComposeContainerView" customModule="Pico" customModuleProvider="target">
+                                            <stackView verifyAmbiguity="off" opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="3Jb-z4-kgp" customClass="ComposeContainerView" customModule="Pico" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                                                 <gestureRecognizers/>
                                                 <connections>
@@ -316,6 +321,7 @@
                         <outlet property="containerWrapperCenterXConstraint" destination="bkM-s9-ajj" id="2mg-qE-HZq"/>
                         <outlet property="containerWrapperLeadingConstraint" destination="GC6-2T-RVc" id="w4G-0b-WH5"/>
                         <outlet property="containerWrapperTrailingConstraint" destination="8tj-WS-eFi" id="gQk-t9-RtI"/>
+                        <outlet property="loadingIndicator" destination="3fT-eg-GIo" id="FGP-ea-JSz"/>
                         <outlet property="panGesture" destination="rOY-HI-ftD" id="MOz-FL-lRy"/>
                         <outlet property="scroll" destination="Qfn-Hc-ipw" id="lun-dp-7Ar"/>
                         <outlet property="topConstraint" destination="bre-SP-3Ha" id="ILm-lm-TFt"/>
