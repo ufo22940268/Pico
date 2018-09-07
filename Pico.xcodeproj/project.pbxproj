@@ -33,9 +33,18 @@
 		425F9B3820EB402300B0F2CF /* ImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 425F9B3620EB402300B0F2CF /* ImageCell.xib */; };
 		425F9B3C20EB66AF00B0F2CF /* PickImageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425F9B3B20EB66AF00B0F2CF /* PickImageController.swift */; };
 		4266A1722101B92F009F92D6 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4266A1712101B92F009F92D6 /* UIViewExtension.swift */; };
+		426A3A2F2141FBD300FDDC5C /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 426A3A2B2141FBD200FDDC5C /* libWeChatSDK.a */; };
+		426A3A302141FBE900FDDC5C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42014D9C21378DC200C11B9D /* SystemConfiguration.framework */; };
+		426A3A312141FBEF00FDDC5C /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 42014D9E21378DCA00C11B9D /* libz.tbd */; };
+		426A3A322141FBF800FDDC5C /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 42014DA021378DD800C11B9D /* libsqlite3.0.tbd */; };
+		426A3A332141FC0100FDDC5C /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42014DA621378DEE00C11B9D /* CoreTelephony.framework */; };
+		426A3A352141FC0A00FDDC5C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 426A3A342141FC0A00FDDC5C /* QuartzCore.framework */; };
+		426A3A362141FE7300FDDC5C /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 42014DA221378DE000C11B9D /* libc++.tbd */; };
+		426A3A372141FE7B00FDDC5C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42014DA421378DE700C11B9D /* Security.framework */; };
+		426A3A3A21425C6800FDDC5C /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426A3A3921425C6700FDDC5C /* UIImageExtension.swift */; };
 		428006F020EB7C610091BE9B /* ComposeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428006EF20EB7C610091BE9B /* ComposeController.swift */; };
 		428006F420EB99610091BE9B /* ComposeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 428006F320EB99610091BE9B /* ComposeCell.xib */; };
-		428C51F4211D6D5700A34E9B /* CGRectExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428C51F3211D6D5700A34E9B /* CGRectExtensions.swift */; };
+		428C51F4211D6D5700A34E9B /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428C51F3211D6D5700A34E9B /* CGRectExtension.swift */; };
 		42A18C4B20EAF5A600DD4AA5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A18C4A20EAF5A600DD4AA5 /* AppDelegate.swift */; };
 		42A18C4D20EAF5A600DD4AA5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A18C4C20EAF5A600DD4AA5 /* ViewController.swift */; };
 		42A18C5020EAF5A600DD4AA5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42A18C4E20EAF5A600DD4AA5 /* Main.storyboard */; };
@@ -130,9 +139,16 @@
 		425F9B3A20EB5D0E00B0F2CF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		425F9B3B20EB66AF00B0F2CF /* PickImageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickImageController.swift; sourceTree = "<group>"; };
 		4266A1712101B92F009F92D6 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		426A3A2B2141FBD200FDDC5C /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
+		426A3A2C2141FBD200FDDC5C /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
+		426A3A2D2141FBD300FDDC5C /* WechatAuthSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WechatAuthSDK.h; sourceTree = "<group>"; };
+		426A3A2E2141FBD300FDDC5C /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
+		426A3A342141FC0A00FDDC5C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		426A3A382141FF6200FDDC5C /* Weixin-Brigding-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Weixin-Brigding-Header.h"; sourceTree = "<group>"; };
+		426A3A3921425C6700FDDC5C /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		428006EF20EB7C610091BE9B /* ComposeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeController.swift; sourceTree = "<group>"; };
 		428006F320EB99610091BE9B /* ComposeCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ComposeCell.xib; sourceTree = "<group>"; };
-		428C51F3211D6D5700A34E9B /* CGRectExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectExtensions.swift; sourceTree = "<group>"; };
+		428C51F3211D6D5700A34E9B /* CGRectExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectExtension.swift; sourceTree = "<group>"; };
 		42A18C4720EAF5A600DD4AA5 /* Pico.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pico.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42A18C4A20EAF5A600DD4AA5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		42A18C4C20EAF5A600DD4AA5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -173,6 +189,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				426A3A372141FE7B00FDDC5C /* Security.framework in Frameworks */,
+				426A3A362141FE7300FDDC5C /* libc++.tbd in Frameworks */,
+				426A3A352141FC0A00FDDC5C /* QuartzCore.framework in Frameworks */,
+				426A3A332141FC0100FDDC5C /* CoreTelephony.framework in Frameworks */,
+				426A3A322141FBF800FDDC5C /* libsqlite3.0.tbd in Frameworks */,
+				426A3A312141FBEF00FDDC5C /* libz.tbd in Frameworks */,
+				426A3A302141FBE900FDDC5C /* SystemConfiguration.framework in Frameworks */,
+				426A3A2F2141FBD300FDDC5C /* libWeChatSDK.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -196,6 +220,7 @@
 		42014D9B21378DC200C11B9D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				426A3A342141FC0A00FDDC5C /* QuartzCore.framework */,
 				42014DA821378DF400C11B9D /* CFNetwork.framework */,
 				42014DA621378DEE00C11B9D /* CoreTelephony.framework */,
 				42014DA421378DE700C11B9D /* Security.framework */,
@@ -210,6 +235,7 @@
 		4201F004210ED68B00A6EBA5 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				42A5BAC020F6037400D9E2A9 /* BasicExtension.swift */,
 				420EF44D20FCBF2E006CCDD3 /* UIScrollViewExtension.swift */,
 				420EF44F20FCC024006CCDD3 /* UIImageViewExtension.swift */,
 				4266A1712101B92F009F92D6 /* UIViewExtension.swift */,
@@ -218,10 +244,23 @@
 				4201F005210ED73400A6EBA5 /* GestureExtension.swift */,
 				4201F00721119A0700A6EBA5 /* CIImageExtension.swift */,
 				4201F009211305DA00A6EBA5 /* UIColorExtension.swift */,
-				428C51F3211D6D5700A34E9B /* CGRectExtensions.swift */,
+				428C51F3211D6D5700A34E9B /* CGRectExtension.swift */,
 				420186F0212ABFD300EF903F /* CGSizeExtension.swift */,
+				426A3A3921425C6700FDDC5C /* UIImageExtension.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		426A3A2A2141FBB700FDDC5C /* WeixinSDK */ = {
+			isa = PBXGroup;
+			children = (
+				426A3A2B2141FBD200FDDC5C /* libWeChatSDK.a */,
+				426A3A2D2141FBD300FDDC5C /* WechatAuthSDK.h */,
+				426A3A2C2141FBD200FDDC5C /* WXApi.h */,
+				426A3A2E2141FBD300FDDC5C /* WXApiObject.h */,
+				426A3A382141FF6200FDDC5C /* Weixin-Brigding-Header.h */,
+			);
+			path = WeixinSDK;
 			sourceTree = "<group>";
 		};
 		42A18C3E20EAF5A600DD4AA5 = {
@@ -248,6 +287,7 @@
 		42A18C4920EAF5A600DD4AA5 /* Pico */ = {
 			isa = PBXGroup;
 			children = (
+				426A3A2A2141FBB700FDDC5C /* WeixinSDK */,
 				42A18C8A20EB09AE00DD4AA5 /* Views */,
 				42A18C8520EB020800DD4AA5 /* Pico.entitlements */,
 				42A18C8020EB00D700DD4AA5 /* Models */,
@@ -303,7 +343,6 @@
 				42C4066C20F335550074B728 /* UIView+Style.swift */,
 				42C4066E20F446750074B728 /* OverlapDetector.swift */,
 				42B3665720F5A5F900CF12CA /* Errors.swift */,
-				42A5BAC020F6037400D9E2A9 /* BasicExtension.swift */,
 				42143E0120F89D9D00000487 /* MovieDetector.swift */,
 				420EF44720F965FA006CCDD3 /* AutoConcate.swift */,
 				420EF44920F9665D006CCDD3 /* MovieConcate.swift */,
@@ -500,11 +539,12 @@
 				420EF44C20FCA784006CCDD3 /* PreviewController.swift in Sources */,
 				425F9B3720EB402300B0F2CF /* ImageCell.swift in Sources */,
 				4251DEFE213E613500B63E94 /* PreviewFrameDecorator.swift in Sources */,
+				426A3A3A21425C6800FDDC5C /* UIImageExtension.swift in Sources */,
 				42C89D6F210998AB00792EED /* VNRectangleObservationExtension.swift in Sources */,
 				420EF45020FCC024006CCDD3 /* UIImageViewExtension.swift in Sources */,
 				423F1C1420EBB4530083DB6D /* ComposeCell.swift in Sources */,
 				425F9B3C20EB66AF00B0F2CF /* PickImageController.swift in Sources */,
-				428C51F4211D6D5700A34E9B /* CGRectExtensions.swift in Sources */,
+				428C51F4211D6D5700A34E9B /* CGRectExtension.swift in Sources */,
 				42B3665820F5A5F900CF12CA /* Errors.swift in Sources */,
 				42A18C7D20EB008A00DD4AA5 /* ImagesLibrary.swift in Sources */,
 				421BC84B20FE0C9600F8C89F /* PreviewView.swift in Sources */,
@@ -646,9 +686,13 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "Pico/WeixinSDK/Weixin-Brigding-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -701,9 +745,13 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OBJC_BRIDGING_HEADER = "Pico/WeixinSDK/Weixin-Brigding-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -721,6 +769,10 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pico/WeixinSDK",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bettycc.Pico;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -742,6 +794,10 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pico/WeixinSDK",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bettycc.Pico;
 				PRODUCT_NAME = "$(TARGET_NAME)";
