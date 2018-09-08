@@ -28,7 +28,7 @@ class ShareManager: NSObject {
     init(viewController: UIViewController) {
         self.viewController = viewController
         self.imageGenerator = viewController as! ShareImageGenerator
-        alertVC = UIAlertController(title: "保存", message: "保存中", preferredStyle: .alert)
+        alertVC = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         okAction = UIAlertAction(title: "OK", style: .default)
         okAction.isEnabled = false
         alertVC.addAction(okAction)
@@ -46,17 +46,24 @@ class ShareManager: NSObject {
     func buildActionController() -> UIAlertController {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "微信分享给好友", style: .default, handler: { _ in
+            self.showLoading(label: "分享中...")
             self.generateImage(complete: {[weak self]  image in
+                self?.dismissLoading()
                 self?.shareToWechat(image: image, scene: WXSceneSession)
             })
         }))
         alert.addAction(UIAlertAction(title: "分享到朋友圈", style: .default, handler: { _ in
+            self.showLoading(label: "分享中...")
             self.generateImage(complete: {[weak self]  image in
+                self?.dismissLoading()
                 self?.shareToWechat(image: image, scene: WXSceneTimeline)
             })
         }))
         alert.addAction(UIAlertAction(title: "下载到相册", style: .default, handler: { _ in
+            self.showLoading(label: "保存中..")
             self.generateImage(complete: {[weak self]  image in
+                self?.alertVC.message = "图片已经保存到相册"
+                self?.okAction.isEnabled = true
                 self?.saveToPhoto(image: image)
             })
         }))
@@ -64,10 +71,15 @@ class ShareManager: NSObject {
         return alert
     }
     
-    func startSavingPhoto() {
+    func showLoading(label: String) {
+        alertVC.message = label
         viewController?.present(alertVC, animated: true, completion: nil)
     }
     
+    func dismissLoading() {
+        alertVC.dismiss(animated: true, completion: nil)
+    }
+        
     func showActions() {
         if let viewController = viewController {
             viewController.present(actionController, animated: true, completion: nil)

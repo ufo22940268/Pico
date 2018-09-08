@@ -115,7 +115,7 @@ class PreviewController: UIViewController {
                 cellFrames.append(CGRect(origin: CGPoint(x: 0, y: height), size: uiImage.size))
                 cropRects.append(CGRect(origin: CGPoint.zero, size: CGSize(width: 1, height: 1)))
                 height = height + uiImage.size.height
-            }
+            }            
         }
         
         preview.uiImages = uiImages
@@ -203,10 +203,7 @@ class PreviewController: UIViewController {
     
     @IBAction func onShareClick(_ sender: Any) {
         let shareManager: ShareManager = ShareManager(viewController: self)
-        shareManager.startSavingPhoto()
-        preview.renderImageForExport(imageEntities: imageEntities, cropRects: cropRects, complete: { image in
-            shareManager.saveToPhoto(image: image)
-        })
+        shareManager.showActions()
     }
     
     @IBAction func onPixellateItemClick(_ sender: Any) {
@@ -290,7 +287,6 @@ extension PreviewController {
         preview.updateFrame(.none)
     }
     
-    
     @IBAction func onFrameSeperatorModeClick(_ sender: Any) {
         preview.updateFrame(.seperator)
     }
@@ -333,5 +329,14 @@ extension PreviewController {
     @IBAction func clearSign(_ sender: Any) {
         self.preview.clearSign()
         onSignChanged(sign: nil)
+    }
+}
+
+
+extension PreviewController : ShareImageGenerator {
+    func generateImage(callback: @escaping (UIImage) -> Void) {
+        preview.renderImageForExport(imageEntities: imageEntities, cropRects: cropRects, complete: { image in
+            callback(image)
+        })
     }
 }

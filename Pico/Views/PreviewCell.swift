@@ -40,7 +40,10 @@ class PreviewCell: GLKView {
     
     override func draw(_ rect: CGRect) {
         let lastImage = decorator.composeLastImageWithSign()
-        ciContext.draw(lastImage, in: rect.applying(CGAffineTransform(scaleX: UIScreen.main.scale, y: UIScreen.main.scale)), from: lastImage.extent)
+        ciContext.draw(lastImage, in: rect.applying(CGAffineTransform(scaleX: UIScreen.main.scale, y: UIScreen.main.scale+0.1)), from: lastImage.extent)
+     
+        //Very bad resolution.
+//        ciContext.draw(lastImage, in: rect.applying(CGAffineTransform(scaleX: UIScreen.main.scale, y: UIScreen.main.scale)), from: lastImage.extent)
     }
     
 }

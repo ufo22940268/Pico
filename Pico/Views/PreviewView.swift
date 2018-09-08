@@ -80,7 +80,7 @@ class PreviewView: UIStackView {
     var pixellateImage: CIImage?
     var signFontSize = CGFloat(20)
     
-    var frameType: PreviewFrameType!
+    var frameType: PreviewFrameType = .none
     
     override func awakeFromNib() {
         
@@ -145,7 +145,7 @@ class PreviewView: UIStackView {
             let img = images[index]
             return rect.applying(CGAffineTransform(scaleX: img.size.width, y: img.size.height))
         }
-        let croppedImages = images.map{CIImage(image: $0)!}.enumerated().map({(index, img) in img.cropped(to: imageCrops[index])})
+        let croppedImages = images.map{CIImage(image: $0)!}.enumerated().map({(index, img) in img.cropped(to: imageCrops[index]).transformed(by: CGAffineTransform(translationX: 0, y: -imageCrops[index].minY))})
         return croppedImages
     }
     
@@ -295,7 +295,6 @@ extension PreviewView {
         
         layoutMargins = UIEdgeInsets(top: insetWidth, left: insetWidth, bottom: insetWidth, right: insetWidth)
         isLayoutMarginsRelativeArrangement = show
-
     }
     
     
