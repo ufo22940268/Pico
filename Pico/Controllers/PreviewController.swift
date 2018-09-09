@@ -328,8 +328,13 @@ extension PreviewController {
     }
     
     @IBAction func clearSign(_ sender: Any) {
-        self.preview.clearSign()
-        onSignChanged(sign: nil)
+        let alert  = UIAlertController(title: nil, message: "确定重置签名吗", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { (_) in
+            self.preview.clearSign()
+            self.onSignChanged(sign: nil)
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
 }
 
