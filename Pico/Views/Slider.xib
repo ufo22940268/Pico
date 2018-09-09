@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -21,7 +22,7 @@
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ban-IM-6C4" userLabel="line">
                             <rect key="frame" x="0.0" y="9" width="343" height="2"/>
-                            <color key="backgroundColor" name="keyboardFocusIndicatorColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="Slider"/>
                             <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.5"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="2" id="40M-qk-jNW"/>
@@ -29,7 +30,7 @@
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8ER-9v-Fki">
                             <rect key="frame" x="147" y="0.5" width="50" height="20"/>
-                            <color key="backgroundColor" red="0.18823529410000001" green="0.51372549020000002" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" name="Slider"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="20" id="JEd-UT-vFI"/>
                                 <constraint firstAttribute="width" constant="50" id="feR-4C-aMD" userLabel="width = 40"/>
@@ -82,14 +83,14 @@
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m8q-Jn-26T" userLabel="line">
                             <rect key="frame" x="0.0" y="0.0" width="376" height="2"/>
-                            <color key="backgroundColor" name="keyboardFocusIndicatorColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="Slider"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="2" id="BBm-94-d8e"/>
                             </constraints>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0M1-nQ-DQC">
                             <rect key="frame" x="163" y="0.0" width="50" height="20"/>
-                            <color key="backgroundColor" red="0.18823529410000001" green="0.51372549020000002" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" name="Slider"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="20" id="JNa-fZ-qMO"/>
                                 <constraint firstAttribute="width" constant="50" id="w7x-5H-kPP"/>
@@ -147,14 +148,14 @@
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wZH-WN-ppM" userLabel="line">
                             <rect key="frame" x="0.0" y="18" width="376" height="2"/>
-                            <color key="backgroundColor" name="keyboardFocusIndicatorColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="Slider"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="2" id="N3g-wa-M5l"/>
                             </constraints>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OxF-rH-3u9">
                             <rect key="frame" x="163" y="0.0" width="50" height="20"/>
-                            <color key="backgroundColor" red="0.18823529410000001" green="0.51372549020000002" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" name="Slider"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="50" id="7kf-IJ-wK0"/>
                                 <constraint firstAttribute="height" constant="20" id="fBY-eS-r3b"/>
@@ -213,7 +214,7 @@
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mqP-DA-OvO" userLabel="line">
                             <rect key="frame" x="0.0" y="0.0" width="2" height="473"/>
-                            <color key="backgroundColor" name="keyboardFocusIndicatorColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="Slider"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="2" id="wvS-1z-v3W"/>
                             </constraints>
@@ -223,7 +224,7 @@
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Sy-2k-fkg">
                                     <rect key="frame" x="0.0" y="33.5" width="38" height="50"/>
-                                    <color key="backgroundColor" red="0.18823529410000001" green="0.51372549020000002" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" name="Slider"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="20" id="9Zx-Ec-kGq"/>
                                         <constraint firstAttribute="height" constant="50" id="Vpv-7E-QAq"/>
@@ -288,7 +289,7 @@
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Oz-1H-aZ8">
                                     <rect key="frame" x="0.0" y="33.5" width="38" height="50"/>
-                                    <color key="backgroundColor" red="0.18823529410000001" green="0.51372549020000002" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" name="Slider"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="50" id="I2Z-I9-yg3"/>
                                     </constraints>
@@ -313,7 +314,7 @@
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cfM-PM-xaE" userLabel="line">
                             <rect key="frame" x="38" y="0.0" width="2" height="473"/>
-                            <color key="backgroundColor" name="keyboardFocusIndicatorColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="Slider"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="2" id="56A-66-wPh"/>
                             </constraints>
@@ -352,5 +353,8 @@
     <resources>
         <image name="check-solid" width="15" height="12"/>
         <image name="seperator-edit" width="13" height="13"/>
+        <namedColor name="Slider">
+            <color red="0.77899998426437378" green="0.50900000333786011" blue="0.91399997472763062" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

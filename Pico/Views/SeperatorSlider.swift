@@ -73,7 +73,7 @@ class SeperatorSlider: UIView, SliderSelectable {
         }
         
         addConstraint(NSLayoutConstraint(item: self, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 0))
-        backgroundColor = UIColor.yellow
+        backgroundColor = UIColor.yellow        
     }
             
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {

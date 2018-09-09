@@ -122,13 +122,16 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         case .screenshot:
             self.concateScreenshot(uiImages)
             self.navigationItem.title = "长截图"
+            activeCropMode()
         case .movie:
             MovieConcate(cells: self.container.cells, images: uiImages).scrollCells()
             hideLoading()
             self.navigationItem.title = "电影截图"
+            activeCropMode()
         default:
             self.navigationItem.title = "竖向拼接"
             hideLoading()
+            activeSlideMode()
         }
         
         scroll.layoutIfNeeded()
@@ -442,7 +445,7 @@ extension ComposeController {
             if highlight {
                 item.tintColor = UIColor.system
             } else {
-                item.tintColor = UIColor.lightGray
+                item.tintColor = UIColor.black
             }
         }
     }
