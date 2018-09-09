@@ -9,7 +9,7 @@
 import UIKit
 
 enum SliderType {
-    case crop, slide
+    case crop, slide, none
 }
 
 class ComposeController: UIViewController, EditDelegator, OnCellScroll {
@@ -454,25 +454,38 @@ extension ComposeController {
         hightlightSlideItem(index: 0)
         container.sliderType = .slide
         container.updateSliderType()
-        container.setEditStateInvalid()
         container.showSeperators(show: true)
     }
     
-    @IBAction func onSlideItemSelected(_ sender: UIBarButtonItem) {
-        activeSlideMode()
+    fileprivate func selectNoneSlideMode() {
+        container.sliderType = .none
+        container.updateSliderType()
+        container.showSeperators(show: false)
     }
     
     fileprivate func activeCropMode() {
         hightlightSlideItem(index: 1)
         container.sliderType = .crop
         container.updateSliderType()
-        container.setEditStateInvalid()
         container.showSeperators(show: true)
     }
     
     @IBAction func onCropItemSelected(_ sender: Any) {
-        activeCropMode()
+        if container.sliderType == .crop {
+            selectNoneSlideMode()
+        } else {
+            activeCropMode()
+        }
     }
+    
+    @IBAction func onSlideItemSelected(_ sender: UIBarButtonItem) {
+        if container.sliderType == .slide {
+            selectNoneSlideMode()
+        } else {
+            activeSlideMode()
+        }
+    }
+    
 }
 
 // MARK: - Zoom operation
