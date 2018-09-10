@@ -172,18 +172,6 @@
                                 <action selector="onClickCanncel:" destination="M0x-L9-9tl" id="WhO-yB-noZ"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="2DG-bT-sKa"/>
-                        <barButtonItem enabled="NO" image="comments-regular" id="tnW-Q3-J2P" userLabel="Long Screenshot">
-                            <connections>
-                                <segue destination="h2r-xB-xzJ" kind="show" identifier="composeScreenshot" id="oka-ze-DW4"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="aTV-Hb-8YJ"/>
-                        <barButtonItem enabled="NO" title="电影截图" image="film-solid" id="koE-GC-NJh">
-                            <connections>
-                                <segue destination="h2r-xB-xzJ" kind="show" identifier="composeMovie" id="yxL-aV-NMS"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="MlG-F4-Pt3"/>
                         <barButtonItem enabled="NO" title="竖向拼接" image="clone-regular" id="YC7-Tx-url">
                             <connections>
@@ -203,8 +191,6 @@
                     <connections>
                         <outlet property="cancelItem" destination="CjG-Lh-uqX" id="WJQ-eP-gzP"/>
                         <outlet property="doneItem" destination="YC7-Tx-url" id="Op5-To-ceL"/>
-                        <outlet property="longScreenShotItem" destination="tnW-Q3-J2P" id="NKh-nj-GbT"/>
-                        <outlet property="movieItem" destination="koE-GC-NJh" id="gmA-kW-XYe"/>
                         <outlet property="recentScreenshotItem" destination="j3o-LW-0EB" id="jux-Od-QF9"/>
                         <outlet property="selectAlbumContainer" destination="8fy-vO-tKd" id="wZv-5F-CLQ"/>
                     </connections>
@@ -596,10 +582,8 @@
         <image name="ban-solid" width="24" height="24"/>
         <image name="check-circle-solid" width="24" height="24"/>
         <image name="clone-regular" width="22" height="22"/>
-        <image name="comments-regular" width="22" height="18"/>
         <image name="crop-alt-solid" width="24" height="24"/>
         <image name="edit-solid" width="24" height="22"/>
-        <image name="film-solid" width="22" height="17"/>
         <image name="full-frame" width="24" height="24"/>
         <image name="pixel-large" width="25" height="25"/>
         <image name="pixel-medium" width="25" height="26"/>
