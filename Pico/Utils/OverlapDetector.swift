@@ -224,7 +224,7 @@ class OverlapDetector {
                     return completeHandler(0, 0)
                 }
                 
-                let prepare = bundle.0
+                let prepare = bundle.0            
                 let imageOverlap = bundle.1
 
                 // upRectInCGImage coordinate is LTC
