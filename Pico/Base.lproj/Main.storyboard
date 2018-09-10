@@ -352,6 +352,11 @@
                                     <constraint firstItem="bEx-xN-zR0" firstAttribute="leading" secondItem="QGp-s0-rHz" secondAttribute="leading" priority="750" id="yqh-mR-IfS"/>
                                 </constraints>
                             </scrollView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="cL7-PC-7Dn">
+                                <rect key="frame" x="169" y="315" width="37" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="color" name="headerColor" catalog="System" colorSpace="catalog"/>
+                            </activityIndicatorView>
                             <view opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hT0-KK-yMI" customClass="PreviewCover" customModule="Pico" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="-44" width="375" height="711"/>
                                 <connections>
@@ -505,6 +510,7 @@
                     <connections>
                         <outlet property="cover" destination="hT0-KK-yMI" id="XjQ-Ag-9yL"/>
                         <outlet property="frameToolbar" destination="sVd-lL-Emf" id="pmU-15-yCA"/>
+                        <outlet property="loadingIndicator" destination="cL7-PC-7Dn" id="6SV-nN-NXW"/>
                         <outlet property="pixellateToolbar" destination="MqJ-uF-SXN" id="jHd-h8-tAC"/>
                         <outlet property="pixelllateGesture" destination="JII-QL-bxo" id="0qo-qM-Rdx"/>
                         <outlet property="preview" destination="bEx-xN-zR0" id="oGH-gt-krk"/>

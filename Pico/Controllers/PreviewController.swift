@@ -81,7 +81,9 @@ class PreviewController: UIViewController {
     
     @IBOutlet var pixelItems: [UIBarButtonItem]!
     let bottomToolbarHeight = CGFloat(44)
+    var isDev: Bool = true
     
+    @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     var mode:PreviewMode = .none {
         willSet(mode) {
             switch mode {
@@ -102,28 +104,18 @@ class PreviewController: UIViewController {
     }
     
     func forDev() -> Bool {
-        return uiImages == nil
+        return isDev
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        if forDev() {
-            uiImages = Array(0..<2).map {sampleImages[$0%2]}
-            imageEntities = sampleImages.map {ImageMocker(image: $0)}
-            var height = CGFloat(0)
-            for uiImage in uiImages! {
-                cellFrames.append(CGRect(origin: CGPoint(x: 0, y: height), size: uiImage.size))
-                cropRects.append(CGRect(origin: CGPoint.zero, size: CGSize(width: 1, height: 1)))
-                height = height + uiImage.size.height
-            }            
-        }
-        
+    var initializeClosure: (() -> Void)?
+    
+    func setupAfterLoaded() {
         preview.uiImages = uiImages
         preview.image = preview.setupCells(images: (uiImages!.map({ (uiImage) -> CIImage in
             return CIImage(image: uiImage)!
         })))
 
+        
         let previewImageSize = preview.image.extent
         let ratio: CGFloat = previewImageSize.width/previewImageSize.height
         
@@ -140,10 +132,41 @@ class PreviewController: UIViewController {
         scroll.maximumZoomScale = 2.0
         scroll.minimumZoomScale = 0.5
         scroll.delegate = self
-
+        
         onSignChanged(sign: nil)
+        hideLoading()
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        if forDev() {
+            uiImages = Array(0..<2).map {sampleImages[$0%2]}
+            imageEntities = sampleImages.map {ImageMocker(image: $0)}
+            var height = CGFloat(0)
+            for uiImage in uiImages! {
+                cellFrames.append(CGRect(origin: CGPoint(x: 0, y: height), size: uiImage.size))
+                cropRects.append(CGRect(origin: CGPoint.zero, size: CGSize(width: 1, height: 1)))
+                height = height + uiImage.size.height
+            }            
+        }
+
+        if let initializeClosure = initializeClosure {
+            showLoading()
+            initializeClosure()
+        }
+        initializeClosure = nil
+    }
+    
+    func showLoading() {
+        loadingIndicator.startAnimating()
+        scroll.isHidden = true
+    }
+    
+    func hideLoading() {
+        loadingIndicator.stopAnimating()
+        scroll.isHidden = false
+    }
 
     override func viewDidLayoutSubviews() {
         centerPreview()
@@ -342,7 +365,7 @@ extension PreviewController {
 extension PreviewController : ShareImageGenerator {
     func generateImage(callback: @escaping (UIImage) -> Void) {
         preview.renderImageForExport(imageEntities: imageEntities, cropRects: cropRects, complete: { image in
-            DispatchQueue.main.async {                
+            DispatchQueue.main.async {
                 callback(image)
             }
         })

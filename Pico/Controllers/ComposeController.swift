@@ -412,24 +412,30 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         case "preview":
              container.showSeperators(show: false)
              let previewController: PreviewController = segue.destination as! PreviewController
-             previewController.uiImages = container.cells.map({ (cell) -> UIImage in
-                return cell.exportSnapshot(wrapperBounds: cell.convert(containerWrapper.bounds, from: containerWrapper))
-             })
              
-             previewController.cropRects = container.cells.map({ (cell) -> CGRect in
-                return cell.getIntersection(wrapperBounds: cell.convert(containerWrapper.bounds, from: containerWrapper))
-             })
+             previewController.isDev = false
              
-             var cellFrames = [CGRect]()
-             var height = CGFloat(0)
-             for img in previewController.uiImages! {
-                cellFrames.append(CGRect(origin: CGPoint(x: 0, y: height), size: img.size))
-                height = height + img.size.height
+             previewController.initializeClosure = {() in
+                previewController.uiImages = self.container.cells.map({ (cell) -> UIImage in
+                    return cell.exportSnapshot(wrapperBounds: cell.convert(self.containerWrapper.bounds, from: self.containerWrapper))
+                })
+                
+                previewController.cropRects = self.container.cells.map({ (cell) -> CGRect in
+                    return cell.getIntersection(wrapperBounds: cell.convert(self.containerWrapper.bounds, from: self.containerWrapper))
+                })
+                
+                var cellFrames = [CGRect]()
+                var height = CGFloat(0)
+                for img in previewController.uiImages! {
+                    cellFrames.append(CGRect(origin: CGPoint(x: 0, y: height), size: img.size))
+                    height = height + img.size.height
+                }
+                previewController.cellFrames = cellFrames
+                
+                previewController.imageEntities = self.loadedImages
+                self.container.showSeperators(show: true)
+                previewController.setupAfterLoaded()
              }
-             previewController.cellFrames = cellFrames
-             
-             previewController.imageEntities = loadedImages
-             container.showSeperators(show: true)
         default:
             break
         }
