@@ -9,10 +9,15 @@
 import UIKit
 
 class PickImageCell: UICollectionViewCell {
+    
+    enum ImageType {
+        case none, concatenated, screenshot
+    }
 
     @IBOutlet weak var image: UIImageView!
     @IBOutlet weak var selectedSequence: UIView!
     @IBOutlet weak var sequence: UILabel!
+    @IBOutlet weak var stateIcon: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -26,5 +31,17 @@ class PickImageCell: UICollectionViewCell {
     
     func unselect() {
         selectedSequence.isHidden = true
+    }
+    
+    func setImageType(_ type: ImageType) {
+        switch type {
+        case .none:
+            stateIcon.isHidden = true
+        case .screenshot:
+            stateIcon.image = #imageLiteral(resourceName: "mobile-alt-solid")
+            stateIcon.isHidden = false
+        case .concatenated:
+            stateIcon.isHidden = false
+        }
     }
 }

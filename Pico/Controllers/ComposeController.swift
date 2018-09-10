@@ -450,6 +450,10 @@ extension ComposeController {
         }
     }
     
+    func dimAllSlideItems() {
+        hightlightSlideItem(index: -1)
+    }
+    
     fileprivate func activeSlideMode() {
         hightlightSlideItem(index: 0)
         container.sliderType = .slide
@@ -459,6 +463,7 @@ extension ComposeController {
     
     fileprivate func selectNoneSlideMode() {
         container.sliderType = .none
+        dimAllSlideItems()
         container.updateSliderType()
         container.showSeperators(show: false)
     }
