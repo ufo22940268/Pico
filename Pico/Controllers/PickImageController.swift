@@ -158,6 +158,8 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
             doneImage = #imageLiteral(resourceName: "mobile-solid")
         }
         doneItem.image = doneImage
+        
+        
 //        UIView.transition(with: doneItem.customView!,
 //                          duration: 0.75,
 //                          options: .transitionCrossDissolve,
@@ -186,36 +188,46 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
     
     
     
+    fileprivate func prepareForNormalConcatenate(_ segue: UIStoryboardSegue) {
+        let compose = segue.destination as! ComposeController
+        compose.type = .normal
+        compose.loadedImages = imageGallery.selectImages
+        
+        compose.loadUIImageHandler = { [weak self] () -> Void in
+            self?.imageGallery.getImagesFromViewCache(images: self?.imageGallery.selectImages) {
+                compose.loadedUIImages = $0
+            }
+        }
+    }
+    
+    fileprivate func prepareForScreenshotConcatenate(_ segue: UIStoryboardSegue) {
+        let compose = segue.destination as! ComposeController
+        compose.type = .screenshot
+        compose.loadedImages = imageGallery.selectImages.sorted(by: { (img1, img2) -> Bool in
+            if let d1 = img1.asset.creationDate, let d2 = img2.asset.creationDate {
+                return d1 < d2
+            } else {
+                return true
+            }
+        })
+        
+        compose.loadUIImageHandler = { [weak self] () -> Void in
+            self?.imageGallery.getImagesFromViewCache(images: compose.loadedImages) {
+                compose.loadedUIImages = $0
+            }
+        }
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "imageGallery":
             imageGallery = segue.destination as! ImageGalleryController
             imageGallery.delegate = self
-        case "composeNormal":
-            let compose = segue.destination as! ComposeController
-            compose.type = .normal
-            compose.loadedImages = imageGallery.selectImages
-            
-            compose.loadUIImageHandler = { [weak self] () -> Void in
-                self?.imageGallery.getImagesFromViewCache(images: self?.imageGallery.selectImages) {
-                    compose.loadedUIImages = $0
-                }
-            }
-        case "composeScreenshot":
-            let compose = segue.destination as! ComposeController
-            compose.type = .screenshot
-            compose.loadedImages = imageGallery.selectImages.sorted(by: { (img1, img2) -> Bool in
-                if let d1 = img1.asset.creationDate, let d2 = img2.asset.creationDate {
-                    return d1 < d2
-                } else {
-                    return true
-                }
-            }) 
- 
-            compose.loadUIImageHandler = { [weak self] () -> Void in
-                self?.imageGallery.getImagesFromViewCache(images: compose.loadedImages) {
-                    compose.loadedUIImages = $0
-                }
+        case "compose":
+            if getUserIntention() == .normal {
+                prepareForNormalConcatenate(segue)
+            } else {
+                prepareForScreenshotConcatenate(segue)
             }
         case "composeRecentScreenshot":
             let compose = segue.destination as! ComposeController
