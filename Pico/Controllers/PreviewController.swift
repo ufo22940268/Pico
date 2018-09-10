@@ -342,7 +342,9 @@ extension PreviewController {
 extension PreviewController : ShareImageGenerator {
     func generateImage(callback: @escaping (UIImage) -> Void) {
         preview.renderImageForExport(imageEntities: imageEntities, cropRects: cropRects, complete: { image in
-            callback(image)
+            DispatchQueue.main.async {                
+                callback(image)
+            }
         })
     }
 }
