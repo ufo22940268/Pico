@@ -30,6 +30,10 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
     
     let reloadQueue = DispatchQueue(label: "com.bettycc.reloadQueue")
     
+    enum Intention {
+        case normal, screenshot
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         pickNavigationButton = UINib(nibName: "PickNavigationButton", bundle: nil).instantiate(withOwner: self, options: nil).first as! PickNavigationButton
@@ -145,23 +149,35 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
         cancelItem.isEnabled = enabled
         doneItem.isEnabled = enabled
         
-        if (selectedImages.count > 1) {
-            let firstSize = selectedImages.first!
-            let equalLength = selectedImages[1..<selectedImages.count].filter{
-                $0.asset.pixelHeight != firstSize.asset.pixelHeight && $0.asset.pixelWidth != firstSize.asset.pixelWidth
-                }.isEmpty
-            
-            let isScreenshot = (selectedImages.filter {img in !CGSize(width: img.asset.pixelWidth, height: img.asset.pixelHeight).isScreenshot()}).isEmpty
+        let intention = getUserIntention()
+        var doneImage: UIImage
+        switch intention {
+        case .normal:
+            doneImage = #imageLiteral(resourceName: "clone-regular")
+        case .screenshot:
+            doneImage = #imageLiteral(resourceName: "mobile-solid")
         }
+        doneItem.image = doneImage
+//        UIView.transition(with: doneItem.customView!,
+//                          duration: 0.75,
+//                          options: .transitionCrossDissolve,
+//                          animations: { self.doneItem.image = doneImage },
+//                          completion: nil)
     }
     
     func onImageSelected(selectedImages: [Image]) {
         updateTabbarItems(selectedImages)
     }
     
-    @IBAction func onDone(_ sender: UIBarButtonItem) {
+    func getUserIntention() -> Intention {
         let containsOtherThanScreenshot = imageGallery.selectImages.filter {!Album.isScreenshot(image: $0)}
-        if containsOtherThanScreenshot.isEmpty {
+        return (containsOtherThanScreenshot.isEmpty && (!imageGallery.selectImages.isEmpty)) ?  Intention.screenshot : Intention.normal
+    }
+    
+    
+    @IBAction func onDone(_ sender: UIBarButtonItem) {
+        let intention = getUserIntention()
+        if intention == .normal {
             performSegue(withIdentifier: "composeNormal", sender: self)
         } else {
             performSegue(withIdentifier: "composeScreenshot", sender: self)
