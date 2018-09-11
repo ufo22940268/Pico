@@ -94,14 +94,16 @@ class ShareManager: NSObject {
         let message = WXMediaMessage()
         message.setThumbImage(image.thumbnail())
         let imageObj = WXImageObject()
-        imageObj.imageData = UIImagePNGRepresentation(image)
+        imageObj.imageData = UIImageJPEGRepresentation(image, 1)
         message.mediaObject = imageObj
-        
+     
+        WXApi.startLog(by: .detail, logBlock: {s in print("wx log: \(s)")})
         let req = SendMessageToWXReq()
         req.message = message
         req.bText = false
         req.scene = Int32(scene.rawValue)
         WXApi.send(req)
+        WXApi.stopLog()
     }
     
     @objc func afterSaveToPhoto(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
