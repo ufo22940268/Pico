@@ -37,16 +37,16 @@ class PreviewCellDecorator {
     
     /// Constructor for export
     convenience init(image: CIImage, cell: PreviewCell) {
-        self.init(image: image, scale: cell.decorator.pixellateScale)
+        self.init(image: image, scale: cell.decorator!.pixellateScale)
         boundWidth = image.extent.width
         boundHeight = image.extent.height
         
-        if let sign = cell.decorator.sign {
+        if let sign = cell.decorator!.sign {
             self.sign = sign
-            self.signAlign = cell.decorator.signAlign
+            self.signAlign = cell.decorator!.signAlign
         }
         
-        cropRects = cell.decorator.cropRects
+        cropRects = cell.decorator!.cropRects
         fontSize = PreviewConstants.signFontSize*(image.extent.width/UIScreen.main.bounds.width)
     }
     

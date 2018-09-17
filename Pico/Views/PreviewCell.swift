@@ -9,29 +9,42 @@
 import Foundation
 import UIKit
 import GLKit
+import PhotosUI
 
 class PreviewCell: GLKView {
     
     var ciContext: CIContext!
-    var image: CIImage!
-    var decorator: PreviewCellDecorator!
+    var image: Image!
+    var decorator: PreviewCellDecorator?
+    var imageManager = PHCachingImageManager.default()
     
     override var bounds: CGRect {
         willSet(newBounds) {
-            decorator.boundWidth = newBounds.width
-            decorator.boundHeight = newBounds.height
+            if let decorator = decorator {
+                decorator.boundWidth = newBounds.width
+                decorator.boundHeight = newBounds.height
+            }
         }
     }
     
-    init(image: CIImage) {
+    init(image: Image) {
         super.init(frame: CGRect.zero, context: EAGLContext(api: .openGLES3)!)
         self.image = image
         ciContext = CIContext(eaglContext: context)
-        decorator = PreviewCellDecorator(image: image, scale: .small)
+//        decorator = PreviewCellDecorator(image: image, scale: .small)
         
         translatesAutoresizingMaskIntoConstraints = false
-        let ratio = image.extent.width/image.extent.height
+        let ratio = CGFloat(image.asset.pixelWidth)/CGFloat(image.asset.pixelHeight)
         widthAnchor.constraint(equalTo: heightAnchor, multiplier: ratio).isActive = true
+        
+        let options = PHImageRequestOptions()
+        options.isNetworkAccessAllowed = true
+        imageManager.requestImage(for: image.asset, targetSize: UIScreen.main.bounds.size, contentMode: .aspectFill, options: options) { (uiImage, config) in
+            if let uiImage = uiImage {
+                self.decorator = PreviewCellDecorator(image: CIImage(image: uiImage)!, scale: .small)
+                self.setNeedsDisplay()
+            }
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -39,8 +52,10 @@ class PreviewCell: GLKView {
     }
     
     override func draw(_ rect: CGRect) {
-        let lastImage = decorator.composeLastImageWithSign()
-        ciContext.draw(lastImage, in: rect.applying(CGAffineTransform(scaleX: UIScreen.main.scale, y: UIScreen.main.scale+0.1)), from: lastImage.extent)
+        if let decorator = decorator {
+            let lastImage = decorator.composeLastImageWithSign()
+            ciContext.draw(lastImage, in: rect.applying(CGAffineTransform(scaleX: UIScreen.main.scale, y: UIScreen.main.scale+0.1)), from: lastImage.extent)
+        }
      
         //Very bad resolution.
 //        ciContext.draw(lastImage, in: rect.applying(CGAffineTransform(scaleX: UIScreen.main.scale, y: UIScreen.main.scale)), from: lastImage.extent)
@@ -52,18 +67,18 @@ class PreviewCell: GLKView {
 extension PreviewCell {
     
     func updateCrop(with normalizedRect: CGRect, identifier: CropArea) {
-        decorator.updateCrop(with: normalizedRect, identifier: identifier)
+        decorator?.updateCrop(with: normalizedRect, identifier: identifier)
         setNeedsDisplay()
     }
     
     
     func resetPixel() {
-        decorator.resetPixel()
+        decorator?.resetPixel()
         setNeedsDisplay()
     }
     
     func setPixelScale(_ scale: PreviewPixellateScale) {
-        decorator.updatePixelScale(scale)
+        decorator?.updatePixelScale(scale)
     }
 }
 
@@ -71,12 +86,12 @@ extension PreviewCell {
 extension PreviewCell {
     
     func setSign(_ sign: String?) {
-        decorator.setSign(sign)
+        decorator?.setSign(sign)
         setNeedsDisplay()
     }
     
     func setSignAlign(_ align: PreviewAlignMode) {
-        decorator.setSignAlign(align)
+        decorator?.setSignAlign(align)
         setNeedsDisplay()
     }
 }
