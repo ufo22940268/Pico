@@ -112,7 +112,6 @@ class PreviewView: UIStackView {
 
     func setupCells(images: [Image], fillContainer: Bool = true) -> Void {
         cells = imageEntities.map {addCell(with: $0)}
-
     }
     
     func applyPixel(image: CIImage, pixelScale: PreviewPixellateScale) -> CIImage {
@@ -154,6 +153,19 @@ class PreviewView: UIStackView {
             
             complete(uiCanvas)
         })
+    }
+    
+    func loadImages(scrollView: UIScrollView) {
+        let visibleRect = convert(scrollView.bounds.intersection(self.frame), from: scrollView)
+        let visibleCells = cells.filter {$0.frame.intersects(visibleRect)}
+        
+        let loadCells = visibleCells
+        loadCells.forEach {$0.loadImage()}
+        
+        let unloadCells = cells.filter {!loadCells.contains($0)}
+        unloadCells.forEach {$0.unloadImage()}
+        
+        print(loadCells.count, unloadCells.count)
     }
 }
 
