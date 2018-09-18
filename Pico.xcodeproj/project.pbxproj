@@ -456,6 +456,7 @@
 				TargetAttributes = {
 					42A18C4620EAF5A600DD4AA5 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 						SystemCapabilities = {
 							com.apple.DataProtection = {
 								enabled = 0;
@@ -464,10 +465,12 @@
 					};
 					42A18C5A20EAF5A900DD4AA5 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 						TestTargetID = 42A18C4620EAF5A600DD4AA5;
 					};
 					42A18C6520EAF5A900DD4AA5 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 						TestTargetID = 42A18C4620EAF5A600DD4AA5;
 					};
 				};
@@ -777,7 +780,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.bettycc.Pico;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -802,7 +805,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.bettycc.Pico;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -822,7 +825,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bettycc.PicoTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pico.app/Pico";
 			};
@@ -843,7 +846,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bettycc.PicoTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pico.app/Pico";
 			};
@@ -863,7 +866,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bettycc.PicoUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Pico;
 			};
@@ -883,7 +886,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bettycc.PicoUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Pico;
 			};
