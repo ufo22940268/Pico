@@ -92,6 +92,7 @@ class PreviewView: UIStackView {
         axis = .vertical
         directionalLayoutMargins = NSDirectionalEdgeInsets.zero
         
+        ciContext = CIContext(eaglContext: eaglContext)
     }
     
     func convertUIRectToCIRect(uiRect: CGRect) -> CGRect {
@@ -104,8 +105,10 @@ class PreviewView: UIStackView {
         return image.transformed(by: CGAffineTransform(scaleX: scale, y: scale))
     }
     
+    let eaglContext = EAGLContext(api: .openGLES3)!
+    
     func addCell(with image: Image) -> PreviewCell {
-        let cell = PreviewCell(image: image)
+        let cell = PreviewCell(image: image, ciContext: ciContext, eaglContext: eaglContext)
         addArrangedSubview(cell)
         return cell
     }
@@ -162,8 +165,11 @@ class PreviewView: UIStackView {
         let loadCells = visibleCells
         loadCells.forEach {$0.loadImage()}
         
+        
         let unloadCells = cells.filter {!loadCells.contains($0)}
         unloadCells.forEach {$0.unloadImage()}
+        
+        print("loadCells: \(loadCells.count) unloadCells: \(unloadCells.count)")
     }
 }
 

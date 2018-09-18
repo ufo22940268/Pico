@@ -30,12 +30,10 @@ class PreviewCell: GLKView {
         }
     }
     
-    init(image: Image) {
-        super.init(frame: CGRect.zero, context: EAGLContext(api: .openGLES3)!)
+    init(image: Image, ciContext: CIContext, eaglContext: EAGLContext) {
+        super.init(frame: CGRect.zero, context: eaglContext)
         self.image = image
-        ciContext = CIContext(eaglContext: context)
-//        decorator = PreviewCellDecorator(image: image, scale: .small)
-        
+        self.ciContext = ciContext
         translatesAutoresizingMaskIntoConstraints = false
         let ratio = CGFloat(image.asset.pixelWidth)/CGFloat(image.asset.pixelHeight)
         widthAnchor.constraint(equalTo: heightAnchor, multiplier: ratio).isActive = true
@@ -51,9 +49,9 @@ class PreviewCell: GLKView {
     override func draw(_ rect: CGRect) {
         let drawRect: CGRect = rect.applying(CGAffineTransform(scaleX: UIScreen.main.scale, y: UIScreen.main.scale+0.1))
         if let decorator = decorator {
-            let lastImage = decorator.composeLastImageWithSign()
-            ciContext.draw(lastImage, in: drawRect, from: lastImage.extent)
-//        } else {
+//            let lastImage = decorator.composeLastImageWithSign()
+//            ciContext.draw(lastImage, in: drawRect, from: lastImage.extent)
+        } else {
 //            ciContext.draw(placeholderImage, in: drawRect, from: drawRect)
         }
      
@@ -75,6 +73,7 @@ class PreviewCell: GLKView {
                 self.decorator = PreviewCellDecorator(image: CIImage(image: uiImage)!, scale: .small)
                 self.decorator?.boundWidth = self.bounds.width
                 self.decorator?.boundHeight = self.bounds.height
+                self.bindDrawable()
                 self.setNeedsDisplay()
             }
         }
@@ -83,6 +82,7 @@ class PreviewCell: GLKView {
     func unloadImage() {
         decorator = nil
         loadingSeq = 0
+        self.deleteDrawable()
     }
     
 }
