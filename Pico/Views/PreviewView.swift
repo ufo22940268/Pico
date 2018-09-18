@@ -174,14 +174,14 @@ extension PreviewView {
         return cells.filter {$0.frame.intersects(rect)}
     }
     
-    fileprivate func pixellate(forExport: Bool) {
+    fileprivate func pixelAllCells(forExport: Bool) {
         for index in 0..<crops.count {
             if !forExport && crops[index].rendered != false {
                 continue
             }
             
             let viewCrop = crops[index]
-            var viewRect: CGRect = viewCrop.rect
+            let viewRect: CGRect = viewCrop.rect
             
             let rectInUICoordinate = viewRect.applying(transform.scaledBy(x: bounds.width, y: bounds.height))
             findInstersectCells(with: rectInUICoordinate)?.forEach { cell in
@@ -192,8 +192,6 @@ extension PreviewView {
             
         }
     }
-    
-
     
     func undo() {
         if crops.count > 0 {
@@ -208,11 +206,11 @@ extension PreviewView {
     }
     
     func refreshPixelImage() {
-        pixellate(forExport: false)
+        pixelAllCells(forExport: false)
     }
     
     func setPixelScale(scale: PreviewPixellateScale) {
-        cells.map {$0.setPixelScale(scale)}
+        cells.forEach {$0.setPixelScale(scale)}
     }
     
     func updatePixellate(uiRect: CGRect) {
