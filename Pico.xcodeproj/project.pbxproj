@@ -67,6 +67,7 @@
 		42C4066F20F446750074B728 /* OverlapDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C4066E20F446750074B728 /* OverlapDetector.swift */; };
 		42C4067120F44E820074B728 /* RGBAImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C4067020F44E810074B728 /* RGBAImage.swift */; };
 		42C89D6F210998AB00792EED /* VNRectangleObservationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C89D6E210998AB00792EED /* VNRectangleObservationExtension.swift */; };
+		42D69DC12151EF1A00BAD5BD /* PixelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D69DC02151EF1A00BAD5BD /* PixelView.swift */; };
 		42DA302A210B551A00C19AB8 /* SideSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DA3029210B551A00C19AB8 /* SideSlider.swift */; };
 		42E93CE82136979C00FB0433 /* FrameDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E93CE72136979C00FB0433 /* FrameDetector.swift */; };
 		42F14EF520F5D751009E6716 /* PickNavigationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F14EF420F5D751009E6716 /* PickNavigationButton.swift */; };
@@ -178,6 +179,7 @@
 		42C4066E20F446750074B728 /* OverlapDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlapDetector.swift; sourceTree = "<group>"; };
 		42C4067020F44E810074B728 /* RGBAImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBAImage.swift; sourceTree = "<group>"; };
 		42C89D6E210998AB00792EED /* VNRectangleObservationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VNRectangleObservationExtension.swift; sourceTree = "<group>"; };
+		42D69DC02151EF1A00BAD5BD /* PixelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelView.swift; sourceTree = "<group>"; };
 		42DA3029210B551A00C19AB8 /* SideSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideSlider.swift; sourceTree = "<group>"; };
 		42E93CE72136979C00FB0433 /* FrameDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDetector.swift; sourceTree = "<group>"; };
 		42F14EF420F5D751009E6716 /* PickNavigationButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickNavigationButton.swift; sourceTree = "<group>"; };
@@ -383,6 +385,7 @@
 				421BC84A20FE0C9600F8C89F /* PreviewView.swift */,
 				4242142C21192E7F0079E61D /* SliderProtocal.swift */,
 				42BF6E1A213C87B500458E78 /* PreviewCell.swift */,
+				42D69DC02151EF1A00BAD5BD /* PixelView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -538,6 +541,7 @@
 				420EF44820F965FA006CCDD3 /* AutoConcate.swift in Sources */,
 				42143E0020F83D7900000487 /* GalleryDetailController.swift in Sources */,
 				420EF45220FD5665006CCDD3 /* PreviewCover.swift in Sources */,
+				42D69DC12151EF1A00BAD5BD /* PixelView.swift in Sources */,
 				42A18C7A20EAF8A500DD4AA5 /* ImageGalleryController.swift in Sources */,
 				420EF44C20FCA784006CCDD3 /* PreviewController.swift in Sources */,
 				425F9B3720EB402300B0F2CF /* ImageCell.swift in Sources */,

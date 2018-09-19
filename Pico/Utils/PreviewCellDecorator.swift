@@ -26,23 +26,20 @@ class PreviewCellDecorator {
     var signImage: CIImage?
     var fontSize = PreviewConstants.signFontSize
     
-    var renderCache: UIImage!
+    var lastUIImage: UIImage? {
+        guard let lastImage = lastImage else {return nil}
+        return UIImage(ciImage: lastImage)
+    }
     
     /// Constructor for view
-    init(image: CIImage, scale: PreviewPixellateScale) {
-        self.image = image
-        self.lastImage = image
+    init(scale: PreviewPixellateScale) {
         self.pixellateScale = scale
-        
-        preparePixellateImages(image)
-        
-        updateRenderCache()
     }
     
     
     /// Constructor for export
     convenience init(image: CIImage, cell: PreviewCell) {
-        self.init(image: image, scale: cell.decorator!.pixellateScale)
+        self.init(scale: cell.decorator!.pixellateScale)
         boundWidth = image.extent.width
         boundHeight = image.extent.height
         
@@ -53,11 +50,26 @@ class PreviewCellDecorator {
         
         cropRects = cell.decorator!.cropRects
         fontSize = PreviewConstants.signFontSize*(image.extent.width/UIScreen.main.bounds.width)
+        setImage(image)
+    }
+
+    func isImageLoaded() -> Bool {
+        return self.lastImage != nil
     }
     
-    func updateRenderCache() {
-        renderCache = composeLastImageWithSign().convertToUIImage()
+    func setImage(_ image: CIImage) {
+        self.image = image
+        self.lastImage = image
+        
+        preparePixellateImages(image)
     }
+    
+    func releaseImage() {
+        self.image = nil
+        self.lastImage = nil
+        pixellateImages.removeAll()
+    }
+    
     
     func toUICoordinate(from rect: CGRect) -> CGRect {
         return rect.applying(CGAffineTransform(scaleX: boundWidth, y: boundHeight))
@@ -70,7 +82,18 @@ class PreviewCellDecorator {
     func updateCrop(with normalizedRect: CGRect, identifier: CropArea) {
         cropRects[identifier] = normalizedRect
         renderCrop(with: normalizedRect)
-        updateRenderCache()
+    }
+    
+    func removeCrop(by identifier: CropArea) {
+        cropRects.removeValue(forKey: identifier)
+    }
+    
+//    func sync(with areas: [CropArea]) {
+    func sync(with areas: [CropArea:CGRect]) {
+        cropRects.removeAll()
+        for (area, cropRect) in areas {
+            cropRects[area] = cropRect
+        }
     }
     
     func preparePixellateImages(_ image: CIImage) {

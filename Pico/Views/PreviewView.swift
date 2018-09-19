@@ -11,22 +11,22 @@ import GLKit
 
 struct CropArea: Hashable {
     var hashValue: Int {
-        return Int(rect.width*rect.height)
+        return seq
     }
     
     static func == (lhs: CropArea, rhs: CropArea) -> Bool {
-        return lhs.rect == rhs.rect && lhs.rendered == rhs.rendered
+        return lhs.seq == rhs.seq
     }
     
-    init(rect: CGRect) {
+    init(rect: CGRect, seq: Int) {
         self.rect = rect
+        self.seq = seq
     }
-    var rect: CGRect!
-    var rendered = false
     
-    mutating func setRendered(rendered: Bool) {
-        self.rendered = rendered
-    }
+    var rect: CGRect!
+    var seq: Int!
+    var closed: Bool = false
+    var cropRect: CGRect?
 }
 
 enum PreviewPixellateScale: Int {
@@ -74,7 +74,7 @@ class PreviewView: UIStackView {
     
     var selection: CGRect?
     var ciContext: CIContext!
-    var crops: [CropArea] = [CropArea]()
+    var areas: [CropArea] = [CropArea]()
     var labelView: UILabel!
     var pixellateImages = [PreviewPixellateScale: CIImage]()
     
@@ -93,6 +93,7 @@ class PreviewView: UIStackView {
         directionalLayoutMargins = NSDirectionalEdgeInsets.zero
         
         ciContext = CIContext(eaglContext: eaglContext)
+        
     }
     
     func convertUIRectToCIRect(uiRect: CGRect) -> CGRect {
@@ -168,8 +169,6 @@ class PreviewView: UIStackView {
         
         let unloadCells = cells.filter {!loadCells.contains($0)}
         unloadCells.forEach {$0.unloadImage()}
-        
-        print("loadCells: \(loadCells.count) unloadCells: \(unloadCells.count)")
     }
 }
 
@@ -180,13 +179,56 @@ extension PreviewView {
         return cells.filter {$0.frame.intersects(rect)}
     }
     
-    fileprivate func pixelAllCells(forExport: Bool) {
-        for index in 0..<crops.count {
-            if !forExport && crops[index].rendered != false {
-                continue
+    func undo() {
+        if areas.count > 0 {
+            let removedCropRect = areas.removeLast()
+            syncCropsToCell()
+            reloadVisibleCells()
+        }
+    }
+    
+    func syncCropsToCell() {
+        var dict = [PreviewCell: [CropArea]]()
+        for area in areas {
+            if let cells = findInstersectCells(with: area.rect.applying(CGAffineTransform(scaleX: bounds.width, y: bounds.height))) {
+                for cell in cells {
+                    if dict[cell] == nil {
+                        dict[cell] = [CropArea]()
+                    }
+                    
+                    dict[cell]?.append(area)
+                }
             }
-            
-            let viewCrop = crops[index]
+        }
+        
+        for (cell, areas) in dict {
+            var areasWithCropRect = [CropArea: CGRect]()
+            for area in areas {
+                let intersectRect = area.rect.applying(CGAffineTransform(scaleX: bounds.width, y: bounds.height)).intersection(cell.frame)
+                let cropRect = cell.convert(intersectRect, from: self).applying(CGAffineTransform(scaleX: 1/CGFloat(cell.bounds.width), y: 1/CGFloat(cell.bounds.height)))
+                areasWithCropRect[area] = cropRect
+            }
+            cell.sync(with: areasWithCropRect)
+        }
+        
+        for cell in cells where !dict.keys.contains(cell) {
+            cell.sync(with: [CropArea:CGRect]())
+        }
+    }
+    
+    func reloadVisibleCells() {
+        let displayRect = convert(superview!.bounds, from: superview).intersection(bounds)
+        findInstersectCells(with: displayRect)?.forEach {$0.updateCrop()}
+    }
+    
+    fileprivate func addPixellate(uiRect: CGRect) {
+        let ciRect = convertUIRectToCIRect(uiRect: uiRect)
+        areas.append(CropArea(rect: ciRect, seq: areas.count))
+    }
+    
+    func updatePixelInCells() {
+        for index in 0..<areas.count {
+            let viewCrop = areas[index]
             let viewRect: CGRect = viewCrop.rect
             
             let rectInUICoordinate = viewRect.applying(transform.scaledBy(x: bounds.width, y: bounds.height))
@@ -194,25 +236,7 @@ extension PreviewView {
                 let intersectionCrop = cell.convert(rectInUICoordinate.intersection(cell.frame), from: self).applying(CGAffineTransform(scaleX: 1/CGFloat(cell.bounds.width), y: 1/CGFloat(cell.bounds.height)))
                 cell.updateCrop(with: intersectionCrop, identifier: viewCrop)
             }
-            crops[index].rendered = true
-            
         }
-    }
-    
-    func undo() {
-        if crops.count > 0 {
-            crops.removeLast()
-            rerenderCrops()
-        }
-    }
-    
-    func addPixellate(uiRect: CGRect) {
-        let ciRect = convertUIRectToCIRect(uiRect: uiRect)
-        crops.append(CropArea(rect: ciRect))
-    }
-    
-    func refreshPixelImage() {
-        pixelAllCells(forExport: false)
     }
     
     func setPixelScale(scale: PreviewPixellateScale) {
@@ -220,26 +244,24 @@ extension PreviewView {
     }
     
     func updatePixellate(uiRect: CGRect) {
-        if crops.count == 0 {
+        if areas.count == 0 || areas.last!.closed {
             addPixellate(uiRect: uiRect)
         }
         
-        crops[crops.count - 1].rect = uiRect
-        crops[crops.count - 1].rendered = false
+        areas[areas.count - 1].rect = uiRect
         
-        refreshPixelImage()
+//        updatePixelInCells()
+        syncCropsToCell()
+        reloadVisibleCells()
     }
     
-    func rerenderCrops() {
-        previousImage = image
-        for index in 0..<crops.count {
-            crops[index].rendered = false
+    func closeLastRectCrop() {
+        guard areas.count > 0 else {
+            return
         }
         
-        cells.forEach {$0.resetPixel()}
-        
-        refreshPixelImage()
-    }    
+        areas[areas.count - 1].closed = true
+    }
 }
 
 // MARK: - Signature

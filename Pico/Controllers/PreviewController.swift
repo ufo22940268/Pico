@@ -139,7 +139,7 @@ class PreviewController: UIViewController {
                 let library = ImagesLibrary()
                 library.reload {
                     let album = Album.selectAllPhotoAlbum(albums: library.albums)!
-                    self.imageEntities = Array(album.items[0..<min(album.items.count, 80)])
+                    self.imageEntities = Array(album.items[0..<min(album.items.count, 5)])
                     self.cropRects = (0..<self.imageEntities.count).map {_ in CGRect(origin: CGPoint.zero, size: CGSize(width: 1, height: 1))}
                     self.preview.imageEntities = self.imageEntities
                     self.setupAfterLoaded()
@@ -196,12 +196,9 @@ class PreviewController: UIViewController {
 
         } else if sender.state == .ended {
             cover.clearSelection()
-
-            if let selection = selectRegion.toRect(), insidePreview(selection: selection) {
-                let imageRect = selection.applying(preview.transform)
-                preview.addPixellate(uiRect: imageRect)
-            }
+            preview.closeLastRectCrop()
         }
+        
         preview.setNeedsDisplay()
 
     }
@@ -254,7 +251,7 @@ class PreviewController: UIViewController {
         
         
         preview.setPixelScale(scale: tagToScale[sender.tag]!)
-        preview.refreshPixelImage()
+        preview.updatePixelInCells()
         preview.setNeedsDisplay()
         
         updatePixelSelection(tag: sender.tag)
