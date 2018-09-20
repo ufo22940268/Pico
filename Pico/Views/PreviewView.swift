@@ -218,7 +218,10 @@ extension PreviewView {
     
     func reloadVisibleCells() {
         let displayRect = convert(superview!.bounds, from: superview).intersection(bounds)
-        findInstersectCells(with: displayRect)?.forEach {$0.updateCrop()}
+        findInstersectCells(with: displayRect)?.forEach {
+            $0.displayCrop()
+            $0.displaySign()
+        }
     }
     
     fileprivate func addPixellate(uiRect: CGRect) {
