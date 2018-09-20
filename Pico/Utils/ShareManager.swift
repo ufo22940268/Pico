@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import MonkeyKing
 
 protocol ShareImageGenerator: class {
     func generateImage(callback: @escaping (UIImage) -> Void)
@@ -97,13 +98,24 @@ class ShareManager: NSObject {
         imageObj.imageData = image.jpegData(compressionQuality: 1)
         message.mediaObject = imageObj
      
-        WXApi.startLog(by: .detail, logBlock: {s in print("wx log: \(s)")})
-        let req = SendMessageToWXReq()
-        req.message = message
-        req.bText = false
-        req.scene = Int32(scene.rawValue)
-        WXApi.send(req)
-        WXApi.stopLog()
+//        WXApi.startLog(by: .detail, logBlock: {s in print("wx log: \(s)")})
+//        let req = SendMessageToWXReq()
+//        req.message = message
+//        req.bText = false
+//        req.scene = Int32(scene.rawValue)
+//        WXApi.send(req)
+//        WXApi.stopLog()
+        
+        let monkeyMessage = MonkeyKing.Message.weChat(.session(info: (
+            title: nil,
+            description: nil,
+            thumbnail: image.thumbnail(),
+            media: .image(image)
+        )))
+        
+        MonkeyKing.deliver(monkeyMessage) { success in
+            print("shareURLToWeChatSession success: \(success)")
+        }
     }
     
     @objc func afterSaveToPhoto(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
