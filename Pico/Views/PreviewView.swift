@@ -321,16 +321,18 @@ extension PreviewView {
     
     
     func updateFrame(_ mode: PreviewFrameType) {
-        switch mode {
-        case .seperator:            
-            showInset(false)
-            showHorizontalSeperator(true)
-        case .full:
-            showHorizontalSeperator(true)
-            showInset(true)
-        case .none:
-            showHorizontalSeperator(false)
-            showInset(false)
+        UIView.animate(withDuration: 0.3) {
+            switch mode {
+            case .seperator:
+                self.showInset(false)
+                self.showHorizontalSeperator(true)
+            case .full:
+                self.showHorizontalSeperator(true)
+                self.showInset(true)
+            case .none:
+                self.showHorizontalSeperator(false)
+                self.showInset(false)
+            }
         }
         
         frameType = mode
