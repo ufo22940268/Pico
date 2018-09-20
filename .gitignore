@@ -5,3 +5,5 @@ fastlane/*
 Pico.ipa
 Pico.app.dSYM.zip
 .DS_Store
+Cartfile.resolved
+Carthage/
