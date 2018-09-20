@@ -16,6 +16,10 @@ protocol ShareImageGenerator: class {
 
 class ShareManager: NSObject {
     
+    enum ShareDestination {
+        case session, timeline
+    }
+    
     weak var viewController: UIViewController?
 
     let alertVC: UIAlertController!
@@ -50,14 +54,14 @@ class ShareManager: NSObject {
             self.showLoading(label: "分享中...")
             self.generateImage(complete: {[weak self]  image in
                 self?.dismissLoading()
-                self?.shareToWechat(image: image, scene: WXSceneSession)
+                self?.shareToWechat(image: image, destination: .session)
             })
         }))
         alert.addAction(UIAlertAction(title: "分享到朋友圈", style: .default, handler: { _ in
             self.showLoading(label: "分享中...")
             self.generateImage(complete: {[weak self]  image in
                 self?.dismissLoading()
-                self?.shareToWechat(image: image, scene: WXSceneTimeline)
+                self?.shareToWechat(image: image, destination: .timeline)
             })
         }))
         alert.addAction(UIAlertAction(title: "下载到相册", style: .default, handler: { _ in
@@ -91,27 +95,23 @@ class ShareManager: NSObject {
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(afterSaveToPhoto(_:didFinishSavingWithError:contextInfo:)), nil)
     }
     
-    func shareToWechat(image: UIImage, scene: WXScene) {
-        let message = WXMediaMessage()
-        message.setThumbImage(image.thumbnail())
-        let imageObj = WXImageObject()
-        imageObj.imageData = image.jpegData(compressionQuality: 1)
-        message.mediaObject = imageObj
-     
-//        WXApi.startLog(by: .detail, logBlock: {s in print("wx log: \(s)")})
-//        let req = SendMessageToWXReq()
-//        req.message = message
-//        req.bText = false
-//        req.scene = Int32(scene.rawValue)
-//        WXApi.send(req)
-//        WXApi.stopLog()
-        
-        let monkeyMessage = MonkeyKing.Message.weChat(.session(info: (
-            title: nil,
-            description: nil,
-            thumbnail: image.thumbnail(),
-            media: .image(image)
-        )))
+    func shareToWechat(image: UIImage, destination: ShareDestination) {
+        var monkeyMessage: MonkeyKing.Message
+        if destination == .session {
+            monkeyMessage = MonkeyKing.Message.weChat(.session(info: (
+                title: nil,
+                description: nil,
+                thumbnail: image.thumbnail(),
+                media: .image(image)
+            )))
+        } else {
+            monkeyMessage = MonkeyKing.Message.weChat(.timeline(info: (
+                title: nil,
+                description: nil,
+                thumbnail: image.thumbnail(),
+                media: .image(image)
+            )))
+        }
         
         MonkeyKing.deliver(monkeyMessage) { success in
             print("shareURLToWeChatSession success: \(success)")
