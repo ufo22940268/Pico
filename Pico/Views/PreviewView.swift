@@ -73,7 +73,6 @@ class PreviewView: UIStackView {
     }
     
     var selection: CGRect?
-    var ciContext: CIContext!
     var areas: [CropArea] = [CropArea]()
     var labelView: UILabel!
     var pixellateImages = [PreviewPixellateScale: CIImage]()
@@ -91,9 +90,6 @@ class PreviewView: UIStackView {
         
         axis = .vertical
         directionalLayoutMargins = NSDirectionalEdgeInsets.zero
-        
-        ciContext = CIContext(eaglContext: eaglContext)
-        
     }
     
     func convertUIRectToCIRect(uiRect: CGRect) -> CGRect {
@@ -106,10 +102,8 @@ class PreviewView: UIStackView {
         return image.transformed(by: CGAffineTransform(scaleX: scale, y: scale))
     }
     
-    let eaglContext = EAGLContext(api: .openGLES3)!
-    
     func addCell(with image: Image) -> PreviewCell {
-        let cell = PreviewCell(image: image, ciContext: ciContext, eaglContext: eaglContext)
+        let cell = PreviewCell(image: image)
         addArrangedSubview(cell)
         return cell
     }
