@@ -61,14 +61,13 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         let view = UINib(nibName: "ComposeCell", bundle: nil).instantiate(withOwner: self, options: nil).first as! ComposeCell
         
         view.setImage(image: imageEntity)
-        view.imageEntity = imageEntity
         view.index = cells.count
         view.restorationIdentifier = String(view.index)
         view.onCellScrollDelegator = self
         
         self.addArrangedSubview(view)
         
-        cells.append(view)
+        cells.append(view)        
     }
     
     func addTopSeperator() {
@@ -275,4 +274,12 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         })
     }
     
+}
+
+
+extension ComposeContainerView : RecycleList {
+    
+    func getCells() -> [RecycleCell] {
+        return cells
+    }
 }

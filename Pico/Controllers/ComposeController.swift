@@ -39,18 +39,10 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     var panView: ComposeCell!
     
     var loadedImages:[Image]!
-//    var loadedUIImages: [UIImage] = [UIImage]() {
-//        willSet(uiImages) {
-//            if uiImages.count >= 2 {
-//                loadedImages = uiImages.map {ImageMocker(image: $0)}
-//                self.configureUIImages(uiImages)
-//            }
-//        }
-//    }
+    
     var loadUIImageHandler:(() -> Void)?
     
     @IBOutlet weak var containerWidthConstraint: NSLayoutConstraint!
-    
     @IBOutlet var containerWrapperCenterXConstraint: NSLayoutConstraint!
     @IBOutlet var panGesture: UIPanGestureRecognizer!
     
@@ -137,10 +129,10 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         scroll.layoutIfNeeded()
         self.resetGapToContainer()
-        
         updateSideSliderButtons()
-
         container.updateSliderType()
+        
+        container.loadImages(scrollView: scroll)
     }
     
     func isDev() -> Bool {
@@ -156,7 +148,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                 let library = ImagesLibrary()
                 library.reload {
                     let album = Album.selectAllPhotoAlbum(albums: library.albums)!
-                    let images = Array(album.items[0..<min(album.items.count, 10)])
+                    let images = Array(album.items[0..<min(album.items.count, 100)])
                     self.loadedImages = images
                     
                     self.configureImages(images)
@@ -563,6 +555,7 @@ extension ComposeController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateSideSliderButtons()
+        container.loadImages(scrollView: scrollView)
     }
 }
 
@@ -576,3 +569,4 @@ extension ComposeController: ShareImageGenerator {
         }, wrapperBounds: rect)
     }
 }
+

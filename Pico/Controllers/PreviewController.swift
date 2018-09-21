@@ -269,6 +269,7 @@ class PreviewController: UIViewController {
 }
 
 extension PreviewController: UIScrollViewDelegate {
+    
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return preview
     }

@@ -240,7 +240,6 @@ extension PreviewView {
         
         areas[areas.count - 1].rect = uiRect
         
-//        updatePixelInCells()
         syncCropsToCell()
         reloadVisibleCells()
     }
