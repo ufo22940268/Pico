@@ -43,7 +43,7 @@ extension UIView {
 }
 
 
-class PreviewCell: UIView {
+class PreviewCell: UIView, RecycleCell {
     
     var ciImage: Image!
     var decorator: PreviewCellDecorator!
@@ -101,6 +101,10 @@ class PreviewCell: UIView {
         super.init(coder: aDecoder)
     }
     
+    func getFrame() -> CGRect {
+        return frame
+    }
+
     func loadImage() {
         guard loadingSeq == Int32(0) else {
             return

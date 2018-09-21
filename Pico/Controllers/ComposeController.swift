@@ -39,14 +39,14 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     var panView: ComposeCell!
     
     var loadedImages:[Image]!
-    var loadedUIImages: [UIImage] = [UIImage]() {
-        willSet(uiImages) {
-            if uiImages.count >= 2 {
-                loadedImages = uiImages.map {ImageMocker(image: $0)}
-                self.configureUIImages(uiImages)
-            }
-        }
-    }
+//    var loadedUIImages: [UIImage] = [UIImage]() {
+//        willSet(uiImages) {
+//            if uiImages.count >= 2 {
+//                loadedImages = uiImages.map {ImageMocker(image: $0)}
+//                self.configureUIImages(uiImages)
+//            }
+//        }
+//    }
     var loadUIImageHandler:(() -> Void)?
     
     @IBOutlet weak var containerWidthConstraint: NSLayoutConstraint!
@@ -95,16 +95,16 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         }
     }
     
-    fileprivate func configureUIImages(_ uiImages: ([UIImage?])) {
+    fileprivate func configureImages(_ images: ([Image])) {
         self.container.addTopSeperator()
         
-        self.container.addImage(image: uiImages.first!!, imageEntity: loadedImages.first!)
-        
-        for (index, image) in uiImages[1..<uiImages.count].enumerated() {
-            self.container.addSeperator()
-            self.container.addImage(image: image!, imageEntity: loadedImages[index + 1])
-        }
-        
+//        self.container.addImage(image: uiImages.first!!, imageEntity: loadedImages.first!)
+//        
+//        for (index, image) in uiImages[1..<uiImages.count].enumerated() {
+//            self.container.addSeperator()
+//            self.container.addImage(image: image!, imageEntity: loadedImages[index + 1])
+//        }
+//        
         self.container.addBottomSeperator()
         
         self.container.addLeftSeperator()
@@ -119,14 +119,16 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
 
         switch self.type! {
         case .screenshot:
-            self.concateScreenshot(uiImages)
-            self.navigationItem.title = "长截图"
-            activeCropMode()
+//            self.concateScreenshot(uiImages)
+//            self.navigationItem.title = "长截图"
+//            activeCropMode()
+            break
         case .movie:
-            MovieConcate(cells: self.container.cells, images: uiImages).scrollCells()
-            hideLoading()
-            self.navigationItem.title = "电影截图"
-            activeCropMode()
+//            MovieConcate(cells: self.container.cells, images: uiImages).scrollCells()
+//            hideLoading()
+//            self.navigationItem.title = "电影截图"
+//            activeCropMode()
+            break
         default:
             self.navigationItem.title = "竖向拼接"
             hideLoading()
@@ -151,11 +153,12 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         if isDev() {
             loadUIImageHandler = {
                 self.type = .normal
-                let sampleImages: [UIImage] = [UIImage(named: "short")!, UIImage(named: "short2")!]
-                
-                //Unresolve
-                self.loadedImages = sampleImages.map {ImageMocker(image: $0)}
-                self.loadedUIImages = sampleImages
+                let library = ImagesLibrary()
+                library.reload {
+                    let album = Album.selectAllPhotoAlbum(albums: library.albums)!
+                    let images = Array(album.items[0..<min(album.items.count, 2)])
+                    self.loadedImages = images
+                }
             }
         }
         

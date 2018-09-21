@@ -40,7 +40,8 @@ struct PreviewConstants {
     static let signFontSize = CGFloat(20)
 }
 
-class PreviewView: UIStackView {
+class PreviewView: UIStackView, RecycleList {
+    
 
     var previousImage: CIImage!
     var uiImages: [UIImage]!
@@ -70,6 +71,10 @@ class PreviewView: UIStackView {
         willSet(newImage) {
             previousImage = newImage
         }
+    }
+    
+    func getCells() -> [RecycleCell] {
+        return cells
     }
     
     var selection: CGRect?
@@ -152,26 +157,10 @@ class PreviewView: UIStackView {
             complete(uiCanvas)
         })
     }
-    
-    func loadImages(scrollView: UIScrollView) {
-        let visibleRect = convert(scrollView.bounds.intersection(self.frame), from: scrollView)
-        let visibleCells = cells.filter {$0.frame.intersects(visibleRect)}
-        
-        let loadCells = visibleCells
-        loadCells.forEach {$0.loadImage()}
-        
-        
-        let unloadCells = cells.filter {!loadCells.contains($0)}
-        unloadCells.forEach {$0.unloadImage()}
-    }
 }
 
 // MARK: - Pixellate functions
 extension PreviewView {
-    
-    fileprivate func findInstersectCells(with rect: CGRect) -> [PreviewCell]? {
-        return cells.filter {$0.frame.intersects(rect)}
-    }
     
     func undo() {
         if areas.count > 0 {
@@ -181,10 +170,14 @@ extension PreviewView {
         }
     }
     
+    func findIntersectCellsAndConvert(with rect: CGRect) -> [PreviewCell]? {
+        return findIntersectCells(with:rect).map {$0 as! PreviewCell}
+    }
+    
     func syncCropsToCell() {
         var dict = [PreviewCell: [CropArea]]()
         for area in areas {
-            if let cells = findInstersectCells(with: area.rect.applying(CGAffineTransform(scaleX: bounds.width, y: bounds.height))) {
+            if let cells = findIntersectCellsAndConvert(with: area.rect.applying(CGAffineTransform(scaleX: bounds.width, y: bounds.height))) {
                 for cell in cells {
                     if dict[cell] == nil {
                         dict[cell] = [CropArea]()
@@ -212,7 +205,7 @@ extension PreviewView {
     
     func reloadVisibleCells() {
         let displayRect = convert(superview!.bounds, from: superview).intersection(bounds)
-        findInstersectCells(with: displayRect)?.forEach {
+        findIntersectCellsAndConvert(with: displayRect)?.forEach {
             $0.displayCrop()
             $0.displaySign()
         }
@@ -229,7 +222,7 @@ extension PreviewView {
             let viewRect: CGRect = viewCrop.rect
             
             let rectInUICoordinate = viewRect.applying(transform.scaledBy(x: bounds.width, y: bounds.height))
-            findInstersectCells(with: rectInUICoordinate)?.forEach { cell in
+            findIntersectCellsAndConvert(with: rectInUICoordinate)?.forEach { cell in
                 let intersectionCrop = cell.convert(rectInUICoordinate.intersection(cell.frame), from: self).applying(CGAffineTransform(scaleX: 1/CGFloat(cell.bounds.width), y: 1/CGFloat(cell.bounds.height)))
                 cell.updateCrop(with: intersectionCrop, identifier: viewCrop)
             }
