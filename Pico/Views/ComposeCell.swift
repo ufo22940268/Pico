@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Photos
 
 struct ScalableConstant {
     var scale = CGFloat(1)
@@ -28,6 +29,13 @@ struct ScalableConstant {
     }
 }
 
+extension UIScreen {
+    
+    var pixelSize: CGSize {
+        return self.bounds.size.applying(CGAffineTransform(scaleX: scale, y: scale))
+    }
+}
+
 class ComposeCell: UIView, EditDelegator {
     
     @IBOutlet weak var image: UIImageView!
@@ -42,6 +50,7 @@ class ComposeCell: UIView, EditDelegator {
     
     var bottomConstant = ScalableConstant()
     var topConstant = ScalableConstant()
+    var imageManager = PHCachingImageManager.default() as! PHCachingImageManager    
 
     override func awakeFromNib() {
     }
@@ -128,6 +137,15 @@ class ComposeCell: UIView, EditDelegator {
         scrollY(position, translateY)
 
         sender.setTranslation(CGPoint.zero, in: image)
+    }
+    
+    func setImage(image: Image) {
+        self.imageEntity = image
+        var options = PHImageRequestOptions()
+        options.isNetworkAccessAllowed = true
+        imageManager.requestImage(for: image.asset, targetSize: UIScreen.main.pixelSize, contentMode: .aspectFill, options: options) { (uiImage, config) in
+            self.setImage(uiImage: uiImage!)
+        }
     }
     
     func setImage(uiImage: UIImage) {

@@ -98,13 +98,13 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     fileprivate func configureImages(_ images: ([Image])) {
         self.container.addTopSeperator()
         
-//        self.container.addImage(image: uiImages.first!!, imageEntity: loadedImages.first!)
-//        
-//        for (index, image) in uiImages[1..<uiImages.count].enumerated() {
-//            self.container.addSeperator()
-//            self.container.addImage(image: image!, imageEntity: loadedImages[index + 1])
-//        }
-//        
+        self.container.addImage(imageEntity: images.first!)
+//
+        for image in images {
+            self.container.addSeperator()
+            self.container.addImage(imageEntity: image)
+        }
+        
         self.container.addBottomSeperator()
         
         self.container.addLeftSeperator()
@@ -156,8 +156,10 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                 let library = ImagesLibrary()
                 library.reload {
                     let album = Album.selectAllPhotoAlbum(albums: library.albums)!
-                    let images = Array(album.items[0..<min(album.items.count, 2)])
+                    let images = Array(album.items[0..<min(album.items.count, 10)])
                     self.loadedImages = images
+                    
+                    self.configureImages(images)
                 }
             }
         }
