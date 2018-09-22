@@ -147,7 +147,7 @@ class ComposeCell: UIView, EditDelegator {
             self.removeConstraint(constraint)
         }
         
-        let ratioConstraint: NSLayoutConstraint = NSLayoutConstraint(item: self.image, attribute: .width, relatedBy: .equal, toItem: self.image, attribute: .height, multiplier: CGFloat(image.asset.pixelWidth)/CGFloat(image.asset.pixelHeight), constant: 0)
+        let ratioConstraint: NSLayoutConstraint = NSLayoutConstraint(item: self.image, attribute: .width, relatedBy: .equal, toItem: self.image, attribute: .height, multiplier: CGFloat(image.assetSize.width)/CGFloat(image.assetSize.height), constant: 0)
         ratioConstraint.identifier = "ratio"
         self.addConstraint(ratioConstraint)
     }
@@ -220,10 +220,13 @@ extension ComposeCell : RecycleCell {
         options.isNetworkAccessAllowed = true
         options.resizeMode = .exact
         let width = UIScreen.main.pixelSize.width
-        let height = CGFloat(imageEntity.asset.pixelHeight)/CGFloat(imageEntity.asset.pixelWidth)*width
-        loadingTag = imageManager.requestImage(for: imageEntity.asset, targetSize: CGSize(width: width, height: height), contentMode: .aspectFill, options: options) { (uiImage, config) in
+        let height = CGFloat(imageEntity.assetSize.height)/CGFloat(imageEntity.assetSize.width)*width
+//        loadingTag = imageManager.requestImage(for: imageEntity.asset, targetSize: CGSize(width: width, height: height), contentMode: .aspectFill, options: options) { (uiImage, config) in
+//            self.setImage(uiImage: uiImage!)
+//        }
+        loadingTag = imageEntity.resolve(completion: { (uiImage) in
             self.setImage(uiImage: uiImage!)
-        }
+        }, targetWidth: width, resizeMode: .exact, contentMode: .aspectFill)
     }
     
     func unloadImage() {
