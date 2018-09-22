@@ -213,7 +213,7 @@ class ComposeCell: UIView, EditDelegator {
 extension ComposeCell : RecycleCell {
     
     func loadImage() {
-        guard loadingTag == Int32(0) else {
+        guard loadingTag == Int32(0) && image.image == nil else {
             return
         }
         let options = PHImageRequestOptions()
