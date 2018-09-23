@@ -20,13 +20,17 @@ public class Image: Equatable {
     ///
     /// - Parameter size: The target size
     /// - Returns: The resolved UIImage, otherwise nil
-    public func resolve(completion: @escaping (UIImage?) -> Void, targetWidth: CGFloat? = nil, deliveryMode: PHImageRequestOptionsDeliveryMode = .highQualityFormat, resizeMode: PHImageRequestOptionsResizeMode = .fast, contentMode: PHImageContentMode = .default) -> Int32 {
+    public func resolve(completion: @escaping (UIImage?) -> Void, targetWidth: CGFloat? = nil, targetSize: CGSize? = nil, deliveryMode: PHImageRequestOptionsDeliveryMode = .highQualityFormat, resizeMode: PHImageRequestOptionsResizeMode = .fast, contentMode: PHImageContentMode = .default) -> Int32 {
         var size:CGSize
-        if targetWidth == nil {
-            size = CGSize(width: assetSize.width, height: assetSize.height)
-        } else {
+        
+        if targetSize != nil {
+            size = targetSize!
+        } else if targetWidth != nil {
             size = CGSize(width: targetWidth!, height: CGFloat(assetSize.height)/CGFloat(assetSize.width)*targetWidth!)
+        } else {
+            size = CGSize(width: assetSize.width, height: assetSize.height)
         }
+        
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
         options.deliveryMode = deliveryMode
@@ -54,8 +58,8 @@ class ImageMocker: Image {
         super.init(asset: PHAsset())
         self.uiImage = image
     }
-
-    override func resolve(completion: @escaping (UIImage?) -> Void, targetWidth: CGFloat?, deliveryMode: PHImageRequestOptionsDeliveryMode, resizeMode: PHImageRequestOptionsResizeMode, contentMode: PHImageContentMode) -> Int32 {
+    
+    override func resolve(completion: @escaping (UIImage?) -> Void, targetWidth: CGFloat?, targetSize: CGSize?, deliveryMode: PHImageRequestOptionsDeliveryMode, resizeMode: PHImageRequestOptionsResizeMode, contentMode: PHImageContentMode) -> Int32 {
         completion(uiImage)
         return Int32.random(in: 1...10000)
     }

@@ -107,14 +107,16 @@ class PreviewView: UIStackView, RecycleList {
         return image.transformed(by: CGAffineTransform(scaleX: scale, y: scale))
     }
     
-    func addCell(with image: Image) -> PreviewCell {
-        let cell = PreviewCell(image: image)
+    func addCell(with image: Image, hasCrop crop: CGRect) -> PreviewCell {
+        let cell = PreviewCell(image: image, imageCrop: crop)
         addArrangedSubview(cell)
         return cell
     }
 
-    func setupCells(images: [Image], fillContainer: Bool = true) -> Void {
-        cells = imageEntities.map {addCell(with: $0)}
+    func setupCells(images: [Image], crops: [CGRect], fillContainer: Bool = true) -> Void {
+        cells = imageEntities.enumerated().map { (index, image) in
+            addCell(with: image, hasCrop: crops[index])
+        }
     }
     
     func applyPixel(image: CIImage, pixelScale: PreviewPixellateScale) -> CIImage {

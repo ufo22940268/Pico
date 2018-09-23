@@ -111,8 +111,7 @@ class PreviewController: UIViewController {
     
     func setupAfterLoaded() {
         preview.uiImages = uiImages
-        preview.setupCells(images: imageEntities)
-
+        preview.setupCells(images: imageEntities, crops: cropRects)
         
         preview.sign = nil
         

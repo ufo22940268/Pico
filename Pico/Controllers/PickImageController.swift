@@ -191,19 +191,15 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
     fileprivate func prepareForNormalConcatenate(_ segue: UIStoryboardSegue) {
         let compose = segue.destination as! ComposeController
         compose.type = .normal
-        compose.loadedImages = imageGallery.selectImages
-        
         compose.loadUIImageHandler = { [weak self] () -> Void in
-//            self?.imageGallery.getImagesFromViewCache(images: self?.imageGallery.selectImages) {
-//                compose.loadedUIImages = $0
-//            }
+            compose.configureImages(self!.imageGallery.selectImages)
         }
     }
     
     fileprivate func prepareForScreenshotConcatenate(_ segue: UIStoryboardSegue) {
         let compose = segue.destination as! ComposeController
         compose.type = .screenshot
-        compose.loadedImages = imageGallery.selectImages.sorted(by: { (img1, img2) -> Bool in
+        let images = imageGallery.selectImages.sorted(by: { (img1, img2) -> Bool in
             if let d1 = img1.asset.creationDate, let d2 = img2.asset.creationDate {
                 return d1 < d2
             } else {
@@ -212,9 +208,7 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
         })
         
         compose.loadUIImageHandler = { [weak self] () -> Void in
-//            self?.imageGallery.getImagesFromViewCache(images: compose.loadedImages) {
-//                compose.loadedUIImages = $0
-//            }
+            compose.configureImages(images)
         }
     }
     
@@ -232,20 +226,14 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
         case "composeRecentScreenshot":
             let compose = segue.destination as! ComposeController
             compose.type = .screenshot
-            compose.loadedImages = recentScreenshots
             compose.loadUIImageHandler = { [weak self] () -> Void in
-//                self?.imageGallery.getImagesFromViewCache(images: self?.recentScreenshots) {
-//                    compose.loadedUIImages = $0
-//                }
+                compose.configureImages(self!.recentScreenshots)
             }
         case "composeMovie":
             let compose = segue.destination as! ComposeController
             compose.type = .movie
-            compose.loadedImages = imageGallery.selectImages
             compose.loadUIImageHandler = { [weak self] () -> Void in
-//                self?.imageGallery.getImagesFromViewCache(images: self?.imageGallery.selectImages) {
-//                    compose.loadedUIImages = $0
-//                }
+                compose.configureImages(self!.imageGallery.selectImages)
             }
         case "selectAlbum":
             selectAlbumController = segue.destination as! SelectAlbumController

@@ -21,4 +21,11 @@ extension UIImage {
         let thumbnail = UIImage(cgImage: imageReference)
         return thumbnail
     }
+    
+    func cropImage(toRect rect:CGRect) -> UIImage{
+        let imageRef:CGImage = self.cgImage!.cropping(to: rect)!
+        let cropped:UIImage = UIImage(cgImage:imageRef)
+        return cropped
+    }
+
 }

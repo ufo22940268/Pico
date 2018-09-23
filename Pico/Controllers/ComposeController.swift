@@ -130,11 +130,12 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
 //        }
     }
     
-    fileprivate func configureImages(_ images: ([Image])) {
+    func configureImages(_ images: ([Image])) {
         guard images.count >= 2 else {
             return
         }
         
+        self.loadedImages = images
         self.container.addTopSeperator()
         self.container.addImage(imageEntity: images.first!)
 //
@@ -182,7 +183,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     }
     
     func isDev() -> Bool {
-        return loadedImages == nil
+        return loadUIImageHandler == nil
     }
     
     override func viewDidLoad() {
@@ -201,7 +202,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
 //                }
 //
                 let images = [ImageMocker(image: UIImage(named: "IMG_3146")!), ImageMocker(image: UIImage(named: "IMG_3147")!)]
-                self.loadedImages = images
                 self.configureImages(images)
             }
         }
@@ -454,23 +454,20 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
              previewController.isDev = false
              
              previewController.initializeClosure = {() in
-                previewController.uiImages = self.container.cells.map({ (cell) -> UIImage in
-                    return cell.exportSnapshot(wrapperBounds: cell.convert(self.containerWrapper.bounds, from: self.containerWrapper))
-                })
-                
                 previewController.cropRects = self.container.cells.map({ (cell) -> CGRect in
                     return cell.getIntersection(wrapperBounds: cell.convert(self.containerWrapper.bounds, from: self.containerWrapper))
                 })
                 
-                var cellFrames = [CGRect]()
-                var height = CGFloat(0)
-                for img in previewController.uiImages! {
-                    cellFrames.append(CGRect(origin: CGPoint(x: 0, y: height), size: img.size))
-                    height = height + img.size.height
-                }
-                previewController.cellFrames = cellFrames
+//                var cellFrames = [CGRect]()
+//                var height = CGFloat(0)
+//                for img in previewController.uiImages! {
+//                    cellFrames.append(CGRect(origin: CGPoint(x: 0, y: height), size: img.size))
+//                    height = height + img.size.height
+//                }
+//                previewController.cellFrames = cellFrames
                 
                 previewController.imageEntities = self.loadedImages
+                previewController.preview.imageEntities = self.loadedImages
                 self.container.showSeperators(show: true)
                 previewController.setupAfterLoaded()
              }

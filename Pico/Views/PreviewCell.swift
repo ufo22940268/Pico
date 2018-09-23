@@ -45,7 +45,8 @@ extension UIView {
 
 class PreviewCell: UIView, RecycleCell {
     
-    var ciImage: Image!
+    var image: Image!
+    var imageCrop: CGRect!
     var decorator: PreviewCellDecorator!
     var imageManager = PHCachingImageManager.default() as! PHCachingImageManager
     var placeholderImage: CIImage!
@@ -65,12 +66,14 @@ class PreviewCell: UIView, RecycleCell {
         }
     }
     
-    init(image: Image) {
+    init(image: Image, imageCrop: CGRect) {
         super.init(frame: CGRect.zero)
         self.decorator = PreviewCellDecorator(scale: .small)
-        self.ciImage = image
+        self.image = image
+        self.imageCrop = imageCrop
         translatesAutoresizingMaskIntoConstraints = false
-        let ratio = CGFloat(image.assetSize.width)/CGFloat(image.assetSize.height)
+        let pixelCropSize = imageCrop.size.applying(CGAffineTransform(scaleX: image.assetSize.width, y: image.assetSize.height))
+        let ratio = pixelCropSize.width/pixelCropSize.height
         widthAnchor.constraint(equalTo: heightAnchor, multiplier: ratio).isActive = true
         
         backgroundColor = UIColor.yellow
@@ -113,10 +116,12 @@ class PreviewCell: UIView, RecycleCell {
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
         options.resizeMode = .exact
-        let targetSize = CGSize(width: UIScreen.main.bounds.width, height: CGFloat(ciImage.assetSize.height)/CGFloat(ciImage.assetSize.width)*UIScreen.main.bounds.width)
-        loadingSeq = imageManager.requestImage(for: ciImage.asset, targetSize: targetSize, contentMode: .aspectFill, options: options) { (uiImage, config) in
+        loadingSeq = image.resolve(completion: { (uiImage) in
             if let uiImage = uiImage {
-                self.decorator.setImage(CIImage(image: uiImage)!)
+//                let croppedImage = uiImage.cropImage(
+//                    toRect: self.imageCrop.applying(CGAffineTransform(scaleX: uiImage.size.width, y: uiImage.size.height)).convertLTCToLBC(frameHeight: uiImage.size.height))
+                let ciImage: CIImage = CIImage(image: uiImage)!.cropped(to: self.imageCrop.applying(CGAffineTransform(scaleX: uiImage.size.width, y: uiImage.size.height)))
+                self.decorator.setImage(ciImage)
                 self.decorator?.boundWidth = self.bounds.width
                 self.decorator?.boundHeight = self.bounds.height
                 self.imageView.image = UIImage(ciImage: self.decorator.lastImage)
@@ -124,7 +129,7 @@ class PreviewCell: UIView, RecycleCell {
                 self.displayCrop()
                 self.setNeedsDisplay()
             }
-        }
+        }, targetWidth: UIScreen.main.bounds.width, resizeMode: .exact, contentMode: .aspectFill)
     }
     
     func unloadImage() {
