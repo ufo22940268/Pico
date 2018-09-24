@@ -202,6 +202,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
 //                }
 //
                 let images = [ImageMocker(image: UIImage(named: "IMG_3146")!), ImageMocker(image: UIImage(named: "IMG_3147")!)]
+//                self.configureImages((1...50).map {images[$0%2]})
                 self.configureImages(images)
             }
         }
@@ -457,14 +458,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                 previewController.cropRects = self.container.cells.map({ (cell) -> CGRect in
                     return cell.getIntersection(wrapperBounds: cell.convert(self.containerWrapper.bounds, from: self.containerWrapper))
                 })
-                
-//                var cellFrames = [CGRect]()
-//                var height = CGFloat(0)
-//                for img in previewController.uiImages! {
-//                    cellFrames.append(CGRect(origin: CGPoint(x: 0, y: height), size: img.size))
-//                    height = height + img.size.height
-//                }
-//                previewController.cellFrames = cellFrames
                 
                 previewController.imageEntities = self.loadedImages
                 previewController.preview.imageEntities = self.loadedImages
