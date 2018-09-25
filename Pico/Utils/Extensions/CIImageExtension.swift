@@ -19,13 +19,19 @@ extension CIImage {
         return image
     }
     
-    static func concateImages(images: [CIImage]) -> CIImage {
+    static func concateImages(images: [CIImage], needScale: Bool = true) -> CIImage {
         let minWidth = images.min { (c1, c2) -> Bool in
             return c1.extent.width < c2.extent.width
         }!.extent.width
-        var scaledImages = images.map { img -> CIImage in
-            let scale = minWidth/img.extent.width
-            return img.transformed(by: CGAffineTransform(scaleX: scale, y: scale))
+        
+        var scaledImages = [CIImage]()
+        if needScale {
+            scaledImages = images.map { img -> CIImage in
+                let scale = minWidth/img.extent.width
+                return img.transformed(by: CGAffineTransform(scaleX: scale, y: scale))
+            }
+        } else {
+            scaledImages = images
         }
         
         let canvasHeight = scaledImages.reduce(0) { (r, img)  in

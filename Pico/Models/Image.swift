@@ -6,6 +6,7 @@ public class Image: Equatable {
     
     public var asset: PHAsset
     
+    
     var assetSize:CGSize {
         return CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
     }
@@ -20,7 +21,7 @@ public class Image: Equatable {
     ///
     /// - Parameter size: The target size
     /// - Returns: The resolved UIImage, otherwise nil
-    public func resolve(completion: @escaping (UIImage?) -> Void, targetWidth: CGFloat? = nil, targetSize: CGSize? = nil, deliveryMode: PHImageRequestOptionsDeliveryMode = .highQualityFormat, resizeMode: PHImageRequestOptionsResizeMode = .fast, contentMode: PHImageContentMode = .default) -> Int32 {
+    public func resolve(completion: @escaping (UIImage?) -> Void, targetWidth: CGFloat? = nil, targetSize: CGSize? = nil, deliveryMode: PHImageRequestOptionsDeliveryMode = .highQualityFormat, resizeMode: PHImageRequestOptionsResizeMode = .fast, contentMode: PHImageContentMode = .default, isSynchronize: Bool = false) -> Int32 {
         var size:CGSize
         
         if targetSize != nil {
@@ -35,6 +36,7 @@ public class Image: Equatable {
         options.isNetworkAccessAllowed = true
         options.deliveryMode = deliveryMode
         options.resizeMode = resizeMode
+        options.isSynchronous = isSynchronize
         
         return PHImageManager.default().requestImage(
             for: asset,
@@ -59,7 +61,7 @@ class ImageMocker: Image {
         self.uiImage = image
     }
     
-    override func resolve(completion: @escaping (UIImage?) -> Void, targetWidth: CGFloat?, targetSize: CGSize?, deliveryMode: PHImageRequestOptionsDeliveryMode, resizeMode: PHImageRequestOptionsResizeMode, contentMode: PHImageContentMode) -> Int32 {
+    override func resolve(completion: @escaping (UIImage?) -> Void, targetWidth: CGFloat?, targetSize: CGSize?, deliveryMode: PHImageRequestOptionsDeliveryMode, resizeMode: PHImageRequestOptionsResizeMode, contentMode: PHImageContentMode, isSynchronize: Bool = false) -> Int32 {
         completion(uiImage)
         return Int32.random(in: 1...10000)
     }
