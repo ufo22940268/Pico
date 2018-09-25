@@ -14,3 +14,13 @@ extension Float {
     var degreesToRadians: Float { return self * .pi / 180 }
     var radiansToDegrees: Float { return self * 180 / .pi }
 }
+
+extension UIDevice {
+    var isSimulator: Bool {
+        #if IOS_SIMULATOR
+        return true
+        #else
+        return false
+        #endif
+    }
+}

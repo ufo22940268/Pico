@@ -172,18 +172,16 @@ class ComposeCell: UIView, EditDelegator {
         
     func exportSnapshot(callback: @escaping (CIImage) -> Void, wrapperBounds: CGRect) {
         var inter = getIntersection(wrapperBounds: wrapperBounds)
-        DispatchQueue.global().async {
-            self.imageEntity.resolve(completion: { (img) in
-                if let img = img {
-                    inter = inter.applying(CGAffineTransform(scaleX: img.size.width, y: img.size.height))
-                    var imageCache = CIImage(image: img)!
-                    imageCache = imageCache.cropped(to: inter)
-                    callback(imageCache)
-                } else {
-                    print("parse \(String(describing: img)) error")
-                }
-            })
-        }
+        self.imageEntity.resolve(completion: { (img) in
+            if let img = img {
+                inter = inter.applying(CGAffineTransform(scaleX: img.size.width, y: img.size.height))
+                var imageCache = CIImage(image: img)!
+                imageCache = imageCache.cropped(to: inter)
+                callback(imageCache)
+            } else {
+                print("parse \(String(describing: img)) error")
+            }
+        })
     }
     
     func exportSnapshot(wrapperBounds: CGRect) -> UIImage {

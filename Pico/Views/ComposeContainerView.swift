@@ -250,7 +250,6 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     
     func exportSnapshot(callback: @escaping (UIImage) -> Void, wrapperBounds: CGRect) {
         let group = DispatchGroup()
-
         group.enter()
         var imageMap = [Int: CIImage]()
         group.leave()
@@ -263,6 +262,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
                 }
             }, wrapperBounds: cell.convert(wrapperBounds, from: self))
         }
+        
         
         group.notify(queue: .global(), execute: {
             let images = (imageMap.sorted(by: { (lhs, rhs) -> Bool in

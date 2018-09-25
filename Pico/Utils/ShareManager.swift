@@ -92,7 +92,11 @@ class ShareManager: NSObject {
     }
     
     func saveToPhoto(image: UIImage) {
-        UIImageWriteToSavedPhotosAlbum(image, self, #selector(afterSaveToPhoto(_:didFinishSavingWithError:contextInfo:)), nil)
+        if UIDevice.current.isSimulator {
+            print("saved image with size \(image.size) to photos")
+        } else {            
+            UIImageWriteToSavedPhotosAlbum(image, self, #selector(afterSaveToPhoto(_:didFinishSavingWithError:contextInfo:)), nil)
+        }
     }
     
     func shareToWechat(image: UIImage, destination: ShareDestination) {
