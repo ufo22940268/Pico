@@ -250,33 +250,37 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     
     func exportSnapshot(callback: @escaping (UIImage) -> Void, wrapperBounds: CGRect) {
         let group = DispatchGroup()
-        var imageMap = [Int: CIImage]()
         var canvas: CIImage? = nil
         
         let targetWidth = cells.map {$0.imageEntity.asset.pixelWidth}.min { (c1, c2) -> Bool in
             c1 < c2
         }
-        for (index, cell) in cells.enumerated() {
-            group.enter()
-            autoreleasepool {
+        let queue = DispatchQueue(label: "comjjj")
+        queue.async {
+            for (index, cell) in self.cells.enumerated() {
+                group.enter()
                 cell.exportSnapshot(callback: {img in
-                    if canvas == nil {
-                        canvas = img
-                    } else {
-                        canvas = CIImage.concateImages(images: [canvas!, img], needScale: false)
+                    autoreleasepool {
+                        if canvas == nil {
+                            canvas = img
+                        } else {
+                            canvas = CIImage.concateImages(images: [canvas!, img], needScale: false)
+                        }
+                        print("leave \(index) \(img.extent)")
+                        group.leave()
                     }
-                    group.leave()
                 }, wrapperBounds: cell.convert(wrapperBounds, from: self), targetWidth: CGFloat(targetWidth!))
+                group.wait()
             }
+            
+            print("finish")
+            
+            group.notify(queue: .global(), execute: {
+                print("quitttttttttttttttt")
+                let snapshot = canvas!.convertToUIImage()
+                callback(snapshot)
+            })
         }
-        
-        group.notify(queue: .global(), execute: {
-            let images = (imageMap.sorted(by: { (lhs, rhs) -> Bool in
-                return lhs.key < rhs.key
-            })).map {$0.value}
-            let snapshot = canvas!.convertToUIImage()
-            callback(snapshot)
-        })
     }
 }
 
