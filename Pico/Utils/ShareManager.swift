@@ -123,6 +123,7 @@ class ShareManager: NSObject {
             alertVC.message = "图片已经保存到相册"
             okAction.isEnabled = true
         } else {
+            print("save image error: \(error)")
             alertVC.dismiss(animated: true, completion: nil)
         }
     }
