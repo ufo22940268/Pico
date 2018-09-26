@@ -43,7 +43,7 @@ extension UIView {
 }
 
 
-class PreviewCell: UIView, RecycleCell {
+class PreviewCell: UIView {
     
     var image: Image!
     var imageCrop: CGRect!
@@ -105,41 +105,7 @@ class PreviewCell: UIView, RecycleCell {
         super.init(coder: aDecoder)
     }
     
-    func getFrame() -> CGRect {
-        return frame
-    }
 
-    func loadImage() {
-        guard loadingSeq == Int32(0) else {
-            return
-        }
-        
-        showPlaceholder()
-        let options = PHImageRequestOptions()
-        options.isNetworkAccessAllowed = true
-        options.resizeMode = .exact
-        loadingSeq = image.resolve(completion: { (uiImage) in
-            if let uiImage = uiImage {
-                let ciImage: CIImage = CIImage(image: uiImage)!.cropped(to: self.imageCrop.applying(CGAffineTransform(scaleX: uiImage.size.width, y: uiImage.size.height)))
-                self.decorator.setImage(ciImage)
-                self.decorator?.boundWidth = self.bounds.width
-                self.decorator?.boundHeight = self.bounds.height
-                self.imageView.image = self.decorator.lastImage.convertToUIImage()
-                self.pixelView.image = UIImage(ciImage: self.decorator!.pixellateImages.first!.value)
-                self.displayPixel()
-            }
-            self.showContentView()
-            self.setNeedsDisplay()
-            self.setNeedsLayout()
-        }, targetWidth: UIScreen.main.pixelSize.width, resizeMode: .fast, contentMode: .aspectFill)
-    }
-    
-    func unloadImage() {
-        decorator.releaseImage()
-        loadingSeq = 0
-        self.imageView.image = nil
-        self.pixelView.image = nil
-    }
     
 }
 
@@ -225,5 +191,44 @@ extension PreviewCell : LoadingPlaceholder {
         imageView.isHidden = !show
         pixelView.isHidden = !show
         signView.isHidden = !show
+    }
+}
+
+extension PreviewCell : RecycleCell {
+    
+    func getFrame() -> CGRect {
+        return frame
+    }
+    
+    func loadImage() {
+        guard loadingSeq == Int32(0) else {
+            return
+        }
+        
+        showPlaceholder()
+        let options = PHImageRequestOptions()
+        options.isNetworkAccessAllowed = true
+        options.resizeMode = .exact
+        loadingSeq = image.resolve(completion: { (uiImage) in
+            if let uiImage = uiImage {
+                let ciImage: CIImage = CIImage(image: uiImage)!.cropped(to: self.imageCrop.applying(CGAffineTransform(scaleX: uiImage.size.width, y: uiImage.size.height)))
+                self.decorator.setImage(ciImage)
+                self.decorator?.boundWidth = self.bounds.width
+                self.decorator?.boundHeight = self.bounds.height
+                self.imageView.image = self.decorator.lastImage.convertToUIImage()
+                self.pixelView.image = UIImage(ciImage: self.decorator!.pixellateImages.first!.value)
+                self.displayPixel()
+            }
+            self.showContentView()
+            self.setNeedsDisplay()
+            self.setNeedsLayout()
+        }, targetWidth: UIScreen.main.pixelSize.width, resizeMode: .fast, contentMode: .aspectFill)
+    }
+    
+    func unloadImage() {
+        decorator.releaseImage()
+        loadingSeq = 0
+        self.imageView.image = nil
+        self.pixelView.image = nil
     }
 }

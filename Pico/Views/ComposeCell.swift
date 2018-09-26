@@ -212,6 +212,27 @@ class ComposeCell: UIView, EditDelegator {
 
 extension ComposeCell : RecycleCell {
     
+    func cacheImage() {
+        print("cache : \(index!)")
+        let size = CGSize(width: UIScreen.main.pixelSize.width, height: CGFloat(imageEntity.asset.pixelHeight)/CGFloat(imageEntity.asset.pixelWidth)*UIScreen.main.pixelSize.width)
+        let options = PHImageRequestOptions()
+        options.isNetworkAccessAllowed = true
+        options.deliveryMode = .highQualityFormat
+        options.resizeMode = .exact
+        imageManager.startCachingImages(for: [imageEntity.asset], targetSize: size, contentMode: .aspectFill, options: options)
+    }
+    
+    func purgeImageCache() {
+        print("purge cache : \(index!)")
+        let size = CGSize(width: UIScreen.main.pixelSize.width, height: CGFloat(imageEntity.asset.pixelHeight)/CGFloat(imageEntity.asset.pixelWidth)*UIScreen.main.pixelSize.width)
+        let options = PHImageRequestOptions()
+        options.isNetworkAccessAllowed = true
+        options.deliveryMode = .highQualityFormat
+        options.resizeMode = .exact
+        imageManager.stopCachingImages(for: [imageEntity.asset], targetSize: size, contentMode: .aspectFill, options: options)
+    }
+    
+    
     func loadImage() {
         guard loadingTag == Int32(0) && image.image == nil else {
             return

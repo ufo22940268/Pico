@@ -24,15 +24,25 @@ extension RecycleList where Self : UIStackView {
     
     func loadImages(scrollView: UIScrollView) {
         let visibleRect = convert(scrollView.bounds.intersection(self.frame), from: scrollView)
-        let visibleCells = getCells().filter {$0.getFrame().intersects(visibleRect)}
+        let allCells = getCells()
+        let visibleCells = allCells.filter {$0.getFrame().intersects(visibleRect)}
         
-        let loadCells = visibleCells
-        loadCells.forEach {$0.loadImage()}
-        
-        let unloadCells = getCells().filter {cell in !loadCells.contains(where: { (cell2) -> Bool in
-            cell === cell2
-        })}
-        unloadCells.forEach {$0.unloadImage()}
+        //Loading images
+        if visibleCells.count > 0 {
+            let lowerBound = allCells.enumerated().filter { (_, cell) -> Bool in
+                cell === visibleCells.first!
+            }.first!.offset
+            let upperBound = allCells.enumerated().filter {$1 === visibleCells.last!}.first!.offset
+            
+            let cacheOffset = 3
+            let cacheCells = allCells[max(lowerBound - cacheOffset, 0)...min(upperBound + cacheOffset, allCells.count - 1)]
+            cacheCells.forEach {$0.loadImage()}
+
+            let purgeCacheCells = allCells.filter {cell in !cacheCells.contains(where: { (cell2) -> Bool in
+                cell === cell2
+            })}
+            purgeCacheCells.forEach {$0.unloadImage()}
+        }
     }
 }
 
