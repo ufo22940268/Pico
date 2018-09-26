@@ -359,10 +359,10 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     func updateContainerImages() {
         container.loadImages(scrollView: scroll)
     }
-    
+   
     func findScrollCell(hitView: UIView) -> ComposeCell? {
         let cellIndex = container.cells.enumerated().filter {$0.element == hitView}.first!.offset
-        if case .editing(let direction, let seperatorIndex) = editState {
+        if case .editing( _, let seperatorIndex) = editState {
             if let seperatorIndex = seperatorIndex, editState.maybeVertical() {
                 if cellIndex < seperatorIndex {
                     return container.cells[seperatorIndex - 1]

@@ -142,7 +142,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     }
     
     fileprivate func updateSliderStateForSlideWhenEditChanged() {
-        if case let .editing(direction, index) = editState {
+        if case let .editing(_, index) = editState {
             seperators.forEach { seperator in
                 if seperator.index != index {
                     seperator.hideAndDisable(true)

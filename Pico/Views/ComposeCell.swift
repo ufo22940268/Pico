@@ -67,7 +67,7 @@ class ComposeCell: UIView, EditDelegator {
     //        above: -1
     //        below: 1
     static func getPositionToSeperator(editState: EditState, cellIndex: Int) -> Position? {
-        if case .editing(let direction, let seperatorIndex) = editState {
+        if case .editing(_, let seperatorIndex) = editState {
             if editState.maybeVertical(), let seperatorIndex = seperatorIndex {
                 if cellIndex - seperatorIndex == 1 || cellIndex - seperatorIndex == -1 {
                     return Position.above
@@ -141,6 +141,8 @@ class ComposeCell: UIView, EditDelegator {
     }
     
     func setup(image: Image) {
+        setupPlaceholder()
+        
         self.imageEntity = image
         
         if let constraint = (self.constraints.filter { $0.identifier == "ratio" }.first) {
@@ -214,14 +216,15 @@ extension ComposeCell : RecycleCell {
         guard loadingTag == Int32(0) && image.image == nil else {
             return
         }
+        showPlaceholder()
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
         options.resizeMode = .exact
         let width = UIScreen.main.pixelSize.width
-        let height = CGFloat(imageEntity.assetSize.height)/CGFloat(imageEntity.assetSize.width)*width
         loadingTag = imageEntity.resolve(completion: { (uiImage) in
             self.setImage(uiImage: uiImage!)
-        }, targetWidth: width, resizeMode: .exact, contentMode: .aspectFill)
+            self.showContentView()
+        }, targetWidth: width, resizeMode: .fast, contentMode: .aspectFill)
     }
     
     func unloadImage() {
@@ -231,5 +234,12 @@ extension ComposeCell : RecycleCell {
     
     func getFrame() -> CGRect {
         return frame
+    }
+}
+
+
+extension ComposeCell : LoadingPlaceholder {
+    func contentViewVisible(_ show: Bool) {
+        image.isHidden = !show
     }
 }
