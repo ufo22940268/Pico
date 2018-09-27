@@ -50,8 +50,8 @@ class SideSlider: UIView, SliderSelectable {
     
     func updateSlider(midPoint: CGPoint, transform: CGAffineTransform) {
         topConstraint.constant = midPoint.y
+        self.button.transform = transform
         setNeedsLayout()
-        self.transform = transform
     }
     
     func setupAnimation() {

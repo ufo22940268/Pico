@@ -167,7 +167,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                 let library = ImagesLibrary()
                 library.reload {
                     let album = Album.selectAllPhotoAlbum(albums: library.albums)!
-                    let images = Array(album.items[0..<min(album.items.count, 2)])
+                    let images = Array(album.items[0..<min(album.items.count, 20)])
                     self.loadedImages = images
 
                     self.configureImages(images)
@@ -368,26 +368,27 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     }
 
     fileprivate func resetGapToContainer() {
-        var topDistance = topConstraint.constant
-        var bottomDistance = bottomConstraint.constant
+//        var topDistance = topConstraint.constant
+//        var bottomDistance = bottomConstraint.constant
+//
+//        var topInset = CGFloat(0)
+//        var bottomInset = CGFloat(0)
+//        let containerHeight = max(container.frame.height, container.frame.height*(minContainerWidth/container.frame.width))
+//        if containerHeight < scroll.frame.height {
+//            let halfGap = (scroll.frame.height - containerHeight)/2
+//            topDistance = halfGap
+//            bottomDistance = halfGap
+//            topInset = 0
+//            bottomInset = 0
+//            topConstraint.constant = topDistance
+//            bottomConstraint.constant = bottomDistance
+//        } else {
+//            topInset = topDistance
+//            bottomInset = bottomDistance
+//        }
+//
+//        scroll.contentInset = UIEdgeInsets(top: -topInset, left: 0, bottom: -bottomInset, right: 0)
         
-        var topInset = CGFloat(0)
-        var bottomInset = CGFloat(0)
-        let containerHeight = max(container.frame.height, container.frame.height*(minContainerWidth/container.frame.width))
-        if containerHeight < scroll.frame.height {
-            let halfGap = (scroll.frame.height - containerHeight)/2
-            topDistance = halfGap
-            bottomDistance = halfGap
-            topInset = 0
-            bottomInset = 0
-            topConstraint.constant = topDistance
-            bottomConstraint.constant = bottomDistance
-        } else {
-            topInset = topDistance
-            bottomInset = bottomDistance
-        }
-        
-        scroll.contentInset = UIEdgeInsets(top: -topInset, left: 0, bottom: -bottomInset, right: 0)
         centerContainerWrapper()
     }
     
@@ -565,23 +566,27 @@ extension ComposeController {
 
 extension ComposeController: UIScrollViewDelegate {
     
+    fileprivate var sliderButtonTransform: CGAffineTransform {
+        let transform = containerWrapper.transform.inverted()
+        return CGAffineTransform(scaleX: transform.a, y: transform.a)
+    }
+    
     fileprivate func updateSeperatorSliderButtons() {
         let midX = (min(container.frame.maxX, containerWrapper.bounds.maxX) - max(container.frame.minX, containerWrapper.bounds.minX)) / 2
         if let firstSeperator = container.seperators.first {
             let midPoint = firstSeperator.convert(CGPoint(x: midX, y: 0.0), from: containerWrapper)
-            let transform = containerWrapper.transform.inverted()
-            container.updateSeperatorSliderButtons(midPoint: midPoint, transform: transform)
+            container.updateSeperatorSliderButtons(midPoint: midPoint, transform: sliderButtonTransform)
         }
     }
+    
     
     fileprivate func updateSideSliderButtons() {
         if container.leftSlider != nil {
             let fillScrollHeight = containerWrapper.bounds.height >= scroll.bounds.height
             let scrollMidPoint = containerWrapper.convert(CGPoint(x: 0, y: scroll.bounds.midY), from: scroll)
             let midPoint = container.leftSlider.convert(CGPoint(x: 0, y: fillScrollHeight ? scrollMidPoint.y : containerWrapper.bounds.midY), from: containerWrapper)
-            let transform = containerWrapper.transform.inverted()
-            container.leftSlider.updateSlider(midPoint: midPoint, transform: transform)
-            container.rightSlider.updateSlider(midPoint: midPoint, transform: transform)
+            container.leftSlider.updateSlider(midPoint: midPoint, transform: sliderButtonTransform)
+            container.rightSlider.updateSlider(midPoint: midPoint, transform: sliderButtonTransform)
         }
     }
     
