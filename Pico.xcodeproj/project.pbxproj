@@ -59,6 +59,8 @@
 		42C4066D20F335550074B728 /* UIView+Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C4066C20F335550074B728 /* UIView+Style.swift */; };
 		42C4066F20F446750074B728 /* OverlapDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C4066E20F446750074B728 /* OverlapDetector.swift */; };
 		42C4067120F44E820074B728 /* RGBAImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C4067020F44E810074B728 /* RGBAImage.swift */; };
+		42C84780215C9EE300A3ECF8 /* Storyboards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C8477F215C9EE300A3ECF8 /* Storyboards.swift */; };
+		42C84782215CA11800A3ECF8 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C84781215CA11800A3ECF8 /* OnboardingViewController.swift */; };
 		42C89D6F210998AB00792EED /* VNRectangleObservationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C89D6E210998AB00792EED /* VNRectangleObservationExtension.swift */; };
 		42D69DC12151EF1A00BAD5BD /* PixelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D69DC02151EF1A00BAD5BD /* PixelView.swift */; };
 		42D69DC32153456D00BAD5BD /* MonkeyKing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D69DC22153456D00BAD5BD /* MonkeyKing.framework */; };
@@ -167,6 +169,8 @@
 		42C4066C20F335550074B728 /* UIView+Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Style.swift"; sourceTree = "<group>"; };
 		42C4066E20F446750074B728 /* OverlapDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlapDetector.swift; sourceTree = "<group>"; };
 		42C4067020F44E810074B728 /* RGBAImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBAImage.swift; sourceTree = "<group>"; };
+		42C8477F215C9EE300A3ECF8 /* Storyboards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storyboards.swift; sourceTree = "<group>"; };
+		42C84781215CA11800A3ECF8 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		42C89D6E210998AB00792EED /* VNRectangleObservationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VNRectangleObservationExtension.swift; sourceTree = "<group>"; };
 		42D69DC02151EF1A00BAD5BD /* PixelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelView.swift; sourceTree = "<group>"; };
 		42D69DC22153456D00BAD5BD /* MonkeyKing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MonkeyKing.framework; path = Carthage/Build/iOS/MonkeyKing.framework; sourceTree = "<group>"; };
@@ -272,6 +276,8 @@
 				42A18C5620EAF5A800DD4AA5 /* Info.plist */,
 				42338F89213001E500BD961C /* Test.swift */,
 				4210CDB5215B796F00169574 /* Onboarding.storyboard */,
+				42C8477F215C9EE300A3ECF8 /* Storyboards.swift */,
+				42C84781215CA11800A3ECF8 /* OnboardingViewController.swift */,
 			);
 			path = Pico;
 			sourceTree = "<group>";
@@ -565,6 +571,8 @@
 				423F1C1820ECA9730083DB6D /* SeperatorSlider.swift in Sources */,
 				42338F8A213001E500BD961C /* Test.swift in Sources */,
 				42C4067120F44E820074B728 /* RGBAImage.swift in Sources */,
+				42C84780215C9EE300A3ECF8 /* Storyboards.swift in Sources */,
+				42C84782215CA11800A3ECF8 /* OnboardingViewController.swift in Sources */,
 				42A18C4B20EAF5A600DD4AA5 /* AppDelegate.swift in Sources */,
 				42C4066F20F446750074B728 /* OverlapDetector.swift in Sources */,
 				4201F006210ED73400A6EBA5 /* GestureExtension.swift in Sources */,
