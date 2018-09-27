@@ -78,6 +78,7 @@ extension LoadingPlaceholder where Self : UIView {
         image.contentMode = .center
         image.tag = ViewTag.placeholder.rawValue
         image.tintColor = UIColor.lightGray
+        image.isHidden = true
     }
     
     fileprivate func getPlaceholder() -> UIView {
