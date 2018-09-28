@@ -30,7 +30,7 @@ class SeperatorSlider: UIView, SliderSelectable {
     var validArrows = [UIImageView]()
     
     @objc var direction = "middle"
-    @IBOutlet weak var button: UIButton!
+    @IBOutlet weak var button: SliderButton!
     @IBOutlet var buttonCenterXConstraint: NSLayoutConstraint!
     
     fileprivate func showAboveArrow() -> Bool {
@@ -75,7 +75,9 @@ class SeperatorSlider: UIView, SliderSelectable {
         }
         
         addConstraint(NSLayoutConstraint(item: self, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 0))
-        backgroundColor = UIColor.yellow        
+        backgroundColor = UIColor.yellow
+        
+        button.setup(direction: SliderDirection.parse(direction: direction))
     }
             
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {

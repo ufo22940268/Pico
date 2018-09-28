@@ -18,24 +18,19 @@
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Buh-HB-ZaF">
-                    <rect key="frame" x="0.0" y="-10" width="343" height="20"/>
+                    <rect key="frame" x="0.0" y="-10" width="343" height="34"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ban-IM-6C4" userLabel="line">
-                            <rect key="frame" x="0.0" y="9" width="343" height="2"/>
+                            <rect key="frame" x="0.0" y="16" width="343" height="2"/>
                             <color key="backgroundColor" name="Slider"/>
                             <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.5"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="2" id="40M-qk-jNW"/>
                             </constraints>
                         </view>
-                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8ER-9v-Fki">
-                            <rect key="frame" x="147" y="0.0" width="50" height="20"/>
+                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8ER-9v-Fki" customClass="SliderButton" customModule="Pico" customModuleProvider="target">
+                            <rect key="frame" x="147" y="0.0" width="50" height="34"/>
                             <color key="backgroundColor" name="Slider"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="20" id="JEd-UT-vFI"/>
-                                <constraint firstAttribute="width" constant="50" id="feR-4C-aMD" userLabel="width = 40"/>
-                            </constraints>
-                            <state key="normal" image="seperator-edit"/>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="string" keyPath="layer.borderWidth" value="0"/>
                             </userDefinedRuntimeAttributes>
@@ -81,8 +76,8 @@
             <rect key="frame" x="0.0" y="0.0" width="376" height="30"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Fx-5S-OMy">
-                    <rect key="frame" x="0.0" y="0.0" width="376" height="20"/>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="rA9-BK-yhQ">
+                    <rect key="frame" x="0.0" y="0.0" width="376" height="36"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m8q-Jn-26T" userLabel="line">
                             <rect key="frame" x="0.0" y="0.0" width="376" height="2"/>
@@ -91,17 +86,12 @@
                                 <constraint firstAttribute="height" constant="2" id="BBm-94-d8e"/>
                             </constraints>
                         </view>
-                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0M1-nQ-DQC">
-                            <rect key="frame" x="163" y="0.0" width="50" height="20"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0M1-nQ-DQC" customClass="SliderButton" customModule="Pico" customModuleProvider="target">
+                            <rect key="frame" x="173" y="2" width="30" height="34"/>
                             <color key="backgroundColor" name="Slider"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="20" id="JNa-fZ-qMO"/>
-                                <constraint firstAttribute="width" constant="50" id="w7x-5H-kPP"/>
-                            </constraints>
-                            <state key="normal" image="seperator-edit">
+                            <state key="normal">
                                 <color key="titleColor" red="1" green="0.21595210109999999" blue="0.14619663590000001" alpha="1" colorSpace="calibratedRGB"/>
                             </state>
-                            <state key="selected" image="check-solid"/>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="string" keyPath="layer.borderWidth" value="0"/>
                             </userDefinedRuntimeAttributes>
@@ -111,26 +101,17 @@
                         </button>
                     </subviews>
                     <constraints>
-                        <constraint firstItem="m8q-Jn-26T" firstAttribute="top" secondItem="9Fx-5S-OMy" secondAttribute="top" id="3FY-W9-AlA"/>
-                        <constraint firstAttribute="trailing" secondItem="m8q-Jn-26T" secondAttribute="trailing" id="LQu-BG-S8D"/>
-                        <constraint firstItem="0M1-nQ-DQC" firstAttribute="centerX" secondItem="9Fx-5S-OMy" secondAttribute="centerX" id="O4I-Gh-2yh"/>
-                        <constraint firstItem="m8q-Jn-26T" firstAttribute="leading" secondItem="9Fx-5S-OMy" secondAttribute="leading" id="VeO-HS-GgM"/>
-                        <constraint firstItem="0M1-nQ-DQC" firstAttribute="top" secondItem="m8q-Jn-26T" secondAttribute="top" id="p5o-gp-rr9"/>
-                        <constraint firstItem="0M1-nQ-DQC" firstAttribute="height" secondItem="9Fx-5S-OMy" secondAttribute="height" id="y5y-87-JHf"/>
+                        <constraint firstItem="m8q-Jn-26T" firstAttribute="width" secondItem="rA9-BK-yhQ" secondAttribute="width" id="jVg-Hm-Ecm"/>
                     </constraints>
-                    <variation key="default">
-                        <mask key="constraints">
-                            <exclude reference="O4I-Gh-2yh"/>
-                        </mask>
-                    </variation>
-                </view>
+                </stackView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
             <gestureRecognizers/>
             <constraints>
-                <constraint firstItem="9Fx-5S-OMy" firstAttribute="top" secondItem="rHX-Ga-oeX" secondAttribute="top" id="D90-jr-C1s"/>
-                <constraint firstItem="9Fx-5S-OMy" firstAttribute="leading" secondItem="rHX-Ga-oeX" secondAttribute="leading" id="c9i-B6-JzU"/>
-                <constraint firstAttribute="trailing" secondItem="9Fx-5S-OMy" secondAttribute="trailing" id="ifG-AC-qMA"/>
+                <constraint firstItem="rA9-BK-yhQ" firstAttribute="leading" secondItem="V5c-Wf-sHO" secondAttribute="leading" id="12n-Hw-dXa"/>
+                <constraint firstItem="V5c-Wf-sHO" firstAttribute="trailing" secondItem="rA9-BK-yhQ" secondAttribute="trailing" id="NfD-w1-H46"/>
+                <constraint firstItem="rA9-BK-yhQ" firstAttribute="top" secondItem="V5c-Wf-sHO" secondAttribute="top" id="auB-pt-fnq"/>
+                <constraint firstItem="rA9-BK-yhQ" firstAttribute="width" secondItem="rHX-Ga-oeX" secondAttribute="width" id="fL0-le-hgq"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="V5c-Wf-sHO"/>
@@ -146,27 +127,22 @@
             <rect key="frame" x="0.0" y="0.0" width="376" height="30"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B4X-9M-Fgr">
-                    <rect key="frame" x="0.0" y="10" width="376" height="20"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B4X-9M-Fgr" customClass="UIStackView">
+                    <rect key="frame" x="0.0" y="-4" width="376" height="34"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wZH-WN-ppM" userLabel="line">
-                            <rect key="frame" x="0.0" y="18" width="376" height="2"/>
+                            <rect key="frame" x="0.0" y="32" width="376" height="2"/>
                             <color key="backgroundColor" name="Slider"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="2" id="N3g-wa-M5l"/>
                             </constraints>
                         </view>
-                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OxF-rH-3u9">
-                            <rect key="frame" x="163" y="0.0" width="50" height="20"/>
+                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OxF-rH-3u9" customClass="SliderButton" customModule="Pico" customModuleProvider="target">
+                            <rect key="frame" x="163" y="0.0" width="50" height="34"/>
                             <color key="backgroundColor" name="Slider"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="50" id="7kf-IJ-wK0"/>
-                                <constraint firstAttribute="height" constant="20" id="fBY-eS-r3b"/>
-                            </constraints>
-                            <state key="normal" image="seperator-edit">
+                            <state key="normal">
                                 <color key="titleColor" red="1" green="0.21595210109999999" blue="0.14619663590000001" alpha="1" colorSpace="calibratedRGB"/>
                             </state>
-                            <state key="selected" image="check-solid"/>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="string" keyPath="layer.borderWidth" value="0"/>
                             </userDefinedRuntimeAttributes>
@@ -344,8 +320,6 @@
         </view>
     </objects>
     <resources>
-        <image name="check-solid" width="15" height="12"/>
-        <image name="seperator-edit" width="13" height="13"/>
         <namedColor name="Slider">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

@@ -20,6 +20,18 @@ enum SliderDirection : String, CaseIterable {
     static func parse(direction: String) -> SliderDirection {
         return SliderDirection.allCases.first {$0.rawValue == direction}!
     }
+    
+    func isVertical() -> Bool {
+        return [SliderDirection.top, .middle, .bottom].contains(self)
+    }
+
+    var buttonSize: CGSize {
+        if self.isVertical() {
+            return CGSize(width: 50, height: 20)
+        } else {
+            return CGSize(width: 20, height: 50)
+        }
+    }
 }
 
 class SliderIconView : UIImageView {
@@ -59,7 +71,6 @@ class SliderIconView : UIImageView {
 
 class SliderButton : UIButton {
     
-    var initButtonWidth = CGFloat(20)
     var widthConstraint: NSLayoutConstraint!
     var iconView: SliderIconView!
     var direction: SliderDirection!
@@ -75,9 +86,9 @@ class SliderButton : UIButton {
         iconView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         iconView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         
-        widthConstraint = widthAnchor.constraint(equalToConstant: initButtonWidth)
+        widthConstraint = widthAnchor.constraint(equalToConstant: direction.buttonSize.width)
         widthConstraint.isActive = true
-        widthAnchor.constraint(equalTo: heightAnchor, multiplier: CGFloat(20)/CGFloat(50), constant: 1).isActive = true
+        widthAnchor.constraint(equalTo: heightAnchor, multiplier: direction.buttonSize.width/direction.buttonSize.height, constant: 1).isActive = true
         
         addTarget(self, action: #selector(onStateChanged(event:)), for: .allEvents)
     }
@@ -95,7 +106,7 @@ class SliderButton : UIButton {
     let originSize = CGSize(width: 20, height: 50)
     var scale: CGFloat = 1.0 {
         didSet {
-            widthConstraint.constant = scale * initButtonWidth
+            widthConstraint.constant = scale * direction.buttonSize.width
             iconView.scale = scale
         }
     }
@@ -109,9 +120,15 @@ class SliderButton : UIButton {
     fileprivate func updateCorner() {
         switch direction! {
         case .left:
-            roundCorners([.topRight, .bottomRight], radius: 30)
+            roundCorners([.topRight, .bottomRight], radius: SliderConstants.buttonHeight/2)
         case .right:
             roundCorners([.topLeft, .bottomLeft], radius: SliderConstants.buttonHeight/2)
+        case .top:
+            roundCorners([.bottomLeft, .bottomRight], radius: SliderConstants.buttonHeight)
+        case .middle:
+            roundCorners([.bottomLeft, .bottomRight, .topLeft, .topRight], radius: SliderConstants.buttonHeight/2)
+        case .bottom:
+            roundCorners([.topLeft, .topRight], radius: SliderConstants.buttonHeight)
         default:
             break
         }
