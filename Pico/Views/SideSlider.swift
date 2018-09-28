@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 
 class SideSlider: UIView, SliderSelectable {
+    
+    
     @objc var direction: String!
 
     @IBOutlet weak var button: SliderButton!
@@ -35,6 +37,8 @@ class SideSlider: UIView, SliderSelectable {
             arrow.trailingAnchor.constraint(equalTo: button.leadingAnchor, constant: -SliderConstants.gap).isActive = true
             arrow.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
         }
+        
+        button.setup(direction: SliderDirection.parse(direction: direction))
     }
     
     func updateSlider(midPoint: CGPoint, transform: CGAffineTransform) {
