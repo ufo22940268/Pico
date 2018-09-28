@@ -161,13 +161,13 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         if isDev() {
             loadUIImageHandler = {
-                self.type = .normal
+                self.type = .screenshot
                 
                 //Photo library
                 let library = ImagesLibrary()
                 library.reload {
                     let album = Album.selectAllPhotoAlbum(albums: library.albums)!
-                    let images = Array(album.items[0..<min(album.items.count, 20)])
+                    let images = Array(album.items[0..<min(album.items.count, 2)])
                     self.loadedImages = images
 
                     self.configureImages(images)
@@ -403,16 +403,13 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         }
         
         if case .editing(let direction, _) = state, ["left", "right"].contains(direction) {
-//            containerWrapperCenterXConstraint.isActive = false
-//            containerWrapperLeadingConstraint.constant = containerWrapper.frame.minX
-//            containerWrapperTrailingConstraint.constant = scroll.frame.width - containerWrapper.frame.maxX
+            
         } else if case .inactive(let fromDirections) = state {
             if let fromDirections = fromDirections {
                 if ["left", "right"].contains(fromDirections) {
                     self.containerWrapperLeadingConstraint.constant = 0
                     self.containerWrapperTrailingConstraint.constant = 0
                     UIViewPropertyAnimator(duration: 0.15, curve: .linear, animations: {
-//                        self.containerWrapperCenterXConstraint.isActive = true
                         self.scroll.layoutIfNeeded()
                     }).startAnimation()
                 } else {
