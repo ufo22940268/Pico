@@ -160,13 +160,13 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         if isDev() {
             loadUIImageHandler = {
-                self.type = .normal
+                self.type = .screenshot
                 
                 //Photo library
                 let library = ImagesLibrary()
                 library.reload {
                     let album = Album.selectAllPhotoAlbum(albums: library.albums)!
-                    let images = Array(album.items[0..<min(album.items.count, 5)])
+                    let images = Array(album.items[0..<min(album.items.count, 2)])
                     self.loadedImages = images
 
                     self.configureImages(images)
@@ -299,22 +299,18 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                 activeConstraint.constant = containerTrailingConstraintConstant.addConstant(delta: calibrateDirection*abs(calibratedTranslateX))
             }
             
-//            /// Update container wrapper
-//            switch direction {
-//            case "left":
-//                containerWrapperTrailingConstraint.constant = containerWrapperTrailingConstraint.constant + (shrink ? 1 : -1)*abs(calibratedTranslateX)
-//            case "right":
-//                containerWrapperLeadingConstraint.constant = containerWrapperLeadingConstraint.constant + (shrink ? 1 : -1)*abs(calibratedTranslateX)
-//            default:
-//                break
-//            }
-//
-//            updateSeperatorSliderButtons()
 
+            keepHorizontalPosition(inDirection: direction, translate: calibratedTranslateX)
             
             sender.setTranslation(CGPoint.zero, in: container)
-            
-            centerContainerWrapper()
+        }
+    }
+    
+    func keepHorizontalPosition(inDirection direction: String,  translate: CGFloat) {
+        if direction == "left" {
+            scroll.contentInset.right = scroll.contentInset.right - translate
+        } else if direction == "right" {
+            scroll.contentInset.left = scroll.contentInset.left + translate
         }
     }
     
@@ -357,9 +353,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         return container.bounds.width/maxContainerWidth
     }
     
-    func onCellScroll(translate: Float, cellIndex: Int, position: ComposeCell.Position) {
-        let scale = getContainerScale()
-        let distanceVector = CGFloat(translate)*scale
+    fileprivate func keepVerticalPosition(_ position: ComposeCell.Position, _ distanceVector: CGFloat) {
         if case .above = position {
             var contentInset = scroll.contentInset
             contentInset.top = contentInset.top + distanceVector
@@ -373,6 +367,12 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             contentInset.bottom = contentInset.bottom - distanceVector
             scroll.contentInset = contentInset
         }
+    }
+    
+    func onCellScroll(translate: Float, cellIndex: Int, position: ComposeCell.Position) {
+        let scale = getContainerScale()
+        let distanceVector = CGFloat(translate)*scale
+        keepVerticalPosition(position, distanceVector)
     }
 
     fileprivate func resetGapToContainer() {
@@ -399,12 +399,11 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                     self.containerWrapperLeadingConstraint.constant = 0
                     self.containerWrapperTrailingConstraint.constant = 0
                     UIViewPropertyAnimator(duration: 0.15, curve: .linear, animations: {
-                        self.scroll.layoutIfNeeded()
+                        self.resetGapToContainer()
                     }).startAnimation()
                 } else {
                     UIView.animate(withDuration: 0.15, animations: {
                         self.resetGapToContainer()
-                        self.containerWrapper.layoutIfNeeded()
                     })
                 }
             }
@@ -617,4 +616,3 @@ extension ComposeController: ShareImageGenerator {
         }, wrapperBounds: rect)
     }
 }
-
