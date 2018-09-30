@@ -33,6 +33,7 @@ class SeperatorSlider: UIView, SliderSelectable {
     @IBOutlet weak var button: SliderButton!
     @IBOutlet var buttonCenterXConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var middleTopCosntraint: NSLayoutConstraint!
     fileprivate func showAboveArrow() -> Bool {
         return ["bottom", "middle"].contains(direction)
     }
@@ -41,8 +42,12 @@ class SeperatorSlider: UIView, SliderSelectable {
         return ["top", "middle"].contains(direction)
     }
     
+    var directionEnum: SliderDirection!
     
     override func awakeFromNib() {
+        
+        directionEnum = SliderDirection.parse(direction: direction)
+        
         buttonCenterXConstraint = button.centerXAnchor.constraint(equalTo: centerXAnchor)
         buttonCenterXConstraint.isActive = true
         
@@ -141,6 +146,13 @@ class SeperatorSlider: UIView, SliderSelectable {
     
     func updateButtonPosition(midPoint: CGPoint) {
         buttonCenterXConstraint.constant = (midPoint.x - bounds.midX)
+    }
+    
+    func updateScale(_ scale: CGFloat) {
+        button.scale = scale
+        if directionEnum! == .middle {
+            middleTopCosntraint.constant = -button.bounds.height/2
+        }
     }
     
     fileprivate func setupAnimations() {

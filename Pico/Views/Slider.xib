@@ -69,6 +69,7 @@
             </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="button" destination="8ER-9v-Fki" id="LEn-aM-nRg"/>
+                <outlet property="middleTopCosntraint" destination="tmO-2T-M7f" id="Qkf-LC-INw"/>
             </connections>
             <point key="canvasLocation" x="210.5" y="-103.5"/>
         </view>

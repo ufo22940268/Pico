@@ -104,9 +104,11 @@ class SliderButton : UIButton {
     }
     
     let originSize = CGSize(width: 20, height: 50)
+    
     var scale: CGFloat = 1.0 {
         didSet {
             widthConstraint.constant = scale * direction.buttonSize.width
+            print(scale * direction.buttonSize.width)
             iconView.scale = scale
         }
     }
@@ -120,15 +122,15 @@ class SliderButton : UIButton {
     fileprivate func updateCorner() {
         switch direction! {
         case .left:
-            roundCorners([.topRight, .bottomRight], radius: SliderConstants.buttonHeight/2)
+            roundCorners([.topRight, .bottomRight], radius: bounds.height/2)
         case .right:
-            roundCorners([.topLeft, .bottomLeft], radius: SliderConstants.buttonHeight/2)
+            roundCorners([.topLeft, .bottomLeft], radius: bounds.height/2)
         case .top:
-            roundCorners([.bottomLeft, .bottomRight], radius: SliderConstants.buttonHeight)
+            roundCorners([.bottomLeft, .bottomRight], radius: bounds.height)
         case .middle:
-            roundCorners([.bottomLeft, .bottomRight, .topLeft, .topRight], radius: SliderConstants.buttonHeight/2)
+            roundCorners([.bottomLeft, .bottomRight, .topLeft, .topRight], radius: bounds.height/2)
         case .bottom:
-            roundCorners([.topLeft, .topRight], radius: SliderConstants.buttonHeight)
+            roundCorners([.topLeft, .topRight], radius: bounds.height)
         default:
             break
         }
