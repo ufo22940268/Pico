@@ -44,7 +44,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     var loadUIImageHandler:(() -> Void)?
     
     @IBOutlet weak var containerWidthConstraint: NSLayoutConstraint!
-//    @IBOutlet var containerWrapperCenterXConstraint: NSLayoutConstraint!
     @IBOutlet var panGesture: UIPanGestureRecognizer!
     
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
@@ -161,13 +160,13 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         if isDev() {
             loadUIImageHandler = {
-                self.type = .screenshot
+                self.type = .normal
                 
                 //Photo library
                 let library = ImagesLibrary()
                 library.reload {
                     let album = Album.selectAllPhotoAlbum(albums: library.albums)!
-                    let images = Array(album.items[0..<min(album.items.count, 2)])
+                    let images = Array(album.items[0..<min(album.items.count, 5)])
                     self.loadedImages = images
 
                     self.configureImages(images)
@@ -360,10 +359,19 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     
     func onCellScroll(translate: Float, cellIndex: Int, position: ComposeCell.Position) {
         let scale = getContainerScale()
+        let distanceVector = CGFloat(translate)*scale
         if case .above = position {
-            topConstraint.constant = topConstraint.constant + CGFloat(translate)*scale
+            var contentInset = scroll.contentInset
+            contentInset.top = contentInset.top + distanceVector
+            scroll.contentInset = contentInset
+            
+            var offset = scroll.contentOffset
+            offset.y = offset.y - distanceVector
+            scroll.contentOffset = offset
         } else if case .below = position {
-            bottomConstraint.constant = bottomConstraint.constant - CGFloat(translate)*scale
+            var contentInset = scroll.contentInset
+            contentInset.bottom = contentInset.bottom - distanceVector
+            scroll.contentInset = contentInset
         }
     }
 
