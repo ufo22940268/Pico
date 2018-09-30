@@ -108,7 +108,6 @@ class SliderButton : UIButton {
     var scale: CGFloat = 1.0 {
         didSet {
             widthConstraint.constant = scale * direction.buttonSize.width
-            print(scale * direction.buttonSize.width)
             iconView.scale = scale
         }
     }
