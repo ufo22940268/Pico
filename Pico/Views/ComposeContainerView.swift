@@ -141,6 +141,10 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         }
     }
     
+    func showActiveSeperator() {
+        getActiveSlider()?.hideAndDisable(false)
+    }
+    
     fileprivate func updateSliderStateForSlideWhenEditChanged() {
         if case let .editing(_, index) = editState {
             seperators.forEach { seperator in
