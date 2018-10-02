@@ -39,6 +39,7 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        collectionView.allowsMultipleSelection = true
         collection.register(UINib(nibName: "ImageCell", bundle: nil), forCellWithReuseIdentifier: reuseIdentifier)
         registerForPreviewing(with: self, sourceView: collection)
     }
@@ -85,6 +86,17 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         }
     }
 
+    fileprivate func updateCellSelectedStatus(_ indexPath: IndexPath, _ cell: PickImageCell) {
+        let sequence = getSelectSequence(image: images[indexPath.item])
+        if cell.isSelected {
+            if let sequence = sequence  {
+                cell.select(number: sequence)
+            }
+        } else {
+            cell.unselect()
+        }
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PickImageCell
         
@@ -104,12 +116,7 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         
         cell.setImageType(getImageType(from: image))        
         
-        let sequence = getSelectSequence(image: images[indexPath.item])
-        if let sequence = sequence  {
-            cell.select(number: sequence)
-        } else {
-            cell.unselect()
-        }
+        updateCellSelectedStatus(indexPath, cell)
         
         return cell
     }
@@ -152,20 +159,27 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         return CGSize(width: size, height: size)
     }
     
+    
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectImage = images[indexPath.item]
+        guard selectImages.count < maxSelectCount else {
+            let ac = UIAlertController(title: nil, message: "最多只能选择\(maxSelectCount)张图片", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "ok", style: .default))
+            self.present(ac, animated: true, completion: nil)
+            return
+        }
+        
+        selectImages.append(selectImage)
+        
+        updateAfterSelectionChanged()
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         let selectImage = images[indexPath.item]
         if selectImages.contains(selectImage) {
             selectImages.remove(at: selectImages.index(of: selectImage)!)
-        } else {
-            guard selectImages.count < maxSelectCount else {
-                let ac = UIAlertController(title: nil, message: "最多只能选择\(maxSelectCount)张图片", preferredStyle: .alert)
-                ac.addAction(UIAlertAction(title: "ok", style: .default))
-                self.present(ac, animated: true, completion: nil)
-                return
-            }
-            selectImages.append(selectImage)
         }
-        
+
         updateAfterSelectionChanged()
     }
     
@@ -174,7 +188,9 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         if reloadAll {
             self.collectionView?.reloadData()
         } else {
-            self.collection.reloadItems(at: self.collectionView!.indexPathsForVisibleItems)
+            for cell in collectionView.visibleCells {
+                updateCellSelectedStatus(collectionView.indexPath(for: cell)!, cell as! PickImageCell)
+            }
         }
     }
 
