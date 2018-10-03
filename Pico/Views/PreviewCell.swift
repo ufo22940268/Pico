@@ -56,6 +56,7 @@ class PreviewCell: UIView {
     var imageView: UIImageView!
     var pixelView: PixelView!
     var signView: UILabel!
+    var pixelScale : PreviewPixellateScale = .small
     
     override var bounds: CGRect {
         willSet(newBounds) {
@@ -110,16 +111,16 @@ class PreviewCell: UIView {
 // MARK: - Pixellate
 extension PreviewCell {
         
-    func updateCrop(with normalizedRect: CGRect, identifier: CropArea) {
+    func updatePixelCrop(with normalizedRect: CGRect, identifier: CropArea) {
         guard decorator.isImageLoaded() else {return}
         
         decorator.updatePixelCrop(with: normalizedRect, identifier: identifier)
-        displayPixel()
     }
     
-    func displayPixel() {
+    func updatePixelView() {
         guard decorator.isImageLoaded() else {return}
-
+        
+        self.pixelView.image = pixelImage
         pixelView.updatePixelRects(Array(decorator.cropRects.values))
     }
     
@@ -165,6 +166,7 @@ extension PreviewCell {
     }
     
     func setPixelScale(_ scale: PreviewPixellateScale) {
+        pixelScale = scale
         decorator?.updatePixelScale(scale)
     }
 }
@@ -198,7 +200,11 @@ extension PreviewCell : RecycleCell {
         return frame
     }
     
-    func loadImage() {
+    var pixelImage:UIImage {
+        return UIImage(ciImage: self.decorator!.pixellateImages[pixelScale]!)
+    }
+    
+    func loadImage() {
         guard loadingSeq == Int32(0) else {
             return
         }
@@ -215,8 +221,7 @@ extension PreviewCell : RecycleCell {
                 self.decorator?.boundWidth = self.bounds.width
                 self.decorator?.boundHeight = self.bounds.height
                 self.imageView.image = self.decorator.lastImage.convertToUIImage()
-                self.pixelView.image = UIImage(ciImage: self.decorator!.pixellateImages.first!.value)
-                self.displayPixel()
+                self.updatePixelView()
             }
             self.showContentView()
             self.setNeedsDisplay()
