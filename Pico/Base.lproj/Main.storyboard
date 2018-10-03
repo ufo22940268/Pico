@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="MIE-CQ-9z1">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="h2r-xB-xzJ">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -207,9 +207,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="3fT-eg-GIo">
-                                <rect key="frame" x="170" y="316" width="37" height="37"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="3fT-eg-GIo">
+                                <rect key="frame" x="169" y="347" width="37" height="37"/>
                                 <color key="color" name="headerColor" catalog="System" colorSpace="catalog"/>
                             </activityIndicatorView>
                             <scrollView hidden="YES" verifyAmbiguity="off" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qfn-Hc-ipw">
@@ -275,9 +274,11 @@
                             <constraint firstItem="Qfn-Hc-ipw" firstAttribute="bottom" secondItem="479-VI-HKL" secondAttribute="top" id="4dR-Tn-wdv"/>
                             <constraint firstItem="479-VI-HKL" firstAttribute="bottom" secondItem="cZ4-cg-Jcn" secondAttribute="bottom" id="Hlx-yi-gKK"/>
                             <constraint firstItem="479-VI-HKL" firstAttribute="trailing" secondItem="Qfn-Hc-ipw" secondAttribute="trailing" id="TTl-Mx-xej"/>
+                            <constraint firstItem="3fT-eg-GIo" firstAttribute="centerY" secondItem="cZ4-cg-Jcn" secondAttribute="centerY" id="Uzw-yp-gSe"/>
                             <constraint firstItem="Qfn-Hc-ipw" firstAttribute="trailing" secondItem="cZ4-cg-Jcn" secondAttribute="trailing" id="aXH-ul-u6P"/>
                             <constraint firstItem="Qfn-Hc-ipw" firstAttribute="top" secondItem="cZ4-cg-Jcn" secondAttribute="top" id="hCh-Ph-bYJ"/>
                             <constraint firstItem="479-VI-HKL" firstAttribute="leading" secondItem="Qfn-Hc-ipw" secondAttribute="leading" id="wys-dj-ibx"/>
+                            <constraint firstItem="3fT-eg-GIo" firstAttribute="centerX" secondItem="cZ4-cg-Jcn" secondAttribute="centerX" id="ypv-2e-XuV"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="cZ4-cg-Jcn"/>
                     </view>
@@ -590,6 +591,6 @@
         <image name="user-edit-solid" width="24" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="qc9-Ra-JBo"/>
+        <segue reference="p86-VW-Pye"/>
     </inferredMetricsTieBreakers>
 </document>
