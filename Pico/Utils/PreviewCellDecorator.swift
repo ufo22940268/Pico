@@ -29,6 +29,7 @@ class PreviewCellDecorator {
     var signAlign:PreviewAlignMode = .middle
     var signImage: CIImage?
     var fontSize = PreviewConstants.signFontSize
+    var forExport = false
     
     var lastUIImage: UIImage? {
         guard let lastImage = lastImage else {return nil}
@@ -44,6 +45,7 @@ class PreviewCellDecorator {
     /// Constructor for export
     convenience init(image: CIImage, cell: PreviewCell) {
         self.init(scale: cell.decorator!.pixellateScale)
+        forExport = true
         boundWidth = image.extent.width
         boundHeight = image.extent.height
         
@@ -79,16 +81,16 @@ class PreviewCellDecorator {
         return rect.applying(CGAffineTransform(scaleX: boundWidth, y: boundHeight))
     }
     
-    func renderCrop(with rect: CGRect)  {
+    func renderPixelCrop(with rect: CGRect)  {
         lastImage = pixellateImages[pixellateScale]!.cropped(to: toUICoordinate(from: rect).convertLTCToLBC(frameHeight: boundHeight)).composited(over: lastImage)
     }
     
-    func updateCrop(with normalizedRect: CGRect, identifier: CropArea) {
+    func updatePixelCrop(with normalizedRect: CGRect, identifier: CropArea) {
         cropRects[identifier] = normalizedRect
-        renderCrop(with: normalizedRect)
+        renderPixelCrop(with: normalizedRect)
     }
     
-    func removeCrop(by identifier: CropArea) {
+    func removePixelCrop(by identifier: CropArea) {
         cropRects.removeValue(forKey: identifier)
     }
     
@@ -105,8 +107,13 @@ class PreviewCellDecorator {
         }
     }
     
+    var exportRatio: CGFloat {
+        return lastImage.extent.width/UIScreen.main.bounds.width
+    }
+    
     func applyPixel(image: CIImage, pixelScale: PreviewPixellateScale) -> CIImage {
-        return image.applyingFilter("CIPixellate", parameters: ["inputScale": pixelScale.rawValue])
+        let scale = !forExport ? CGFloat(pixelScale.rawValue) : CGFloat(pixelScale.rawValue)*exportRatio
+        return image.applyingFilter("CIPixellate", parameters: ["inputScale": scale])
     }
     
     func resetPixel() {
@@ -156,12 +163,12 @@ class PreviewCellDecorator {
     func rerenderAllPixelCrops() {
         resetPixel()
         for (_, cropRect) in cropRects {
-            renderCrop(with: cropRect)
+            renderPixelCrop(with: cropRect)
         }
     }
     
     func updateSignImage() {
-        guard let sign = sign else {
+        guard sign != nil else {
             signImage = nil
             return
         }
