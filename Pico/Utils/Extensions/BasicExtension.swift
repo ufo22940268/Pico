@@ -15,6 +15,13 @@ extension Float {
     var radiansToDegrees: Float { return self * 180 / .pi }
 }
 
+extension CGSize {
+    /// Height/Width
+    var ratio : CGFloat {
+        return height/width
+    }
+}
+
 extension UIDevice {
     var isSimulator: Bool {
         #if IOS_SIMULATOR

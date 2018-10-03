@@ -38,6 +38,10 @@ extension UIScreen {
     var pixelSize: CGSize {
         return self.bounds.size.applying(CGAffineTransform(scaleX: scale, y: scale))
     }
+    
+    var pixelBounds: CGRect {
+        return self.bounds.applying(CGAffineTransform(scaleX: scale, y: scale))
+    }
 }
 
 class ComposeCell: UIView, EditDelegator {
