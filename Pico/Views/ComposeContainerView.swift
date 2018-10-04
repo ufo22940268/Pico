@@ -260,7 +260,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         let targetWidth = cells.map {$0.imageEntity.asset.pixelWidth}.min { (c1, c2) -> Bool in
             c1 < c2
         }
-        let queue = DispatchQueue(label: "comjjj")
+        let queue = DispatchQueue(label: "com.bettycc.pico.compose.export")
         queue.async {
             for (index, cell) in self.cells.enumerated() {
                 group.enter()
