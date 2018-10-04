@@ -74,7 +74,7 @@ class PreviewFrameDecorator {
             canvasHeight = canvasHeight + frameWidth
         }
         
-        let rect = CGRect(origin: CGPoint.zero, size: CGSize(width: canvasWidth, height: canvasHeight))
+        let rect = CGRect(origin: image.extent.origin, size: CGSize(width: canvasWidth, height: canvasHeight))
         canvas = canvas.clampedToExtent().cropped(to: rect)
         canvas = image.transformed(by: CGAffineTransform(translationX: (canvasWidth - image.extent.width)/2, y: canvasHeight > image.extent.height ? frameWidth : 0)).composited(over: canvas)
         return canvas

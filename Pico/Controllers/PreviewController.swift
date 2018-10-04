@@ -171,7 +171,7 @@ class PreviewController: UIViewController {
                 let library = ImagesLibrary()
                 library.reload {
                     let album = Album.selectAllPhotoAlbum(albums: library.albums)!
-                    self.imageEntities = Array(album.items[0..<min(album.items.count, 5)])
+                    self.imageEntities = Array(album.items[0..<min(album.items.count, 2)])
                     self.cropRects = (0..<self.imageEntities.count).map {_ in CGRect(origin: CGPoint.zero, size: CGSize(width: 1, height: 1))}
                     self.preview.imageEntities = self.imageEntities
                     self.setupAfterLoaded()
@@ -342,7 +342,7 @@ extension PreviewController {
             1: .middle,
             2: .large
         ]
-        
+                
         preview.setPixelScale(scale: tagToScale[sender.tag]!)
         preview.updatePixelInCells()
         preview.setNeedsDisplay()

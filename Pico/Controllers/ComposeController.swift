@@ -166,7 +166,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                 let library = ImagesLibrary()
                 library.reload {
                     let album = Album.selectAllPhotoAlbum(albums: library.albums)!
-                    let images = Array(album.items[0..<min(album.items.count, 6)])
+                    let images = Array(album.items[0..<min(album.items.count, 20)])
                     self.loadedImages = images
 
                     self.configureImages(images)
