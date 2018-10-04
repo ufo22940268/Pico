@@ -118,7 +118,10 @@ class PreviewCellDecorator {
         
         let inputCenter = forExport ? CIVector(cgPoint: CGPoint(x: lastImage.extent.midX, y: lastImage.extent.midY)) : CIVector(cgPoint: CGPoint(x: UIScreen.main.pixelBounds.midX, y: UIScreen.main.pixelBounds.midY))
         
-        return image.applyingFilter("CIPixellate", parameters: ["inputScale": scale, "inputCenter": inputCenter])
+        var pixelImage = image.applyingFilter("CIPixellate", parameters: ["inputScale": scale, "inputCenter": inputCenter])
+        pixelImage = pixelImage.cropped(to: CGRect(origin: CGPoint.zero, size: lastImage.extent.size))
+        
+        return pixelImage
     }
     
     func resetPixel() {

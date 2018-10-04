@@ -91,6 +91,7 @@ class PreviewCell: UIView {
         
         pixelView = PixelView(frame: CGRect.zero)
         addSubview(pixelView)
+        pixelView.contentMode = .scaleToFill
         pixelView.translatesAutoresizingMaskIntoConstraints = false
         pixelView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1).isActive = true
         pixelView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 1).isActive = true
