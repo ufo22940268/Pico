@@ -521,7 +521,6 @@
                 <panGestureRecognizer enabled="NO" minimumNumberOfTouches="1" id="JII-QL-bxo" userLabel="Pixellate Gesture Recognizer">
                     <connections>
                         <action selector="onSelectRegion:" destination="ycZ-tp-DN7" id="kGh-Kf-xsa"/>
-                        <outlet property="delegate" destination="bEx-xN-zR0" id="yps-5a-UzZ"/>
                     </connections>
                 </panGestureRecognizer>
             </objects>
