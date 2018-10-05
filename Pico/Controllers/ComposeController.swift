@@ -449,7 +449,7 @@ extension ComposeController {
             if highlight {
                 item.tintColor = UIColor.system
             } else {
-                item.tintColor = UIColor.black
+                item.tintColor = UIColor.gray
             }
         }
     }

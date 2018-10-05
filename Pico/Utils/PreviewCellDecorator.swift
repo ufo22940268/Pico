@@ -176,7 +176,7 @@ class PreviewCellDecorator {
     }
     
     func updateSignImage() {
-        guard sign != nil else {
+        guard sign != nil && sign != "" else {
             signImage = nil
             return
         }
