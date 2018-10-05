@@ -65,4 +65,8 @@ extension CIImage {
         }
         return scaledImages
     }
+    
+    func resetOffset() -> CIImage {
+        return self.transformed(by: CGAffineTransform(translationX: -extent.minX, y: -extent.minY))
+    }
 }
