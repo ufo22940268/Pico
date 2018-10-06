@@ -30,9 +30,9 @@ struct CropArea: Hashable {
 }
 
 enum PreviewPixellateScale: Int {
-    case small = 21
-    case middle = 31
-    case large = 41
+    case small = 20
+    case middle = 30
+    case large = 40
 }
 
 struct PreviewConstants {
@@ -136,27 +136,6 @@ class PreviewView: UIStackView, RecycleList {
     }
     
     func renderImageForExport(imageEntities: [Image], cropRects: [CGRect], complete:  @escaping (UIImage) -> Void) {
-//        Image.resolve(images: imageEntities, completion: { originalImages in
-//            let filteredOriginalImages = originalImages as! [UIImage]
-//
-//            var croppedImages = self.cropImagesForExport(images: filteredOriginalImages, cropRects: cropRects)
-//            var finalImages = [CIImage]()
-//            croppedImages = CIImage.resizeToSameWidth(images: croppedImages)
-//
-//            for (index, croppedImage) in croppedImages.enumerated() {
-//                let cell = self.cells[index]
-//                finalImages.append(PreviewCellDecorator(image: croppedImage, cell: cell).composeImageForExport())
-//            }
-//
-//            finalImages = PreviewFrameDecorator(images: finalImages, frameType: self.frameType).addFrames()
-//
-//            let canvas = CIImage.concateImages(images: finalImages, needScale: false)
-//
-//            let uiCanvas = canvas.convertToUIImage()
-//
-//            complete(uiCanvas)
-//        })
-        
         let minWidth = cropRects.enumerated().map { offset, crop in
             return crop.width * CGFloat(imageEntities[offset].asset.pixelWidth)
         }.min()!
