@@ -19,9 +19,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     @IBOutlet weak var scroll: UIScrollView!
     @IBOutlet weak var containerWrapper: UIView!
     
-    @IBOutlet var topConstraint: NSLayoutConstraint!
-    @IBOutlet var bottomConstraint: NSLayoutConstraint!
-    
     @IBOutlet var containerLeadingConstraint: NSLayoutConstraint!
     @IBOutlet var containerTrailingConstraint: NSLayoutConstraint!
     @IBOutlet var containerWrapperLeadingConstraint: NSLayoutConstraint!
@@ -92,7 +89,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                     
                     dispatchGroup.notify(queue: .main) {
                         self.hideLoading()
-                        self.resetGapToContainer()
+                        self.centerContainerWrapper()
                     }
                 })
             }
@@ -144,7 +141,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         }
         
         scroll.layoutIfNeeded()
-        self.resetGapToContainer()
+        centerContainerWrapper()
         updateSideSliderButtons()
         container.updateSliderType()
         
@@ -160,13 +157,13 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         if isDev() {
             loadUIImageHandler = {
-                self.type = .screenshot
+                self.type = .normal
                 
                 //Photo library
                 let library = ImagesLibrary()
                 library.reload {
                     let album = Album.selectAllPhotoAlbum(albums: library.albums)!
-                    let images = Array(album.items[0..<min(album.items.count, 20)])
+                    let images = Array(album.items[0..<min(album.items.count, 2)])
                     self.loadedImages = images
 
                     self.configureImages(images)
@@ -374,12 +371,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         let distanceVector = CGFloat(translate)*scale
         keepVerticalPosition(position, distanceVector)
     }
-
-    fileprivate func resetGapToContainer() {
-        topConstraint.constant = 0
-        bottomConstraint.constant = 0
-        centerContainerWrapper()
-    }
     
     func editStateChanged(state: EditState) {
         editState = state
@@ -399,11 +390,11 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                     self.containerWrapperLeadingConstraint.constant = 0
                     self.containerWrapperTrailingConstraint.constant = 0
                     UIViewPropertyAnimator(duration: 0.15, curve: .linear, animations: {
-                        self.resetGapToContainer()
+                        self.centerContainerWrapper()
                     }).startAnimation()
                 } else {
                     UIView.animate(withDuration: 0.15, animations: {
-                        self.resetGapToContainer()
+                        self.centerContainerWrapper()
                     })
                 }
             }
@@ -538,8 +529,8 @@ extension ComposeController {
                 if self.containerWidthConstraint.multiplier < minScale {
                     self.scaleContainerWrapper(scale: minScale/self.containerWidthConstraint.multiplier)
                 }
-         
-                self.resetGapToContainer()
+ 
+                self.centerContainerWrapper()
                 self.scroll.layoutIfNeeded()
                 self.updateAfterWrapperResize()
             }.startAnimation()
@@ -603,6 +594,15 @@ extension ComposeController: UIScrollViewDelegate {
         let offsetX = max((scrollBounds.width - scroll.contentSize.width) * 0.5, 0)
         let offsetY = max((scrollBounds.height - scroll.contentSize.height) * 0.5, 0)
         scroll.contentInset = UIEdgeInsets(top: offsetY, left: offsetX, bottom: 0, right: 0)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        switch editState {
+        case .inactive:
+            centerContainerWrapper()
+        default:
+            break
+        }
     }
 }
 
