@@ -589,6 +589,7 @@ extension ComposeController: UIScrollViewDelegate {
         updateSeperatorSliderButtons()
     }
     
+    
     fileprivate func centerContainerWrapper() {
         let scrollBounds = scroll.bounds
         let offsetX = max((scrollBounds.width - scroll.contentSize.width) * 0.5, 0)
