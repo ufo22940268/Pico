@@ -244,7 +244,7 @@ extension ComposeCell : RecycleCell {
     func loadImage() {
         guard loadingTag == Int32(0) && image.image == nil else {
             return
-        }
+        }        
         showPlaceholder()
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true

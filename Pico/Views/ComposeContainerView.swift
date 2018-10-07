@@ -266,10 +266,11 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
                 group.enter()
                 cell.exportSnapshot(callback: {img in
                     autoreleasepool {
+                        let calibratedImg = img.resetOffset()
                         if canvas == nil {
-                            canvas = img
+                            canvas = calibratedImg
                         } else {
-                            canvas = CIImage.concateImages(images: [canvas!, img], needScale: false)
+                            canvas = CIImage.concateImages(images: [canvas!, calibratedImg], needScale: false)
                         }
                     }
                     group.leave()

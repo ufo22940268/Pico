@@ -240,6 +240,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             panView.scrollVertical(sender)
             container.showSeperators(show: false)
             container.showActiveSeperator()
+            updateContainerImages()
         } else if sender.state == .ended {
             container.showSeperators(show: true)
         }
@@ -501,41 +502,6 @@ extension ComposeController {
     fileprivate func updateAfterWrapperResize() {
         updateSideSliderButtons()
         updateSeperatorSliderButtons()
-    }
-    
-    @IBAction func onPinchComposeView(_ gestureRecognizer: UIPinchGestureRecognizer) {
-        if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
-            let maxScale = maxContainerWidth/containerWrapper.frame.width
-            let scale = min(gestureRecognizer.scale, maxScale)
-            
-            let targetScale = containerWidthConstraint.multiplier * scale
-            guard targetScale > 0.5 else {
-                return
-            }
-            
-            scaleContainerWrapper(scale: scale)
-            
-            if scale != 1 {
-                lastScale = scale
-            }
-            gestureRecognizer.scale = 1.0
-            
-            updateAfterWrapperResize()
-            updateContainerImages()
-        } else if gestureRecognizer.state == .ended {
-            
-            let minScale = CGFloat(0.5)
-            UIViewPropertyAnimator(duration: 0.1, curve: .linear) {
-                if self.containerWidthConstraint.multiplier < minScale {
-                    self.scaleContainerWrapper(scale: minScale/self.containerWidthConstraint.multiplier)
-                }
- 
-                self.centerContainerWrapper()
-                self.scroll.layoutIfNeeded()
-                self.updateAfterWrapperResize()
-            }.startAnimation()
-            updateContainerImages()
-        }
     }
 }
 
