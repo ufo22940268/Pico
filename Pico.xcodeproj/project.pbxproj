@@ -39,6 +39,8 @@
 		426A3A3A21425C6800FDDC5C /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426A3A3921425C6700FDDC5C /* UIImageExtension.swift */; };
 		428006F020EB7C610091BE9B /* ComposeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428006EF20EB7C610091BE9B /* ComposeController.swift */; };
 		428006F420EB99610091BE9B /* ComposeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 428006F320EB99610091BE9B /* ComposeCell.xib */; };
+		4288D7AF2169E718007B67FB /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4288D7AE2169E718007B67FB /* SettingViewController.swift */; };
+		4288D7B12169EB68007B67FB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4288D7B02169EB68007B67FB /* MessageUI.framework */; };
 		428C51F4211D6D5700A34E9B /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428C51F3211D6D5700A34E9B /* CGRectExtension.swift */; };
 		42A18C4B20EAF5A600DD4AA5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A18C4A20EAF5A600DD4AA5 /* AppDelegate.swift */; };
 		42A18C4D20EAF5A600DD4AA5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A18C4C20EAF5A600DD4AA5 /* ViewController.swift */; };
@@ -144,6 +146,8 @@
 		426A3A3921425C6700FDDC5C /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		428006EF20EB7C610091BE9B /* ComposeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeController.swift; sourceTree = "<group>"; };
 		428006F320EB99610091BE9B /* ComposeCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ComposeCell.xib; sourceTree = "<group>"; };
+		4288D7AE2169E718007B67FB /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		4288D7B02169EB68007B67FB /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		428C51F3211D6D5700A34E9B /* CGRectExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectExtension.swift; sourceTree = "<group>"; };
 		42A18C4720EAF5A600DD4AA5 /* Pico.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pico.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42A18C4A20EAF5A600DD4AA5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -189,6 +193,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4288D7B12169EB68007B67FB /* MessageUI.framework in Frameworks */,
 				42D69DC32153456D00BAD5BD /* MonkeyKing.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -213,6 +218,7 @@
 		42014D9B21378DC200C11B9D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4288D7B02169EB68007B67FB /* MessageUI.framework */,
 				42D69DC22153456D00BAD5BD /* MonkeyKing.framework */,
 				426A3A342141FC0A00FDDC5C /* QuartzCore.framework */,
 				42014DA821378DF400C11B9D /* CFNetwork.framework */,
@@ -315,6 +321,7 @@
 				42A5BAC220F60B1700D9E2A9 /* SelectAlbumController.swift */,
 				42143DFF20F83D7900000487 /* GalleryDetailController.swift */,
 				420EF44B20FCA784006CCDD3 /* PreviewController.swift */,
+				4288D7AE2169E718007B67FB /* SettingViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -583,6 +590,7 @@
 				42C84782215CA11800A3ECF8 /* OnboardingViewController.swift in Sources */,
 				42A18C4B20EAF5A600DD4AA5 /* AppDelegate.swift in Sources */,
 				42C4066F20F446750074B728 /* OverlapDetector.swift in Sources */,
+				4288D7AF2169E718007B67FB /* SettingViewController.swift in Sources */,
 				4201F006210ED73400A6EBA5 /* GestureExtension.swift in Sources */,
 				42A18C8820EB047300DD4AA5 /* Image.swift in Sources */,
 				42BF6E1B213C87B500458E78 /* PreviewCell.swift in Sources */,
