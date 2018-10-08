@@ -189,7 +189,7 @@
                     <navigationItem key="navigationItem" title="所有图片" id="Wls-ep-VAL">
                         <barButtonItem key="rightBarButtonItem" image="cog-solid" id="8k2-M6-ijd">
                             <connections>
-                                <segue destination="G89-QP-eSV" kind="show" id="tg0-Mc-P5F"/>
+                                <segue destination="G89-QP-eSV" kind="show" id="Pv4-Bc-ITc"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -687,7 +687,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mgl-fD-ZmO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1985" y="1038"/>
+            <point key="canvasLocation" x="2044" y="1133"/>
         </scene>
     </scenes>
     <resources>
@@ -711,7 +711,7 @@
         <image name="user-edit-solid" width="24" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="fvF-Lz-IAD"/>
+        <segue reference="POO-oW-Ira"/>
         <segue reference="K7U-HG-x3b"/>
     </inferredMetricsTieBreakers>
 </document>
