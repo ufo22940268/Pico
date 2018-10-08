@@ -162,6 +162,7 @@ class PreviewController: UIViewController {
     var initializeClosure: (() -> Void)?
     
     func setupAfterLoaded() {
+        print("setupAfterLoaded")
         preview.uiImages = uiImages
         preview.setupCells(images: imageEntities, crops: cropRects)
         
@@ -176,11 +177,11 @@ class PreviewController: UIViewController {
         scroll.delegate = self
         
         onSignChanged(sign: nil)
-        hideLoading()
         
         scroll.layoutIfNeeded()
         preview.loadImages(scrollView: scroll)
         activeToolbarItem(at: nil)
+        hideLoading()
     }
     
     override func viewDidLoad() {

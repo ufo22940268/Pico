@@ -53,7 +53,7 @@ class PreviewCell: UIView {
     var loading = false
     var loadingSeq = Int32(0)
     
-    var imageView: UIImageView!
+    var imageView: CropImageView!
     var pixelView: PixelView!
     var signView: UILabel!
     var pixelScale : PreviewPixellateScale = .small
@@ -79,7 +79,7 @@ class PreviewCell: UIView {
         
         setupPlaceholder()
         
-        imageView = UIImageView(frame: CGRect.zero)
+        imageView = UINib(nibName: "CropImageView", bundle: .main).instantiate(withOwner: self, options: nil).first! as? CropImageView
         addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1).isActive = true
@@ -217,20 +217,22 @@ extension PreviewCell : RecycleCell {
         }
         
         showPlaceholder()
-        let options = PHImageRequestOptions()
-        options.isNetworkAccessAllowed = true
-        options.resizeMode = .exact
         loadingSeq = image.resolve(completion: { (uiImage) in
             if let uiImage = uiImage {
-                var ciImage: CIImage = CIImage(image: uiImage)!
-                ciImage = ciImage.cropped(to: self.imageCrop.applying(CGAffineTransform(scaleX: ciImage.extent.width, y: ciImage.extent.height)))
-                ciImage = ciImage.transformed(by: CGAffineTransform(scaleX: UIScreen.main.pixelSize.width/ciImage.extent.width, y: UIScreen.main.pixelSize.width/ciImage.extent.width))
-                self.decorator.setImage(ciImage)
+//                var ciImage: CIImage = CIImage(image: uiImage)!
+//                ciImage = ciImage.cropped(to: self.imageCrop.applying(CGAffineTransform(scaleX: ciImage.extent.width, y: ciImage.extent.height)))
+//                ciImage = ciImage.transformed(by: CGAffineTransform(scaleX: UIScreen.main.pixelSize.width/ciImage.extent.width, y: UIScreen.main.pixelSize.width/ciImage.extent.width))
+                self.decorator.setImage(CIImage(image: uiImage)!)
                 self.decorator?.boundWidth = self.bounds.width
                 self.decorator?.boundHeight = self.bounds.height
-                self.imageView.image = self.decorator.lastImage.convertToUIImage()
-                self.updatePixelRects()
-                self.updatePixelImageInPixelView()
+                UIView.transition(with: self.imageView, duration: 0.3, options: .transitionCrossDissolve, animations: {
+//                    self.imageView.image = self.decorator.lastImage.convertToUIImage()
+                    self.imageView.image = uiImage
+                    self.imageView.cropRect = self.imageCrop
+                }, completion: { success in
+                    self.updatePixelRects()
+                    self.updatePixelImageInPixelView()
+                })
             }
             self.showContentView()
             self.setNeedsDisplay()
