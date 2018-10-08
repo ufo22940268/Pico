@@ -257,16 +257,16 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         let group = DispatchGroup()
         var canvas: CIImage? = nil
         
-        let targetWidth = cells.map {$0.imageEntity.asset.pixelWidth}.min { (c1, c2) -> Bool in
+        let targetWidth = CGFloat(cells.map {$0.imageEntity.asset.pixelWidth}.min { (c1, c2) -> Bool in
             c1 < c2
-        }
+        }!)
         let queue = DispatchQueue(label: "com.bettycc.pico.compose.export")
         queue.async {
             for (index, cell) in self.cells.enumerated() {
                 group.enter()
                 cell.exportSnapshot(callback: {img in
                     autoreleasepool {
-                        let calibratedImg = img.resetOffset()
+                        let calibratedImg = img.resetOffset().transformed(by: CGAffineTransform(scaleX: targetWidth/img.extent.width, y: targetWidth/img.extent.width))
                         if canvas == nil {
                             canvas = calibratedImg
                         } else {
@@ -274,7 +274,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
                         }
                     }
                     group.leave()
-                }, wrapperBounds: cell.convert(wrapperBounds, from: self), targetWidth: CGFloat(targetWidth!))
+                }, wrapperBounds: cell.convert(wrapperBounds, from: self), targetWidth: targetWidth)
                 group.wait()
             }
             
