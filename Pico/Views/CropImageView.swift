@@ -11,12 +11,32 @@ import UIKit
 
 class CropImageView : UIView {
     
-    @IBOutlet weak var trailingConstraint: NSLayoutConstraint!
-    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
-    @IBOutlet weak var leadingConstraint: NSLayoutConstraint!
-    @IBOutlet weak var topConstraint: NSLayoutConstraint!
+    var trailingConstraint: NSLayoutConstraint!
+    var bottomConstraint: NSLayoutConstraint!
+    var leadingConstraint: NSLayoutConstraint!
+    var topConstraint: NSLayoutConstraint!
+
+    var imageView: UIImageView!
     
-    @IBOutlet weak var imageView: UIImageView!
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(imageView)
+        
+        trailingConstraint = safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: imageView.trailingAnchor)
+        trailingConstraint.isActive = true
+        bottomConstraint = safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: imageView.bottomAnchor)
+        bottomConstraint.isActive = true
+        topConstraint = imageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor)
+        topConstraint.isActive = true
+        leadingConstraint = imageView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor)
+        leadingConstraint.isActive = true
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
     
     var image: UIImage? {
         get {
