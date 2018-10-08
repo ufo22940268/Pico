@@ -13,9 +13,11 @@ import Vision
 class Test {
     
     func run() {
-        let movieScreenshots = ["movie_IMG_3942", "IMG_0009"].map{UIImage(named: $0)!}
-        Image.detectType(image: movieScreenshots.first!) { (type) in
-            print(type)
+        let movieScreenshots = ["movie_IMG_3942","movie_IMG_3945","movie_IMG_3947", "movie_IMG_3950", "IMG_3955"].map{UIImage(named: $0)!}
+        movieScreenshots.forEach {image in
+            Image.detectType(image: image, complete: { (type) in
+                print(type)
+            })
         }
     }
     
