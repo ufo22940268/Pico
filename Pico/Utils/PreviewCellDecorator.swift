@@ -22,6 +22,7 @@ class PreviewCellDecorator {
     
     var cropRects: [CropArea: CGRect] = [CropArea: CGRect]()
     var pixellateImages = [PreviewPixellateScale: CIImage]()
+    var pixellateUIImages = [PreviewPixellateScale: UIImage]()
     var boundWidth: CGFloat!
     var boundHeight: CGFloat!
     
@@ -112,6 +113,7 @@ class PreviewCellDecorator {
     func preparePixellateImages(_ image: CIImage) {
         for scale in [PreviewPixellateScale.small, .middle, .large] {
             pixellateImages[scale] = pixelImage(image: image, pixelScale: scale)
+            pixellateUIImages[scale] = pixellateImages[scale]?.convertToUIImage()
         }
     }
     
