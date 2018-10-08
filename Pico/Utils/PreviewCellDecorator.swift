@@ -114,7 +114,9 @@ class PreviewCellDecorator {
     func preparePixellateImages(_ image: CIImage) {
         for scale in [PreviewPixellateScale.small, .middle, .large] {
             pixellateImages[scale] = pixelImage(image: image, pixelScale: scale)
-            pixellateUIImages[scale] = pixellateImages[scale]?.convertToUIImage()
+            if !forExport {
+                pixellateUIImages[scale] = pixellateImages[scale]?.convertToUIImage()
+            }
         }
     }
     
