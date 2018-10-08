@@ -169,7 +169,7 @@ class ComposeCell: UIView, EditDelegator {
     func getCropRectForExport(wrapperBounds: CGRect) -> CGRect {
         var inter = wrapperBounds.intersection(self.bounds)
         inter = inter.applying(CGAffineTransform(scaleX: 1.0/self.image.frame.width, y: 1.0/self.image.frame.height))
-          inter.origin.y = 1 - inter.origin.y - inter.height
+        inter.origin.y = 1 - inter.origin.y - inter.height
         return inter
     }
     

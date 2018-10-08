@@ -20,8 +20,11 @@ class CropImageView : UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        clipsToBounds = true
+        
         imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleToFill
         addSubview(imageView)
         
         trailingConstraint = safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: imageView.trailingAnchor)
@@ -50,7 +53,8 @@ class CropImageView : UIView {
     
     var cropRect: CGRect! {
         didSet {
-            let size = bounds.size
+            let parentViewSize = superview!.bounds.size
+            let size = CGSize(width: parentViewSize.width/cropRect.width, height: parentViewSize.height/cropRect.height)
             let crop = cropRect.applying(CGAffineTransform(scaleX: size.width, y: size.height))
             
             let leftPadding = crop.minX
@@ -59,9 +63,9 @@ class CropImageView : UIView {
             let bottomPadding = size.height - crop.maxY
             
             leadingConstraint.constant = -leftPadding
-            topConstraint.constant = -topPadding
+            topConstraint.constant = -bottomPadding
             trailingConstraint.constant = -rightPadding
-            bottomConstraint.constant = -bottomPadding
+            bottomConstraint.constant = -topPadding
         }
     }
 }
