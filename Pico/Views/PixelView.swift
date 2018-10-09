@@ -29,8 +29,7 @@ class PixelView : CropImageView {
         isHidden = rects.count == 0
         let path = UIBezierPath()
         rects.forEach{addPixelRects(rect: $0, in: path)}
-//        addPixelRects(rect: CGRect(origin: CGPoint.zero, size: CGSize(width: 1, height: 1)), in: path )
         mask(withPath: path, inverse: false)
         setNeedsDisplay()
-    }
+    }
 }

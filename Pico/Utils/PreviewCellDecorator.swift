@@ -68,7 +68,7 @@ class PreviewCellDecorator {
         self.image = image
         self.lastImage = image
         
-        preparePixellateImages(image)
+        preparePixellateImage()
     }
     
     func releaseImage() {
@@ -111,12 +111,11 @@ class PreviewCellDecorator {
         }
     }
     
-    func preparePixellateImages(_ image: CIImage) {
-        for scale in [PreviewPixellateScale.small, .middle, .large] {
-            pixellateImages[scale] = pixelImage(image: image, pixelScale: scale)
-            if !forExport {
-                pixellateUIImages[scale] = pixellateImages[scale]?.convertToUIImage()
-            }
+    fileprivate func preparePixellateImage() {
+        let scale = pixellateScale
+        pixellateImages[scale] = pixelImage(image: image, pixelScale: scale)
+        if !forExport {
+            pixellateUIImages[scale] = pixellateImages[scale]?.convertToUIImage()
         }
     }
     
@@ -129,13 +128,9 @@ class PreviewCellDecorator {
         let compatibleSize = CGSize(width: Int(image.extent.width) - Int(image.extent.width)%scale, height: Int(image.extent.height) - Int(image.extent.height)%scale)
         let compatibleImage = image.cropped(to: CGRect(origin: image.extent.origin, size: compatibleSize))
         
-//        let inputCenter = forExport ? CIVector(cgPoint: CGPoint(x: compatibleImage.extent.midX, y: compatibleImage.extent.midY)) : CIVector(cgPoint: CGPoint(x: UIScreen.main.pixelBounds.midX, y: UIScreen.main.pixelBounds.midY))
-        
         let inputCenter = CIVector(cgPoint: CGPoint(x: Int(compatibleImage.extent.width)/scale/2*scale, y: Int(compatibleImage.extent.height)/scale/2*scale))
-        
         var pixelImage = compatibleImage.applyingFilter("CIPixellate", parameters: ["inputScale": scale]).resetOffset()
         pixelImage = pixelImage.transformed(by: CGAffineTransform(scaleX: image.extent.width/pixelImage.extent.width, y: image.extent.height/pixelImage.extent.height))
-//        pixelImage = pixelImage.cropped(to: CGRect(origin: CGPoint.zero, size: lastImage.extent.size))
         
         return pixelImage
     }
@@ -146,6 +141,9 @@ class PreviewCellDecorator {
     
     func updatePixelScale(_ scale: PreviewPixellateScale) {
         pixellateScale = scale
+        if isImageLoaded() {
+            preparePixellateImage()
+        }
     }
     
     func setSign(_ sign: String?) {

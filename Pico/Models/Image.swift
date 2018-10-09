@@ -22,12 +22,12 @@ extension Array where Element: FloatingPoint {
 public class Image: Equatable {
     
     public var asset: PHAsset
-    let imageManager = PHImageManager.default()
     let cacheImageManager:PHCachingImageManager = {
         let manager = PHCachingImageManager.default() as! PHCachingImageManager
         manager.allowsCachingHighQualityImages = true
         return manager
     } ()
+    let imageManager = PHImageManager.default()
     
     var cacheOptions:PHImageRequestOptions {
         let options = PHImageRequestOptions()
