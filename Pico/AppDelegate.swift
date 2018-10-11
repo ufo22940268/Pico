@@ -57,7 +57,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            print("move", up, down)
 //        }
         
-//        Test().run()
+//        Test().runA()
+        Test().run()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
