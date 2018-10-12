@@ -55,8 +55,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
 
 
     func resolveImages(images: [Image], _ completion: @escaping ([UIImage]) -> Void) {
-        Image.resolve(images: images, resizeMode: .none) { (images) in
-            print(images)
+        Image.resolve(images: images, resizeMode: .exact) { (images) in
             completion(images.map {$0!})
         }
     }
@@ -69,28 +68,31 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     }
 
     fileprivate func concateScreenshot(_ images: ([Image])) {
-        let dispatchGroup = DispatchGroup()
-        for index in 0..<images.count - 1 {
-            dispatchGroup.enter()
-            self.resolveImages(images: Array(images[index...index+1]), { (uiImages) in
-                let upImage = uiImages[0]
-                let downImage = uiImages[1]
-                OverlapDetector(upImage: upImage, downImage: downImage).detect {upOverlap, downOverlap in
-                    DispatchQueue.main.async {
-                        if upOverlap > 0 && downOverlap > 0 {
-                            let imageHeight = uiImages[0].size.height
-                            self.container.cells[index].scrollDown(percentage: upOverlap/imageHeight)
-                            self.container.cells[index + 1].scrollUp(percentage: -downOverlap/imageHeight)
+        detectFrame(images: Array(images[0..<2])) { (frameResult) in
+            print("frameResult: \(frameResult)")
+            let dispatchGroup = DispatchGroup()
+            for index in 0..<images.count - 1 {
+                dispatchGroup.enter()
+                self.resolveImages(images: Array(images[index...index+1]), { (uiImages) in
+                    let upImage = uiImages[0]
+                    let downImage = uiImages[1]
+                    OverlapDetector(upImage: upImage, downImage: downImage, frameResult: frameResult).detect {upOverlap, downOverlap in
+                        DispatchQueue.main.async {
+                            if upOverlap >= 0 && downOverlap >= 0 {
+                                let imageHeight = uiImages[0].size.height
+                                self.container.cells[index].scrollDown(percentage: (upOverlap + frameResult.topGap)/imageHeight)
+                                self.container.cells[index + 1].scrollUp(percentage: -(downOverlap + frameResult.bottomGap)/imageHeight)
+                            }
+                            dispatchGroup.leave()
                         }
-                        dispatchGroup.leave()
                     }
-                }
-                
-                dispatchGroup.notify(queue: .main) {
-                    self.hideLoading()
-                    self.centerContainerWrapper()
-                }
-            })
+                    
+                    dispatchGroup.notify(queue: .main) {
+                        self.hideLoading()
+                        self.centerContainerWrapper()
+                    }
+                })
+            }
         }
     }
     
@@ -168,7 +170,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
 //                }
 
                 //Mocker
-                let images = [ImageMocker(image: UIImage(named: "IMG_3978")!), ImageMocker(image: UIImage(named: "IMG_3979")!)]
+                let images = [ImageMocker(image: UIImage(named: "IMG_0009")!), ImageMocker(image: UIImage(named: "IMG_0010")!)]
                 self.configureImages(images)
             }
         }
