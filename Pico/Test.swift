@@ -89,8 +89,8 @@ class Test {
 //        var downRect = CGRect(origin: CGPoint(x: 0, y: downImage.height - 1879), size: CGSize(width: downImage.width, height: 1000))
 //        downImage = downImage.cropping(to: downRect)!
         
-        let upImage = UIImage(named: "upImage")!.cgImage!
-        let downImage = UIImage(named: "Slice")!.cgImage!
+        let upImage = UIImage(named: "Slice2")!.cgImage!
+        let downImage = UIImage(named: "downImage")!.cgImage!
         
         var normHeight = CGFloat(1)
         let height = normHeight*CGFloat(upImage.height)
