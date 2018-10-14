@@ -55,7 +55,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
 
 
     func resolveImages(images: [Image], _ completion: @escaping ([UIImage]) -> Void) {
-        Image.resolve(images: images, resizeMode: .exact) { (images) in
+        Image.resolve(images: images, resizeMode: .none) { (images) in
             completion(images.map {$0!})
         }
     }

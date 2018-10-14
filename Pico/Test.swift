@@ -89,8 +89,9 @@ class Test {
 //        var downRect = CGRect(origin: CGPoint(x: 0, y: downImage.height - 1879), size: CGSize(width: downImage.width, height: 1000))
 //        downImage = downImage.cropping(to: downRect)!
         
-        let upImage = UIImage(named: "Slice2")!.cgImage!
-        let downImage = UIImage(named: "downImage")!.cgImage!
+//        let upImage = UIImage(named: "upImage_17")!.cgImage!
+        let upImage = UIImage(named: "downImage_19")!.cgImage!
+        let downImage = UIImage(named: "downImage_19")!.cgImage!
         
         var normHeight = CGFloat(1)
         let height = normHeight*CGFloat(upImage.height)
@@ -110,9 +111,9 @@ class Test {
         })
         
         //        request.regionOfInterest = CGRect(x: 0, y: 0, width:1, height:normHeight)
-        request.regionOfInterest = CGRect(x: 0, y: 0, width:1, height:normHeight)
+//        request.regionOfInterest = CGRect(x: 0, y: 0, width:1, height:normHeight)
         
-        try! VNSequenceRequestHandler().perform([request], on: upImage)
-//        try! VNImageRequestHandler(cgImage: upImage, options: [:]).perform([request])
+//        try! VNSequenceRequestHandler().perform([request], on: upImage)
+        try! VNImageRequestHandler(cgImage: upImage, options: [:]).perform([request])
     }
 }
