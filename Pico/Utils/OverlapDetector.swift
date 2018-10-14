@@ -108,7 +108,12 @@ class OverlapDetector {
             }
         })
         
-        try! VNImageRequestHandler(cgImage: upImage.cgImage!, options: [:]).perform([request])
+        do {
+            try VNImageRequestHandler(cgImage: upImage.cgImage!, options: [:]).perform([request])
+        } catch {
+            print("VNImageRequestHandler error: \(error)")
+            complete(nil, nil)
+        }
     }
     
     func isRegionTheSame(upRegion:CGImage, downRegion:CGImage, complete:@escaping(Bool) -> Void) {
@@ -120,7 +125,13 @@ class OverlapDetector {
                 complete(false)
             }
         })
-        try! VNImageRequestHandler(cgImage: downRegion, options: [:]).perform([request])
+        
+        do {
+            try VNImageRequestHandler(cgImage: downRegion, options: [:]).perform([request])
+        } catch {
+            print("VNImageRequestHandler error in isRegionTheSame: \(error)")
+            complete(false)
+        }
     }
     
     func detect(completeHandler: @escaping (CGFloat, CGFloat) -> Void) {
