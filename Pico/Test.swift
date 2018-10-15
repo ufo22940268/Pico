@@ -22,8 +22,8 @@ class Test {
 //    }
     
     func run() {
-        var upImage = UIImage(named: "upImage")!.cgImage!
-        var downImage = UIImage(named: "downImage")!.cgImage!
+        var upImage = UIImage(named: "IMG_3975")!.cgImage!
+        var downImage = UIImage(named: "IMG_3976")!.cgImage!
         
         
 //        downImage = (downImage.cropping(to: CGRect(origin: CGPoint(x: 0, y:400), size: CGSize(width: downImage.width, height: 469))))!
@@ -34,8 +34,6 @@ class Test {
                 print("transform \(obs.alignmentTransform) confidence: \(obs.confidence)")
             }
         })
-        
-        request.regionOfInterest = CGRect(origin: CGPoint(x: 0, y: 0.39), size: CGSize(width: 1, height: 0.31))
         
         try! VNImageRequestHandler(cgImage: upImage, options: [:]).perform([request])
     }
