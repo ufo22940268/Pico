@@ -20,6 +20,11 @@ extension CGSize {
     var ratio : CGFloat {
         return height/width
     }
+    
+    func almostTheSameSize(_ otherSize: CGSize) -> Bool {
+        let tolerance = CGFloat(8)
+        return width - otherSize.width < tolerance && height - otherSize.height < tolerance
+    }
 }
 
 extension UIDevice {
