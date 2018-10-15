@@ -24,6 +24,14 @@ class SelectAlbumController: UITableViewController {
         // Do any additional setup after loading the view.
         self.tableView.tableFooterView = UIView()
     }
+    
+    func selectAlbum(for selectedAlbum: Album?) {
+        if let selectedAlbum = selectedAlbum, let row  = albums.enumerated().first(where: { v -> Bool in
+            return v.element === selectedAlbum
+        })?.offset {
+            self.tableView.selectRow(at: IndexPath(row: row, section: 0), animated: false, scrollPosition: .none)
+        }
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
