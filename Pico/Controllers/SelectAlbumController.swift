@@ -41,15 +41,14 @@ class SelectAlbumController: UITableViewController {
         
         if let image = album.items.first {
             let imageSize = CGSize(width: 25*UIScreen.main.scale, height: 25*UIScreen.main.scale)
-            PHImageManager.default().requestImage(for: image.asset, targetSize: imageSize, contentMode: .aspectFill, options: PHImageRequestOptions()) { [weak self] (image, _) in
+            
+            let options = PHImageRequestOptions()
+            options.resizeMode = .exact
+            PHImageManager.default().requestImage(for: image.asset, targetSize: imageSize, contentMode: .aspectFill,  options: options) { [weak self] (image, _) in
                 cell.thumbernail.image = image
-                UIGraphicsBeginImageContextWithOptions(imageSize, false, UIScreen.main.scale);
-                let imageRect = CGRect.init(origin: CGPoint.zero, size: imageSize)
-                cell.thumbernail.image?.draw(in: imageRect)
-                cell.thumbernail.image = UIGraphicsGetImageFromCurrentImageContext()
-                UIGraphicsEndImageContext()
-            }
+            }            
         }
+        
         
         return cell
     }
