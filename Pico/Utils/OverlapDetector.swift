@@ -29,6 +29,7 @@ class OverlapDetector {
     var frameResult: FrameDetectResult!
     var cropFrame:CGRect!
     var upImage:CGImage!
+    var rectangleQueue = DispatchQueue(label: "com.bettycc.pico.rectangle.detection")
     
     fileprivate func generateUpImages(by divideCount: Int, _ cropRect: CGRect, _ upImage: UIImage) {
         let unitHeight = cropRect.height/CGFloat(divideCount/3)
@@ -94,7 +95,7 @@ class OverlapDetector {
                     let imageRegion = CGRect(origin: CGPoint.zero, size: self.cropFrame.size)
                     let upRegion = CGRect(origin: CGPoint(x: 0, y: imageRegion.height - upImageShift - downShift), size: CGSize(width: imageRegion.width, height: detectHeight))
                     let downRegion = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: imageRegion.width, height: detectHeight))
-                    self.isRegionTheSame(upRegion: self.upImage.cropping(to: upRegion)!, downRegion: self.downImage.cropping(to: downRegion)!, complete: {same in
+                    self.isRegionTheSame(upRegion: self.upImage.cropping(to: upRegion.minusOnePixel)!, downRegion: self.downImage.cropping(to: downRegion.minusOnePixel)!, complete: {same in
                         if same {
                             complete(upShift, downShift)
                         } else {
@@ -121,7 +122,7 @@ class OverlapDetector {
             if let obs = req.results?.first as? VNImageTranslationAlignmentObservation, abs(obs.alignmentTransform.ty) < tolerance && abs(obs.alignmentTransform.tx) == 0 {
                 complete(true)
             } else {
-                complete(false)
+                return complete(false)
             }
         })
         
@@ -129,7 +130,6 @@ class OverlapDetector {
             try VNImageRequestHandler(cgImage: downRegion, options: [:]).perform([request])
         } catch {
             print("VNImageRequestHandler error in isRegionTheSame: \(error)")
-            complete(false)
         }
     }
     
@@ -148,40 +148,46 @@ class OverlapDetector {
     func findRectangles(complete: @escaping ([CGRect], [CGRect]) -> Void) {
         let group = DispatchGroup()
         var upRects = [CGRect]()
-        
-        group.enter()
-        let upRequest = VNDetectRectanglesRequest { (req, error) in
-            if let obsList = req.results {
-                for obs in obsList {
-                    if let obs = obs as? VNRectangleObservation {
-                        let rect = obs.toRect(size: self.upImage.size).convertLBCToLTC(frameHeight: self.upImage.size.height)
-                        upRects.append(rect)
-                    }
-                }
-            }
-            group.leave()
-        }
-        configureRectangleRequest(upRequest)
-        try! VNImageRequestHandler(cgImage: upImage, options: [:]).perform([upRequest])
-
         var downRects = [CGRect]()
-        group.enter()
-        let downRequest = VNDetectRectanglesRequest { (req, error) in
-            if let obsList = req.results {
-                for obs in obsList {
-                    if let obs = obs as? VNRectangleObservation {
-                        let rect = obs.toRect(size: self.downImage.size).convertLBCToLTC(frameHeight: self.downImage.size.height)
-                        downRects.append(rect)
+        
+        do {
+            group.enter()
+            let upRequest = VNDetectRectanglesRequest { (req, error) in
+                if let obsList = req.results {
+                    for obs in obsList {
+                        if let obs = obs as? VNRectangleObservation {
+                            let rect = obs.toRect(size: self.upImage.size).convertLBCToLTC(frameHeight: self.upImage.size.height)
+                            upRects.append(rect)
+                        }
                     }
                 }
+                group.leave()
             }
-            group.leave()
+            configureRectangleRequest(upRequest)
+            try VNImageRequestHandler(cgImage: upImage, options: [:]).perform([upRequest])
+            
+            group.enter()
+            let downRequest = VNDetectRectanglesRequest { (req, error) in
+                if let obsList = req.results {
+                    for obs in obsList {
+                        if let obs = obs as? VNRectangleObservation {
+                            let rect = obs.toRect(size: self.downImage.size).convertLBCToLTC(frameHeight: self.downImage.size.height)
+                            downRects.append(rect)
+                        }
+                    }
+                }
+                group.leave()
+            }
+            
+
+            configureRectangleRequest(downRequest)
+            try VNImageRequestHandler(cgImage: downImage, options: [:]).perform([downRequest])
+        } catch {
+            print("VNError: \(error)")
+            return complete(upRects, downRects)
         }
 
-        configureRectangleRequest(downRequest)
-        try! VNImageRequestHandler(cgImage: downImage, options: [:]).perform([downRequest])
-        
-        group.notify(queue: .global()) {
+        group.notify(queue: rectangleQueue) {
             complete(upRects, downRects)
         }
     }
@@ -191,7 +197,12 @@ class OverlapDetector {
         for upRect in upRects {
             for downRect in downRects {
                 if upRect.size.almostTheSameSize(downRect.size) {
-                    binds.append((upRect, downRect))
+                    var fixUpRect = upRect
+                    var fixDownRect = downRect
+                    let minWidth = min(upRect.width, downRect.width)
+                    fixUpRect.size.width = minWidth
+                    fixDownRect.size.width = minWidth
+                    binds.append((fixUpRect, fixDownRect))
                 }
             }
         }
