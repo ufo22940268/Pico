@@ -123,7 +123,6 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
             }
             
             self.reloadQueue.async {
-                
                 if self.selectAlbum == nil {
                     self.selectAlbum = self.library.albums.filter { $0.collection.assetCollectionSubtype == .smartAlbumUserLibrary }.first ?? self.library.albums.first!
                 } else {
@@ -302,10 +301,20 @@ extension PickImageController: PHPhotoLibraryChangeObserver {
                 return
             }
             
+            for otherAlbum in (self.library.albums.filter {$0 !== selectAlbum}) {
+                if let changes = changeInstance.changeDetails(for: otherAlbum.collection) {
+                    if let collection = changes.objectAfterChanges {
+                        otherAlbum.collection = collection
+                        otherAlbum.reload()
+                    }
+                }
+            }
+            
             if let albumChanges = changeInstance.changeDetails(for: selectAlbum.collection) {
                 // Fetch the new album and update the UI accordingly.
                 selectAlbum.collection = albumChanges.objectAfterChanges! 
             }
+            
             // Check for changes to the list of assets (insertions, deletions, moves, or updates).
             if let changes = changeInstance.changeDetails(for: selectAlbum.fetchResult) {
                 // Keep the new fetch result for future use.
@@ -340,7 +349,9 @@ extension PickImageController: PHPhotoLibraryChangeObserver {
                 } else {
                     // Reload the collection view if incremental diffs are not available.
                     collectionView.reloadData()
-                }                
+                }
+                
+                selectAlbumController.tableView.reloadData()
             }
         }
         
