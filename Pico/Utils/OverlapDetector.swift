@@ -32,7 +32,7 @@ class OverlapDetector {
     var rectangleQueue = DispatchQueue(label: "com.bettycc.pico.rectangle.detection")
     
     fileprivate func generateUpImages(by divideCount: Int, _ cropRect: CGRect, _ upImage: UIImage) {
-        let unitHeight = cropRect.height/CGFloat(divideCount/3)
+        let unitHeight = (cropRect.height/CGFloat(divideCount/3)).rounded()
         let preserveShift = CGFloat(0)
         
         Array(0...divideCount).forEach { i in
@@ -44,7 +44,7 @@ class OverlapDetector {
             if i == 0 {
                 shift = 0
             } else {
-                shift = CGFloat(i - 1)*((cropRect.height - unitHeight - preserveShift)/CGFloat(divideCount - 1))
+                shift = CGFloat(i - 1)*((cropRect.height - unitHeight - preserveShift)/CGFloat(divideCount - 1)).rounded()
             }
             rect.origin.y = rect.origin.y - shift
             
@@ -57,10 +57,8 @@ class OverlapDetector {
 
         self.upImage = upImage.cropToCGImage(in: cropRect)
         
-//        generateUpImages(by: 4, cropRect, upImage)
-//        generateUpImages(by: 8, cropRect, upImage)
         generateUpImages(by: 10, cropRect, upImage)
-
+        
         cropFrame = cropRect
         
         var downCropRect = cropRect
@@ -95,7 +93,7 @@ class OverlapDetector {
                     let imageRegion = CGRect(origin: CGPoint.zero, size: self.cropFrame.size)
                     let upRegion = CGRect(origin: CGPoint(x: 0, y: imageRegion.height - upImageShift - downShift), size: CGSize(width: imageRegion.width, height: detectHeight))
                     let downRegion = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: imageRegion.width, height: detectHeight))
-                    self.isRegionTheSame(upRegion: self.upImage.cropping(to: upRegion.minusOnePixel)!, downRegion: self.downImage.cropping(to: downRegion.minusOnePixel)!, complete: {same in
+                    self.isRegionTheSame(upRegion: self.upImage.cropping(to: upRegion)!, downRegion: self.downImage.cropping(to: downRegion)!, complete: {same in
                         if same {
                             complete(upShift, downShift)
                         } else {
