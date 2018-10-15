@@ -27,5 +27,18 @@ extension UIImage {
         let cropped:UIImage = UIImage(cgImage:imageRef)
         return cropped
     }
+    
+    func cropToCGImage(in rect:CGRect) -> CGImage {
+        let newRect = CGRect(x: rect.minX, y: rect.minY, width: rect.width - 1, height: rect.height)
+        let imageRef:CGImage = self.cgImage!.cropping(to: newRect)!
+        return imageRef
+    }
 
+}
+
+
+extension CGImage {
+    var size:CGSize {
+        return CGSize(width: width, height: height)
+    }
 }
