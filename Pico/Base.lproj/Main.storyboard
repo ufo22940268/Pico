@@ -83,7 +83,7 @@
             <objects>
                 <tableViewController id="K6A-do-lcy" userLabel="Select Album" customClass="SelectAlbumController" customModule="Pico" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="WMA-oT-7Aw">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
@@ -147,7 +147,7 @@
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8fy-vO-tKd" userLabel="Select ablums container view">
-                                <rect key="frame" x="0.0" y="623" width="375" height="559"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <connections>
                                     <segue destination="K6A-do-lcy" kind="embed" identifier="selectAlbum" id="Zkp-1q-HMf"/>
                                 </connections>
@@ -157,10 +157,10 @@
                         <constraints>
                             <constraint firstItem="Ksn-wa-16o" firstAttribute="leading" secondItem="SlA-zE-blI" secondAttribute="leading" id="0cC-nT-L1k"/>
                             <constraint firstItem="8fy-vO-tKd" firstAttribute="trailing" secondItem="Ksn-wa-16o" secondAttribute="trailing" id="D5n-dZ-uwt"/>
+                            <constraint firstItem="8fy-vO-tKd" firstAttribute="bottom" secondItem="SlA-zE-blI" secondAttribute="bottom" constant="44" id="PvJ-1M-nxz"/>
                             <constraint firstItem="8fy-vO-tKd" firstAttribute="leading" secondItem="SlA-zE-blI" secondAttribute="leading" id="WOA-eo-ZnL"/>
-                            <constraint firstItem="8fy-vO-tKd" firstAttribute="top" secondItem="SlA-zE-blI" secondAttribute="bottom" id="dfK-e8-t4T"/>
+                            <constraint firstItem="8fy-vO-tKd" firstAttribute="top" secondItem="SlA-zE-blI" secondAttribute="top" id="dfK-e8-t4T"/>
                             <constraint firstItem="SlA-zE-blI" firstAttribute="trailing" secondItem="Ksn-wa-16o" secondAttribute="trailing" id="qeE-Aw-IhN"/>
-                            <constraint firstItem="8fy-vO-tKd" firstAttribute="height" secondItem="Ksn-wa-16o" secondAttribute="height" id="rhr-NZ-q4I"/>
                             <constraint firstItem="SlA-zE-blI" firstAttribute="bottom" secondItem="Ksn-wa-16o" secondAttribute="bottom" id="vSu-2k-EA0"/>
                             <constraint firstItem="Ksn-wa-16o" firstAttribute="top" secondItem="SlA-zE-blI" secondAttribute="top" id="yD4-eo-Jc3"/>
                         </constraints>
@@ -198,7 +198,8 @@
                         <outlet property="cancelItem" destination="CjG-Lh-uqX" id="WJQ-eP-gzP"/>
                         <outlet property="doneItem" destination="YC7-Tx-url" id="Op5-To-ceL"/>
                         <outlet property="recentScreenshotItem" destination="j3o-LW-0EB" id="jux-Od-QF9"/>
-                        <outlet property="selectAlbumContainer" destination="8fy-vO-tKd" id="wZv-5F-CLQ"/>
+                        <outlet property="selectAlbumBottomConstraint" destination="PvJ-1M-nxz" id="F9c-BX-V29"/>
+                        <outlet property="selectAlbumContainerView" destination="8fy-vO-tKd" id="KyL-vc-fCH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pJb-OQ-6NM" userLabel="First Responder" sceneMemberID="firstResponder"/>
