@@ -86,11 +86,16 @@ class GalleryDetailController: UIViewController, UINavigationControllerDelegate 
         collectionView.collectionViewLayout = layout
         collectionView.delegate = self
         collectionView.showsHorizontalScrollIndicator = false
-        if let initialImage = initialImage {
-            scrollTo(image: initialImage)
-        }
+        collectionView.isHidden = true
         
         updateSelectView()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if let initialImage = initialImage {
+            scrollTo(image: initialImage)
+            collectionView.isHidden = false
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
