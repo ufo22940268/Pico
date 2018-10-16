@@ -20,7 +20,7 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
     let imageCellSize = 100*UIScreen.main.scale
     
     var images = [Image]()
-    var selectImages = [Image]() 
+    var selectImages = [Image]()
     
     @IBOutlet var collection: UICollectionView!
     
@@ -121,6 +121,13 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         return cell
     }
     
+    func syncSelectedImagesToCollectionView() {
+        for selectedImage in selectImages {
+            let selectedIndex = IndexPath(row: images.enumerated().first {$0.element == selectedImage}!.offset, section: 0)
+            collection.selectItem(at: selectedIndex, animated: false, scrollPosition: [])
+        }
+    }
+    
     func getSelectSequence(image: Image) -> Int? {
         return selectImages.index(of: image)
     }
@@ -137,12 +144,9 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
             })
         {
             let image = images[(collection.indexPath(for: peekCell)?.item)!]
-            controller.imageDate = image.asset.creationDate
-            image.resolve(completion:  { (uiImage) in
-                controller.image.image = uiImage
-            })
-            controller.imageEntity = image
-            controller.isSelected = selectImages.contains(image) 
+            controller.imageEntities = images
+            controller.selectedImageEntities = selectImages
+            controller.initialImage = image
         }
         return controller
     }
