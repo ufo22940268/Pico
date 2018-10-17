@@ -118,6 +118,10 @@ class SeperatorSlider: UIView, SliderSelectable {
     
     
     func updateSelectState(_ newSelectState: Bool) {
+        guard newSelectState != button.isSelected else {
+            return
+        }
+        
         button.isSelected = newSelectState
         
         if (button.isSelected) {
