@@ -225,13 +225,18 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
     fileprivate func prepareForScreenshotConcatenate(_ segue: UIStoryboardSegue) {
         let compose = segue.destination as! ComposeController
         compose.type = .screenshot
-        let images = imageGallery.selectImages.sorted(by: { (img1, img2) -> Bool in
-            if let d1 = img1.asset.creationDate, let d2 = img2.asset.creationDate {
-                return d1 < d2
-            } else {
-                return true
-            }
-        })
+        var images: [Image]
+        if UserDefaults.standard.bool(forKey: UserDefaultKeys.rearrangeSelection.rawValue) {
+            images = imageGallery.selectImages.sorted(by: { (img1, img2) -> Bool in
+                if let d1 = img1.asset.creationDate, let d2 = img2.asset.creationDate {
+                    return d1 < d2
+                } else {
+                    return true
+                }
+            })
+        } else {
+            images = imageGallery.selectImages
+        }
         
         compose.loadUIImageHandler = { [weak self] () -> Void in
             compose.configureImages(images)
