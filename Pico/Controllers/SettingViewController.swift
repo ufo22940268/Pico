@@ -30,6 +30,8 @@ class SettingViewController: UITableViewController {
         rearrangeSwitchView.isOn = UserDefaults.standard.bool(forKey: UserDefaultKeys.rearrangeSelection.rawValue)
         rearrangeSelectionCell.accessoryView = rearrangeSwitchView
         rearrangeSwitchView.addTarget(self, action: #selector(onRearrangeSwitcherChanges(sender:)), for: .valueChanged)
+        
+        clearsSelectionOnViewWillAppear = true
     }
     
     
@@ -59,6 +61,8 @@ class SettingViewController: UITableViewController {
         default:
             break
         }
+        
+        tableView.cellForRow(at: indexPath)?.isSelected = false
     }
 }
 
