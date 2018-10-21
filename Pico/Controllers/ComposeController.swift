@@ -165,7 +165,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         if isDev() {
             loadUIImageHandler = {
-                self.type = .screenshot
+                self.type = .normal
                 
 //                //Photo library
 //                let library = ImagesLibrary()
@@ -511,6 +511,7 @@ extension ComposeController {
         updateSideSliderButtons()
         updateSeperatorSliderButtons()
     }
+
 }
 
 

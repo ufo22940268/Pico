@@ -228,7 +228,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         self.editState = state
         updateSlidersWhenEditChanged()
         updateComposeCells(state: state)
-        editDelegator?.editStateChanged(state: editState)    
+        editDelegator?.editStateChanged(state: editState)
     }
     
     func setEditDelegator(delegator: EditDelegator) {

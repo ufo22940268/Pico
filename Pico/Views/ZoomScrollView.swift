@@ -21,10 +21,16 @@ class ZoomScrollView: UIScrollView {
         tapGestureRecognizer.cancelsTouchesInView = false
         tapGestureRecognizer.isEnabled = true
         tapGestureRecognizer.numberOfTapsRequired = 2
+        tapGestureRecognizer.delaysTouchesEnded = false
         addGestureRecognizer(tapGestureRecognizer)
     }
     
     @objc func onDoubleTap(_ gesture: UITapGestureRecognizer) {
+        
+        if locationInSeperator(gesture: gesture) {
+            return
+        }
+        
         if zoomScale < 1.0 {
             setZoomScale(1.0, animated: true)
         } else if zoomScale == 1.0 {
@@ -34,5 +40,23 @@ class ZoomScrollView: UIScrollView {
         } else if zoomScale == maxZoomScale {
             setZoomScale(1.0, animated: true)
         }
+    }
+    
+    func locationInSeperator(gesture: UITapGestureRecognizer) -> Bool {
+        if let containerWrapper = subviews.first, let container = containerWrapper.subviews.first {
+            for seperator in container.subviews where seperator is SliderSelectable {
+                if let seperatorSlider = seperator as? SeperatorSlider {
+                    if seperatorSlider.button.point(inside: gesture.location(in: seperatorSlider.button), with: nil) {
+                        return true
+                    }
+                } else if let sideSlider = seperator as? SideSlider {
+                    if sideSlider.button.point(inside: gesture.location(in: sideSlider.button), with: nil) {
+                        return true
+                    }
+                }
+            }
+        }
+        
+        return false
     }
 }

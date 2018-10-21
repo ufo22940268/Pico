@@ -100,7 +100,6 @@ class SeperatorSlider: UIView, SliderSelectable {
     }
             
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        
         guard isUserInteractionEnabled else {
             return nil
         }
