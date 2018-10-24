@@ -9,9 +9,22 @@
 import Foundation
 import UIKit
 
+
+protocol ZoomScrollViewDelegate: class {
+    func onChangeTo(scale: CGFloat)
+}
+
 class ZoomScrollView: UIScrollView {
     
     var maxZoomScale:CGFloat = 2.0
+//    override var bounds: CGRect {
+//        didSet {
+//            print("contentSize: \(contentSize)")
+//        }
+//    }
+    
+    
+    weak var zoomDelegate: ZoomScrollViewDelegate?
     
     override func awakeFromNib() {
         maximumZoomScale = maxZoomScale
@@ -31,20 +44,41 @@ class ZoomScrollView: UIScrollView {
             return
         }
         
-        if zoomScale < 1.0 {
-            setZoomScale(1.0, animated: true)
-        } else if zoomScale == 1.0 {
-            let touchPoint = gesture.location(in: self)
-            let size = bounds.size.applying(CGAffineTransform(scaleX: 1.0/maxZoomScale, y: 1.0/maxZoomScale))
-            zoom(to: CGRect(origin: touchPoint.applying(CGAffineTransform(translationX: -size.width/2, y: -size.height/2)), size: size), animated: true)
-        } else if zoomScale == maxZoomScale {
-            setZoomScale(1.0, animated: true)
+        
+        let newScale:CGFloat = zoomScale == 2.0 ? 1.0 : 2.0
+        self.setZoomScale(newScale, animated: true)
+        self.layoutIfNeeded()
+        UIView.animate(withDuration: 0.3) {
+            self.zoomDelegate?.onChangeTo(scale: newScale)
+            self.layoutIfNeeded()
         }
+        
+//        self.layoutIfNeeded()
+//        UIView.animate(withDuration: 3) {
+//            var newScale:CGFloat
+//            if self.zoomScale < 1.0 {
+//                self.setZoomScale(1.0, animated: false)
+//                newScale = 1.0
+//            } else if self.zoomScale >= 1.0 && self.zoomScale < self.maxZoomScale {
+//                let touchPoint = gesture.location(in: self)
+//                let size = self.bounds.size.applying(CGAffineTransform(scaleX: 1.0/self.maxZoomScale, y: 1.0/self.maxZoomScale))
+////                self.zoom(to: CGRect(origin: touchPoint.applying(CGAffineTransform(translationX: -size.width/2, y: -size.height/2)), size: size), animated: false)
+//                self.setZoomScale(self.maxZoomScale, animated: false)
+//                newScale = self.maxZoomScale
+//            } else {
+//                self.setZoomScale(1.0, animated: false)
+//                newScale = 1.0
+//            }
+//
+//            self.zoomDelegate?.onChangeTo(scale: newScale)
+//            self.layoutIfNeeded()
+//        }
     }
+    
     
     func locationInSeperator(gesture: UITapGestureRecognizer) -> Bool {
         if let containerWrapper = subviews.first, let container = containerWrapper.subviews.first {
-            for seperator in container.subviews where seperator is SliderSelectable {
+            for seperator in container.subviews where seperator is Slider {
                 if let seperatorSlider = seperator as? SeperatorSlider {
                     if seperatorSlider.button.point(inside: gesture.location(in: seperatorSlider.button), with: nil) {
                         return true

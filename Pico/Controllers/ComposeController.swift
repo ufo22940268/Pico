@@ -109,15 +109,15 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         }
         
         self.loadedImages = images
-        self.container.addTopSeperator()
+        self.container.addTopSeperator(toView: self.view)
         self.container.addImage(imageEntity: images.first!)
 //
         for image in images[1..<images.count] {
-            self.container.addSeperator()
+            self.container.addMiddleSeperator(toView: self.view)
             self.container.addImage(imageEntity: image)
         }
         
-        self.container.addBottomSeperator()
+        self.container.addBottomSeperator(toView: self.view)
         
         self.container.addLeftSeperator()
         self.container.leftSlider.leadingAnchor.constraint(equalTo: containerWrapper.leadingAnchor).isActive = true
@@ -204,6 +204,12 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     
     func setupScrollView() {
         scroll.delegate = self
+        scroll.zoomDelegate = self
+        syncSeperatorFrames()
+    }
+    
+    func syncSeperatorFrames() {
+        container.seperators.forEach {$0.syncFrame()}
     }
     
     func showLoading() {
@@ -218,7 +224,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         loadingIndicator.stopAnimating()
         scroll.isHidden = false
     }
-    
     
     @IBAction func download(_ sender: UIBarButtonItem) {
         let shareManager: ShareManager = ShareManager(viewController: self)
@@ -405,6 +410,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             }
         }
         
+        syncSeperatorFrames()
     }
 
     override func didReceiveMemoryWarning() {
@@ -508,8 +514,8 @@ extension ComposeController {
     }
     
     fileprivate func updateAfterWrapperResize() {
-        updateSideSliderButtons()
-        updateSeperatorSliderButtons()
+//        updateSideSliderButtons()
+//        updateSeperatorSliderButtons()
     }
 
 }
@@ -526,7 +532,7 @@ extension ComposeController: UIScrollViewDelegate {
         let midX = (min(container.frame.maxX, containerWrapper.bounds.maxX) - max(container.frame.minX, containerWrapper.bounds.minX)) / 2
         if let firstSeperator = container.seperators.first {
             let midPoint = firstSeperator.convert(CGPoint(x: midX, y: 0.0), from: containerWrapper)
-            container.updateSeperatorSliders(midPoint: midPoint, transform: sliderButtonTransform)
+            container.updateSeperatorSliders(midPoint: midPoint)
         }
     }
     
@@ -545,6 +551,8 @@ extension ComposeController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateSideSliderButtons()
         updateContainerImages()
+        
+        syncSeperatorFrames()
     }
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
@@ -553,14 +561,14 @@ extension ComposeController: UIScrollViewDelegate {
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         centerContainerWrapper()
-        updateSideSliderButtons()
-        updateSeperatorSliderButtons()
+//        updateSideSliderButtons()
+//        updateSeperatorSliderButtons()
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         centerContainerWrapper()
-        updateSideSliderButtons()
-        updateSeperatorSliderButtons()
+//        updateSideSliderButtons()
+//        updateSeperatorSliderButtons()
     }
     
     
@@ -589,5 +597,15 @@ extension ComposeController: ShareImageGenerator {
                 callback(snapshot)
             }
         }, wrapperBounds: rect)
+    }
+}
+
+extension ComposeController: ZoomScrollViewDelegate {
+    func onChangeTo(scale: CGFloat) {
+        let midX = (min(container.frame.maxX, containerWrapper.bounds.maxX) - max(container.frame.minX, containerWrapper.bounds.minX)) / 2
+        if let firstSeperator = container.seperators.first {
+            let midPoint = firstSeperator.convert(CGPoint(x: midX, y: 0.0), from: containerWrapper)
+            container.updateSeperatorSliders(midPoint: midPoint)
+        }
     }
 }

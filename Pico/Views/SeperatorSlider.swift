@@ -33,7 +33,9 @@ class ArrowImage : UIImageView {
 }
 
 
-class SeperatorSlider: UIView, SliderSelectable {
+class SeperatorSlider: UIView, Slider {
+    
+    var placeholder: SliderPlaceholder!
     
     var aboveArrow: ArrowImage!
     var belowArrow: ArrowImage!
@@ -46,13 +48,27 @@ class SeperatorSlider: UIView, SliderSelectable {
     @IBOutlet weak var button: SliderButton!
     @IBOutlet var buttonCenterXConstraint: NSLayoutConstraint!
     
-    @IBOutlet weak var middleTopCosntraint: NSLayoutConstraint!
+    @IBOutlet weak var middleTopConstraint: NSLayoutConstraint!
     fileprivate func showAboveArrow() -> Bool {
         return ["bottom", "middle"].contains(direction)
     }
     
     fileprivate func showBelowArrow() -> Bool {
         return ["top", "middle"].contains(direction)
+    }
+    
+    var frameDelegate: ((CGRect) -> Void)?
+    
+    override var frame: CGRect {
+        didSet {
+            frameDelegate?(frame)
+        }
+    }
+    
+    override var bounds: CGRect {
+        didSet {
+            frameDelegate?(frame)
+        }
     }
     
     var directionEnum: SliderDirection!
@@ -93,7 +109,6 @@ class SeperatorSlider: UIView, SliderSelectable {
             break
         }
         
-        addConstraint(NSLayoutConstraint(item: self, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 0))
         backgroundColor = UIColor.yellow
         
         button.setup(direction: SliderDirection.parse(direction: direction))
@@ -164,23 +179,7 @@ class SeperatorSlider: UIView, SliderSelectable {
     func updateButtonPosition(midPoint: CGPoint) {
         buttonCenterXConstraint.constant = (midPoint.x - bounds.midX)
     }
-    
-    func updateScale(_ scale: CGFloat) {
-        button.scale = scale
         
-        if directionEnum! == .middle {
-            middleTopCosntraint.constant = -button.bounds.height/2
-        }
-        
-        //Update scale for arrows
-        aboveArrow.scale = scale
-        belowArrow.scale = scale
-        
-        for (constraint, scaleConstant) in arrowGapConstraints {
-            constraint.constant = scaleConstant.finalConstant(byScale: scale)
-        }
-    }
-    
     fileprivate func setupAnimations() {
         //Above
         if showAboveArrow() {
