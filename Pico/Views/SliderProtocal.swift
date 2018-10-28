@@ -21,7 +21,7 @@ protocol Slider {
 
 extension Slider where Self: UIView {    
     func syncFrame() {
-        if placeholder != nil, let frameInRootView =  placeholder.frameInRootView {
+        if placeholder != nil, let frameInRootView = placeholder.frameInRootView {
             self.frame = frameInRootView
         }
     }
