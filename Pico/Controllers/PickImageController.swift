@@ -37,7 +37,6 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
     
     @IBOutlet weak var selectAlbumBottomConstraint: NSLayoutConstraint!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         pickNavigationButton = UINib(nibName: "PickNavigationButton", bundle: nil).instantiate(withOwner: self, options: nil).first as! PickNavigationButton

@@ -22,8 +22,6 @@ class SideSlider: UIView, Slider {
     var arrowAnimator: UIViewPropertyAnimator!
     
     override func awakeFromNib() {
-        translatesAutoresizingMaskIntoConstraints = false
-        
         let uiImage: UIImage? = direction == "left" ? UIImage(named: "angle-double-left-solid") : UIImage(named: "angle-double-right-solid")
         
         arrow = ArrowImage(image: uiImage)
@@ -83,6 +81,23 @@ class SideSlider: UIView, Slider {
         }
     }
     
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        guard isUserInteractionEnabled else {
+            return nil
+        }
+        
+        for view in subviews.reversed() {
+            var convertedPoint: CGPoint!
+            convertedPoint = view.convert(point, from: self)
+            if let v = view.hitTest(convertedPoint, with: event) {
+                return v
+            }
+        }
+        
+        return nil
+    }
+    
+
     
     func startAnimator() {
         arrow.isHidden = false

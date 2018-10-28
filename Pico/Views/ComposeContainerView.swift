@@ -43,9 +43,31 @@ enum EditState {
 }
 
 class SliderPlaceholder: UIView {
+    
     weak var rootView: UIView?
+    var label: String!
+    
     var frameInRootView: CGRect? {
-        return rootView?.convert(frame, from: self.superview)
+        if ["top", "middle", "bottom"].contains(label) {
+            if let container = self.superview, let wrapper = container.superview {
+                let containerBounds = container.convert(wrapper.bounds.intersection(container.frame), from: wrapper)
+                return rootView?.convert(frame.intersection(containerBounds), from: self.superview)
+            } else {
+                return nil
+            }
+        } else {
+            return rootView?.convert(frame, from: self.superview)
+        }
+    }
+    
+    init(label: String) {
+        super.init(frame: CGRect.zero)
+        self.label = label
+        translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
 }
 
@@ -90,10 +112,10 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         let seperator = UINib(nibName: "Slider", bundle: nil).instantiate(withOwner: self, options: nil).map {$0 as! UIView}.filter {$0.restorationIdentifier == "top"}.first as! SeperatorSlider
         seperator.editDelegator = self
         
-        let placeholder = SliderPlaceholder()
+        let placeholder = SliderPlaceholder(label: "top")
         placeholder.rootView = view
         self.addArrangedSubview(placeholder)
-        placeholder.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0).isActive = true
+//        placeholder.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0).isActive = true
         placeholder.heightAnchor.constraint(equalToConstant: 0).isActive = true
         seperator.placeholder = placeholder
 
@@ -107,10 +129,9 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         let seperator = UINib(nibName: "Slider", bundle: nil).instantiate(withOwner: self, options: nil).first as! SeperatorSlider
         seperator.editDelegator = self
         
-        let placeholder = SliderPlaceholder()
+        let placeholder = SliderPlaceholder(label: "middle")
         placeholder.rootView = view
         self.addArrangedSubview(placeholder)
-        placeholder.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0).isActive = true
         placeholder.heightAnchor.constraint(equalToConstant: 0).isActive = true
         seperator.placeholder = placeholder
         
@@ -124,10 +145,9 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         let seperator = UINib(nibName: "Slider", bundle: nil).instantiate(withOwner: self, options: nil).map {$0 as! UIView}.filter {$0.restorationIdentifier == "bottom"}.first as! SeperatorSlider
         seperator.editDelegator = self
         
-        let placeholder = SliderPlaceholder()
+        let placeholder = SliderPlaceholder(label: "bottom")
         placeholder.rootView = view
         self.addArrangedSubview(placeholder)
-        placeholder.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0).isActive = true
         placeholder.heightAnchor.constraint(equalToConstant: 0).isActive = true
         seperator.placeholder = placeholder
         
@@ -138,33 +158,44 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         seperators.append(seperator)
     }
     
-    func addLeftSeperator() {
+    func addLeftSeperator(toView view: UIView) {
         let seperator = UINib(nibName: "Slider", bundle: nil).instantiate(withOwner: self, options: nil).map {$0 as! UIView}.filter {$0.restorationIdentifier == "left"}.first as! SideSlider
-        self.addSubview(seperator)
-        let topConstraint = seperator.topAnchor.constraint(equalTo: topAnchor)
-        topConstraint.priority = .defaultHigh
-        topConstraint.isActive = true
-        let bottomConstraint = seperator.bottomAnchor.constraint(equalTo: bottomAnchor)
-        bottomConstraint.priority = .defaultHigh
-        bottomConstraint.isActive = true
         
         seperator.addEditDelegator(editDelegator: self)
         
+        let placeholder = SliderPlaceholder(label: "left")
+        placeholder.rootView = view
+        if let wrapper = superview {
+            wrapper.addSubview(placeholder)
+            placeholder.leadingAnchor.constraint(equalTo: wrapper.leadingAnchor).isActive = true
+            placeholder.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 1.0).isActive = true
+            placeholder.widthAnchor.constraint(equalToConstant: 0).isActive = true
+            placeholder.topAnchor.constraint(equalTo: wrapper.topAnchor).isActive = true
+        }
+        seperator.placeholder = placeholder
+
+        view.addSubview(seperator)
+
         leftSlider = seperator
     }
     
-    func addRightSeperator() {
+    func addRightSeperator(toView view: UIView) {
         let seperator = UINib(nibName: "Slider", bundle: nil).instantiate(withOwner: self, options: nil).map {$0 as! UIView}.filter {$0.restorationIdentifier == "right"}.first as! SideSlider
-        self.addSubview(seperator)
-        let topConstraint = seperator.topAnchor.constraint(equalTo: topAnchor)
-        topConstraint.priority = .defaultHigh
-        topConstraint.isActive = true
-        let bottomConstraint = seperator.bottomAnchor.constraint(equalTo: bottomAnchor)
-        bottomConstraint.priority = .defaultHigh
-        bottomConstraint.isActive = true
-        
         seperator.addEditDelegator(editDelegator: self)
         
+        let placeholder = SliderPlaceholder(label: "right")
+        placeholder.rootView = view
+        if let wrapper = superview {
+            wrapper.addSubview(placeholder)
+            placeholder.trailingAnchor.constraint(equalTo: wrapper.trailingAnchor).isActive = true
+            placeholder.heightAnchor.constraint(equalTo: wrapper.heightAnchor, multiplier: 1.0).isActive = true
+            placeholder.widthAnchor.constraint(equalToConstant: 0).isActive = true
+            placeholder.topAnchor.constraint(equalTo: wrapper.topAnchor).isActive = true
+        }
+        seperator.placeholder = placeholder
+
+        view.addSubview(seperator)
+
         rightSlider = seperator
     }
     

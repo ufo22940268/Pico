@@ -21,12 +21,9 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     
     @IBOutlet var containerLeadingConstraint: NSLayoutConstraint!
     @IBOutlet var containerTrailingConstraint: NSLayoutConstraint!
-    @IBOutlet var containerWrapperLeadingConstraint: NSLayoutConstraint!
-    @IBOutlet var containerWrapperTrailingConstraint: NSLayoutConstraint!
-
-    var containerLeadingConstraintConstant = ScalableConstant()
-    var containerTrailingConstraintConstant = ScalableConstant()
-
+    
+    @IBOutlet weak var wrapperWidthConstraint: NSLayoutConstraint!
+    
     @IBOutlet var slideTypeItems: [UIBarButtonItem]!
     
     let minContainerWidth = CGFloat(230)
@@ -119,10 +116,10 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         self.container.addBottomSeperator(toView: self.view)
         
-        self.container.addLeftSeperator()
-        self.container.leftSlider.leadingAnchor.constraint(equalTo: containerWrapper.leadingAnchor).isActive = true
-        self.container.addRightSeperator()
-        self.container.rightSlider.trailingAnchor.constraint(equalTo: containerWrapper.trailingAnchor).isActive = true
+        self.container.addLeftSeperator(toView: self.view)
+//        self.container.leftSlider.leadingAnchor.constraint(equalTo: containerWrapper.leadingAnchor).isActive = true
+        self.container.addRightSeperator(toView: self.view)
+//        self.container.rightSlider.trailingAnchor.constraint(equalTo: containerWrapper.trailingAnchor).isActive = true
         
         self.container.subviews.filter{$0.isKind(of: SeperatorSlider.self)}.forEach {self.container.bringSubviewToFront($0)}
         self.container.subviews.filter{$0.isKind(of: SideSlider.self)}.forEach {
@@ -135,25 +132,20 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             self.navigationItem.title = "长截图"
             activeCropMode()
             break
-        case .movie:
-//            MovieConcate(cells: self.container.cells, images: uiImages).scrollCells()
-//            hideLoading()
-//            self.navigationItem.title = "电影截图"
-//            activeCropMode()
-            break
         default:
             self.navigationItem.title = "竖向拼接"
             hideLoading()
-            activeSlideMode()
+//            activeSlideMode()
+            activeCropMode()
         }
         
         scroll.layoutIfNeeded()
-        centerContainerWrapper()
         updateSideSliderButtons()
         container.updateSliderType()
         
         updateContainerImages()
         setupScrollView()
+        centerContainerWrapper()
     }
     
     func isDev() -> Bool {
@@ -210,6 +202,8 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     
     func syncSeperatorFrames() {
         container.seperators.forEach {$0.syncFrame()}
+        container.leftSlider.syncFrame()
+        container.rightSlider.syncFrame()
     }
     
     func showLoading() {
@@ -256,6 +250,8 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     }
     
     fileprivate func onScrollHorizontal(_ sender: UIPanGestureRecognizer, _ direction: String) {
+        
+
         if sender.state == .changed {
             guard case .editing = editState else {
                 return
@@ -270,47 +266,16 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             
             let shrink = (translateX > 0 && direction == "right") || (translateX < 0 && direction == "left")
             
-            var calibratedTranslateX = translateX
-
             /// Move container
-            var translateForActiveConstraint: CGFloat!
-            var calibrateDirection: CGFloat!
-            
-            let activeConstraint = direction == "left" ? containerLeadingConstraint! : containerTrailingConstraint!
-            var activeConstantCopy = direction == "left" ? containerLeadingConstraintConstant : containerTrailingConstraintConstant
-            let alternativeConstantCopy = direction == "left" ? containerTrailingConstraintConstant : containerLeadingConstraintConstant
-            if direction == "left" {
-                calibrateDirection = (shrink ? -1 : 1)
-            } else {
-                calibrateDirection = (shrink ? 1 : -1)
-            }
-            translateForActiveConstraint = calibrateDirection*abs(calibratedTranslateX)
-            
-            let targetConstant = activeConstantCopy.addConstant(delta: translateForActiveConstraint)
-
-            if (direction == "left" && targetConstant > 0) || (direction == "right" && targetConstant < 0) {
-                //TODO Calibrate left right translate
-//                let delta = abs(targetConstant)
-//                calibratedTranslateX = calibratedTranslateX/abs(calibratedTranslateX) * (abs(calibratedTranslateX) - delta)
-                return
-            } else if abs(targetConstant) + abs(alternativeConstantCopy.finalConstant()) > container.frame.width {
-                let delta = abs(targetConstant) + abs(alternativeConstantCopy.finalConstant()) - container.frame.width
-                calibratedTranslateX = calibratedTranslateX/abs(calibratedTranslateX)*(abs(calibratedTranslateX) - delta)
-            } else if container.frame.width - abs(targetConstant) - abs(alternativeConstantCopy.finalConstant()) < 30 {
-                return
+            if shrink {
+                wrapperWidthConstraint.constant = wrapperWidthConstraint.constant - abs(translateX)
             }
             
-            if direction == "left" {
-                activeConstraint.constant = containerLeadingConstraintConstant.addConstant(delta: calibrateDirection*abs(calibratedTranslateX))
-            } else {
-                activeConstraint.constant = containerTrailingConstraintConstant.addConstant(delta: calibrateDirection*abs(calibratedTranslateX))
-            }
-            
-
-            keepHorizontalPosition(inDirection: direction, translate: calibratedTranslateX)
-            
+            keepHorizontalPosition(inDirection: direction, translate: translateX)
             sender.setTranslation(CGPoint.zero, in: container)
         }
+        
+        updateSiders()
     }
     
     func keepHorizontalPosition(inDirection direction: String,  translate: CGFloat) {
@@ -397,8 +362,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         } else if case .inactive(let fromDirections) = state {
             if let fromDirections = fromDirections {
                 if ["left", "right"].contains(fromDirections) {
-                    self.containerWrapperLeadingConstraint.constant = 0
-                    self.containerWrapperTrailingConstraint.constant = 0
                     UIViewPropertyAnimator(duration: 0.15, curve: .linear, animations: {
                         self.centerContainerWrapper()
                     }).startAnimation()
@@ -509,8 +472,6 @@ extension ComposeController {
     func scaleContainerWrapper(scale: CGFloat) {
         containerWidthConstraint  = containerWidthConstraint.setMultiplier(multiplier: containerWidthConstraint.multiplier * scale)
         container.cells.forEach {$0.multiplyScale(scale: scale)}
-        containerLeadingConstraint.constant = containerLeadingConstraintConstant.multiplyScale(scale)
-        containerTrailingConstraint.constant = containerTrailingConstraintConstant.multiplyScale(scale)
     }
     
     fileprivate func updateAfterWrapperResize() {
@@ -542,10 +503,14 @@ extension ComposeController: UIScrollViewDelegate {
             let scrollMidPoint = containerWrapper.convert(CGPoint(x: 0, y: scroll.bounds.midY), from: scroll)
             let midPoint = container.leftSlider.convert(CGPoint(x: 0, y: fillScrollHeight ? scrollMidPoint.y : containerWrapper.bounds.midY), from: containerWrapper)
             container.leftSlider.update(midPoint: midPoint)
-            container.leftSlider.updateScale(sliderButtonTransform.a)
             container.rightSlider.update(midPoint: midPoint)
-            container.rightSlider.updateScale(sliderButtonTransform.a)
         }
+    }
+    
+    fileprivate func updateSiders() {
+        updateSeperatorSliderButtons()
+        updateSideSliderButtons()
+        syncSeperatorFrames()
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
