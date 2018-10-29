@@ -134,8 +134,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         default:
             self.navigationItem.title = "竖向拼接"
             hideLoading()
-//            activeSlideMode()
-            activeCropMode()
+            activeSlideMode()
         }
         
         scroll.layoutIfNeeded()
@@ -497,7 +496,6 @@ extension ComposeController {
     
     func scaleContainerWrapper(scale: CGFloat) {
         containerWidthConstraint  = containerWidthConstraint.setMultiplier(multiplier: containerWidthConstraint.multiplier * scale)
-        container.cells.forEach {$0.multiplyScale(scale: scale)}
     }
     
     fileprivate func updateAfterWrapperResize() {
