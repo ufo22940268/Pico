@@ -264,9 +264,8 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="3Jb-z4-kgp" secondAttribute="bottom" priority="750" identifier="bottom to wrapper" id="2Gc-LI-0x1"/>
-                                            <constraint firstItem="3Jb-z4-kgp" firstAttribute="leading" secondItem="FDD-5R-i7y" secondAttribute="leading" priority="250" id="7bH-SJ-Ixx"/>
-                                            <constraint firstItem="3Jb-z4-kgp" firstAttribute="trailing" secondItem="FDD-5R-i7y" secondAttribute="trailing" priority="250" id="GHB-58-3aE"/>
                                             <constraint firstAttribute="width" secondItem="3Jb-z4-kgp" secondAttribute="width" id="Msz-fs-xDc"/>
+                                            <constraint firstItem="3Jb-z4-kgp" firstAttribute="centerX" secondItem="FDD-5R-i7y" secondAttribute="centerX" id="XpY-JB-ERC"/>
                                             <constraint firstItem="3Jb-z4-kgp" firstAttribute="top" secondItem="FDD-5R-i7y" secondAttribute="top" priority="750" identifier="top to wrapper" id="bre-SP-3Ha"/>
                                         </constraints>
                                     </view>
@@ -335,9 +334,8 @@
                         </userDefinedRuntimeAttributes>
                     </navigationItem>
                     <connections>
+                        <outlet property="centerXOfContainerConstraint" destination="XpY-JB-ERC" id="Ip8-jC-pKK"/>
                         <outlet property="container" destination="3Jb-z4-kgp" id="M0F-LT-kJO"/>
-                        <outlet property="containerLeadingConstraint" destination="7bH-SJ-Ixx" id="rez-I9-IEM"/>
-                        <outlet property="containerTrailingConstraint" destination="GHB-58-3aE" id="W3Z-kD-ujB"/>
                         <outlet property="containerWidthConstraint" destination="VRi-gu-AyE" id="Kvb-Yq-Bvy"/>
                         <outlet property="containerWrapper" destination="FDD-5R-i7y" id="Hcy-ki-a2b"/>
                         <outlet property="loadingIndicator" destination="3fT-eg-GIo" id="FGP-ea-JSz"/>

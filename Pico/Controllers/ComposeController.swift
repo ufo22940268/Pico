@@ -19,10 +19,9 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     @IBOutlet weak var scroll: ZoomScrollView!
     @IBOutlet weak var containerWrapper: UIView!
     
-    @IBOutlet var containerLeadingConstraint: NSLayoutConstraint!
-    @IBOutlet var containerTrailingConstraint: NSLayoutConstraint!
-    
     @IBOutlet weak var wrapperWidthConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var centerXOfContainerConstraint: NSLayoutConstraint!
     
     @IBOutlet var slideTypeItems: [UIBarButtonItem]!
     
@@ -266,16 +265,40 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             
             let shrink = (translateX > 0 && direction == "right") || (translateX < 0 && direction == "left")
             
-            /// Move container
-            if shrink {
-                wrapperWidthConstraint.constant = wrapperWidthConstraint.constant - abs(translateX)
+            
+            let newCenterX = centerXOfContainerConstraint.constant + translateX/2
+            
+            if !horizontalScrollOverEdge(onDirection: direction, shrink: shrink, translateX) {
+                /// Move container
+                if shrink {
+                    wrapperWidthConstraint.constant = wrapperWidthConstraint.constant - abs(translateX)
+                } else {
+                    wrapperWidthConstraint.constant = wrapperWidthConstraint.constant + abs(translateX)
+                }
+
+                centerXOfContainerConstraint.constant = newCenterX
+                keepHorizontalPosition(inDirection: direction, translate: translateX)
             }
             
-            keepHorizontalPosition(inDirection: direction, translate: translateX)
             sender.setTranslation(CGPoint.zero, in: container)
         }
-        
+        scroll.layoutIfNeeded()
         updateSiders()
+    }
+    
+    var validAreaForHorizontalScrolling: CGRect {
+        return container.convert(containerWrapper.bounds.intersection(container.frame), from: containerWrapper)
+    }
+    
+    func horizontalScrollOverEdge(onDirection direction: String, shrink: Bool, _ translateX: CGFloat) -> Bool {
+        let finalWidth = validAreaForHorizontalScrolling.width + (shrink ? -1 : 1)*abs(translateX)
+        var maxWidth: CGFloat
+        if direction == "left" {
+            maxWidth = validAreaForHorizontalScrolling.maxX
+        } else {
+            maxWidth = scroll.bounds.width - validAreaForHorizontalScrolling.minX
+        }
+        return !(finalWidth <= maxWidth && finalWidth > 30)
     }
     
     func keepHorizontalPosition(inDirection direction: String,  translate: CGFloat) {

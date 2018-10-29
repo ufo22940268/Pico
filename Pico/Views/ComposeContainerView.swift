@@ -52,10 +52,12 @@ class SliderPlaceholder: UIView {
             if let container = self.superview, let wrapper = container.superview {
                 let containerBounds = container.convert(wrapper.bounds.intersection(container.frame), from: wrapper)
                 var newFrame = frame
+                
                 //Very strange. The minY of bottom placeholder is large than container bounds.
                 if label == "bottom" {
                     newFrame = newFrame.offsetBy(dx: 0, dy: -0.1)
                 }
+                
                 let rect = rootView?.convert(newFrame.intersection(containerBounds), from: self.superview)
                 return rect
             } else {
