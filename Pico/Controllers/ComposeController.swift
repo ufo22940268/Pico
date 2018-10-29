@@ -526,6 +526,7 @@ extension ComposeController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateSideSliderButtons()
+        updateSeperatorSliderButtons()
         updateContainerImages()
         syncSeperatorFrames()
     }
@@ -540,11 +541,14 @@ extension ComposeController: UIScrollViewDelegate {
 //        updateSideSliderButtons()
     }
     
+    
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         centerContainerWrapper()
 //        updateSideSliderButtons()
 //        updateSeperatorSliderButtons()
     }
+    
+    
     
     
     fileprivate func centerContainerWrapper() {
