@@ -13,7 +13,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view autoresizesSubviews="NO" contentMode="scaleToFill" id="iN0-l3-epB" customClass="SeperatorSlider" customModule="Pico" customModuleProvider="target">
+        <view autoresizesSubviews="NO" contentMode="scaleToFill" id="iN0-l3-epB" userLabel="Middle Seperator Slider" customClass="SeperatorSlider" customModule="Pico" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="343" height="40"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
@@ -44,15 +44,9 @@
                         <constraint firstItem="ban-IM-6C4" firstAttribute="centerY" secondItem="Buh-HB-ZaF" secondAttribute="centerY" id="9yj-IV-rIy"/>
                         <constraint firstItem="ban-IM-6C4" firstAttribute="leading" secondItem="Buh-HB-ZaF" secondAttribute="leading" id="FWz-vT-JIQ"/>
                         <constraint firstItem="8ER-9v-Fki" firstAttribute="top" secondItem="Buh-HB-ZaF" secondAttribute="top" id="Pcu-j3-47A"/>
-                        <constraint firstItem="8ER-9v-Fki" firstAttribute="centerX" secondItem="Buh-HB-ZaF" secondAttribute="centerX" id="fkD-5D-Ath"/>
                         <constraint firstAttribute="height" secondItem="8ER-9v-Fki" secondAttribute="height" id="jxt-TG-6dQ"/>
                         <constraint firstAttribute="trailing" secondItem="ban-IM-6C4" secondAttribute="trailing" id="qpe-ht-DYc"/>
                     </constraints>
-                    <variation key="default">
-                        <mask key="constraints">
-                            <exclude reference="fkD-5D-Ath"/>
-                        </mask>
-                    </variation>
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
@@ -166,15 +160,9 @@
                         <constraint firstItem="wZH-WN-ppM" firstAttribute="bottom" secondItem="OxF-rH-3u9" secondAttribute="bottom" id="2A4-OD-TKO"/>
                         <constraint firstItem="OxF-rH-3u9" firstAttribute="centerY" secondItem="B4X-9M-Fgr" secondAttribute="centerY" id="9C7-gr-JZY"/>
                         <constraint firstItem="wZH-WN-ppM" firstAttribute="leading" secondItem="B4X-9M-Fgr" secondAttribute="leading" id="9gr-xG-JZz"/>
-                        <constraint firstItem="OxF-rH-3u9" firstAttribute="centerX" secondItem="B4X-9M-Fgr" secondAttribute="centerX" id="Jfa-gJ-rMY"/>
                         <constraint firstAttribute="trailing" secondItem="wZH-WN-ppM" secondAttribute="trailing" id="LJw-6J-b2A"/>
                         <constraint firstItem="OxF-rH-3u9" firstAttribute="height" secondItem="B4X-9M-Fgr" secondAttribute="height" id="ddy-iy-ync"/>
                     </constraints>
-                    <variation key="default">
-                        <mask key="constraints">
-                            <exclude reference="Jfa-gJ-rMY"/>
-                        </mask>
-                    </variation>
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>

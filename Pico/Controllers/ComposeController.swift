@@ -116,9 +116,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         self.container.addBottomSeperator(toView: self.view)
         
         self.container.addLeftSeperator(toView: self.view)
-//        self.container.leftSlider.leadingAnchor.constraint(equalTo: containerWrapper.leadingAnchor).isActive = true
         self.container.addRightSeperator(toView: self.view)
-//        self.container.rightSlider.trailingAnchor.constraint(equalTo: containerWrapper.trailingAnchor).isActive = true
         
         self.container.subviews.filter{$0.isKind(of: SeperatorSlider.self)}.forEach {self.container.bringSubviewToFront($0)}
         self.container.subviews.filter{$0.isKind(of: SideSlider.self)}.forEach {
@@ -139,6 +137,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         scroll.layoutIfNeeded()
         updateSideSliderButtons()
+        updateSeperatorSliderButtons()
         container.updateSliderType()
         
         updateContainerImages()
@@ -282,20 +281,25 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         updateSliders()
     }
     
-    var validAreaForHorizontalScrolling: CGRect {
+    var containerRectAfterCroppedByWrapper: CGRect {
         return container.convert(containerWrapper.bounds.intersection(container.frame), from: containerWrapper)
+    }
+    
+    var visibleContainerRect: CGRect {
+        let scrollRect = container.convert(scroll.bounds, from: scroll)
+        return scrollRect.intersection(container.bounds)
     }
     
     let minimunGapBetweenSlides: CGFloat = 80
     
     func horizontalScrollOverEdge(onDirection direction: String, shrink: Bool, _ translateX: inout CGFloat) -> Bool {
-        let validAreaWidth = validAreaForHorizontalScrolling.width
-        let finalWidth = validAreaForHorizontalScrolling.width + (shrink ? -1 : 1)*abs(translateX)
+        let validAreaWidth = containerRectAfterCroppedByWrapper.width
+        let finalWidth = containerRectAfterCroppedByWrapper.width + (shrink ? -1 : 1)*abs(translateX)
         var maxWidth: CGFloat
         if direction == "left" {
-            maxWidth = validAreaForHorizontalScrolling.maxX
+            maxWidth = containerRectAfterCroppedByWrapper.maxX
         } else {
-            maxWidth = scroll.bounds.width - validAreaForHorizontalScrolling.minX
+            maxWidth = scroll.bounds.width - containerRectAfterCroppedByWrapper.minX
         }
         
         if (validAreaWidth >= maxWidth && !shrink) || (validAreaWidth <= minimunGapBetweenSlides && shrink) {
@@ -322,6 +326,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     
     @IBAction func onScroll(_ sender: UIPanGestureRecognizer) {
         guard case .editing = editState else {
+            updateSliders()
             return
         }
         
@@ -332,8 +337,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                 onScrollHorizontal(sender, direction)
             }
         }
-        
-        updateAfterWrapperResize()
     }
     
     func updateContainerImages() {
@@ -491,21 +494,6 @@ extension ComposeController {
     
 }
 
-// MARK: - Zoom operation
-extension ComposeController {
-    
-    func scaleContainerWrapper(scale: CGFloat) {
-        containerWidthConstraint  = containerWidthConstraint.setMultiplier(multiplier: containerWidthConstraint.multiplier * scale)
-    }
-    
-    fileprivate func updateAfterWrapperResize() {
-//        updateSideSliderButtons()
-//        updateSeperatorSliderButtons()
-    }
-
-}
-
-
 extension ComposeController: UIScrollViewDelegate {
     
     fileprivate var sliderButtonTransform: CGAffineTransform {
@@ -514,9 +502,8 @@ extension ComposeController: UIScrollViewDelegate {
     }
     
     fileprivate func updateSeperatorSliderButtons() {
-        let midX = (min(container.frame.maxX, containerWrapper.bounds.maxX) - max(container.frame.minX, containerWrapper.bounds.minX)) / 2
         if let firstSeperator = container.seperators.first {
-            let midPoint = firstSeperator.convert(CGPoint(x: midX, y: 0.0), from: containerWrapper)
+            let midPoint = CGPoint(x: firstSeperator.convert(visibleContainerRect, from: container).midX, y: 0)
             container.updateSeperatorSliders(midPoint: midPoint)
         }
     }
@@ -540,7 +527,6 @@ extension ComposeController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateSideSliderButtons()
         updateContainerImages()
-        
         syncSeperatorFrames()
     }
     
@@ -549,9 +535,9 @@ extension ComposeController: UIScrollViewDelegate {
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        updateSeperatorSliderButtons()
         centerContainerWrapper()
 //        updateSideSliderButtons()
-//        updateSeperatorSliderButtons()
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
@@ -578,6 +564,16 @@ extension ComposeController: UIScrollViewDelegate {
     }
 }
 
+extension ComposeController: ZoomScrollViewDelegate {
+    func onChangeTo(scale: CGFloat) {
+        let midX = (min(container.frame.maxX, containerWrapper.bounds.maxX) - max(container.frame.minX, containerWrapper.bounds.minX)) / 2
+        if let firstSeperator = container.seperators.first {
+            let midPoint = firstSeperator.convert(CGPoint(x: midX, y: 0.0), from: containerWrapper)
+//            container.updateSeperatorSliders(midPoint: midPoint)
+        }
+    }
+}
+
 extension ComposeController: ShareImageGenerator {
     func generateImage(callback: @escaping (UIImage) -> Void) {
         let rect: CGRect = self.container.convert(self.containerWrapper.bounds, from: self.containerWrapper)
@@ -589,12 +585,3 @@ extension ComposeController: ShareImageGenerator {
     }
 }
 
-extension ComposeController: ZoomScrollViewDelegate {
-    func onChangeTo(scale: CGFloat) {
-        let midX = (min(container.frame.maxX, containerWrapper.bounds.maxX) - max(container.frame.minX, containerWrapper.bounds.minX)) / 2
-        if let firstSeperator = container.seperators.first {
-            let midPoint = firstSeperator.convert(CGPoint(x: midX, y: 0.0), from: containerWrapper)
-            container.updateSeperatorSliders(midPoint: midPoint)
-        }
-    }
-}

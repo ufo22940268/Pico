@@ -16,13 +16,7 @@ protocol ZoomScrollViewDelegate: class {
 
 class ZoomScrollView: UIScrollView {
     
-    var maxZoomScale:CGFloat = 2.0
-//    override var bounds: CGRect {
-//        didSet {
-//            print("contentSize: \(contentSize)")
-//        }
-//    }
-    
+    var maxZoomScale:CGFloat = 2.0    
     
     weak var zoomDelegate: ZoomScrollViewDelegate?
     
@@ -45,34 +39,25 @@ class ZoomScrollView: UIScrollView {
         }
         
         
-        let newScale:CGFloat = zoomScale == 2.0 ? 1.0 : 2.0
-        self.setZoomScale(newScale, animated: true)
         self.layoutIfNeeded()
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.15) {
+            var newScale:CGFloat
+            if self.zoomScale < 1.0 {
+                self.setZoomScale(1.0, animated: false)
+                newScale = 1.0
+            } else if self.zoomScale >= 1.0 && self.zoomScale < self.maxZoomScale {
+                let touchPoint = gesture.location(in: self)
+                let size = self.bounds.size.applying(CGAffineTransform(scaleX: 1.0/self.maxZoomScale, y: 1.0/self.maxZoomScale))
+                self.zoom(to: CGRect(origin: touchPoint.applying(CGAffineTransform(translationX: -size.width/2, y: -size.height/2)), size: size), animated: false)
+                newScale = self.maxZoomScale
+            } else {
+                self.setZoomScale(1.0, animated: false)
+                newScale = 1.0
+            }
+
             self.zoomDelegate?.onChangeTo(scale: newScale)
             self.layoutIfNeeded()
         }
-        
-//        self.layoutIfNeeded()
-//        UIView.animate(withDuration: 3) {
-//            var newScale:CGFloat
-//            if self.zoomScale < 1.0 {
-//                self.setZoomScale(1.0, animated: false)
-//                newScale = 1.0
-//            } else if self.zoomScale >= 1.0 && self.zoomScale < self.maxZoomScale {
-//                let touchPoint = gesture.location(in: self)
-//                let size = self.bounds.size.applying(CGAffineTransform(scaleX: 1.0/self.maxZoomScale, y: 1.0/self.maxZoomScale))
-////                self.zoom(to: CGRect(origin: touchPoint.applying(CGAffineTransform(translationX: -size.width/2, y: -size.height/2)), size: size), animated: false)
-//                self.setZoomScale(self.maxZoomScale, animated: false)
-//                newScale = self.maxZoomScale
-//            } else {
-//                self.setZoomScale(1.0, animated: false)
-//                newScale = 1.0
-//            }
-//
-//            self.zoomDelegate?.onChangeTo(scale: newScale)
-//            self.layoutIfNeeded()
-//        }
     }
     
     
