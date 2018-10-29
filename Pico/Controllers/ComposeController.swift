@@ -237,7 +237,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             } else {
                 print("should only hit one cell view")
             }
-            
         } else if case .changed = sender.state {
             panView.scrollVertical(sender)
             container.showSeperators(show: false)
@@ -246,11 +245,12 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         } else if sender.state == .ended {
             container.showSeperators(show: true)
         }
+        
+        scroll.layoutIfNeeded()
+        updateSliders()
     }
     
     fileprivate func onScrollHorizontal(_ sender: UIPanGestureRecognizer, _ direction: String) {
-        
-
         if sender.state == .changed {
             guard case .editing = editState else {
                 return
@@ -264,7 +264,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             }
             
             let shrink = (translateX > 0 && direction == "right") || (translateX < 0 && direction == "left")
-            
             
             if !horizontalScrollOverEdge(onDirection: direction, shrink: shrink, &translateX) {
                 let newCenterX = centerXOfContainerConstraint.constant + translateX/2
@@ -281,14 +280,14 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             sender.setTranslation(CGPoint.zero, in: container)
         }
         scroll.layoutIfNeeded()
-        updateSiders()
+        updateSliders()
     }
     
     var validAreaForHorizontalScrolling: CGRect {
         return container.convert(containerWrapper.bounds.intersection(container.frame), from: containerWrapper)
     }
     
-    let minimunGapBetweenSlides: CGFloat = 30
+    let minimunGapBetweenSlides: CGFloat = 80
     
     func horizontalScrollOverEdge(onDirection direction: String, shrink: Bool, _ translateX: inout CGFloat) -> Bool {
         let validAreaWidth = validAreaForHorizontalScrolling.width
@@ -300,7 +299,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             maxWidth = scroll.bounds.width - validAreaForHorizontalScrolling.minX
         }
         
-        if (validAreaWidth == maxWidth && !shrink) || (validAreaWidth == minimunGapBetweenSlides && shrink) {
+        if (validAreaWidth >= maxWidth && !shrink) || (validAreaWidth <= minimunGapBetweenSlides && shrink) {
             return true
         } else {
             if finalWidth > maxWidth {
@@ -395,21 +394,12 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         if case .editing(let direction, _) = state, ["left", "right"].contains(direction) {
             
-        } else if case .inactive(let fromDirections) = state {
-            if let fromDirections = fromDirections {
-                if ["left", "right"].contains(fromDirections) {
-                    UIViewPropertyAnimator(duration: 0.15, curve: .linear, animations: {
-                        self.centerContainerWrapper()
-                    }).startAnimation()
-                } else {
-                    UIView.animate(withDuration: 0.15, animations: {
-                        self.centerContainerWrapper()
-                    })
-                }
-            }
+        } else if case .inactive = state {
+            UIView.animate(withDuration: 0.15, animations: {
+                self.syncSeperatorFrames()
+                self.centerContainerWrapper()
+            })
         }
-        
-        syncSeperatorFrames()
     }
 
     override func didReceiveMemoryWarning() {
@@ -543,7 +533,7 @@ extension ComposeController: UIScrollViewDelegate {
         }
     }
     
-    fileprivate func updateSiders() {
+    fileprivate func updateSliders() {
         updateSeperatorSliderButtons()
         updateSideSliderButtons()
         syncSeperatorFrames()
