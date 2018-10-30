@@ -508,6 +508,17 @@ extension ComposeController: UIScrollViewDelegate {
         }
     }
     
+    fileprivate func updateSeperatorSliderButtons(toDestinationRect destinationRect: CGRect) {
+        if let firstSeperator = container.seperators.first {
+            let midPoint = CGPoint(x: firstSeperator.convert(destinationRect, from: containerWrapper).midX, y: 0)
+            container.updateSeperatorSliders(midPoint: midPoint)
+        }
+    }
+    
+    fileprivate func updateSeperatorSliderButtons(toMidPoint midPoint: CGPoint) {
+        container.updateSeperatorSliders(midPoint: midPoint)
+    }
+
     fileprivate func updateSideSliderButtons() {
         if container.leftSlider != nil {
             let fillScrollHeight = containerWrapper.bounds.height >= scroll.bounds.height
@@ -526,7 +537,7 @@ extension ComposeController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateSideSliderButtons()
-        updateSeperatorSliderButtons()
+//        updateSeperatorSliderButtons()
         updateContainerImages()
         syncSeperatorFrames()
     }
@@ -536,20 +547,13 @@ extension ComposeController: UIScrollViewDelegate {
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        updateSeperatorSliderButtons()
         centerContainerWrapper()
+        
 //        updateSideSliderButtons()
     }
-    
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        centerContainerWrapper()
-//        updateSideSliderButtons()
-//        updateSeperatorSliderButtons()
     }
-    
-    
-    
     
     fileprivate func centerContainerWrapper() {
         let scrollBounds = scroll.bounds
@@ -569,12 +573,15 @@ extension ComposeController: UIScrollViewDelegate {
 }
 
 extension ComposeController: ZoomScrollViewDelegate {
-    func onChangeTo(scale: CGFloat) {
-        let midX = (min(container.frame.maxX, containerWrapper.bounds.maxX) - max(container.frame.minX, containerWrapper.bounds.minX)) / 2
-        if let firstSeperator = container.seperators.first {
-            let midPoint = firstSeperator.convert(CGPoint(x: midX, y: 0.0), from: containerWrapper)
-//            container.updateSeperatorSliders(midPoint: midPoint)
+    func onChangeTo(destinationRect: CGRect?) {
+        if let destinationRect = destinationRect {
+            print(destinationRect)
+            updateSeperatorSliderButtons(toDestinationRect: destinationRect)
         }
+    }
+    
+    func onResetZoomScale() {
+        updateSeperatorSliderButtons(toMidPoint: CGPoint(x: scroll.bounds.width/2, y: 0))
     }
 }
 
