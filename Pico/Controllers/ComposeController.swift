@@ -547,13 +547,16 @@ extension ComposeController: UIScrollViewDelegate {
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        updateSliders()
         centerContainerWrapper()
         
 //        updateSideSliderButtons()
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+        updateSliders()
     }
+    
     
     fileprivate func centerContainerWrapper() {
         let scrollBounds = scroll.bounds
@@ -575,7 +578,6 @@ extension ComposeController: UIScrollViewDelegate {
 extension ComposeController: ZoomScrollViewDelegate {
     func onChangeTo(destinationRect: CGRect?) {
         if let destinationRect = destinationRect {
-            print(destinationRect)
             updateSeperatorSliderButtons(toDestinationRect: destinationRect)
         }
     }
