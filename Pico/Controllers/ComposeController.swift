@@ -151,7 +151,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         self.container.exportSnapshot(callback: {snapshot in
             DispatchQueue.main.async {
                 sender.isEnabled = true
-                shareManager.saveToPhoto(image: snapshot)                
+                shareManager.saveToPhoto(image: snapshot)
             }
         }, wrapperBounds: rect)
     }
@@ -399,6 +399,7 @@ extension ComposeController {
     func scaleContainerWrapper(scale: CGFloat) {
         containerWrapperWidthConstraint  = containerWrapperWidthConstraint.setMultiplier(multiplier: containerWrapperWidthConstraint.multiplier * scale)
         containerWidthConstraint  = containerWidthConstraint.setMultiplier(multiplier: containerWidthConstraint.multiplier * scale)
+//        container.cells.forEach {$0.multiplyScale(scale: scale)}
     }
     
     fileprivate func updateAfterWrapperResize() {
@@ -426,6 +427,7 @@ extension ComposeController {
             updateAfterWrapperResize()
         } else if gestureRecognizer.state == .ended {
             updateAfterWrapperResize()
+            resetGapToContainer()
         }
     }
 }
