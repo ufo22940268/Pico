@@ -26,6 +26,9 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     @IBOutlet var containerWrapperLeadingConstraint: NSLayoutConstraint!
     @IBOutlet var containerWrapperTrailingConstraint: NSLayoutConstraint!
     
+    var containerWrapperLeadingConstant = ScalableConstant()
+    var containerWrapperTrailingConstant = ScalableConstant()
+
     @IBOutlet var slideTypeItems: [UIBarButtonItem]!
     
     let minContainerWidth = CGFloat(230)
@@ -128,7 +131,8 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         toolbarItems?.first?.setBackgroundImage(UIImage(named: "crop-alt-solid-fade"), for: .highlighted, barMetrics: .default)
         
         if loadedImages == nil {
-            let sampleImages: [UIImage?] = [UIImage(named: "short"), UIImage(named: "short2"), UIImage(named: "short2"), UIImage(named: "short2")]
+//            let sampleImages: [UIImage?] = [UIImage(named: "short"), UIImage(named: "short2"), UIImage(named: "short2"), UIImage(named: "short2")]
+            let sampleImages: [UIImage?] = [UIImage(named: "short"), UIImage(named: "short2")]
             loadedImages = sampleImages.map {ImageMocker(image: $0!)}
             self.configureUIImages(sampleImages)
         } else if loadedImages.count >= 2 {
@@ -224,11 +228,12 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             /// Update container wrapper
             let newWidth = scroll.frame.width - abs(containerLeadingConstraint.constant) - abs(containerTrailingConstraint.constant)
             containerWrapperWidthConstraint.constant = newWidth - scroll.frame.width
+            
             switch direction {
             case "left":
-                containerWrapperTrailingConstraint.constant = containerWrapperTrailingConstraint.constant + (shrink ? 1 : -1)*abs(calibratedTranslateX)
+                containerWrapperTrailingConstraint.constant = containerWrapperTrailingConstant.addConstant(delta: (shrink ? 1 : -1)*abs(calibratedTranslateX))
             case "right":
-                containerWrapperLeadingConstraint.constant = containerWrapperLeadingConstraint.constant + (shrink ? 1 : -1)*abs(calibratedTranslateX)
+                containerWrapperLeadingConstraint.constant = containerWrapperLeadingConstant.addConstant(delta: (shrink ? 1 : -1)*abs(calibratedTranslateX))
             default:
                 break
             }
@@ -399,7 +404,10 @@ extension ComposeController {
     func scaleContainerWrapper(scale: CGFloat) {
         containerWrapperWidthConstraint  = containerWrapperWidthConstraint.setMultiplier(multiplier: containerWrapperWidthConstraint.multiplier * scale)
         containerWidthConstraint  = containerWidthConstraint.setMultiplier(multiplier: containerWidthConstraint.multiplier * scale)
-//        container.cells.forEach {$0.multiplyScale(scale: scale)}
+        container.cells.forEach {$0.multiplyScale(scale: scale)}
+        print(containerWrapperTrailingConstant)
+        containerWrapperTrailingConstraint.constant = containerWrapperTrailingConstant.multiplyScale(scale)
+        containerWrapperLeadingConstraint.constant =  containerWrapperLeadingConstant.multiplyScale(scale)
     }
     
     fileprivate func updateAfterWrapperResize() {
