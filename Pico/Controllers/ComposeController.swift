@@ -436,7 +436,6 @@ extension ComposeController {
             
             updateAfterWrapperResize()
         } else if gestureRecognizer.state == .ended {
-            updateAfterWrapperResize()
             
             let minScale = CGFloat(0.5)
             UIViewPropertyAnimator(duration: 0.1, curve: .linear) {
@@ -446,6 +445,7 @@ extension ComposeController {
                 
                 self.resetGapToContainer()
                 self.scroll.layoutIfNeeded()
+                self.updateAfterWrapperResize()
             }.startAnimation()
         }
     }
