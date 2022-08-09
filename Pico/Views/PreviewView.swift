@@ -35,9 +35,6 @@ class PreviewView: GLKView {
 
     var previousImage: CIImage!
     var uiImages: [UIImage]!
-    static let maximumPixellateScale = 50
-    static let minimumPixellateScale = 7
-    var pixellateScale = Float(maximumPixellateScale - minimumPixellateScale)*0.5
     var selectedPixelScale = PreviewPixellateScale.small
     var sign: String? {
         willSet(newSign) {
@@ -240,7 +237,7 @@ extension PreviewView {
         crops.append(CropArea(rect: ciRect))
     }
     
-    fileprivate func refreshPixelImage() {
+    func refreshPixelImage() {
         let selectedPixelImage = pixellateImages[selectedPixelScale]!
         pixellateImage = pixellate(ciImage: image, forExport: false, pixellateImage: selectedPixelImage)
     }
@@ -254,10 +251,6 @@ extension PreviewView {
         crops[crops.count - 1].rendered = false
         
         refreshPixelImage()
-    }
-    
-    func updatePixellateSize(percent: Float) {
-        pixellateScale = Float(PreviewView.maximumPixellateScale - PreviewView.minimumPixellateScale)*percent
     }
     
     func rerenderCrops() {
