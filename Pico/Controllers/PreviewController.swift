@@ -80,6 +80,8 @@ class PreviewController: UIViewController {
     let minScale = CGFloat(0.5)
     let maxScale = CGFloat(2.0)
     
+    @IBOutlet var pixelItems: [UIBarButtonItem]!
+    
     var mode:PreviewMode = .none {
         willSet(mode) {
             switch mode {
@@ -138,6 +140,8 @@ class PreviewController: UIViewController {
         
         frame.frameRects = cellFrames
         frame.frameType = .none
+        
+        updatePixelSelection(tag: 0)
     }
     
     
@@ -260,9 +264,22 @@ class PreviewController: UIViewController {
             2: .large
         ]
         
+        
         preview.selectedPixelScale = tagToScale[sender.tag]!
         preview.refreshPixelImage()
         preview.setNeedsDisplay()
+        
+        updatePixelSelection(tag: sender.tag)
+    }
+    
+    func updatePixelSelection(tag: Int) {
+        pixelItems.forEach { item in
+            if item.tag == tag {
+                item.tintColor = view.tintColor
+            } else {
+                item.tintColor = UIColor.lightGray
+            }
+        }
     }
 }
 
