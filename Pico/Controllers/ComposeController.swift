@@ -26,6 +26,9 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     @IBOutlet var containerWrapperLeadingConstraint: NSLayoutConstraint!
     @IBOutlet var containerWrapperTrailingConstraint: NSLayoutConstraint!
 
+    var containerLeadingConstraintConstraint = ScalableConstant()
+    var containerTrailingConstraintConstraint = ScalableConstant()
+
     @IBOutlet var slideTypeItems: [UIBarButtonItem]!
     
     let minContainerWidth = CGFloat(230)
@@ -123,7 +126,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        containerWrapperWidthConstraint.isActive = false
         container.sliderType = .slide
         toolbarItems?.first?.setBackgroundImage(UIImage(named: "crop-alt-solid-fade"), for: .highlighted, barMetrics: .default)
         
@@ -212,19 +215,26 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             
             let targetConstant = activeConstraint.constant + translateForActiveConstraint
 
-            if (direction == "left" && targetConstant > 0) || (direction == "right" && targetConstant < 0) {
-                let delta = abs(targetConstant)
-                calibratedTranslateX = calibratedTranslateX/abs(calibratedTranslateX)*(abs(calibratedTranslateX) - delta)
-            } else if abs(targetConstant) + abs(alternativeConstraint.constant) > container.frame.width {
-                let delta = abs(targetConstant) + abs(alternativeConstraint.constant) - container.frame.width
-                calibratedTranslateX = calibratedTranslateX/abs(calibratedTranslateX)*(abs(calibratedTranslateX) - delta)
-            }
+            //TODO Calibrate translate
+//            if (direction == "left" && targetConstant > 0) || (direction == "right" && targetConstant < 0) {
+//                let delta = abs(targetConstant)
+//                calibratedTranslateX = calibratedTranslateX/abs(calibratedTranslateX)*(abs(calibratedTranslateX) - delta)
+//            } else if abs(targetConstant) + abs(alternativeConstraint.constant) > container.frame.width {
+//                let delta = abs(targetConstant) + abs(alternativeConstraint.constant) - container.frame.width
+//                calibratedTranslateX = calibratedTranslateX/abs(calibratedTranslateX)*(abs(calibratedTranslateX) - delta)
+//            }
+//
+//            activeConstraint.constant = activeConstraint.constant + calibrateDirection*abs(calibratedTranslateX)
             
-            activeConstraint.constant = activeConstraint.constant + calibrateDirection*abs(calibratedTranslateX)
+            if direction == "left" {
+                activeConstraint.constant = containerLeadingConstraintConstraint.addConstant(delta: calibrateDirection*abs(calibratedTranslateX))
+            } else {
+                activeConstraint.constant = containerTrailingConstraintConstraint.addConstant(delta: calibrateDirection*abs(calibratedTranslateX))
+            }
             
             /// Update container wrapper
             let newWidth = scroll.frame.width - abs(containerLeadingConstraint.constant) - abs(containerTrailingConstraint.constant)
-            containerWrapperWidthConstraint.constant = newWidth - scroll.frame.width
+//            containerWrapperWidthConstraint.constant = newWidth - scroll.frame.width
             switch direction {
             case "left":
                 containerWrapperTrailingConstraint.constant = containerWrapperTrailingConstraint.constant + (shrink ? 1 : -1)*abs(calibratedTranslateX)
@@ -398,9 +408,11 @@ extension ComposeController {
 extension ComposeController {
     
     func scaleContainerWrapper(scale: CGFloat) {
-        containerWrapperWidthConstraint  = containerWrapperWidthConstraint.setMultiplier(multiplier: containerWrapperWidthConstraint.multiplier * scale)
+//        containerWrapperWidthConstraint  = containerWrapperWidthConstraint.setMultiplier(multiplier: containerWrapperWidthConstraint.multiplier * scale)
         containerWidthConstraint  = containerWidthConstraint.setMultiplier(multiplier: containerWidthConstraint.multiplier * scale)
         container.cells.forEach {$0.multiplyScale(scale: scale)}
+        containerLeadingConstraint.constant = containerLeadingConstraintConstraint.multiplyScale(scale)
+        containerTrailingConstraint.constant = containerTrailingConstraintConstraint.multiplyScale(scale)
     }
     
     fileprivate func updateAfterWrapperResize() {
@@ -413,7 +425,7 @@ extension ComposeController {
             let maxScale = maxContainerWidth/containerWrapper.frame.width
             let scale = min(gestureRecognizer.scale, maxScale)
             
-            let targetScale = containerWrapperWidthConstraint.multiplier * scale
+            let targetScale = containerWidthConstraint.multiplier * scale
             guard targetScale > 0.5 else {
                 return
             }
