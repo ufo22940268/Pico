@@ -423,7 +423,7 @@ extension ComposeController {
             let scale = min(gestureRecognizer.scale, maxScale)
             
             let targetScale = containerWidthConstraint.multiplier * scale
-            guard targetScale > 0.5 else {
+            guard targetScale > 0.2 else {
                 return
             }
             
@@ -437,7 +437,13 @@ extension ComposeController {
             updateAfterWrapperResize()
         } else if gestureRecognizer.state == .ended {
             updateAfterWrapperResize()
+            
+            let minScale = CGFloat(0.5)
             UIViewPropertyAnimator(duration: 0.1, curve: .linear) {
+                if self.containerWidthConstraint.multiplier < minScale {
+                    self.scaleContainerWrapper(scale: minScale/self.containerWidthConstraint.multiplier)
+                }
+                
                 self.resetGapToContainer()
                 self.scroll.layoutIfNeeded()
             }.startAnimation()

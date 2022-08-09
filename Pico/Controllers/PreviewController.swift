@@ -66,8 +66,8 @@ class PreviewController: UIViewController {
     
     @IBOutlet var widthConstraint: NSLayoutConstraint!
     
-    @IBOutlet weak var centerXConstraint: NSLayoutConstraint!
-    @IBOutlet weak var centerYConstraint: NSLayoutConstraint!
+    @IBOutlet var centerXConstraint: NSLayoutConstraint!
+    @IBOutlet var centerYConstraint: NSLayoutConstraint!
     
     var cellFrames: [CGRect] = [CGRect]()
     
