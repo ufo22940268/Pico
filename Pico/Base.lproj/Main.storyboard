@@ -242,7 +242,6 @@
                                 </subviews>
                                 <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstItem="FDD-5R-i7y" firstAttribute="width" secondItem="Qfn-Hc-ipw" secondAttribute="width" id="37q-FU-TOZ"/>
                                     <constraint firstItem="FDD-5R-i7y" firstAttribute="trailing" secondItem="Qfn-Hc-ipw" secondAttribute="trailing" priority="250" identifier="containerWrapperTrailing" id="8tj-WS-eFi"/>
                                     <constraint firstItem="FDD-5R-i7y" firstAttribute="leading" secondItem="Qfn-Hc-ipw" secondAttribute="leading" priority="250" identifier="containerWrapperLeading" id="GC6-2T-RVc"/>
                                     <constraint firstAttribute="bottom" secondItem="FDD-5R-i7y" secondAttribute="bottom" id="I0i-Za-MXD"/>
@@ -310,7 +309,6 @@
                         <outlet property="containerWrapperCenterXConstraint" destination="bkM-s9-ajj" id="2mg-qE-HZq"/>
                         <outlet property="containerWrapperLeadingConstraint" destination="GC6-2T-RVc" id="w4G-0b-WH5"/>
                         <outlet property="containerWrapperTrailingConstraint" destination="8tj-WS-eFi" id="gQk-t9-RtI"/>
-                        <outlet property="containerWrapperWidthConstraint" destination="37q-FU-TOZ" id="rI0-Wt-qEB"/>
                         <outlet property="panGesture" destination="rOY-HI-ftD" id="MOz-FL-lRy"/>
                         <outlet property="scroll" destination="Qfn-Hc-ipw" id="lun-dp-7Ar"/>
                         <outlet property="topConstraint" destination="bre-SP-3Ha" id="ILm-lm-TFt"/>
