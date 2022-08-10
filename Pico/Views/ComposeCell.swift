@@ -158,7 +158,9 @@ class ComposeCell: UIView, EditDelegator {
                 if let img = img {
                     inter = inter.applying(CGAffineTransform(scaleX: img.size.width, y: img.size.height))
                     var imageCache = CIImage(image: img)!
+                    print("inter", inter)
                     imageCache = imageCache.cropped(to: inter)
+                    
                     callback(imageCache)
                 } else {
                     print("parse \(String(describing: img)) error")

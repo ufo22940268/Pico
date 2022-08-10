@@ -21,24 +21,24 @@ extension CIImage {
     
     static func concateImages(images: [CIImage]) -> CIImage {
         let minWidth = images.min { (c1, c2) -> Bool in
-            return c1.extent.width < c2.extent.width
+            return c1.extent.extentWidth() < c2.extent.extentWidth()
         }!.extent.width
         var scaledImages = images.map { img -> CIImage in
-            let scale = minWidth/img.extent.width
+            let scale = minWidth/img.extent.extentWidth()
             return img.transformed(by: CGAffineTransform(scaleX: scale, y: scale))
         }
         
         let canvasHeight = scaledImages.reduce(0) { (r, img)  in
-            return r + img.extent.height
+            return r + img.extent.extentHeight()
         }
         
         var canvas = scaledImages.last!
-        let canvasRect = canvas.extent.applying(CGAffineTransform(scaleX: 1, y: canvasHeight/canvas.extent.height))
+        let canvasRect = canvas.extent.applying(CGAffineTransform(scaleX: 1, y: canvasHeight/canvas.extent.extentHeight()))
         canvas = canvas.clampedToExtent().cropped(to: canvasRect)
-        var height = scaledImages.last!.extent.height
+        var height = scaledImages.last!.extent.extentHeight()
         for im in scaledImages[0..<images.count - 1].reversed() {
-            canvas = im.transformed(by: CGAffineTransform(translationX: 0.0, y: height)).composited(over: canvas)
-            height = height + im.extent.height
+            canvas = im.transformed(by: CGAffineTransform(translationX: 0.0, y: height - im.extent.origin.y)).composited(over: canvas)
+            height = height + im.extent.extentHeight()
         }
 
         return canvas

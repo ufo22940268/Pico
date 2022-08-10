@@ -564,7 +564,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="ycZ-tp-DN7" kind="relationship" relationship="rootViewController" id="Z8o-AT-qfc"/>
+                        <segue destination="h2r-xB-xzJ" kind="relationship" relationship="rootViewController" id="tVu-9e-CHw"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BqK-2l-fzQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -623,7 +623,6 @@
         <image name="user-edit-solid" width="24" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Z8o-AT-qfc"/>
-        <segue reference="yxL-aV-NMS"/>
+        <segue reference="tVu-9e-CHw"/>
     </inferredMetricsTieBreakers>
 </document>
