@@ -148,16 +148,15 @@ class ComposeCell: UIView, EditDelegator {
         return inter
     }
     
-    func exportSnapshot(callback: @escaping (CIImage) -> Void, wrapperBounds: CGRect) {
+    func getIntersection(wrapperBounds: CGRect) -> CGRect {
         var inter: CGRect = self.image.convert(bounds, from: self).intersection(self.image.convert(wrapperBounds, from: self))
-        
-        if index == 0 {
-            print(inter)
-        }
-//        print("inter", inter)
         inter = inter.applying(CGAffineTransform(scaleX: 1.0/self.image.frame.width, y: 1.0/self.image.frame.height))
         inter.origin.y = 1 - inter.origin.y - inter.height
-        
+        return inter
+    }
+    
+    func exportSnapshot(callback: @escaping (CIImage) -> Void, wrapperBounds: CGRect) {
+        var inter = getIntersection(wrapperBounds: wrapperBounds)
         DispatchQueue.global().async {
             self.imageEntity.resolve(completion: { (img) in
                 if let img = img {
@@ -175,9 +174,8 @@ class ComposeCell: UIView, EditDelegator {
     }
     
     func exportSnapshot(wrapperBounds: CGRect) -> UIImage {
-        var inter = wrapperBounds.intersection(self.bounds)
-        inter = inter.applying(CGAffineTransform(scaleX: 1.0/self.image.frame.width, y: 1.0/self.image.frame.height))
-        inter.origin.y = 1 - inter.origin.y - inter.height
+        var inter = getIntersection(wrapperBounds: wrapperBounds)
+
         let img = self.image.image!
         
         var imageCache = CIImage(image: img)!
