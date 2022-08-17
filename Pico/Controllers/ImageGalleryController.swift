@@ -58,7 +58,12 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         return cache
     } ()
     
-    
+    let screenshotImageCache: NSCache<Image, UIImage> = { () -> NSCache<Image, UIImage> in
+        let cache = NSCache<Image, UIImage>()
+        cache.countLimit = 20
+        return cache
+    } ()
+
     let imageManager = PHCachingImageManager.default() as! PHCachingImageManager
     let options: PHImageRequestOptions = {
         let ops = PHImageRequestOptions()
@@ -136,11 +141,12 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         return cell
     }
     
-    func loadForfViewImageCache(image: Image) {
+    func loadForfViewImageCache(image: Image, toCache:  NSCache<Image, UIImage>? = nil) {
         let scale = UIScreen.main.bounds.width/CGFloat(image.asset.pixelWidth)
         let imageSize = CGSize(width: image.asset.pixelWidth, height: image.asset.pixelHeight).applying(CGAffineTransform(scaleX: scale, y: scale))
         PHImageManager.default().requestImage(for: image.asset, targetSize: imageSize, contentMode: .default, options: options) { [weak self] (uiImage, _) in
-            self?.viewImageCache.setObject(uiImage!, forKey: image)
+            let cache = toCache ?? self?.viewImageCache
+            cache?.setObject(uiImage!, forKey: image)
         }
     }
     
@@ -188,6 +194,17 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         return images
     }
     
+    func getImagesFromScreenshotCache(images: [Image]) -> [UIImage] {
+        var ar = [UIImage]()
+        for selectImage in images {
+            if let image = screenshotImageCache.object(forKey: selectImage) {
+                ar.append(image)
+            }
+        }
+        return ar
+    }
+    
+
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectImage = images[indexPath.item]
         if selectImages.contains(selectImage) {

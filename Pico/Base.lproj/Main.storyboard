@@ -175,7 +175,7 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="2DG-bT-sKa"/>
                         <barButtonItem enabled="NO" image="comments-regular" id="tnW-Q3-J2P" userLabel="Long Screenshot">
                             <connections>
-                                <segue destination="h2r-xB-xzJ" kind="show" identifier="composeLong" id="oka-ze-DW4"/>
+                                <segue destination="h2r-xB-xzJ" kind="show" identifier="composeScreenshot" id="oka-ze-DW4"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="aTV-Hb-8YJ"/>
@@ -192,13 +192,20 @@
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" title="所有图片" id="Wls-ep-VAL"/>
+                    <navigationItem key="navigationItem" title="所有图片" id="Wls-ep-VAL">
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" title="最近截图" id="j3o-LW-0EB" userLabel="Recent Screenshots">
+                            <connections>
+                                <segue destination="h2r-xB-xzJ" kind="show" identifier="composeRecentScreenshot" id="p86-VW-Pye"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <connections>
                         <outlet property="cancelItem" destination="CjG-Lh-uqX" id="WJQ-eP-gzP"/>
                         <outlet property="doneItem" destination="YC7-Tx-url" id="Op5-To-ceL"/>
                         <outlet property="longScreenShotItem" destination="tnW-Q3-J2P" id="NKh-nj-GbT"/>
                         <outlet property="movieItem" destination="koE-GC-NJh" id="gmA-kW-XYe"/>
+                        <outlet property="recentScreenshotItem" destination="j3o-LW-0EB" id="jux-Od-QF9"/>
                         <outlet property="selectAlbumContainer" destination="8fy-vO-tKd" id="wZv-5F-CLQ"/>
                     </connections>
                 </viewController>
@@ -623,6 +630,6 @@
         <image name="user-edit-solid" width="24" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="tVu-9e-CHw"/>
+        <segue reference="p86-VW-Pye"/>
     </inferredMetricsTieBreakers>
 </document>
