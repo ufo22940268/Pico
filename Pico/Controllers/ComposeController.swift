@@ -71,8 +71,10 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                     if upOverlap > 0 && downOverlap > 0 {
                         for i in 0..<uiImages.count - 1 {
                             let imageHeight = uiImages[0]!.size.height
+                            print("up", upOverlap/imageHeight, "download", downOverlap/imageHeight)
                             self.container.cells[i].scrollDown(percentage: upOverlap/imageHeight)
                             self.container.cells[i + 1].scrollUp(percentage: -downOverlap/imageHeight)
+                            self.container.layoutIfNeeded()
                         }
                     }
                     dispatchGroup.leave()
