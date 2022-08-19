@@ -35,8 +35,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-//        let (bottom, top) = OverlapDetector(upImage: UIImage(named: "IMG_2647")!, downImage: UIImage(named: "IMG_2648")!).detect {}
-//        print(bottom, top)
+        OverlapDetector(upImage: UIImage(named: "IMG_2647")!, downImage: UIImage(named: "IMG_2648")!).detect { (up, down) -> Void in
+            print(up, down)
+        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
