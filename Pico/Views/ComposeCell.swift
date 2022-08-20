@@ -84,7 +84,6 @@ class ComposeCell: UIView, EditDelegator {
                 if !(shrink && frame.height - absTranslateY < 60) {
                     bottomConstant.constant = newContraint
                     bottomConstraint.constant = bottomConstant.finalConstant()
-                    print("bottomConstraint.constant", bottomConstraint.constant)
                     onCellScrollDelegator?.onCellScroll(translate: Float(translateY), cellIndex: index, position: position)
                 }
             }
