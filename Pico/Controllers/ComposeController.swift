@@ -70,7 +70,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                 DispatchQueue.main.async {
                     if upOverlap > 0 && downOverlap > 0 {
                         let imageHeight = uiImages[0]!.size.height
-                        print("up", upOverlap/imageHeight, "download", downOverlap/imageHeight)
+                        print("up", upOverlap, "download", downOverlap)
                         self.container.cells[index].scrollDown(percentage: upOverlap/imageHeight)
                         self.container.cells[index + 1].scrollUp(percentage: -downOverlap/imageHeight)
                         self.container.layoutIfNeeded()
@@ -133,7 +133,8 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         if loadedImages == nil {
 //            let sampleImages: [UIImage?
-            let sampleImages: [UIImage?] = [UIImage(named: "short"), UIImage(named: "short2")]
+            type = .screenshot
+            let sampleImages: [UIImage?] = [UIImage(named: "IMG_3146"), UIImage(named: "IMG_3147")]
             loadedImages = sampleImages.map {ImageMocker(image: $0!)}
             self.configureUIImages(sampleImages)
         } else if loadedImages.count >= 2 {

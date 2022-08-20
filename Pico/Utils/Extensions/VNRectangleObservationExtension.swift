@@ -18,4 +18,9 @@ extension VNRectangleObservation {
         let originPoint = CGPoint(x: bottomLeft.x*size.width, y: bottomLeft.y*size.height)
         return CGRect(origin: originPoint, size: CGSize(width: (bottomRight.x - bottomLeft.x)*size.width, height: (topLeft.y - bottomLeft.y)*size.height))
     }
+    
+    func toRect() -> CGRect {
+        let originPoint = CGPoint(x: bottomLeft.x, y: bottomLeft.y)
+        return CGRect(origin: originPoint, size: CGSize(width: (bottomRight.x - bottomLeft.x), height: (topLeft.y - bottomLeft.y)))
+    }
 }
