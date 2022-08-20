@@ -121,10 +121,10 @@ class OverlapDetector {
         try! VNImageRequestHandler(cgImage: downImage.cgImage!, options: [:]).perform([downRectReqeust])
 
         group.notify(queue: .global()) {
-            print("upObs", upRectObs.map {$0.toRect().size})
-            print("downObs", downRectObs.map {$0.toRect().size})
+//            print("upObs", upRectObs.map {$0.toRect().size})
+//            print("downObs", downRectObs.map {$0.toRect().size})
             if let (upObs, downObs) = self.findMatchingObsBetween(up: upRectObs, down: downRectObs) {
-                print(upObs.toRect(), downObs.toRect())
+//                print(upObs.toRect(), downObs.toRect())
                 completeHandler(upObs.toRect(size: self.upImage.size), downObs.toRect(size: self.downImage.size))
             } else {
                 completeHandler(CGRect.zero, CGRect.zero)
