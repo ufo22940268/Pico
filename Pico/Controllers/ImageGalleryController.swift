@@ -184,9 +184,10 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         return CGSize(width: size, height: size)
     }
     
-    func getImagesFromViewCache() -> [UIImage] {
+    func getImagesFromViewCache(images: [Image]? = nil) -> [UIImage] {
+        let finalImages = images ?? selectImages
         var images = [UIImage]()
-        for selectImage in selectImages {
+        for selectImage in finalImages {
             if let image = viewImageCache.object(forKey: selectImage) {
                 images.append(image)
             }

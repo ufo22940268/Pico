@@ -138,7 +138,9 @@ class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibrary
                 $0.asset.pixelHeight != firstSize.asset.pixelHeight && $0.asset.pixelWidth != firstSize.asset.pixelWidth
                 }.isEmpty
             
-            longScreenShotItem.isEnabled = equalLength
+            let isScreenshot = (selectedImages.filter {img in !CGSize(width: img.asset.pixelWidth, height: img.asset.pixelHeight).isScreenshot()}).isEmpty
+            
+            longScreenShotItem.isEnabled = isScreenshot
             movieItem.isEnabled = equalLength
         } else {
             longScreenShotItem.isEnabled = false
@@ -168,8 +170,14 @@ class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibrary
         case "composeScreenshot":
             let compose = segue.destination as! ComposeController
             compose.type = .screenshot
-            compose.loadedImages = imageGallery.selectImages
-            compose.loadedUIImages = imageGallery.getImagesFromViewCache()
+            compose.loadedImages = imageGallery.selectImages.sorted(by: { (img1, img2) -> Bool in
+                if let d1 = img1.asset.creationDate, let d2 = img2.asset.creationDate {
+                    return d1 < d2
+                } else {
+                    return true
+                }
+            })
+            compose.loadedUIImages = imageGallery.getImagesFromViewCache(images: compose.loadedImages)
         case "composeRecentScreenshot":
             let compose = segue.destination as! ComposeController
             compose.type = .screenshot
