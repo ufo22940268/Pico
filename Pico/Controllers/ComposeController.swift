@@ -377,6 +377,10 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                 return cell.exportSnapshot(wrapperBounds: cell.convert(containerWrapper.bounds, from: containerWrapper))
              })
              
+             previewController.cropRects = container.cells.map({ (cell) -> CGRect in
+                return cell.getIntersection(wrapperBounds: cell.convert(containerWrapper.bounds, from: containerWrapper))
+             })
+             
              var cellFrames = [CGRect]()
              var height = CGFloat(0)
              for img in previewController.uiImages! {
