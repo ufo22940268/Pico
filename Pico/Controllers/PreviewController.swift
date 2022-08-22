@@ -72,7 +72,7 @@ class PreviewController: UIViewController {
     var cellFrames: [CGRect] = [CGRect]()
     var cropRects: [CGRect] = [CGRect]()
     
-    let sampleImages: [UIImage] = [UIImage(named: "short")!, UIImage(named: "short")!]
+    let sampleImages: [UIImage] = [UIImage(named: "very_short")!, UIImage(named: "short")!]
     var uiImages: [UIImage]?
     var imageEntities: [Image]!
     
