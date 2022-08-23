@@ -38,7 +38,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     var editState: EditState = .inactive(fromDirections: nil)
     var panView: ComposeCell!
     
-    /// Useless, remove in future.
     var loadedImages:[Image]!
     var loadedUIImages: [UIImage] = [UIImage]() {
         willSet(uiImages) {
@@ -49,6 +48,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             }
         }
     }
+    var loadUIImageHandler:(() -> Void)?
     
     @IBOutlet weak var containerWidthConstraint: NSLayoutConstraint!
     
@@ -142,10 +142,15 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         if isDev() {
             type = .screenshot
-            let sampleImages: [UIImage] = [UIImage(named: "IMG_3180")!, UIImage(named: "IMG_3181")!]
+            let sampleImages: [UIImage] = [UIImage(named: "half_1")!, UIImage(named: "half_2")!]
             loadedImages = sampleImages.map {ImageMocker(image: $0)}
             loadedUIImages = sampleImages
         }
+
+        loadUIImageHandler?()
+        
+        // To solve compose controller memory issue, but i am not sure if it's a good solution.
+        loadUIImageHandler = nil
         
         if type == .screenshot {
             container.sliderType = .crop
