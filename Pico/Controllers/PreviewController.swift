@@ -115,6 +115,7 @@ class PreviewController: UIViewController {
             var height = CGFloat(0)
             for uiImage in uiImages! {
                 cellFrames.append(CGRect(origin: CGPoint(x: 0, y: height), size: uiImage.size))
+                cropRects.append(CGRect(origin: CGPoint.zero, size: CGSize(width: 1, height: 1)))
                 height = height + uiImage.size.height
             }
         }
@@ -137,20 +138,19 @@ class PreviewController: UIViewController {
         preview.sign = nil
         
         scroll.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 44, right: 0)
-        refreshConstraint()
         
         frame.frameRects = cellFrames
         frame.frameType = .none
         
         updatePixelSelection(tag: 0)
+        
+        scroll.maximumZoomScale = 2.0
+        scroll.minimumZoomScale = 0.5
+        scroll.delegate = self
+        
+        centerPreview()
     }
     
-    
-    /// Set constraints when view initialized or after zoom operation.
-    func refreshConstraint() {
-        centerXConstraint.isActive = scroll.bounds.width > preview.frame.width
-        centerYConstraint.isActive = scroll.bounds.height > preview.frame.height
-    }
     
     
     override func didReceiveMemoryWarning() {
@@ -160,22 +160,22 @@ class PreviewController: UIViewController {
     
     
     func insidePreview(selection: CGRect) -> Bool {
-        let previewSelection = preview.convert(selection, from: cover)
-        let contains = preview.bounds.contains(previewSelection)
+        let contains = preview.bounds.contains(selection.applying(CGAffineTransform(scaleX: preview.bounds.width, y: preview.bounds.height)))
         return contains
     }
     
     @IBAction func onSelectRegion(_ sender: UIPanGestureRecognizer) {
+        let currentPoint = sender.location(in: preview).applying(CGAffineTransform(scaleX: 1/preview.bounds.width, y: 1/preview.bounds.height))
         if sender.state == .began {
             selectRegion = SelectRegion()
             selectRegion.state = .start
-            selectRegion.startPoint = sender.location(in: cover)
+            selectRegion.startPoint = currentPoint
         } else if sender.state == .changed {
             selectRegion.state = .end
-            selectRegion.endPoint = sender.location(in: cover)
+            selectRegion.endPoint = currentPoint
             if let selection = selectRegion.toRect(), insidePreview(selection: selection) {
-                cover.drawSelection(rect: selection)
-                let imageRect = preview.convert(selection, from: cover)
+                cover.drawSelection(rect: cover.convert(selection.applying(CGAffineTransform(scaleX: preview.bounds.width, y: preview.bounds.height)), from: preview) )
+                let imageRect = selection.applying(preview.transform)
                 preview.updatePixellate(uiRect: imageRect)
             }
 
@@ -183,7 +183,7 @@ class PreviewController: UIViewController {
             cover.clearSelection()
 
             if let selection = selectRegion.toRect(), insidePreview(selection: selection) {
-                let imageRect = preview.convert(selection, from: cover)
+                let imageRect = selection.applying(preview.transform)
                 preview.addPixellate(uiRect: imageRect)
             }
         }
@@ -293,26 +293,22 @@ extension PreviewController: PreviewViewDelegate {
     }
 }
 
-// MARK: - Zoom
-extension PreviewController {
-    @IBAction func onZoom(_ gestureRecognizer: UIPinchGestureRecognizer) {
-        if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
-            scalePreview(scale: gestureRecognizer.scale)
-            gestureRecognizer.scale = 1.0
-        } else if gestureRecognizer.state == .ended {
-            UIViewPropertyAnimator(duration: 0.15, curve: .linear) {
-                self.refreshConstraint()
-                self.scroll.layoutIfNeeded()
-            }.startAnimation()
-        }
+extension PreviewController: UIScrollViewDelegate {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return preview
     }
     
-    func scalePreview(scale: CGFloat) {
-        let newMultiplier = widthConstraint.multiplier*scale
-        if newMultiplier <= maxScale && newMultiplier >= minScale {
-            widthConstraint = widthConstraint.setMultiplier(multiplier: newMultiplier)
-        }
-        preview.setNeedsLayout()
+    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+    }
+    
+    fileprivate func centerPreview() {
+        let offsetX = max((scroll.bounds.width - scroll.contentSize.width) * 0.5, 0)
+        let offsetY = max((scroll.bounds.height - scroll.contentSize.height) * 0.5, 0)
+        scroll.contentInset = UIEdgeInsetsMake(offsetY, offsetX, 0, 0)
+    }
+    
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        centerPreview()
     }
 }
 
