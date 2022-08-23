@@ -42,13 +42,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     var loadedImages:[Image]!
     var loadedUIImages: [UIImage] = [UIImage]() {
         willSet(uiImages) {
-//            if uiImages == nil {
-//                type = .screenshot
-//                let sampleImages: [UIImage?] = [UIImage(named: "IMG_3180"), UIImage(named: "IMG_3181")]
-//                loadedImages = sampleImages.map {ImageMocker(image: $0!)}
-//                self.configureUIImages(sampleImages)
-//            }
-            
+
             if uiImages.count >= 2 {
                 loadedImages = uiImages.map {ImageMocker(image: $0)}
                 self.configureUIImages(uiImages)
@@ -139,8 +133,19 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         container.updateSliderType()
     }
     
+    func isDev() -> Bool {
+        return loadedImages == nil
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if isDev() {
+            type = .screenshot
+            let sampleImages: [UIImage] = [UIImage(named: "IMG_3180")!, UIImage(named: "IMG_3181")!]
+            loadedImages = sampleImages.map {ImageMocker(image: $0)}
+            loadedUIImages = sampleImages
+        }
         
         if type == .screenshot {
             container.sliderType = .crop
