@@ -209,7 +209,7 @@ class PreviewController: UIViewController {
     @IBAction func onShareClick(_ sender: Any) {
         let shareManager: ShareManager = ShareManager(viewController: self)
         shareManager.startSavingPhoto()
-        preview.renderCache(frameView: frame, imageEntities: imageEntities, cropRects: cropRects, complete: { image in
+        preview.renderImageForExport(frameView: frame, imageEntities: imageEntities, cropRects: cropRects, complete: { image in
             shareManager.saveToPhoto(image: image)
         })
     }
