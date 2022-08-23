@@ -1,3 +1,6 @@
 Art
 Pico.xcodeproj/xcuserdata/*
 Pico.xcodeproj/project.xcworkspace/xcuserdata/**/*
+fastlane/*
+Pico.ipa
+Pico.app.dSYM.zip
