@@ -147,11 +147,12 @@ class PreviewController: UIViewController {
         scroll.maximumZoomScale = 2.0
         scroll.minimumZoomScale = 0.5
         scroll.delegate = self
-        
-        centerPreview()
     }
     
-    
+
+    override func viewDidLayoutSubviews() {
+        centerPreview()
+    }    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
