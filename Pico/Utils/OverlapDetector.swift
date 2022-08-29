@@ -13,9 +13,12 @@ import Vision
 struct RectangleResult {
     var bundle: (VNRectangleObservation, VNRectangleObservation)?
     var strictBundle: (VNRectangleObservation, VNRectangleObservation)?
+    var largestRect: CGRect?
+    var topRect: CGRect?
+    var bottomRect: CGRect?
     
     static func empty() -> RectangleResult {
-        return self.init(bundle: nil, strictBundle: nil)
+        return self.init(bundle: nil, strictBundle: nil, largestRect: nil, topRect: nil, bottomRect: nil)
     }
 }
 
@@ -26,7 +29,7 @@ class OverlapDetector {
     var upRGB: RGBAImage!
     var downRGB: RGBAImage!
     
-    let invalidPercentThreshold = Float(0.05)
+    let invalidPercentThreshold = Float(0.1)
     
     let tolerateDiffSize = CGFloat(0.01)
 
@@ -34,6 +37,13 @@ class OverlapDetector {
         
         self.upImage = upImage
         self.downImage = downImage
+        self.upRGB = RGBAImage(image: upImage)
+        self.downRGB = RGBAImage(image: downImage)
+    }
+    
+    func preprocessForRGBA(image: UIImage) -> UIImage {
+        let ciImage = CIImage(image: image)
+        return (ciImage?.applyingFilter("CILineOverlay").convertToUIImage())!
     }
     
     enum Position: String {
@@ -41,7 +51,7 @@ class OverlapDetector {
         case bottom = "bottom"
     }
     
-    func getOverlapFromTopOfDownImage() -> Int {
+    func getTopGap() -> CGFloat {
         var untilLine = 0
         for y in 0..<upRGB.height {
             var invalidDot = 0
@@ -57,10 +67,10 @@ class OverlapDetector {
                 break
             }
         }
-        return untilLine
+        return CGFloat(untilLine)
     }
     
-    func getOverlapFromBottomOfUpImage() -> Int {
+    func getBottomGap() -> CGFloat {
         var overlapHeight = 0
         for y in (0..<upRGB.height).reversed() {
             var invalidDot = 0
@@ -76,7 +86,7 @@ class OverlapDetector {
                 break
             }
         }
-        return overlapHeight
+        return CGFloat(overlapHeight)
     }
     
     func isLineInvalid(image1: RGBAImage, image1Y: Int, image2: RGBAImage, image2Y: Int) -> Bool {
@@ -96,8 +106,8 @@ class OverlapDetector {
         request.minimumConfidence = 0.1
         request.minimumAspectRatio = 0.1 // height / width
         request.maximumAspectRatio = 1.0
-        request.minimumSize = 0.13
-        request.quadratureTolerance = 10
+        request.minimumSize = 0.11
+        request.quadratureTolerance = 45
     }
     
     func detectOverlapRectangles(completeHandler: @escaping (RectangleResult) -> Void) {
@@ -156,9 +166,7 @@ class OverlapDetector {
             return obs.topLeft.y < (1 - 0.1) && obs.bottomLeft.y > 0.1
         }
         
-//        debug(image: self.upImage, obsList: up)
-        debug(image: self.downImage, obsList: down)
-
+        
         
         let sortedUp = up.sorted(by: { (l, r) -> Bool in
             return l.bottomLeft.y < r.bottomLeft.y
@@ -171,6 +179,9 @@ class OverlapDetector {
         var obsBundle: (VNRectangleObservation, VNRectangleObservation)?
         var strictObsBundle: (VNRectangleObservation, VNRectangleObservation)?
         
+        debug(image: self.upImage, obsList: sortedUp)
+        debug(image: self.downImage, obsList: sortedDown)
+
         for upObs in sortedUp {
             for downObs in sortedDown {
                 if strictObsBundle == nil && isSizeToleratable(upObs.toRect().width, downObs.toRect().width) && isSizeToleratable(upObs.toRect().height, downObs.toRect().height) {
@@ -182,7 +193,11 @@ class OverlapDetector {
             }
         }
         
-        return RectangleResult(bundle: obsBundle, strictBundle: strictObsBundle)
+        let largestRect = [sortedUp.first!.toRect(), sortedDown.first!.toRect()].max { (l, r) -> Bool in
+            return l.height < r.height
+        }
+        
+        return RectangleResult(bundle: obsBundle, strictBundle: strictObsBundle, largestRect: largestRect, topRect: sortedDown.first!.toRect(), bottomRect: sortedUp.first!.toRect())
     }
     
     
@@ -225,16 +240,17 @@ class OverlapDetector {
                 return
             }
             
-            let (upObs, downObs) = rectangleResult.bundle!
-            var upRectInLTC = self.convertToLTC(rect: upObs.toRect(size: self.upImage.size))
-            var downRectInLTC = self.convertToLTC(rect: downObs.toRect(size: self.upImage.size))
-            
-            if upRectInLTC.height > downRectInLTC.height {
-                downRectInLTC.size.height = upRectInLTC.height
-            } else if upRectInLTC.height < downRectInLTC.height {
-                upRectInLTC.origin.y = upRectInLTC.origin.y - (downRectInLTC.height - upRectInLTC.height)
-                upRectInLTC.size.height = downRectInLTC.height
-            }
+            let topGap = self.getTopGap()
+            let bottomGap = self.getBottomGap()
+            print("gap: \(topGap) ----------- \(bottomGap)")
+            var upRectInLTC = CGRect(x: 0, y: 0, width: self.upImage.size.width, height: self.upImage.size.height - bottomGap)
+            var downRectInLTC = CGRect(x: 0, y: topGap, width: self.upImage.size.width, height: self.upImage.size.height - topGap)
+//            let clipHeight = max(400, rectangleResult.largestRect!.height*self.upImage.size.height + 50)
+            let clipHeight = min(CGFloat(600), rectangleResult.largestRect!.height*self.upImage.size.height + 50)
+            upRectInLTC.origin.y = upRectInLTC.origin.y + (upRectInLTC.height - clipHeight)
+            upRectInLTC.size.height = clipHeight
+            downRectInLTC.size.height = clipHeight
+
             
             let upRectImage = self.upImage.cgImage!.cropping(to: upRectInLTC)
             let downRectImage = self.downImage.cgImage!.cropping(to: downRectInLTC)
