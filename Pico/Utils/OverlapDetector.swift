@@ -26,79 +26,19 @@ class OverlapDetector {
     
     var upImage: UIImage!
     var downImage: UIImage!
-    var upRGB: RGBAImage!
-    var downRGB: RGBAImage!
-    
-    let invalidPercentThreshold = Float(0.1)
+    var frameResult: FrameDetectResult!
     
     let tolerateDiffSize = CGFloat(0.01)
 
-    init(upImage: UIImage, downImage: UIImage) {
-        
+    init(upImage: UIImage, downImage: UIImage, frameResult: FrameDetectResult = FrameDetectResult.zero()) {
         self.upImage = upImage
         self.downImage = downImage
-        self.upRGB = RGBAImage(image: upImage)
-        self.downRGB = RGBAImage(image: downImage)
-    }
-    
-    func preprocessForRGBA(image: UIImage) -> UIImage {
-        let ciImage = CIImage(image: image)
-        return (ciImage?.applyingFilter("CILineOverlay").convertToUIImage())!
+        self.frameResult = frameResult
     }
     
     enum Position: String {
         case top = "top"
         case bottom = "bottom"
-    }
-    
-    func getTopGap() -> CGFloat {
-        var untilLine = 0
-        for y in 0..<upRGB.height {
-            var invalidDot = 0
-            for x in 0..<upRGB.width {
-                if upRGB.pixel(x: x, y) != downRGB.pixel(x: x, y) {
-                    invalidDot = invalidDot + 1
-                }
-            }
-            
-            let invalidPercent: Float = Float(invalidDot)/Float(upRGB.width)
-            if invalidPercent > invalidPercentThreshold {
-                untilLine = y
-                break
-            }
-        }
-        return CGFloat(untilLine)
-    }
-    
-    func getBottomGap() -> CGFloat {
-        var overlapHeight = 0
-        for y in (0..<upRGB.height).reversed() {
-            var invalidDot = 0
-            for x in 0..<upRGB.width {
-                if upRGB.pixel(x: x, y) != downRGB.pixel(x: x, y) {
-                    invalidDot = invalidDot + 1
-                }
-            }
-            
-            let invalidPercent: Float = Float(invalidDot)/Float(upRGB.width)
-            if invalidPercent > invalidPercentThreshold {
-                overlapHeight = upRGB.height - y
-                break
-            }
-        }
-        return CGFloat(overlapHeight)
-    }
-    
-    func isLineInvalid(image1: RGBAImage, image1Y: Int, image2: RGBAImage, image2Y: Int) -> Bool {
-        var invalidDot = 0
-        for x in 0..<image1.width {
-            if image1.pixel(x: x, image1Y) != image2.pixel(x: x, image2Y) {
-                invalidDot = invalidDot + 1
-            }
-        }
-        
-        let invalidPercent: Float = Float(invalidDot)/Float(upRGB.width)
-        return invalidPercent > invalidPercentThreshold
     }
     
     func setupRectRequest(request: VNDetectRectanglesRequest) {
@@ -152,7 +92,7 @@ class OverlapDetector {
     }
     
     func isSizeToleratable(_ size1: CGFloat, _ size2: CGFloat) -> Bool {
-        return abs(size1 - size2) < tolerateDiffSize
+        return abs(size1 - size2)/min(size1, size2) < 0.1
     }
     
     ///
@@ -179,8 +119,8 @@ class OverlapDetector {
         var obsBundle: (VNRectangleObservation, VNRectangleObservation)?
         var strictObsBundle: (VNRectangleObservation, VNRectangleObservation)?
         
-        debug(image: self.upImage, obsList: sortedUp)
-        debug(image: self.downImage, obsList: sortedDown)
+//        debug(image: self.upImage, obsList: sortedUp)
+//        debug(image: self.downImage, obsList: sortedDown)
 
         for upObs in sortedUp {
             for downObs in sortedDown {
@@ -240,20 +180,19 @@ class OverlapDetector {
                 return
             }
             
-            let topGap = self.getTopGap()
-            let bottomGap = self.getBottomGap()
+            let topGap = self.frameResult.topGap!
+            let bottomGap = self.frameResult.bottomGap!
             print("gap: \(topGap) ----------- \(bottomGap)")
             var upRectInLTC = CGRect(x: 0, y: 0, width: self.upImage.size.width, height: self.upImage.size.height - bottomGap)
             var downRectInLTC = CGRect(x: 0, y: topGap, width: self.upImage.size.width, height: self.upImage.size.height - topGap)
-//            let clipHeight = max(400, rectangleResult.largestRect!.height*self.upImage.size.height + 50)
             let clipHeight = min(CGFloat(600), rectangleResult.largestRect!.height*self.upImage.size.height + 50)
             upRectInLTC.origin.y = upRectInLTC.origin.y + (upRectInLTC.height - clipHeight)
             upRectInLTC.size.height = clipHeight
             downRectInLTC.size.height = clipHeight
-
             
             let upRectImage = self.upImage.cgImage!.cropping(to: upRectInLTC)
             let downRectImage = self.downImage.cgImage!.cropping(to: downRectInLTC)
+            
             
             let request = VNTranslationalImageRegistrationRequest(targetedCGImage: downRectImage!, options: [:], completionHandler: {(request, error) in
                 let imageOverlap = (request.results?.first as? VNImageTranslationAlignmentObservation)?.alignmentTransform.ty ?? 0
