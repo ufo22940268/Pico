@@ -136,15 +136,6 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
         imageGallery.collection.reloadData()
     }
     
-    @IBAction func test() {
-        DispatchQueue.main.async {
-            self.imageGallery.collection.performBatchUpdates({
-                self.imageGallery.images.remove(at: 0)
-                self.imageGallery.collection.deleteItems(at: [IndexPath(row: 0, section: 0)])
-            }, completion: nil)
-        }
-    }
-    
     fileprivate func updateTabbarItems(_ selectedImages: [Image]) {
         let enabled = selectedImages.count > 1
         cancelItem.isEnabled = enabled

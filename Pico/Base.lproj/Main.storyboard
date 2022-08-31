@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="MIE-CQ-9z1">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ycZ-tp-DN7">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -193,11 +193,6 @@
                         </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="所有图片" id="Wls-ep-VAL">
-                        <barButtonItem key="leftBarButtonItem" title="Test" id="HiU-cj-Hv0" userLabel="test">
-                            <connections>
-                                <action selector="test" destination="M0x-L9-9tl" id="Qet-3f-dd0"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" enabled="NO" title="最近截图" id="j3o-LW-0EB" userLabel="Recent Screenshots">
                             <connections>
                                 <segue destination="h2r-xB-xzJ" kind="show" identifier="composeRecentScreenshot" id="p86-VW-Pye"/>
@@ -623,7 +618,7 @@
         <image name="user-edit-solid" width="24" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="fvF-Lz-IAD"/>
+        <segue reference="oOs-vT-aOB"/>
         <segue reference="oka-ze-DW4"/>
     </inferredMetricsTieBreakers>
 </document>
