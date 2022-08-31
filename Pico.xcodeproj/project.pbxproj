@@ -79,7 +79,27 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		42014D9021378BB900C11B9D /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		42014D9C21378DC200C11B9D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		42014D9E21378DCA00C11B9D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		42014DA021378DD800C11B9D /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
+		42014DA221378DE000C11B9D /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		42014DA421378DE700C11B9D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		42014DA621378DEE00C11B9D /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		42014DA821378DF400C11B9D /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		420186F0212ABFD300EF903F /* CGSizeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGSizeExtension.swift; sourceTree = "<group>"; };
 		4201F005210ED73400A6EBA5 /* GestureExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureExtension.swift; sourceTree = "<group>"; };
 		4201F00721119A0700A6EBA5 /* CIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CIImageExtension.swift; sourceTree = "<group>"; };
@@ -169,6 +189,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		42014D9B21378DC200C11B9D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				42014DA821378DF400C11B9D /* CFNetwork.framework */,
+				42014DA621378DEE00C11B9D /* CoreTelephony.framework */,
+				42014DA421378DE700C11B9D /* Security.framework */,
+				42014DA221378DE000C11B9D /* libc++.tbd */,
+				42014DA021378DD800C11B9D /* libsqlite3.0.tbd */,
+				42014D9E21378DCA00C11B9D /* libz.tbd */,
+				42014D9C21378DC200C11B9D /* SystemConfiguration.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		4201F004210ED68B00A6EBA5 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -193,6 +227,7 @@
 				42A18C5E20EAF5A900DD4AA5 /* PicoTests */,
 				42A18C6920EAF5A900DD4AA5 /* PicoUITests */,
 				42A18C4820EAF5A600DD4AA5 /* Products */,
+				42014D9B21378DC200C11B9D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -317,6 +352,7 @@
 				42A18C4320EAF5A600DD4AA5 /* Sources */,
 				42A18C4420EAF5A600DD4AA5 /* Frameworks */,
 				42A18C4520EAF5A600DD4AA5 /* Resources */,
+				42014D9021378BB900C11B9D /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -602,6 +638,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -656,6 +693,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";

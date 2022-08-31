@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibraryChangeObserver, AlbumSelectDelegator {
+class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDelegator {
     
     var imageGallery: ImageGalleryController!
     @IBOutlet weak var longScreenShotItem: UIBarButtonItem!
@@ -29,6 +29,8 @@ class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibrary
     var scrollUpAnimation: UIViewPropertyAnimator?
     var scrollDownAnimation: UIViewPropertyAnimator?
     @IBOutlet weak var recentScreenshotItem: UIBarButtonItem!
+    
+    let reloadQueue = DispatchQueue(label: "com.bettycc.reloadQueue")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,31 +88,44 @@ class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibrary
         // Dispose of any resources that can be recreated.
     }
     
-    func reloadAlbums() {
+    func reloadAlbums(notify: Bool = false) {
         self.library.reload {
             guard self.library.albums.count > 0 else {
                 return
             }
             
-            if self.selectAlbum == nil {
-                self.selectAlbum = self.library.albums.filter { $0.collection.assetCollectionSubtype == .smartAlbumUserLibrary }.first ?? self.library.albums.first!
-            } else {
-                self.selectAlbum = self.library.albums.filter { $0.collection.localIdentifier == self.selectAlbum.collection.localIdentifier}.first ?? self.selectAlbum
+            self.reloadQueue.async {
+                
+                if self.selectAlbum == nil {
+                    self.selectAlbum = self.library.albums.filter { $0.collection.assetCollectionSubtype == .smartAlbumUserLibrary }.first ?? self.library.albums.first!
+                } else {
+                    self.selectAlbum = self.library.albums.filter { $0.collection.localIdentifier == self.selectAlbum.collection.localIdentifier}.first ?? self.selectAlbum
+                }
+                
+                let screenshots = Album.selectAllPhotoAlbum(albums: self.library.albums)?.getRecentScreenshots()
+                self.recentScreenshotItem.isEnabled = (screenshots?.count ?? 0) >= 2
+                self.recentScreenshots = screenshots
+                if let recentScreenshots = self.recentScreenshots {
+                    recentScreenshots.forEach {self.imageGallery.loadForfViewImageCache(image: $0)}
+                }
+                
+                self.selectAlbumController.albums = self.library.albums.sorted(by: { (a1, a2) -> Bool in
+                    return a1.collection.localizedTitle == "所有照片"
+                })
+
+                if !notify{
+                    DispatchQueue.main.async {
+                        self.reloadSelectAlbum()
+                        self.selectAlbumController.tableView.reloadData()
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.selectAlbumController.tableView.reloadData()
+                        self.dynamicUpdate()
+                    }
+                }
             }
-            
-            let screenshots = Album.selectAllPhotoAlbum(albums: self.library.albums)?.getRecentScreenshots()
-            self.recentScreenshotItem.isEnabled = (screenshots?.count ?? 0) >= 2
-            self.recentScreenshots = screenshots
-            if let recentScreenshots = self.recentScreenshots {
-                recentScreenshots.forEach {self.imageGallery.loadForfViewImageCache(image: $0, toCache: self.imageGallery.screenshotImageCache)}
-            }
-            
-            self.reloadSelectAlbum()
-            
-            self.selectAlbumController.albums = self.library.albums.sorted(by: { (a1, a2) -> Bool in
-                return a1.collection.localizedTitle == "所有照片"
-            })
-            self.selectAlbumController.tableView.reloadData()
+
         }
     }
     
@@ -121,9 +136,12 @@ class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibrary
         imageGallery.collection.reloadData()
     }
     
-    func photoLibraryDidChange(_ changeInstance: PHChange) {
-        DispatchQueue.main.sync {
-            self.reloadAlbums()
+    @IBAction func test() {
+        DispatchQueue.main.async {
+            self.imageGallery.collection.performBatchUpdates({
+                self.imageGallery.images.remove(at: 0)
+                self.imageGallery.collection.deleteItems(at: [IndexPath(row: 0, section: 0)])
+            }, completion: nil)
         }
     }
     
@@ -219,6 +237,88 @@ class PickImageController: UIViewController, SelectImageDelegate, PHPhotoLibrary
         sender.isEnabled = false
         updateTabbarItems(imageGallery.selectImages)
     }
-    
+}
 
+// MARK: - Dynamic reload images
+extension PickImageController {
+    
+    func dynamicUpdate() {
+        reloadQueue.async {
+            let newItems = self.selectAlbum.items
+            let previousItems = self.imageGallery.images
+            
+            let deletedItems = previousItems.filter {!newItems.contains($0)}
+            let deletedBundle = deletedItems.map { img -> (IndexPath, Image) in
+                return (self.imageGallery.getIndexPath(image: img), img)
+            }
+            let deletedIndexes = deletedBundle.map {$0.0}
+            
+            let insertedItems = newItems.filter {!previousItems.contains($0)}
+
+            DispatchQueue.main.async {
+                self.imageGallery.collection.performBatchUpdates({
+                    deletedBundle.forEach {self.imageGallery.images.remove(at: self.imageGallery.images.index(of: $0.1)!)}
+                    self.imageGallery.collection.deleteItems(at: deletedIndexes)
+                    
+                    self.imageGallery.images.insert(contentsOf: insertedItems, at: 0)
+                    self.imageGallery.collection.insertItems(at:  Array(0..<insertedItems.count).map{IndexPath(row: $0, section: 0)})
+                    
+                }, completion: nil)
+            }
+        }
+        
+    }
+}
+
+extension PickImageController: PHPhotoLibraryChangeObserver {
+    func photoLibraryDidChange(_ changeInstance: PHChange) {
+        guard let collectionView = self.imageGallery.collection else { return }
+        // Change notifications may be made on a background queue.
+        // Re-dispatch to the main queue to update the UI.
+        
+        DispatchQueue.main.sync {
+            // Check for changes to the displayed album itself
+            // (its existence and metadata, not its member assets).
+            if let albumChanges = changeInstance.changeDetails(for: selectAlbum.collection) {
+                // Fetch the new album and update the UI accordingly.
+                selectAlbum.collection = albumChanges.objectAfterChanges! as! PHAssetCollection
+            }
+            // Check for changes to the list of assets (insertions, deletions, moves, or updates).
+            if let changes = changeInstance.changeDetails(for: selectAlbum.fetchResult) {
+                // Keep the new fetch result for future use.
+                selectAlbum.fetchResult = changes.fetchResultAfterChanges
+                selectAlbum.populateItems()
+                self.imageGallery.images = selectAlbum.items
+                let selectImageUpdated = self.imageGallery.updateSelectImages()
+                if changes.hasIncrementalChanges {
+                    // If there are incremental diffs, animate them in the collection view.
+                    collectionView.performBatchUpdates({
+                        // For indexes to make sense, updates must be in this order:
+                        // delete, insert, reload, move
+                        if let removed = changes.removedIndexes, removed.count > 0 {
+                            collectionView.deleteItems(at: removed.map { IndexPath(item: $0, section:0) })
+                        }
+                        if let inserted = changes.insertedIndexes, inserted.count > 0 {
+                            collectionView.insertItems(at: inserted.map { IndexPath(item: $0, section:0) })
+                        }
+                        if let changed = changes.changedIndexes, changed.count > 0 {
+                            collectionView.reloadItems(at: changed.map { IndexPath(item: $0, section:0) })
+                        }
+                        changes.enumerateMoves { fromIndex, toIndex in
+                            collectionView.moveItem(at: IndexPath(item: fromIndex, section: 0),
+                                                    to: IndexPath(item: toIndex, section: 0))
+                        }
+                        
+                        if selectImageUpdated {
+                            self.imageGallery.updateAfterSelectionChanged(reloadAll: true)
+                        }
+                    })
+                } else {
+                    // Reload the collection view if incremental diffs are not available.
+                    collectionView.reloadData()
+                }                
+            }
+        }
+        
+    }
 }
