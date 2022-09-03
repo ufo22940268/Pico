@@ -39,7 +39,7 @@ class PreviewCell: GLKView {
     }
     
     override func draw(_ rect: CGRect) {
-        let lastImage = decorator.lastImage!
+        let lastImage = decorator.composeLastImageWithSign()
         ciContext.draw(lastImage, in: rect.applying(CGAffineTransform(scaleX: UIScreen.main.scale, y: UIScreen.main.scale)), from: lastImage.extent)
     }
     
@@ -64,6 +64,20 @@ extension PreviewCell {
     }
 }
 
+// MARK: - Sign
+extension PreviewCell {
+    
+    func setSign(_ sign: String?) {
+        decorator.setSign(sign)
+        setNeedsDisplay()
+    }
+    
+    func setSignAlign(_ align: PreviewAlignMode) {
+        decorator.setSignAlign(align)
+        setNeedsDisplay()
+    }
+}
+
 class PreviewCellDecorator {
     
     var image: CIImage!
@@ -74,6 +88,10 @@ class PreviewCellDecorator {
     var pixellateImages = [PreviewPixellateScale: CIImage]()
     var boundWidth: CGFloat!
     var boundHeight: CGFloat!
+    
+    var sign: String?
+    var signAlign:PreviewAlignMode = .middle
+    var signImage: CIImage?
     
     init(image: CIImage, scale: PreviewPixellateScale, boundWidth: CGFloat) {
         self.image = image
@@ -112,6 +130,51 @@ class PreviewCellDecorator {
     }
     
     func updatePixelScale(_ scale: PreviewPixellateScale) {
-        pixellateScale = scale        
+        pixellateScale = scale
+    }
+    
+    func setSign(_ sign: String?) {
+        self.sign = sign
+        updateSignImage()
+    }
+    
+    func setSignAlign(_ align: PreviewAlignMode) {
+        self.signAlign = align
+        updateSignImage()
+    }
+    
+    func composeLastImageWithSign() -> CIImage {
+        guard let signImage = signImage else {
+            return lastImage
+        }
+        
+        let viewScale = CGFloat(1.0)
+        let imageWidth = self.image.extent.width
+        var translate:() -> CIImage
+        switch signAlign {
+        case .left:
+            translate = {signImage.transformed(by: CGAffineTransform(translationX: 8*viewScale, y: 8*viewScale))}
+        case .middle:
+            translate = {signImage.transformed(by: CGAffineTransform(translationX: (imageWidth - signImage.extent.width)/2, y: 8*viewScale))}
+        case .right:
+            translate = {signImage.transformed(by: CGAffineTransform(translationX: (imageWidth - signImage.extent.width - 8*viewScale), y: 8*viewScale))}
+        }
+        
+        return translate().composited(over: lastImage)
+    }
+    
+    func updateSignImage() {
+        guard let sign = sign else {
+            signImage = nil
+            return
+        }
+        
+        let labelView = UILabel()
+        labelView.textColor = UIColor.white
+//        labelView.textColor = UIColor.red
+        labelView.font = UIFont.systemFont(ofSize: PreviewConstants.signFontSize)
+        labelView.text = sign
+        labelView.sizeToFit()
+        signImage = labelView.renderToCIImage()
     }
 }

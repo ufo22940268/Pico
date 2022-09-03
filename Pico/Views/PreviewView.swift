@@ -29,14 +29,15 @@ struct CropArea: Hashable {
     }
 }
 
-protocol PreviewViewDelegate: class {
-    func onSignChanged(sign: String?)
-}
-
 enum PreviewPixellateScale: Int {
     case small = 7
     case middle = 14
     case large = 21
+}
+
+struct PreviewConstants {
+    static let frameWidth = CGFloat(10)
+    static let signFontSize = CGFloat(20)
 }
 
 class PreviewView: UIStackView {
@@ -46,7 +47,6 @@ class PreviewView: UIStackView {
     
     var sign: String? {
         willSet(newSign) {
-            previewDelegate?.onSignChanged(sign: newSign)
             let sign = newSign ?? ""
             labelView.text = sign
             labelView.sizeToFit()
@@ -62,7 +62,6 @@ class PreviewView: UIStackView {
         }
     }
     var align = PreviewAlignMode.middle
-    weak var previewDelegate: PreviewViewDelegate?
     var signImage: CIImage?
     var cells: [PreviewCell]!
     
@@ -88,50 +87,7 @@ class PreviewView: UIStackView {
         labelView.font = UIFont.systemFont(ofSize: signFontSize*UIScreen.main.scale)
         
         axis = .vertical
-    }
-    
-    fileprivate func drawSign(canvas: inout CIImage, signImage: CIImage?, viewScale:CGFloat = 1, forExport: Bool = false) {
-        if var signImage = signImage {
-            var translate:() -> CIImage
-            let resultWidth = canvas.extent.width
-            if !forExport {
-                signImage = signImage.transformed(by: CGAffineTransform(scaleX: 1/UIScreen.main.scale, y: 1/UIScreen.main.scale))
-            }
-            switch align {
-            case .left:
-                translate = {signImage.transformed(by: CGAffineTransform(translationX: 8*viewScale, y: 8*viewScale))}
-            case .middle:
-                translate = {signImage.transformed(by: CGAffineTransform(translationX: (resultWidth - signImage.extent.width)/2, y: 8*viewScale))}
-            case .right:
-                translate = {signImage.transformed(by: CGAffineTransform(translationX: (resultWidth - signImage.extent.width - 8*viewScale), y: 8*viewScale))}
-            }
-            canvas = translate().composited(over: canvas)
-        }
-    }
-    
-    fileprivate func findInstersectCells(with rect: CGRect) -> [PreviewCell]? {
-        return cells.filter {$0.frame.intersects(rect)}
-    }
-    
-    fileprivate func pixellate(ciImage: CIImage, forExport: Bool) -> CIImage {
-        var prev = ciImage
-        for index in 0..<crops.count {
-            if !forExport && crops[index].rendered != false {
-                continue
-            }
-            
-            let viewCrop = crops[index]
-            var viewRect: CGRect = viewCrop.rect
-            
-            let rectInUICoordinate = viewRect.applying(transform.scaledBy(x: bounds.width, y: bounds.height))
-            findInstersectCells(with: rectInUICoordinate)?.forEach { cell in
-                let intersectionCrop = cell.convert(rectInUICoordinate.intersection(cell.frame), from: self).applying(CGAffineTransform(scaleX: 1/CGFloat(cell.bounds.width), y: 1/CGFloat(cell.bounds.height)))
-                cell.updateCrop(with: intersectionCrop, identifier: viewCrop)
-            }
-            crops[index].rendered = true
-
-        }
-        return prev
+        directionalLayoutMargins = NSDirectionalEdgeInsets.zero
     }
     
 //    override func draw(_ rect: CGRect) {
@@ -251,6 +207,33 @@ class PreviewView: UIStackView {
 // MARK: - Pixellate functions
 extension PreviewView {
     
+    fileprivate func findInstersectCells(with rect: CGRect) -> [PreviewCell]? {
+        return cells.filter {$0.frame.intersects(rect)}
+    }
+    
+    fileprivate func pixellate(ciImage: CIImage, forExport: Bool) -> CIImage {
+        var prev = ciImage
+        for index in 0..<crops.count {
+            if !forExport && crops[index].rendered != false {
+                continue
+            }
+            
+            let viewCrop = crops[index]
+            var viewRect: CGRect = viewCrop.rect
+            
+            let rectInUICoordinate = viewRect.applying(transform.scaledBy(x: bounds.width, y: bounds.height))
+            findInstersectCells(with: rectInUICoordinate)?.forEach { cell in
+                let intersectionCrop = cell.convert(rectInUICoordinate.intersection(cell.frame), from: self).applying(CGAffineTransform(scaleX: 1/CGFloat(cell.bounds.width), y: 1/CGFloat(cell.bounds.height)))
+                cell.updateCrop(with: intersectionCrop, identifier: viewCrop)
+            }
+            crops[index].rendered = true
+            
+        }
+        return prev
+    }
+    
+
+    
     func undo() {
         if crops.count > 0 {
             crops.removeLast()
@@ -296,15 +279,65 @@ extension PreviewView {
 
 // MARK: - Signature
 extension PreviewView {
+
     func setSign(sign: String) {
-        self.sign = sign
+        cells.last?.setSign(sign)
     }
     
     func clearSign() {
-        self.sign = nil
+        cells.last?.setSign(nil)
     }
     
     func setAlign(align: PreviewAlignMode) {
-        self.align = align
+        cells.last?.setSignAlign(align)
+    }
+    
+    fileprivate func drawSign(canvas: inout CIImage, signImage: CIImage?, viewScale:CGFloat = 1, forExport: Bool = false) {
+        if var signImage = signImage {
+            var translate:() -> CIImage
+            let resultWidth = canvas.extent.width
+            if !forExport {
+                signImage = signImage.transformed(by: CGAffineTransform(scaleX: 1/UIScreen.main.scale, y: 1/UIScreen.main.scale))
+            }
+            switch align {
+            case .left:
+                translate = {signImage.transformed(by: CGAffineTransform(translationX: 8*viewScale, y: 8*viewScale))}
+            case .middle:
+                translate = {signImage.transformed(by: CGAffineTransform(translationX: (resultWidth - signImage.extent.width)/2, y: 8*viewScale))}
+            case .right:
+                translate = {signImage.transformed(by: CGAffineTransform(translationX: (resultWidth - signImage.extent.width - 8*viewScale), y: 8*viewScale))}
+            }
+            canvas = translate().composited(over: canvas)
+        }
+    }
+}
+
+extension PreviewView {
+    
+    func showHorizontalSeperator(_ show: Bool) {
+        if show {
+            spacing = PreviewConstants.frameWidth
+        } else {
+            spacing = 0
+        }
+    }
+    
+    func showInset(_ show: Bool) {
+        let insetWidth = show ? PreviewConstants.frameWidth : 0
+        directionalLayoutMargins = NSDirectionalEdgeInsets(top: insetWidth, leading: insetWidth, bottom: insetWidth, trailing: insetWidth)
+    }
+    
+    
+    func updateFrame(_ mode: PreviewFrameType) {
+        switch mode {
+        case .seperator:            
+            showHorizontalSeperator(true)
+        case .full:
+            showHorizontalSeperator(true)
+            showInset(true)
+        case .none:
+            showHorizontalSeperator(false)
+            showInset(false)
+        }
     }
 }
