@@ -110,7 +110,7 @@ class PreviewController: UIViewController {
         super.viewDidLoad()
 
         if forDev() {
-            uiImages = Array(0..<30).map {sampleImages[$0%2]}
+            uiImages = Array(0..<3).map {sampleImages[$0%2]}
             imageEntities = sampleImages.map {ImageMocker(image: $0)}
             var height = CGFloat(0)
             for uiImage in uiImages! {
@@ -121,13 +121,12 @@ class PreviewController: UIViewController {
         }
         
         preview.uiImages = uiImages
-        preview.image = preview.concateImages(images: (uiImages!.map({ (uiImage) -> CIImage in
+        preview.image = preview.setupCells(images: (uiImages!.map({ (uiImage) -> CIImage in
             return CIImage(image: uiImage)!
         })))
 
         let previewImageSize = preview.image.extent
         let ratio: CGFloat = previewImageSize.width/previewImageSize.height
-        preview.addConstraint(NSLayoutConstraint(item: preview, attribute: .width, relatedBy: .equal, toItem: preview, attribute: .height, multiplier: ratio, constant: 0))
         
         let imageViewHeight = scroll.frame.size.width/ratio
         scroll.centerImage(imageViewHeight: imageViewHeight)
@@ -266,7 +265,8 @@ class PreviewController: UIViewController {
         ]
         
         
-        preview.selectedPixelScale = tagToScale[sender.tag]!
+        
+        preview.setPixelScale(scale: tagToScale[sender.tag]!)
         preview.refreshPixelImage()
         preview.setNeedsDisplay()
         
