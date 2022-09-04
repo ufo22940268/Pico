@@ -4,3 +4,4 @@ Pico.xcodeproj/project.xcworkspace/xcuserdata/**/*
 fastlane/*
 Pico.ipa
 Pico.app.dSYM.zip
+.DS_Store
