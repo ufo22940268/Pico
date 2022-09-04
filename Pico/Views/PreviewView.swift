@@ -88,6 +88,7 @@ class PreviewView: UIStackView {
         
         axis = .vertical
         directionalLayoutMargins = NSDirectionalEdgeInsets.zero
+        
     }
     
     func convertUIRectToCIRect(uiRect: CGRect) -> CGRect {
@@ -137,7 +138,7 @@ class PreviewView: UIStackView {
         }
     }
     
-    fileprivate func cropImagesForExport(images: [UIImage], frameView: FrameView, cropRects: [CGRect]) -> [CIImage] {
+    fileprivate func cropImagesForExport(images: [UIImage], cropRects: [CGRect]) -> [CIImage] {
         var imageCrops = cropRects.enumerated().map { (index, rect) -> CGRect in
             let img = images[index]
             return rect.applying(CGAffineTransform(scaleX: img.size.width, y: img.size.height))
@@ -146,11 +147,11 @@ class PreviewView: UIStackView {
         return croppedImages
     }
     
-    func renderImageForExport(frameView: FrameView, imageEntities: [Image], cropRects: [CGRect], complete:  @escaping (UIImage) -> Void) {
+    func renderImageForExport(imageEntities: [Image], cropRects: [CGRect], complete:  @escaping (UIImage) -> Void) {
         Image.resolve(images: imageEntities, completion: { originalImages in
             let filteredOriginalImages = originalImages as! [UIImage]
             
-            let croppedImages = self.cropImagesForExport(images: filteredOriginalImages, frameView: frameView, cropRects: cropRects)
+            let croppedImages = self.cropImagesForExport(images: filteredOriginalImages, cropRects: cropRects)
             
             var finalImages = [CIImage]()
             for (index, croppedImage) in croppedImages.enumerated() {
@@ -286,13 +287,17 @@ extension PreviewView {
     
     func showInset(_ show: Bool) {
         let insetWidth = show ? PreviewConstants.frameWidth : 0
-        directionalLayoutMargins = NSDirectionalEdgeInsets(top: insetWidth, leading: insetWidth, bottom: insetWidth, trailing: insetWidth)
+        
+        layoutMargins = UIEdgeInsets(top: insetWidth, left: insetWidth, bottom: insetWidth, right: insetWidth)
+        isLayoutMarginsRelativeArrangement = show
+
     }
     
     
     func updateFrame(_ mode: PreviewFrameType) {
         switch mode {
         case .seperator:            
+            showInset(false)
             showHorizontalSeperator(true)
         case .full:
             showHorizontalSeperator(true)

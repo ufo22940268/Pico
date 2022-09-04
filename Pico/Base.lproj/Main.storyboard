@@ -350,41 +350,15 @@
                                 <subviews>
                                     <view verifyAmbiguity="off" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bEx-xN-zR0" customClass="PreviewView" customModule="Pico" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
-                                        <subviews>
-                                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BrR-tC-eTg" userLabel="Frame" customClass="FrameView" customModule="Pico" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
-                                            </view>
-                                        </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstItem="BrR-tC-eTg" firstAttribute="leading" secondItem="bEx-xN-zR0" secondAttribute="leading" id="DPd-ek-o3i"/>
-                                            <constraint firstItem="BrR-tC-eTg" firstAttribute="top" secondItem="bEx-xN-zR0" secondAttribute="top" id="iIg-il-bTh"/>
-                                            <constraint firstAttribute="bottom" secondItem="BrR-tC-eTg" secondAttribute="bottom" id="o4v-NF-Szl"/>
-                                            <constraint firstAttribute="trailing" secondItem="BrR-tC-eTg" secondAttribute="trailing" id="s7K-Yy-RMy"/>
-                                        </constraints>
-                                        <variation key="default">
-                                            <mask key="subviews">
-                                                <exclude reference="BrR-tC-eTg"/>
-                                            </mask>
-                                        </variation>
                                     </view>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="bEx-xN-zR0" secondAttribute="trailing" priority="750" id="3G5-9S-ckG"/>
                                     <constraint firstItem="bEx-xN-zR0" firstAttribute="top" secondItem="QGp-s0-rHz" secondAttribute="top" id="ScJ-sa-4Cr"/>
                                     <constraint firstAttribute="bottom" secondItem="bEx-xN-zR0" secondAttribute="bottom" id="g9R-y7-Li9"/>
-                                    <constraint firstAttribute="bottom" secondItem="bEx-xN-zR0" secondAttribute="bottom" priority="750" id="ibO-wZ-yay"/>
-                                    <constraint firstItem="bEx-xN-zR0" firstAttribute="top" secondItem="QGp-s0-rHz" secondAttribute="top" priority="750" id="lq3-w1-zGo"/>
-                                    <constraint firstItem="bEx-xN-zR0" firstAttribute="width" secondItem="QGp-s0-rHz" secondAttribute="width" id="wbk-L3-pKL"/>
                                     <constraint firstItem="bEx-xN-zR0" firstAttribute="leading" secondItem="QGp-s0-rHz" secondAttribute="leading" priority="750" id="yqh-mR-IfS"/>
                                 </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="ibO-wZ-yay"/>
-                                        <exclude reference="lq3-w1-zGo"/>
-                                        <exclude reference="wbk-L3-pKL"/>
-                                    </mask>
-                                </variation>
                             </scrollView>
                             <view opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hT0-KK-yMI" customClass="PreviewCover" customModule="Pico" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="-44" width="375" height="711"/>
@@ -538,7 +512,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="cover" destination="hT0-KK-yMI" id="XjQ-Ag-9yL"/>
-                        <outlet property="frame" destination="BrR-tC-eTg" id="YLI-Pa-8cu"/>
                         <outlet property="frameToolbar" destination="sVd-lL-Emf" id="pmU-15-yCA"/>
                         <outlet property="pixellateToolbar" destination="MqJ-uF-SXN" id="jHd-h8-tAC"/>
                         <outlet property="pixelllateGesture" destination="JII-QL-bxo" id="0qo-qM-Rdx"/>
@@ -549,7 +522,6 @@
                         <outlet property="signAlignRightItem" destination="0te-J3-kPs" id="i9x-7t-ROf"/>
                         <outlet property="signCancelItem" destination="fch-nv-6BW" id="Sq8-ho-H2u"/>
                         <outlet property="signToolbar" destination="M7h-il-qUt" id="TIv-ew-Bo4"/>
-                        <outlet property="widthConstraint" destination="wbk-L3-pKL" id="9ot-tB-TaE"/>
                         <outletCollection property="pixelItems" destination="WoI-Hl-ng6" collectionClass="NSMutableArray" id="6Qy-0P-EEZ"/>
                         <outletCollection property="pixelItems" destination="EuN-aH-fgk" collectionClass="NSMutableArray" id="4Ne-Y5-uxH"/>
                         <outletCollection property="pixelItems" destination="fVP-Kp-X7O" collectionClass="NSMutableArray" id="QUl-0y-yYD"/>

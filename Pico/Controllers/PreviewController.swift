@@ -75,9 +75,7 @@ class PreviewController: UIViewController {
     let sampleImages: [UIImage] = [UIImage(named: "very_short")!, UIImage(named: "short")!]
     var uiImages: [UIImage]?
     var imageEntities: [Image]!
-    
-    @IBOutlet weak var frame: FrameView!
-    
+        
     let minScale = CGFloat(0.5)
     let maxScale = CGFloat(2.0)
     
@@ -135,9 +133,6 @@ class PreviewController: UIViewController {
         preview.sign = nil
         
         scroll.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 44, right: 0)
-        
-        frame.frameRects = cellFrames
-        frame.frameType = .none
         
         updatePixelSelection(tag: 0)
         
@@ -209,7 +204,7 @@ class PreviewController: UIViewController {
     @IBAction func onShareClick(_ sender: Any) {
         let shareManager: ShareManager = ShareManager(viewController: self)
         shareManager.startSavingPhoto()
-        preview.renderImageForExport(frameView: frame, imageEntities: imageEntities, cropRects: cropRects, complete: { image in
+        preview.renderImageForExport(imageEntities: imageEntities, cropRects: cropRects, complete: { image in
             shareManager.saveToPhoto(image: image)
         })
     }
@@ -293,18 +288,15 @@ extension PreviewController {
     
     @IBAction func onFrameCancelClick(_ sender: UIBarButtonItem) {
         preview.updateFrame(.none)
-        frame.setNeedsDisplay()
     }
     
     
     @IBAction func onFrameSeperatorModeClick(_ sender: Any) {
         preview.updateFrame(.seperator)
-        frame.setNeedsDisplay()
     }
     
     @IBAction func onFrameFullModeClick(_ sender: Any) {
         preview.updateFrame(.full)
-        frame.setNeedsDisplay()
     }
 }
 
