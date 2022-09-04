@@ -36,7 +36,7 @@ enum PreviewPixellateScale: Int {
 }
 
 struct PreviewConstants {
-    static let frameWidth = CGFloat(10)
+    static let frameWidth = CGFloat(8)
     static let signFontSize = CGFloat(20)
 }
 
@@ -79,6 +79,8 @@ class PreviewView: UIStackView {
     
     var pixellateImage: CIImage?
     var signFontSize = CGFloat(20)
+    
+    var frameType: PreviewFrameType!
     
     override func awakeFromNib() {
         
@@ -143,7 +145,7 @@ class PreviewView: UIStackView {
             let img = images[index]
             return rect.applying(CGAffineTransform(scaleX: img.size.width, y: img.size.height))
         }
-        var croppedImages = images.map{CIImage(image: $0)!}.enumerated().map({(index, img) in img.cropped(to: imageCrops[index])})
+        let croppedImages = images.map{CIImage(image: $0)!}.enumerated().map({(index, img) in img.cropped(to: imageCrops[index])})
         return croppedImages
     }
     
@@ -152,14 +154,17 @@ class PreviewView: UIStackView {
             let filteredOriginalImages = originalImages as! [UIImage]
             
             let croppedImages = self.cropImagesForExport(images: filteredOriginalImages, cropRects: cropRects)
-            
             var finalImages = [CIImage]()
             for (index, croppedImage) in croppedImages.enumerated() {
-                let cell = self.cells[index]
+                let cell = self.cells[ index]
                 finalImages.append(PreviewCellDecorator(image: croppedImage, cell: cell).composeImageForExport())
             }
             
+            finalImages = CIImage.resizeToSameWidth(images: finalImages)
+            finalImages = PreviewFrameDecorator(images: finalImages, frameType: self.frameType).addFrames()
+            
             let canvas = CIImage.concateImages(images: finalImages)
+            
             let uiCanvas = canvas.convertToUIImage()
             
             complete(uiCanvas)
@@ -306,5 +311,7 @@ extension PreviewView {
             showHorizontalSeperator(false)
             showInset(false)
         }
+        
+        frameType = mode
     }
 }
