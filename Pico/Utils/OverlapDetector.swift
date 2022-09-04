@@ -34,6 +34,9 @@ class OverlapDetector {
         self.upImage = upImage
         self.downImage = downImage
         self.frameResult = frameResult
+        
+        
+        print("gap: \(frameResult.topGap) ----------- \(frameResult.bottomGap)")
     }
     
     enum Position: String {
@@ -119,7 +122,7 @@ class OverlapDetector {
         var obsBundle: (VNRectangleObservation, VNRectangleObservation)?
         var strictObsBundle: (VNRectangleObservation, VNRectangleObservation)?
         
-//        debug(image: self.upImage, obsList: sortedUp)
+        debug(image: self.upImage, obsList: sortedUp)
 //        debug(image: self.downImage, obsList: sortedDown)
 
         for upObs in sortedUp {
@@ -180,26 +183,26 @@ class OverlapDetector {
                 return
             }
             
-            let topGap = self.frameResult.topGap!
-            let bottomGap = self.frameResult.bottomGap!
-            print("gap: \(topGap) ----------- \(bottomGap)")
-            var upRectInLTC = CGRect(x: 0, y: 0, width: self.upImage.size.width, height: self.upImage.size.height - bottomGap)
-            var downRectInLTC = CGRect(x: 0, y: topGap, width: self.upImage.size.width, height: self.upImage.size.height - topGap)
-            let clipHeight = min(CGFloat(600), rectangleResult.largestRect!.height*self.upImage.size.height + 50)
-            upRectInLTC.origin.y = upRectInLTC.origin.y + (upRectInLTC.height - clipHeight)
-            upRectInLTC.size.height = clipHeight
-            downRectInLTC.size.height = clipHeight
+            let prepares = [self.prepareTranlsate(rectangleResult: rectangleResult, minClip: true), self.prepareTranlsate(rectangleResult: rectangleResult, minClip: false)]
             
-            let upRectImage = self.upImage.cgImage!.cropping(to: upRectInLTC)
-            let downRectImage = self.downImage.cgImage!.cropping(to: downRectInLTC)
+            let group = DispatchGroup()
+            var imageOverlaps = [TranslationPrepare: CGFloat]()
+            for prepare in prepares {
+                group.enter()
+                let request = VNTranslationalImageRegistrationRequest(targetedCGImage: prepare.downImage, options: [:], completionHandler: {(request, error) in
+                    let imageOverlap = (request.results?.first as? VNImageTranslationAlignmentObservation)?.alignmentTransform.ty ?? 0
+                    imageOverlaps[prepare] = imageOverlap
+                    group.leave()
+                })
+                try! VNImageRequestHandler(cgImage: prepare.upImage, options: [:]).perform([request])
+            }
             
-            
-            let request = VNTranslationalImageRegistrationRequest(targetedCGImage: downRectImage!, options: [:], completionHandler: {(request, error) in
-                let imageOverlap = (request.results?.first as? VNImageTranslationAlignmentObservation)?.alignmentTransform.ty ?? 0
+            group.notify(queue: .main, execute: {
+                let overlapBundle = imageOverlaps.first(where: { (prepare, overlap) -> Bool in
+                    overlap < 0
+                })
                 
-                print("compose alignment", (request.results!.first as! VNImageTranslationAlignmentObservation).alignmentTransform)
-                
-                if imageOverlap > 0 {
+                guard let bundle = overlapBundle else {
                     //imageOverlap being positive means translation detection failed.
                     if rectangleResult.strictBundle == nil {
                         return completeHandler(0, 0)
@@ -211,18 +214,53 @@ class OverlapDetector {
                     }
                 }
                 
-                
+                let prepare = bundle.key
+                let imageOverlap = bundle.value
+
                 // upRectInCGImage coordinate is LTC
-                let upOverlap = self.upImage.size.height - (upRectInLTC.origin.y + abs(imageOverlap))
-                
-                let downOverlap = downRectInLTC.minY
-                
+                let upOverlap = self.upImage.size.height - (prepare.upRect.origin.y + abs(imageOverlap))
+
+                let downOverlap = prepare.downRect.minY
+
                 completeHandler(upOverlap, downOverlap)
             })
-            
-            try! VNImageRequestHandler(cgImage: upRectImage!, options: [:]).perform([request])
+
         }
         detectOverlapRectangles(completeHandler: handleRectangle)
+    }
+    
+    struct TranslationPrepare:Hashable {
+        var hashValue: Int {
+            return Int(upImage.width*upImage.height)
+        }
+        
+        var upImage: CGImage
+        var downImage: CGImage
+        var upRect: CGRect
+        var downRect: CGRect
+    }
+    
+    func prepareTranlsate(rectangleResult: RectangleResult, minClip: Bool) -> TranslationPrepare {
+        let topGap = self.frameResult.topGap!
+        let bottomGap = self.frameResult.bottomGap!
+
+        let rectangleLargestHeight: CGFloat = rectangleResult.largestRect!.height
+        var upRectInLTC = CGRect(x: 0, y: 0, width: self.upImage.size.width, height: self.upImage.size.height - bottomGap)
+        var downRectInLTC = CGRect(x: 0, y: topGap, width: self.upImage.size.width, height: self.upImage.size.height - topGap)
+        var clipHeight:CGFloat
+        if minClip {
+            clipHeight = min(CGFloat(600), rectangleLargestHeight*self.upImage.size.height + 50)
+        } else {
+            clipHeight = max(CGFloat(600), rectangleLargestHeight*self.upImage.size.height + 50)
+        }
+        upRectInLTC.origin.y = upRectInLTC.origin.y + (upRectInLTC.height - clipHeight)
+        upRectInLTC.size.height = clipHeight
+        downRectInLTC.size.height = clipHeight
+        
+        let upRectImage = self.upImage.cgImage!.cropping(to: upRectInLTC)
+        let downRectImage = self.downImage.cgImage!.cropping(to: downRectInLTC)
+
+        return TranslationPrepare(upImage: upRectImage!, downImage: downRectImage!, upRect: upRectInLTC, downRect: downRectInLTC)
     }
     
     func detect(completeHandler: @escaping (CGFloat, CGFloat) -> Void) {
