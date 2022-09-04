@@ -27,7 +27,7 @@ class PreviewCell: GLKView {
         super.init(frame: CGRect.zero, context: EAGLContext(api: .openGLES3)!)
         self.image = image
         ciContext = CIContext(eaglContext: context)
-        decorator = PreviewCellDecorator(image: image, scale: .small, boundWidth: bounds.width)
+        decorator = PreviewCellDecorator(image: image, scale: .small)
         
         translatesAutoresizingMaskIntoConstraints = false
         let ratio = image.extent.width/image.extent.height
@@ -93,13 +93,27 @@ class PreviewCellDecorator {
     var signAlign:PreviewAlignMode = .middle
     var signImage: CIImage?
     
-    init(image: CIImage, scale: PreviewPixellateScale, boundWidth: CGFloat) {
+    /// Constructor for view
+    init(image: CIImage, scale: PreviewPixellateScale) {
         self.image = image
         self.lastImage = image
         self.pixellateScale = scale
-        self.boundWidth = boundWidth
         
         preparePixellateImages(image)
+    }
+    
+    /// Constructor for export
+    convenience init(image: CIImage, cell: PreviewCell) {
+        self.init(image: image, scale: cell.decorator.pixellateScale)
+        boundWidth = image.extent.width
+        boundHeight = image.extent.height
+        
+        if let sign = cell.decorator.sign {
+            self.sign = sign
+            self.signAlign = cell.decorator.signAlign
+        }
+        
+        cropRects = cell.decorator.cropRects
     }
     
     func toUICoordinate(from rect: CGRect) -> CGRect {
@@ -161,6 +175,18 @@ class PreviewCellDecorator {
         }
         
         return translate().composited(over: lastImage)
+    }
+    
+    func composeImageForExport() -> CIImage {
+        return rerenderAllPixelCrops()
+    }
+    
+    func rerenderAllPixelCrops() -> CIImage {
+        resetPixel()
+        for (_, cropRect) in cropRects {
+            renderCrop(with: cropRect)
+        }
+        return composeLastImageWithSign()
     }
     
     func updateSignImage() {
