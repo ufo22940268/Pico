@@ -88,6 +88,15 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
         // Dispose of any resources that can be recreated.
     }
     
+    fileprivate func updateRecentScreenshotItemButtonStatus(images: [Image]) {
+        let screenshots = Album.getRecentScreenshots(images: images)
+        self.recentScreenshotItem.isEnabled = screenshots.count >= 2
+        self.recentScreenshots = screenshots
+        if let recentScreenshots = self.recentScreenshots {
+            recentScreenshots.forEach {self.imageGallery.loadForfViewImageCache(image: $0)}
+        }
+    }
+    
     func reloadAlbums(notify: Bool = false) {
         self.library.reload {
             guard self.library.albums.count > 0 else {
@@ -102,11 +111,8 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
                     self.selectAlbum = self.library.albums.filter { $0.collection.localIdentifier == self.selectAlbum.collection.localIdentifier}.first ?? self.selectAlbum
                 }
                 
-                let screenshots = Album.selectAllPhotoAlbum(albums: self.library.albums)?.getRecentScreenshots()
-                self.recentScreenshotItem.isEnabled = (screenshots?.count ?? 0) >= 2
-                self.recentScreenshots = screenshots
-                if let recentScreenshots = self.recentScreenshots {
-                    recentScreenshots.forEach {self.imageGallery.loadForfViewImageCache(image: $0)}
+                if let allPhotoAlbum = Album.selectAllPhotoAlbum(albums: self.library.albums) {
+                    self.updateRecentScreenshotItemButtonStatus(images: allPhotoAlbum.items)
                 }
                 
                 self.selectAlbumController.albums = self.library.albums.sorted(by: { (a1, a2) -> Bool in
@@ -279,6 +285,7 @@ extension PickImageController: PHPhotoLibraryChangeObserver {
                 // Keep the new fetch result for future use.
                 selectAlbum.fetchResult = changes.fetchResultAfterChanges
                 selectAlbum.populateItems()
+                updateRecentScreenshotItemButtonStatus(images: selectAlbum.items)
                 self.imageGallery.images = selectAlbum.items
                 let selectImageUpdated = self.imageGallery.updateSelectImages()
                 if changes.hasIncrementalChanges {

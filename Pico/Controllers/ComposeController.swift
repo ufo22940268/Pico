@@ -60,6 +60,8 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     var maskCenterXToContainerConstraint: NSLayoutConstraint!
     var maskCenterXToContainerWrapperConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
+    
     enum ConcatenateType {
         case screenshot
         case normal
@@ -87,7 +89,8 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                 }
             }
 
-            dispatchGroup.notify(queue: .main) {                
+            dispatchGroup.notify(queue: .main) {
+                self.hideLoading()
                 self.resetGapToContainer()
             }
         }
@@ -121,9 +124,11 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             self.navigationItem.title = "长截图"
         case .movie:
             MovieConcate(cells: self.container.cells, images: uiImages).scrollCells()
+            hideLoading()
             self.navigationItem.title = "电影截图"
         default:
             self.navigationItem.title = "竖向拼接"
+            hideLoading()
         }
         
         scroll.layoutIfNeeded()
@@ -145,7 +150,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             type = .screenshot
             
             //Resolved
-//            let sampleImages: [UIImage] = [UIImage(named: "IMG_01")!, UIImage(named: "IMG_02")!]
 //            let sampleImages: [UIImage] = [UIImage(named: "IMG_2647")!, UIImage(named: "IMG_2648")!]
             
             //Very important
@@ -153,13 +157,19 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             
 //            let sampleImages: [UIImage] = [UIImage(named: "IMG_3314")!, UIImage(named: "IMG_3315")!]
 //            let sampleImages: [UIImage] = [UIImage(named: "half_1")!, UIImage(named: "half_2")!]
-            let sampleImages: [UIImage] = [UIImage(named: "IMG_3428")!, UIImage(named: "IMG_3429")!]
+//            let sampleImages: [UIImage] = [UIImage(named: "IMG_3428")!, UIImage(named: "IMG_3429")!]
+//            let sampleImages: [UIImage] = [UIImage(named: "IMG_3438")!, UIImage(named: "IMG_3439")!]
 
-            //Unresolve
+//            let sampleImages: [UIImage] = [UIImage(named: "IMG_3467")!, UIImage(named: "IMG_3468")!]
+            let sampleImages: [UIImage] = [UIImage(named: "IMG_3476")!, UIImage(named: "IMG_3477")!]
             
+            //Unresolve
+
             loadedImages = sampleImages.map {ImageMocker(image: $0)}
             loadedUIImages = sampleImages
         }
+        
+        showLoading()
 
         loadUIImageHandler?()
         
@@ -179,6 +189,20 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         scroll.delegate = self
     }
+    
+    func showLoading() {
+        loadingIndicator.isHidden = false
+        loadingIndicator.startAnimating()
+
+        scroll.isHidden = true
+    }
+    
+    func hideLoading() {
+        loadingIndicator.isHidden = true
+        loadingIndicator.stopAnimating()
+        scroll.isHidden = false
+    }
+    
     
     @IBAction func download(_ sender: UIBarButtonItem) {
         sender.isEnabled = false
