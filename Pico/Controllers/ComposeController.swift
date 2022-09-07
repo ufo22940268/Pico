@@ -205,16 +205,18 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     
     
     @IBAction func download(_ sender: UIBarButtonItem) {
-        sender.isEnabled = false
-        let rect: CGRect = self.container.convert(self.containerWrapper.bounds, from: self.containerWrapper)
+//        sender.isEnabled = false
         let shareManager: ShareManager = ShareManager(viewController: self)
-        shareManager.startSavingPhoto()
-        self.container.exportSnapshot(callback: {snapshot in
-            DispatchQueue.main.async {
-                sender.isEnabled = true
-                shareManager.saveToPhoto(image: snapshot)
-            }
-        }, wrapperBounds: rect)
+        
+        shareManager.showActions()
+//        shareManager.startSavingPhoto()
+        
+//        self.container.exportSnapshot(callback: {snapshot in
+//            DispatchQueue.main.async {
+//                sender.isEnabled = true
+//                shareManager.saveToPhoto(image: snapshot)
+//            }
+//        }, wrapperBounds: rect)
     }
     
     fileprivate func onScrollVertical(_ sender: UIPanGestureRecognizer) {
@@ -552,5 +554,16 @@ extension ComposeController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateSideSliderButtons()
+    }
+}
+
+extension ComposeController: ShareImageGenerator {
+    func generateImage(callback: @escaping (UIImage) -> Void) {
+        let rect: CGRect = self.container.convert(self.containerWrapper.bounds, from: self.containerWrapper)
+        self.container.exportSnapshot(callback: {snapshot in
+            DispatchQueue.main.async {
+                callback(snapshot)
+            }
+        }, wrapperBounds: rect)
     }
 }

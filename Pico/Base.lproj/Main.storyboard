@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="MIE-CQ-9z1">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="SDp-bB-QNW">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -552,7 +552,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="ycZ-tp-DN7" kind="relationship" relationship="rootViewController" id="oOs-vT-aOB"/>
+                        <segue destination="h2r-xB-xzJ" kind="relationship" relationship="rootViewController" id="4Dp-CG-ZCx"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BqK-2l-fzQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -611,7 +611,6 @@
         <image name="user-edit-solid" width="24" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="fvF-Lz-IAD"/>
-        <segue reference="oka-ze-DW4"/>
+        <segue reference="4Dp-CG-ZCx"/>
     </inferredMetricsTieBreakers>
 </document>
