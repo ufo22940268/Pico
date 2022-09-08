@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="SDp-bB-QNW">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="MIE-CQ-9z1">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -300,7 +300,7 @@
                         <viewLayoutGuide key="safeArea" id="cZ4-cg-Jcn"/>
                     </view>
                     <navigationItem key="navigationItem" largeTitleDisplayMode="always" id="Fea-6E-jSK">
-                        <barButtonItem key="rightBarButtonItem" title="Item" image="download-solid" id="rUV-Yc-bdN">
+                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="rUV-Yc-bdN">
                             <connections>
                                 <action selector="download:" destination="h2r-xB-xzJ" id="fWc-gh-Haj"/>
                             </connections>
@@ -510,7 +510,7 @@
                         <viewLayoutGuide key="safeArea" id="BxA-5P-rMi"/>
                     </view>
                     <navigationItem key="navigationItem" title="编辑" id="lUS-XZ-2ZC">
-                        <barButtonItem key="rightBarButtonItem" image="download-solid" id="EWD-cE-aRH">
+                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="EWD-cE-aRH">
                             <connections>
                                 <action selector="onShareClick:" destination="ycZ-tp-DN7" id="3RT-WU-HsX"/>
                             </connections>
@@ -552,7 +552,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="h2r-xB-xzJ" kind="relationship" relationship="rootViewController" id="4Dp-CG-ZCx"/>
+                        <segue destination="ycZ-tp-DN7" kind="relationship" relationship="rootViewController" id="bMP-mw-94m"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BqK-2l-fzQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -598,7 +598,6 @@
         <image name="clone-regular" width="22" height="22"/>
         <image name="comments-regular" width="22" height="18"/>
         <image name="crop-alt-solid" width="24" height="24"/>
-        <image name="download-solid" width="24" height="24"/>
         <image name="edit-solid" width="24" height="22"/>
         <image name="film-solid" width="22" height="17"/>
         <image name="full-frame" width="24" height="24"/>
@@ -611,6 +610,7 @@
         <image name="user-edit-solid" width="24" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="4Dp-CG-ZCx"/>
+        <segue reference="fvF-Lz-IAD"/>
+        <segue reference="K7U-HG-x3b"/>
     </inferredMetricsTieBreakers>
 </document>

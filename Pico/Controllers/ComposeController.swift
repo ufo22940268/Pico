@@ -205,18 +205,8 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     
     
     @IBAction func download(_ sender: UIBarButtonItem) {
-//        sender.isEnabled = false
         let shareManager: ShareManager = ShareManager(viewController: self)
-        
         shareManager.showActions()
-//        shareManager.startSavingPhoto()
-        
-//        self.container.exportSnapshot(callback: {snapshot in
-//            DispatchQueue.main.async {
-//                sender.isEnabled = true
-//                shareManager.saveToPhoto(image: snapshot)
-//            }
-//        }, wrapperBounds: rect)
     }
     
     fileprivate func onScrollVertical(_ sender: UIPanGestureRecognizer) {
