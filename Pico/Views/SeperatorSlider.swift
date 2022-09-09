@@ -47,9 +47,11 @@ class SeperatorSlider: UIView, SliderSelectable {
         buttonCenterXConstraint.isActive = true
         
         aboveArrow = UIImageView(image: UIImage(named: "angle-double-down-solid"))
+        aboveArrow.tintColor = UIColor(named: "Slider")
         aboveArrow.isHidden = true
         aboveArrow.translatesAutoresizingMaskIntoConstraints = false
         belowArrow = UIImageView(image: UIImage(named: "angle-double-up-solid"))
+        belowArrow.tintColor = UIColor(named: "Slider")
         belowArrow.isHidden = true
         belowArrow.translatesAutoresizingMaskIntoConstraints = false
         

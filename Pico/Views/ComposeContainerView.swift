@@ -202,7 +202,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     func updateSlidersWhenEditChanged() {
         if sliderType == .crop {
             updateSliderStateForCropWhenEditChanged()
-        } else {
+        } else if sliderType == .slide {
             updateSliderStateForSlideWhenEditChanged()
         }
     }
@@ -240,6 +240,12 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
             seperators[0..<seperators.count].forEach {$0.isHidden = false}
             leftSlider.isHidden = true
             rightSlider.isHidden = true
+        } else {
+            seperators[1..<seperators.count - 1].forEach {$0.isHidden = true}
+            seperators.first?.isHidden = true
+            seperators.last?.isHidden = true
+            leftSlider.isHidden = true
+            rightSlider.isHidden = true
         }
     }
     
@@ -269,6 +275,4 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         })
     }
     
-    func setEditStateInvalid() {
-    }
 }

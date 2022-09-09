@@ -35,6 +35,7 @@ class SideSlider: UIView, SliderSelectable {
         let uiImage: UIImage? = direction == "left" ? UIImage(named: "angle-double-left-solid") : UIImage(named: "angle-double-right-solid")
         
         arrow = UIImageView(image: uiImage)
+        arrow.tintColor = UIColor(named: "Slider")
         addSubview(arrow)
         arrow.isHidden = true
         arrow.translatesAutoresizingMaskIntoConstraints = false
