@@ -179,6 +179,7 @@ class SeperatorSlider: UIView, SliderSelectable {
         addConstraint(NSLayoutConstraint(item: arrow, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: SliderConstants.width))
         addConstraint(NSLayoutConstraint(item: arrow, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: SliderConstants.height))
         validArrows.append(arrow)
+        
     }
     
     fileprivate func setupBelowArrow(arrow: UIImageView) {

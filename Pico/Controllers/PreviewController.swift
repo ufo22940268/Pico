@@ -80,6 +80,7 @@ class PreviewController: UIViewController {
     let maxScale = CGFloat(2.0)
     
     @IBOutlet var pixelItems: [UIBarButtonItem]!
+    let bottomToolbarHeight = CGFloat(44)
     
     var mode:PreviewMode = .none {
         willSet(mode) {
@@ -88,7 +89,7 @@ class PreviewController: UIViewController {
                 cover.isUserInteractionEnabled = true
                 self.pixelllateGesture.isEnabled = true
             case .sign:
-                scroll.setContentOffset(CGPoint(x: 0.0, y: scroll.contentSize.height - scroll.frame.height + 44), animated: true)
+                scroll.setContentOffset(CGPoint(x: 0.0, y: scroll.contentSize.height - scroll.frame.height + bottomToolbarHeight), animated: true)
                 break
             case .frame:
                 break
@@ -132,7 +133,7 @@ class PreviewController: UIViewController {
         preview.heightAnchor.constraint(equalToConstant: imageViewHeight)
         preview.sign = nil
         
-        scroll.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 44, right: 0)
+        scroll.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: bottomToolbarHeight, right: 0)
         
         updatePixelSelection(tag: 0)
         
@@ -263,7 +264,7 @@ extension PreviewController: UIScrollViewDelegate {
     fileprivate func centerPreview() {
         let offsetX = max((scroll.bounds.width - scroll.contentSize.width) * 0.5, 0)
         let offsetY = max((scroll.bounds.height - scroll.contentSize.height) * 0.5, 0)
-        scroll.contentInset = UIEdgeInsetsMake(offsetY, offsetX, 0, 0)
+        scroll.contentInset = UIEdgeInsetsMake(offsetY, offsetX, bottomToolbarHeight, 0)
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
