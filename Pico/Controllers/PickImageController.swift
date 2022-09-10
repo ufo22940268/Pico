@@ -276,6 +276,10 @@ extension PickImageController: PHPhotoLibraryChangeObserver {
         DispatchQueue.main.sync {
             // Check for changes to the displayed album itself
             // (its existence and metadata, not its member assets).
+            guard selectAlbum != nil else {
+                return
+            }
+            
             if let albumChanges = changeInstance.changeDetails(for: selectAlbum.collection) {
                 // Fetch the new album and update the UI accordingly.
                 selectAlbum.collection = albumChanges.objectAfterChanges! as! PHAssetCollection

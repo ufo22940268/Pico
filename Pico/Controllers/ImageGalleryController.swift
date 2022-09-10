@@ -93,6 +93,13 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         return images.count
     }
     
+    func getImageType(from image: Image) -> PickImageCell.ImageType {
+        if Album.isScreenshot(image: image) {
+            return .screenshot
+        } else {
+            return .none
+        }
+    }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PickImageCell
@@ -111,6 +118,7 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         }
         cell.tag = Int(id)
         
+        cell.setImageType(getImageType(from: image))        
         
         let sequence = getSelectSequence(image: images[indexPath.item])
         if let sequence = sequence  {
