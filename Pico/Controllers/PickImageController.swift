@@ -12,8 +12,6 @@ import Photos
 class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDelegator {
     
     var imageGallery: ImageGalleryController!
-    @IBOutlet weak var longScreenShotItem: UIBarButtonItem!
-    @IBOutlet weak var movieItem: UIBarButtonItem!
     @IBOutlet weak var doneItem: UIBarButtonItem!
     @IBOutlet weak var cancelItem: UIBarButtonItem!
     var pickNavigationButton: PickNavigationButton!
@@ -154,12 +152,6 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
                 }.isEmpty
             
             let isScreenshot = (selectedImages.filter {img in !CGSize(width: img.asset.pixelWidth, height: img.asset.pixelHeight).isScreenshot()}).isEmpty
-            
-            longScreenShotItem.isEnabled = isScreenshot
-            movieItem.isEnabled = equalLength
-        } else {
-            longScreenShotItem.isEnabled = false
-            movieItem.isEnabled = false
         }
     }
     
@@ -168,8 +160,14 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
     }
     
     @IBAction func onDone(_ sender: UIBarButtonItem) {
-        performSegue(withIdentifier: "compose", sender: self)
+        let containsOtherThanScreenshot = imageGallery.selectImages.filter {!Album.isScreenshot(image: $0)}
+        if containsOtherThanScreenshot.isEmpty {
+            performSegue(withIdentifier: "composeNormal", sender: self)
+        } else {
+            performSegue(withIdentifier: "composeScreenshot", sender: self)
+        }
     }
+    
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
