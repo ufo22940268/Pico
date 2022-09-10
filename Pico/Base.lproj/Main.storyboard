@@ -176,7 +176,7 @@
                         <barButtonItem enabled="NO" title="竖向拼接" image="clone-regular" id="YC7-Tx-url">
                             <connections>
                                 <action selector="onDone:" destination="M0x-L9-9tl" id="e4M-5X-h4t"/>
-                                <segue destination="h2r-xB-xzJ" kind="show" identifier="composeNormal" id="K7U-HG-x3b"/>
+                                <segue destination="h2r-xB-xzJ" kind="show" identifier="compose" id="K7U-HG-x3b"/>
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
