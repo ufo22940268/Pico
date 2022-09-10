@@ -221,14 +221,7 @@ class OverlapDetector {
                     print("Overlap not found")
                     
                     //imageOverlap being positive means translation detection failed.
-                    if rectangleResult.strictBundle == nil {
-                        return completeHandler(0, 0)
-                    } else {
-                        let (strictUpObs, strictDownObs) = rectangleResult.strictBundle!
-                        let strictUpRectInLTC = self.convertToLTC(rect: strictUpObs.toRect(size: self.upImage.size))
-                        let strictDownRectInLTC = self.convertToLTC(rect: strictDownObs.toRect(size: self.downImage.size))
-                        return completeHandler(strictDownRectInLTC.minY, self.upImage.size.height - strictUpRectInLTC.minY)
-                    }
+                    return completeHandler(0, 0)
                 }
                 
                 let prepare = bundle.0
