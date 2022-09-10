@@ -133,6 +133,10 @@ class OverlapDetector {
             }
         }
         
+        guard (!sortedUp.isEmpty) && (!sortedDown.isEmpty) else {
+            return RectangleResult.empty()
+        }
+        
         let largestRect = [sortedUp.first!.toRect(), sortedDown.first!.toRect()].max { (l, r) -> Bool in
             return l.height < r.height
         }
