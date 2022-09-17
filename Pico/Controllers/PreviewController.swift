@@ -126,11 +126,14 @@ class PreviewController: UIViewController {
         
         onSignChanged(sign: nil)
         hideLoading()
+        
+        scroll.layoutIfNeeded()
+        preview.loadImages(scrollView: scroll)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         if forDev() {
 //            uiImages = Array(0..<2).map {sampleImages[$0%2]}
 //            imageEntities = sampleImages.map {ImageMocker(image: $0)}
@@ -293,6 +296,10 @@ extension PreviewController: UIScrollViewDelegate {
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         centerPreview()
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        preview.loadImages(scrollView: scrollView)
     }
 }
 
