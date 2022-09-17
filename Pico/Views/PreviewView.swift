@@ -44,6 +44,7 @@ class PreviewView: UIStackView {
 
     var previousImage: CIImage!
     var uiImages: [UIImage]!
+    var imageEntities: [Image] = [Image]()
     
     var sign: String? {
         willSet(newSign) {
@@ -103,31 +104,15 @@ class PreviewView: UIStackView {
         return image.transformed(by: CGAffineTransform(scaleX: scale, y: scale))
     }
     
-    func addCell(with image: CIImage) -> PreviewCell {
+    func addCell(with image: Image) -> PreviewCell {
         let cell = PreviewCell(image: image)
         addArrangedSubview(cell)
         return cell
     }
 
-    func setupCells(images: [CIImage], fillContainer: Bool = true) -> CIImage {
-        var fillWidth:CGFloat
-        
-        if fillContainer {
-            /// TODO This is not real container width.
-            fillWidth = UIScreen.main.bounds.width
-        } else {
-            fillWidth = images.min(by: { (c1, c2) -> Bool in
-                return c1.extent.width < c2.extent.width
-            })!.extent.width
-        }
-        
-        var scaledImages = images.map { scalaToFill(image: $0, width: fillWidth) }
-        cells = scaledImages.map {addCell(with: $0)}
-        
-        var canvas = scaledImages.last!
-        preparePixellateImages(canvas)
+    func setupCells(images: [Image], fillContainer: Bool = true) -> Void {
+        cells = imageEntities.map {addCell(with: $0)}
 
-        return canvas
     }
     
     func applyPixel(image: CIImage, pixelScale: PreviewPixellateScale) -> CIImage {

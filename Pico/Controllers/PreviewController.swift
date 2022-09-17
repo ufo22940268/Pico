@@ -111,18 +111,9 @@ class PreviewController: UIViewController {
     
     func setupAfterLoaded() {
         preview.uiImages = uiImages
-        preview.image = preview.setupCells(images: (uiImages!.map({ (uiImage) -> CIImage in
-            return CIImage(image: uiImage)!
-        })))
+        preview.setupCells(images: imageEntities)
 
         
-        let previewImageSize = preview.image.extent
-        let ratio: CGFloat = previewImageSize.width/previewImageSize.height
-        
-        let imageViewHeight = scroll.frame.size.width/ratio
-        scroll.centerImage(imageViewHeight: imageViewHeight)
-        
-        preview.heightAnchor.constraint(equalToConstant: imageViewHeight)
         preview.sign = nil
         
         scroll.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: bottomToolbarHeight, right: 0)
@@ -141,14 +132,24 @@ class PreviewController: UIViewController {
         super.viewDidLoad()
 
         if forDev() {
-            uiImages = Array(0..<2).map {sampleImages[$0%2]}
-            imageEntities = sampleImages.map {ImageMocker(image: $0)}
-            var height = CGFloat(0)
-            for uiImage in uiImages! {
-                cellFrames.append(CGRect(origin: CGPoint(x: 0, y: height), size: uiImage.size))
-                cropRects.append(CGRect(origin: CGPoint.zero, size: CGSize(width: 1, height: 1)))
-                height = height + uiImage.size.height
-            }            
+//            uiImages = Array(0..<2).map {sampleImages[$0%2]}
+//            imageEntities = sampleImages.map {ImageMocker(image: $0)}
+//            var height = CGFloat(0)
+//            for uiImage in uiImages! {
+//                cellFrames.append(CGRect(origin: CGPoint(x: 0, y: height), size: uiImage.size))
+//                cropRects.append(CGRect(origin: CGPoint.zero, size: CGSize(width: 1, height: 1)))
+//                height = height + uiImage.size.height
+//            }
+            
+            initializeClosure = {
+                let library = ImagesLibrary()
+                library.reload {
+                    let album = Album.selectAllPhotoAlbum(albums: library.albums)!
+                    self.imageEntities = Array(album.items[0..<7])
+                    self.preview.imageEntities = self.imageEntities
+                    self.setupAfterLoaded()
+                }
+            }
         }
 
         if let initializeClosure = initializeClosure {
@@ -285,9 +286,9 @@ extension PreviewController: UIScrollViewDelegate {
     }
     
     fileprivate func centerPreview() {
-        let offsetX = max((scroll.bounds.width - scroll.contentSize.width) * 0.5, 0)
-        let offsetY = max((scroll.bounds.height - scroll.contentSize.height) * 0.5, 0)
-        scroll.contentInset = UIEdgeInsetsMake(offsetY, offsetX, bottomToolbarHeight, 0)
+//        let offsetX = max((scroll.bounds.width - scroll.contentSize.width) * 0.5, 0)
+//        let offsetY = max((scroll.bounds.height - scroll.contentSize.height) * 0.5, 0)
+//        scroll.contentInset = UIEdgeInsetsMake(offsetY, offsetX, bottomToolbarHeight, 0)
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
