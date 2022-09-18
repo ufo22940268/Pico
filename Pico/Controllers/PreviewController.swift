@@ -135,20 +135,12 @@ class PreviewController: UIViewController {
         super.viewDidLoad()
         
         if forDev() {
-//            uiImages = Array(0..<2).map {sampleImages[$0%2]}
-//            imageEntities = sampleImages.map {ImageMocker(image: $0)}
-//            var height = CGFloat(0)
-//            for uiImage in uiImages! {
-//                cellFrames.append(CGRect(origin: CGPoint(x: 0, y: height), size: uiImage.size))
-//                cropRects.append(CGRect(origin: CGPoint.zero, size: CGSize(width: 1, height: 1)))
-//                height = height + uiImage.size.height
-//            }
-            
             initializeClosure = {
                 let library = ImagesLibrary()
                 library.reload {
                     let album = Album.selectAllPhotoAlbum(albums: library.albums)!
-                    self.imageEntities = Array(album.items[0..<min(album.items.count, 30)])
+                    self.imageEntities = Array(album.items[0..<min(album.items.count, 80)])
+                    self.cropRects = (0..<self.imageEntities.count).map {_ in CGRect(origin: CGPoint.zero, size: CGSize(width: 1, height: 1))}
                     self.preview.imageEntities = self.imageEntities
                     self.setupAfterLoaded()
                 }
@@ -251,7 +243,6 @@ class PreviewController: UIViewController {
             mode = .sign
         }
     }
-
     
     @IBAction func onPixelItemClick(_ sender: UIBarButtonItem) {
         let tagToScale = [
