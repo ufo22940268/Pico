@@ -148,7 +148,7 @@ class PreviewController: UIViewController {
                 let library = ImagesLibrary()
                 library.reload {
                     let album = Album.selectAllPhotoAlbum(albums: library.albums)!
-                    self.imageEntities = Array(album.items[0..<7])
+                    self.imageEntities = Array(album.items[0..<min(album.items.count, 30)])
                     self.preview.imageEntities = self.imageEntities
                     self.setupAfterLoaded()
                 }

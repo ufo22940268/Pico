@@ -27,7 +27,7 @@ class PreviewFrameDecorator {
     
     func addTopFrame(for image: CIImage) -> CIImage {
         var directions:[FrameDecoratorDirection]
-        switch frameType {
+        switch frameType! {
         case .full:
             directions = [.sider, .bottom, .top]
         case .seperator:
@@ -43,7 +43,7 @@ class PreviewFrameDecorator {
     
     func addFrame(for image: CIImage) -> CIImage {
         var directions:[FrameDecoratorDirection]
-        switch frameType {
+        switch frameType! {
         case .full:
             directions = [.sider, .bottom]
         case .seperator:

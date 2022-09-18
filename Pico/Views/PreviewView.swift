@@ -164,8 +164,6 @@ class PreviewView: UIStackView {
         
         let unloadCells = cells.filter {!loadCells.contains($0)}
         unloadCells.forEach {$0.unloadImage()}
-        
-        print(loadCells.count, unloadCells.count)
     }
 }
 
@@ -176,8 +174,7 @@ extension PreviewView {
         return cells.filter {$0.frame.intersects(rect)}
     }
     
-    fileprivate func pixellate(ciImage: CIImage, forExport: Bool) -> CIImage {
-        var prev = ciImage
+    fileprivate func pixellate(forExport: Bool) {
         for index in 0..<crops.count {
             if !forExport && crops[index].rendered != false {
                 continue
@@ -194,7 +191,6 @@ extension PreviewView {
             crops[index].rendered = true
             
         }
-        return prev
     }
     
 
@@ -212,7 +208,7 @@ extension PreviewView {
     }
     
     func refreshPixelImage() {
-        pixellateImage = pixellate(ciImage: image, forExport: false)
+        pixellate(forExport: false)
     }
     
     func setPixelScale(scale: PreviewPixellateScale) {

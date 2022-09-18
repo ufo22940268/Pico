@@ -94,7 +94,7 @@ class ShareManager: NSObject {
         let message = WXMediaMessage()
         message.setThumbImage(image.thumbnail())
         let imageObj = WXImageObject()
-        imageObj.imageData = UIImageJPEGRepresentation(image, 1)
+        imageObj.imageData = image.jpegData(compressionQuality: 1)
         message.mediaObject = imageObj
      
         WXApi.startLog(by: .detail, logBlock: {s in print("wx log: \(s)")})

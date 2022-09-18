@@ -26,7 +26,7 @@ extension UIImageView {
                 let openGLContext = EAGLContext(api: .openGLES3)
                 let context = CIContext(eaglContext: openGLContext!)
                 let originImage = CIImage(image: uiImage)
-                let filter = CIFilter(name: "CIPixellate", withInputParameters: ["inputImage": originImage, "inputScale": 30.0] )
+                let filter = CIFilter(name: "CIPixellate", parameters: ["inputImage": originImage, "inputScale": 30.0] )
                 let result = filter!.outputImage!
 //                let pixelateImage = filter!.outputImage!.cropped(to: pixelRect)
 //                let result = pixelateImage

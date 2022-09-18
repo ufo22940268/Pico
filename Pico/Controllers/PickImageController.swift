@@ -308,7 +308,7 @@ extension PickImageController: PHPhotoLibraryChangeObserver {
             
             if let albumChanges = changeInstance.changeDetails(for: selectAlbum.collection) {
                 // Fetch the new album and update the UI accordingly.
-                selectAlbum.collection = albumChanges.objectAfterChanges! as! PHAssetCollection
+                selectAlbum.collection = albumChanges.objectAfterChanges! 
             }
             // Check for changes to the list of assets (insertions, deletions, moves, or updates).
             if let changes = changeInstance.changeDetails(for: selectAlbum.fetchResult) {

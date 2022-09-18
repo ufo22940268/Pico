@@ -113,12 +113,12 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         self.container.addRightSeperator()
         self.container.rightSlider.trailingAnchor.constraint(equalTo: containerWrapper.trailingAnchor).isActive = true
         
-        self.container.subviews.filter{$0.isKind(of: SeperatorSlider.self)}.forEach {self.container.bringSubview(toFront: $0)}
+        self.container.subviews.filter{$0.isKind(of: SeperatorSlider.self)}.forEach {self.container.bringSubviewToFront($0)}
         self.container.subviews.filter{$0.isKind(of: SideSlider.self)}.forEach {
-            self.container.bringSubview(toFront: $0)            
+            self.container.bringSubviewToFront($0)            
         }
 
-        switch self.type {
+        switch self.type! {
         case .screenshot:
             self.concateScreenshot(uiImages)
             self.navigationItem.title = "长截图"

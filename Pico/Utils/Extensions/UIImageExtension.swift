@@ -11,7 +11,7 @@ import UIKit
 
 extension UIImage {
     func thumbnail() -> UIImage {
-        let imageData = UIImagePNGRepresentation(self)!
+        let imageData = self.pngData()!
         let options = [
             kCGImageSourceCreateThumbnailWithTransform: true,
             kCGImageSourceCreateThumbnailFromImageAlways: true,

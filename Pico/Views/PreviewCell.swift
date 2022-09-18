@@ -50,7 +50,6 @@ class PreviewCell: GLKView {
     
     override func draw(_ rect: CGRect) {
         let drawRect: CGRect = rect.applying(CGAffineTransform(scaleX: UIScreen.main.scale, y: UIScreen.main.scale+0.1))
-        print("decorator: \(decorator)")
         if let decorator = decorator {
             let lastImage = decorator.composeLastImageWithSign()
             ciContext.draw(lastImage, in: drawRect, from: lastImage.extent)
@@ -67,13 +66,16 @@ class PreviewCell: GLKView {
             return
         }
         
-        print("loadImage")
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
-        loadingSeq = imageManager.requestImage(for: image.asset, targetSize: UIScreen.main.bounds.size, contentMode: .aspectFill, options: options) { (uiImage, config) in
+        options.resizeMode = .exact
+        let targetSize = CGSize(width: UIScreen.main.bounds.width, height: CGFloat(image.asset.pixelHeight)/CGFloat(image.asset.pixelWidth)*UIScreen.main.bounds.width)
+        loadingSeq = imageManager.requestImage(for: image.asset, targetSize: targetSize, contentMode: .aspectFill, options: options) { (uiImage, config) in
             if let uiImage = uiImage {
+                print("size: \(uiImage.size)")
                 self.decorator = PreviewCellDecorator(image: CIImage(image: uiImage)!, scale: .small)
-                print("self.decorator: \(self.decorator)")
+                self.decorator?.boundWidth = self.bounds.width
+                self.decorator?.boundHeight = self.bounds.height
                 self.setNeedsDisplay()
             }
         }
