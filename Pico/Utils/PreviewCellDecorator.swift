@@ -26,6 +26,8 @@ class PreviewCellDecorator {
     var signImage: CIImage?
     var fontSize = PreviewConstants.signFontSize
     
+    var renderCache: UIImage!
+    
     /// Constructor for view
     init(image: CIImage, scale: PreviewPixellateScale) {
         self.image = image
@@ -33,7 +35,10 @@ class PreviewCellDecorator {
         self.pixellateScale = scale
         
         preparePixellateImages(image)
+        
+        updateRenderCache()
     }
+    
     
     /// Constructor for export
     convenience init(image: CIImage, cell: PreviewCell) {
@@ -50,6 +55,10 @@ class PreviewCellDecorator {
         fontSize = PreviewConstants.signFontSize*(image.extent.width/UIScreen.main.bounds.width)
     }
     
+    func updateRenderCache() {
+        renderCache = composeLastImageWithSign().convertToUIImage()
+    }
+    
     func toUICoordinate(from rect: CGRect) -> CGRect {
         return rect.applying(CGAffineTransform(scaleX: boundWidth, y: boundHeight))
     }
@@ -61,6 +70,7 @@ class PreviewCellDecorator {
     func updateCrop(with normalizedRect: CGRect, identifier: CropArea) {
         cropRects[identifier] = normalizedRect
         renderCrop(with: normalizedRect)
+        updateRenderCache()
     }
     
     func preparePixellateImages(_ image: CIImage) {
