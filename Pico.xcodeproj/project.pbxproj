@@ -33,14 +33,6 @@
 		425F9B3820EB402300B0F2CF /* ImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 425F9B3620EB402300B0F2CF /* ImageCell.xib */; };
 		425F9B3C20EB66AF00B0F2CF /* PickImageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425F9B3B20EB66AF00B0F2CF /* PickImageController.swift */; };
 		4266A1722101B92F009F92D6 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4266A1712101B92F009F92D6 /* UIViewExtension.swift */; };
-		426A3A2F2141FBD300FDDC5C /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 426A3A2B2141FBD200FDDC5C /* libWeChatSDK.a */; };
-		426A3A302141FBE900FDDC5C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42014D9C21378DC200C11B9D /* SystemConfiguration.framework */; };
-		426A3A312141FBEF00FDDC5C /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 42014D9E21378DCA00C11B9D /* libz.tbd */; };
-		426A3A322141FBF800FDDC5C /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 42014DA021378DD800C11B9D /* libsqlite3.0.tbd */; };
-		426A3A332141FC0100FDDC5C /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42014DA621378DEE00C11B9D /* CoreTelephony.framework */; };
-		426A3A352141FC0A00FDDC5C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 426A3A342141FC0A00FDDC5C /* QuartzCore.framework */; };
-		426A3A362141FE7300FDDC5C /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 42014DA221378DE000C11B9D /* libc++.tbd */; };
-		426A3A372141FE7B00FDDC5C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42014DA421378DE700C11B9D /* Security.framework */; };
 		426A3A3A21425C6800FDDC5C /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426A3A3921425C6700FDDC5C /* UIImageExtension.swift */; };
 		428006F020EB7C610091BE9B /* ComposeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428006EF20EB7C610091BE9B /* ComposeController.swift */; };
 		428006F420EB99610091BE9B /* ComposeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 428006F320EB99610091BE9B /* ComposeCell.xib */; };
@@ -141,12 +133,7 @@
 		425F9B3A20EB5D0E00B0F2CF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		425F9B3B20EB66AF00B0F2CF /* PickImageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickImageController.swift; sourceTree = "<group>"; };
 		4266A1712101B92F009F92D6 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
-		426A3A2B2141FBD200FDDC5C /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
-		426A3A2C2141FBD200FDDC5C /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
-		426A3A2D2141FBD300FDDC5C /* WechatAuthSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WechatAuthSDK.h; sourceTree = "<group>"; };
-		426A3A2E2141FBD300FDDC5C /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
 		426A3A342141FC0A00FDDC5C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		426A3A382141FF6200FDDC5C /* Weixin-Brigding-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Weixin-Brigding-Header.h"; sourceTree = "<group>"; };
 		426A3A3921425C6700FDDC5C /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		428006EF20EB7C610091BE9B /* ComposeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeController.swift; sourceTree = "<group>"; };
 		428006F320EB99610091BE9B /* ComposeCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ComposeCell.xib; sourceTree = "<group>"; };
@@ -193,15 +180,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				426A3A372141FE7B00FDDC5C /* Security.framework in Frameworks */,
-				426A3A362141FE7300FDDC5C /* libc++.tbd in Frameworks */,
-				426A3A352141FC0A00FDDC5C /* QuartzCore.framework in Frameworks */,
-				426A3A332141FC0100FDDC5C /* CoreTelephony.framework in Frameworks */,
-				426A3A322141FBF800FDDC5C /* libsqlite3.0.tbd in Frameworks */,
-				426A3A312141FBEF00FDDC5C /* libz.tbd in Frameworks */,
-				426A3A302141FBE900FDDC5C /* SystemConfiguration.framework in Frameworks */,
 				42D69DC32153456D00BAD5BD /* MonkeyKing.framework in Frameworks */,
-				426A3A2F2141FBD300FDDC5C /* libWeChatSDK.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,18 +236,6 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		426A3A2A2141FBB700FDDC5C /* WeixinSDK */ = {
-			isa = PBXGroup;
-			children = (
-				426A3A2B2141FBD200FDDC5C /* libWeChatSDK.a */,
-				426A3A2D2141FBD300FDDC5C /* WechatAuthSDK.h */,
-				426A3A2C2141FBD200FDDC5C /* WXApi.h */,
-				426A3A2E2141FBD300FDDC5C /* WXApiObject.h */,
-				426A3A382141FF6200FDDC5C /* Weixin-Brigding-Header.h */,
-			);
-			path = WeixinSDK;
-			sourceTree = "<group>";
-		};
 		42A18C3E20EAF5A600DD4AA5 = {
 			isa = PBXGroup;
 			children = (
@@ -293,7 +260,6 @@
 		42A18C4920EAF5A600DD4AA5 /* Pico */ = {
 			isa = PBXGroup;
 			children = (
-				426A3A2A2141FBB700FDDC5C /* WeixinSDK */,
 				42A18C8A20EB09AE00DD4AA5 /* Views */,
 				42A18C8520EB020800DD4AA5 /* Pico.entitlements */,
 				42A18C8020EB00D700DD4AA5 /* Models */,
@@ -815,6 +781,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.bettycc.Pico;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -844,6 +811,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.bettycc.Pico;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
