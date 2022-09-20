@@ -68,6 +68,7 @@
 		42C4067120F44E820074B728 /* RGBAImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C4067020F44E810074B728 /* RGBAImage.swift */; };
 		42C89D6F210998AB00792EED /* VNRectangleObservationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C89D6E210998AB00792EED /* VNRectangleObservationExtension.swift */; };
 		42D69DC12151EF1A00BAD5BD /* PixelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D69DC02151EF1A00BAD5BD /* PixelView.swift */; };
+		42D69DC32153456D00BAD5BD /* MonkeyKing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D69DC22153456D00BAD5BD /* MonkeyKing.framework */; };
 		42DA302A210B551A00C19AB8 /* SideSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DA3029210B551A00C19AB8 /* SideSlider.swift */; };
 		42E93CE82136979C00FB0433 /* FrameDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E93CE72136979C00FB0433 /* FrameDetector.swift */; };
 		42F14EF520F5D751009E6716 /* PickNavigationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F14EF420F5D751009E6716 /* PickNavigationButton.swift */; };
@@ -180,6 +181,7 @@
 		42C4067020F44E810074B728 /* RGBAImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBAImage.swift; sourceTree = "<group>"; };
 		42C89D6E210998AB00792EED /* VNRectangleObservationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VNRectangleObservationExtension.swift; sourceTree = "<group>"; };
 		42D69DC02151EF1A00BAD5BD /* PixelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelView.swift; sourceTree = "<group>"; };
+		42D69DC22153456D00BAD5BD /* MonkeyKing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MonkeyKing.framework; path = Carthage/Build/iOS/MonkeyKing.framework; sourceTree = "<group>"; };
 		42DA3029210B551A00C19AB8 /* SideSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideSlider.swift; sourceTree = "<group>"; };
 		42E93CE72136979C00FB0433 /* FrameDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDetector.swift; sourceTree = "<group>"; };
 		42F14EF420F5D751009E6716 /* PickNavigationButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickNavigationButton.swift; sourceTree = "<group>"; };
@@ -198,6 +200,7 @@
 				426A3A322141FBF800FDDC5C /* libsqlite3.0.tbd in Frameworks */,
 				426A3A312141FBEF00FDDC5C /* libz.tbd in Frameworks */,
 				426A3A302141FBE900FDDC5C /* SystemConfiguration.framework in Frameworks */,
+				42D69DC32153456D00BAD5BD /* MonkeyKing.framework in Frameworks */,
 				426A3A2F2141FBD300FDDC5C /* libWeChatSDK.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -222,6 +225,7 @@
 		42014D9B21378DC200C11B9D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				42D69DC22153456D00BAD5BD /* MonkeyKing.framework */,
 				426A3A342141FC0A00FDDC5C /* QuartzCore.framework */,
 				42014DA821378DF400C11B9D /* CFNetwork.framework */,
 				42014DA621378DEE00C11B9D /* CoreTelephony.framework */,
@@ -401,6 +405,7 @@
 				42A18C4420EAF5A600DD4AA5 /* Frameworks */,
 				42A18C4520EAF5A600DD4AA5 /* Resources */,
 				42014D9021378BB900C11B9D /* Embed Frameworks */,
+				42D69DC4215345DE00BAD5BD /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -528,6 +533,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		42D69DC4215345DE00BAD5BD /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/MonkeyKing.framework",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/MonkeyKing.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n/usr/local/bin/carthage copy-frameworks\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		42A18C4320EAF5A600DD4AA5 /* Sources */ = {
@@ -771,6 +798,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S833P2K5YV;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Pico/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -796,6 +827,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S833P2K5YV;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Pico/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = (

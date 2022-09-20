@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MonkeyKing
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,7 +17,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        WXApi.registerApp("wxef5f2473557d61a0")
+//        WXApi.registerApp("wxef5f2473557d61a0")
+        MonkeyKing.registerAccount(.weChat(appID: "wxef5f2473557d61a0", appKey: "wxef5f2473557d61a0", miniAppID: nil))
+        
         return true
     }
 
