@@ -45,7 +45,6 @@ extension UIView {
 
 class PreviewCell: UIView {
     
-    var ciContext: CIContext!
     var ciImage: Image!
     var decorator: PreviewCellDecorator!
     var imageManager = PHCachingImageManager.default() as! PHCachingImageManager
@@ -66,11 +65,10 @@ class PreviewCell: UIView {
         }
     }
     
-    init(image: Image, ciContext: CIContext, eaglContext: EAGLContext) {
+    init(image: Image) {
         super.init(frame: CGRect.zero)
         self.decorator = PreviewCellDecorator(scale: .small)
         self.ciImage = image
-        self.ciContext = ciContext
         translatesAutoresizingMaskIntoConstraints = false
         let ratio = CGFloat(image.asset.pixelWidth)/CGFloat(image.asset.pixelHeight)
         widthAnchor.constraint(equalTo: heightAnchor, multiplier: ratio).isActive = true
@@ -128,6 +126,8 @@ class PreviewCell: UIView {
     func unloadImage() {
         decorator.releaseImage()
         loadingSeq = 0
+        self.imageView.image = nil
+        self.pixelView.image = nil
     }
     
 }
