@@ -277,9 +277,9 @@ extension PreviewController: UIScrollViewDelegate {
     }
     
     fileprivate func centerPreview() {
-//        let offsetX = max((scroll.bounds.width - scroll.contentSize.width) * 0.5, 0)
-//        let offsetY = max((scroll.bounds.height - scroll.contentSize.height) * 0.5, 0)
-//        scroll.contentInset = UIEdgeInsetsMake(offsetY, offsetX, bottomToolbarHeight, 0)
+        let offsetX = max((scroll.bounds.width - scroll.contentSize.width) * 0.5, 0)
+        let offsetY = max((scroll.bounds.height - scroll.contentSize.height) * 0.5, 0)
+        scroll.contentInset = UIEdgeInsets(top: offsetY, left: offsetX, bottom: bottomToolbarHeight, right: 0)
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
