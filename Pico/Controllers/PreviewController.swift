@@ -139,7 +139,7 @@ class PreviewController: UIViewController {
                 let library = ImagesLibrary()
                 library.reload {
                     let album = Album.selectAllPhotoAlbum(albums: library.albums)!
-                    self.imageEntities = Array(album.items[0..<min(album.items.count, 2)])
+                    self.imageEntities = Array(album.items[0..<min(album.items.count, 30)])
                     self.cropRects = (0..<self.imageEntities.count).map {_ in CGRect(origin: CGPoint.zero, size: CGSize(width: 1, height: 1))}
                     self.preview.imageEntities = self.imageEntities
                     self.setupAfterLoaded()
