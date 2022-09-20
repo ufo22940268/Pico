@@ -12,6 +12,10 @@ import GLKit
 
 class PreviewCellDecorator {
     
+    enum Context {
+        case render, export
+    }
+    
     var image: CIImage!
     var lastImage: CIImage!
     var pixellateScale: PreviewPixellateScale
@@ -88,7 +92,6 @@ class PreviewCellDecorator {
         cropRects.removeValue(forKey: identifier)
     }
     
-//    func sync(with areas: [CropArea]) {
     func sync(with areas: [CropArea:CGRect]) {
         cropRects.removeAll()
         for (area, cropRect) in areas {
@@ -164,10 +167,14 @@ class PreviewCellDecorator {
         }
         
         let labelView = UILabel()
-        labelView.textColor = UIColor.white
-        labelView.font = UIFont.systemFont(ofSize: fontSize)
-        labelView.text = sign
-        labelView.sizeToFit()
+        setupLabel(labelView, for: .export)
         signImage = labelView.renderToCIImage()
+    }
+    
+    func setupLabel(_ label: UILabel, for context: Context) {
+        label.textColor = UIColor.white
+        label.font = UIFont.systemFont(ofSize: fontSize)
+        label.text = sign
+        label.sizeToFit()
     }
 }

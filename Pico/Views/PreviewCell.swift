@@ -55,6 +55,7 @@ class PreviewCell: UIView {
     
     var imageView: UIImageView!
     var pixelView: PixelView!
+    var signView: UILabel!
     
     override var bounds: CGRect {
         willSet(newBounds) {
@@ -92,7 +93,9 @@ class PreviewCell: UIView {
         pixelView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 1).isActive = true
         pixelView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         pixelView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-//        placeholderImage = CIImage(color: CIColor(color: UIColor.green))
+        
+        signView = UILabel(frame: CGRect.zero)
+        signView.translatesAutoresizingMaskIntoConstraints = false
     }
     
     
@@ -114,9 +117,9 @@ class PreviewCell: UIView {
                 self.decorator.setImage(CIImage(image: uiImage)!)
                 self.decorator?.boundWidth = self.bounds.width
                 self.decorator?.boundHeight = self.bounds.height
-                self.imageView.image = UIImage(ciImage: self.decorator.composeLastImageWithSign())
+                self.imageView.image = UIImage(ciImage: self.decorator.lastImage)
                 self.pixelView.image = UIImage(ciImage: self.decorator!.pixellateImages.first!.value)
-                self.updateCrop()
+                self.displayCrop()
                 self.setNeedsDisplay()
             }
         }
@@ -136,14 +139,40 @@ extension PreviewCell {
         guard decorator.isImageLoaded() else {return}
         
         decorator.updateCrop(with: normalizedRect, identifier: identifier)
-        updateCrop()
+        displayCrop()
     }
     
-    func updateCrop() {
+    func displayCrop() {
         guard decorator.isImageLoaded() else {return}
 
         pixelView.updatePixelRects(Array(decorator.cropRects.values))
-        setNeedsDisplay()
+    }
+    
+    func displaySign() {
+        guard decorator.isImageLoaded() else {return}
+    
+        if decorator.sign == nil {
+            signView.removeFromSuperview()
+        } else {
+            signView.removeFromSuperview()
+            addSubview(signView)
+            
+            decorator.setupLabel(signView, for: .render)
+            
+            signView.sizeToFit()
+            signView.widthAnchor.constraint(equalToConstant: signView.bounds.width).isActive = true
+            signView.heightAnchor.constraint(equalToConstant: signView.bounds.height).isActive = true
+            let gap = CGFloat(8)
+            signView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -gap).isActive = true
+            switch decorator.signAlign {
+            case .left:
+                signView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: gap).isActive = true
+            case .middle:
+                signView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: 0).isActive = true
+            case .right:
+                signView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -gap).isActive = true
+            }
+        }
     }
     
     func removeCrop(by identifier: CropArea) {
@@ -154,7 +183,6 @@ extension PreviewCell {
     func sync(with areas: [CropArea: CGRect]) {
         decorator.sync(with: areas)
     }
-    
     
     func resetPixel() {
         decorator?.resetPixel()

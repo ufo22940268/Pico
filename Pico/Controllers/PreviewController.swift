@@ -325,6 +325,7 @@ extension PreviewController {
         signAlignLeftItem.isEnabled = showItems
         signAlignMiddleItem.isEnabled = showItems
         signAlignRightItem.isEnabled = showItems
+        preview.reloadVisibleCells()
     }
 
     @IBAction func onEditSign(_ sender: Any) {
@@ -344,6 +345,7 @@ extension PreviewController {
     
     @IBAction func onAlignClick(_ sender: UIBarButtonItem) {
         preview.setAlign(align: PreviewAlignMode(rawValue: sender.tag)!)
+        self.preview.reloadVisibleCells()
     }
     
     @IBAction func clearSign(_ sender: Any) {
