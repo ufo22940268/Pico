@@ -51,6 +51,7 @@ class ComposeCell: UIView, EditDelegator {
     var bottomConstant = ScalableConstant()
     var topConstant = ScalableConstant()
     var imageManager = PHCachingImageManager.default() as! PHCachingImageManager    
+    var loadingTag = Int32(0)
 
     override func awakeFromNib() {
     }
@@ -141,14 +142,9 @@ class ComposeCell: UIView, EditDelegator {
     
     func setImage(image: Image) {
         self.imageEntity = image
-        var options = PHImageRequestOptions()
-        options.isNetworkAccessAllowed = true
-        imageManager.requestImage(for: image.asset, targetSize: UIScreen.main.pixelSize, contentMode: .aspectFill, options: options) { (uiImage, config) in
-            self.setImage(uiImage: uiImage!)
-        }
     }
     
-    func setImage(uiImage: UIImage) {
+    fileprivate func setImage(uiImage: UIImage) {
         if let constraint = (self.constraints.filter { $0.identifier == "ratio" }.first) {
             self.removeConstraint(constraint)
         }
@@ -209,5 +205,32 @@ class ComposeCell: UIView, EditDelegator {
         let bottomConstraint = self.constraints.filter {$0.identifier == "bottom"}.first!
         bottomConstant.scale = bottomConstant.scale*scale
         bottomConstraint.constant = bottomConstant.finalConstant()
+    }
+}
+
+
+extension ComposeCell : RecycleCell {
+    
+    func loadImage() {
+        guard loadingTag == Int32(0) else {
+            return
+        }
+        let options = PHImageRequestOptions()
+        options.isNetworkAccessAllowed = true
+        options.resizeMode = .exact
+        let width = UIScreen.main.pixelSize.width
+        let height = CGFloat(imageEntity.asset.pixelHeight)/CGFloat(imageEntity.asset.pixelHeight)*width
+        loadingTag = imageManager.requestImage(for: imageEntity.asset, targetSize: CGSize(width: width, height: height), contentMode: .aspectFill, options: options) { (uiImage, config) in
+            self.setImage(uiImage: uiImage!)
+        }
+    }
+    
+    func unloadImage() {
+        image.image = nil
+        loadingTag = Int32(0)
+    }
+    
+    func getFrame() -> CGRect {
+        return frame
     }
 }
