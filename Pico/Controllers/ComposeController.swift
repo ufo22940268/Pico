@@ -41,7 +41,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     var loadedImages:[Image]!
     var loadedUIImages: [UIImage] = [UIImage]() {
         willSet(uiImages) {
-
             if uiImages.count >= 2 {
                 loadedImages = uiImages.map {ImageMocker(image: $0)}
                 self.configureUIImages(uiImages)
@@ -150,26 +149,14 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         super.viewDidLoad()
         
         if isDev() {
-            type = .screenshot
-            
-            //Resolved
-//            let sampleImages: [UIImage] = [UIImage(named: "IMG_2647")!, UIImage(named: "IMG_2648")!]
-            
-            //Very important
-//            let sampleImages: [UIImage] = [UIImage(named: "IMG_3311")!, UIImage(named: "IMG_3312")!]
-            
-//            let sampleImages: [UIImage] = [UIImage(named: "IMG_3314")!, UIImage(named: "IMG_3315")!]
-//            let sampleImages: [UIImage] = [UIImage(named: "half_1")!, UIImage(named: "half_2")!]
-//            let sampleImages: [UIImage] = [UIImage(named: "IMG_3428")!, UIImage(named: "IMG_3429")!]
-//            let sampleImages: [UIImage] = [UIImage(named: "IMG_3438")!, UIImage(named: "IMG_3439")!]
-
-//            let sampleImages: [UIImage] = [UIImage(named: "IMG_3467")!, UIImage(named: "IMG_3468")!]
-            let sampleImages: [UIImage] = [UIImage(named: "IMG_3476")!, UIImage(named: "IMG_3477")!]
-            
-            //Unresolve
-
-            loadedImages = sampleImages.map {ImageMocker(image: $0)}
-            loadedUIImages = sampleImages
+            loadUIImageHandler = {
+                self.type = .normal
+                let sampleImages: [UIImage] = [UIImage(named: "short")!, UIImage(named: "short2")!]
+                
+                //Unresolve
+                self.loadedImages = sampleImages.map {ImageMocker(image: $0)}
+                self.loadedUIImages = sampleImages
+            }
         }
         
         showLoading()
