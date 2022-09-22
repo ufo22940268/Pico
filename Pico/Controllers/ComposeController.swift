@@ -132,7 +132,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         updateSideSliderButtons()
         container.updateSliderType()
         
-        container.loadImages(scrollView: scroll)
+        updateContainerImages()
     }
     
     func isDev() -> Bool {
@@ -148,7 +148,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                 let library = ImagesLibrary()
                 library.reload {
                     let album = Album.selectAllPhotoAlbum(albums: library.albums)!
-                    let images = Array(album.items[0..<min(album.items.count, 100)])
+                    let images = Array(album.items[0..<min(album.items.count, 4)])
                     self.loadedImages = images
                     
                     self.configureImages(images)
@@ -300,6 +300,10 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         }
         
         updateAfterWrapperResize()
+    }
+    
+    func updateContainerImages() {
+        container.loadImages(scrollView: scroll)
     }
     
     func findScrollCell(hitView: UIView) -> ComposeCell? {
@@ -504,7 +508,7 @@ extension ComposeController {
             let scale = min(gestureRecognizer.scale, maxScale)
             
             let targetScale = containerWidthConstraint.multiplier * scale
-            guard targetScale > 0.2 else {
+            guard targetScale > 0.5 else {
                 return
             }
             
@@ -516,6 +520,7 @@ extension ComposeController {
             gestureRecognizer.scale = 1.0
             
             updateAfterWrapperResize()
+            updateContainerImages()
         } else if gestureRecognizer.state == .ended {
             
             let minScale = CGFloat(0.5)
@@ -528,6 +533,7 @@ extension ComposeController {
                 self.scroll.layoutIfNeeded()
                 self.updateAfterWrapperResize()
             }.startAnimation()
+            updateContainerImages()
         }
     }
 }
@@ -555,7 +561,7 @@ extension ComposeController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateSideSliderButtons()
-        container.loadImages(scrollView: scrollView)
+        updateContainerImages()
     }
 }
 
