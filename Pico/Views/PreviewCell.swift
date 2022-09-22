@@ -70,7 +70,7 @@ class PreviewCell: UIView, RecycleCell {
         self.decorator = PreviewCellDecorator(scale: .small)
         self.ciImage = image
         translatesAutoresizingMaskIntoConstraints = false
-        let ratio = CGFloat(image.asset.pixelWidth)/CGFloat(image.asset.pixelHeight)
+        let ratio = CGFloat(image.assetSize.width)/CGFloat(image.assetSize.height)
         widthAnchor.constraint(equalTo: heightAnchor, multiplier: ratio).isActive = true
         
         backgroundColor = UIColor.yellow
@@ -113,7 +113,7 @@ class PreviewCell: UIView, RecycleCell {
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
         options.resizeMode = .exact
-        let targetSize = CGSize(width: UIScreen.main.bounds.width, height: CGFloat(ciImage.asset.pixelHeight)/CGFloat(ciImage.asset.pixelWidth)*UIScreen.main.bounds.width)
+        let targetSize = CGSize(width: UIScreen.main.bounds.width, height: CGFloat(ciImage.assetSize.height)/CGFloat(ciImage.assetSize.width)*UIScreen.main.bounds.width)
         loadingSeq = imageManager.requestImage(for: ciImage.asset, targetSize: targetSize, contentMode: .aspectFill, options: options) { (uiImage, config) in
             if let uiImage = uiImage {
                 self.decorator.setImage(CIImage(image: uiImage)!)

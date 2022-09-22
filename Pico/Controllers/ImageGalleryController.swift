@@ -131,8 +131,8 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
     }
     
     func loadForfViewImageCache(image: Image, isSync: Bool = false, _ complete: ((UIImage) -> Void)? = nil) {
-        let scale = UIScreen.main.bounds.width/CGFloat(image.asset.pixelWidth)
-        let imageSize = CGSize(width: image.asset.pixelWidth, height: image.asset.pixelHeight).applying(CGAffineTransform(scaleX: scale, y: scale))
+        let scale = UIScreen.main.bounds.width/CGFloat(image.assetSize.width)
+        let imageSize = CGSize(width: image.assetSize.width, height: image.assetSize.height).applying(CGAffineTransform(scaleX: scale, y: scale))
         if let complete = complete {
             imageManager.requestImage(for: image.asset, targetSize: imageSize, contentMode: .default, options: options) { [weak self] (uiImage, info) in
                 complete(uiImage!)

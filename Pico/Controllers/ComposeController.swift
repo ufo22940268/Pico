@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 enum SliderType {
     case crop, slide, none
@@ -61,38 +62,83 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     
     var type: ConcatenateType!
 
-    fileprivate func concateScreenshot(_ uiImages: ([UIImage?])) {
-        let dispatchGroup = DispatchGroup()
-        let frameResult = FrameDetector(upImage: uiImages.first!!, downImage: uiImages[1]!).detect()
-        for index in 0..<uiImages.count - 1 {
-            let upImage = uiImages[index]
-            let downImage = uiImages[index + 1]
-            dispatchGroup.enter()
-            OverlapDetector(upImage: upImage!, downImage: downImage!, frameResult: frameResult).detect {upOverlap, downOverlap in
-                DispatchQueue.main.async {
-                    if upOverlap > 0 && downOverlap > 0 {
-                        let imageHeight = uiImages[0]!.size.height
-                        print(index, "up", upOverlap, "down", downOverlap)
-                        self.container.cells[index].scrollDown(percentage: upOverlap/imageHeight)
-                        self.container.cells[index + 1].scrollUp(percentage: -downOverlap/imageHeight)
-                    }
-                    dispatchGroup.leave()
-                }
-            }
 
-            dispatchGroup.notify(queue: .main) {
-                self.hideLoading()
-                self.resetGapToContainer()
-            }
+    func resolveImages(images: [Image], _ completion: @escaping ([UIImage]) -> Void) {
+        Image.resolve(images: images, resizeMode: .none) { (images) in
+            completion(images.map {$0!})
         }
     }
     
-    fileprivate func configureImages(_ images: ([Image])) {
-        self.container.addTopSeperator()
+    func detectFrame(images: [Image], _ complete: @escaping (FrameDetectResult) -> Void) {
+        resolveImages(images: images) { (uiImages) in
+            let frameResult = FrameDetector(upImage: uiImages.first!, downImage: uiImages[1]).detect()
+            complete(frameResult)
+        }
+    }
+
+    fileprivate func concateScreenshot(_ images: ([Image])) {
+        detectFrame(images: Array(images[0..<2])) { (frameResult) in
+            let dispatchGroup = DispatchGroup()
+            for index in 0..<images.count - 1 {
+                dispatchGroup.enter()
+                self.resolveImages(images: Array(images[index...index+1]), { (uiImages) in
+                    let upImage = uiImages[0]
+                    let downImage = uiImages[1]
+                    OverlapDetector(upImage: upImage, downImage: downImage, frameResult: frameResult).detect {upOverlap, downOverlap in
+                        DispatchQueue.main.async {
+                            if upOverlap > 0 && downOverlap > 0 {
+                                let imageHeight = uiImages[0].size.height
+                                print(index, "up", upOverlap, "down", downOverlap)
+                                self.container.cells[index].scrollDown(percentage: upOverlap/imageHeight)
+                                self.container.cells[index + 1].scrollUp(percentage: -downOverlap/imageHeight)
+                            }
+                            dispatchGroup.leave()
+                        }
+                    }
+                    
+                    dispatchGroup.notify(queue: .main) {
+                        self.hideLoading()
+                        self.resetGapToContainer()
+                    }
+                })
+            }
+        }
         
+        
+//        let frameResult = FrameDetector(upImage: uiImages.first!!, downImage: uiImages[1]!).detect()
+//        let dispatchGroup = DispatchGroup()
+//        for index in 0..<uiImages.count - 1 {
+//            let upImage = uiImages[index]
+//            let downImage = uiImages[index + 1]
+//            dispatchGroup.enter()
+//            OverlapDetector(upImage: upImage!, downImage: downImage!, frameResult: frameResult).detect {upOverlap, downOverlap in
+//                DispatchQueue.main.async {
+//                    if upOverlap > 0 && downOverlap > 0 {
+//                        let imageHeight = uiImages[0]!.size.height
+//                        print(index, "up", upOverlap, "down", downOverlap)
+//                        self.container.cells[index].scrollDown(percentage: upOverlap/imageHeight)
+//                        self.container.cells[index + 1].scrollUp(percentage: -downOverlap/imageHeight)
+//                    }
+//                    dispatchGroup.leave()
+//                }
+//            }
+//
+//            dispatchGroup.notify(queue: .main) {
+//                self.hideLoading()
+//                self.resetGapToContainer()
+//            }
+//        }
+    }
+    
+    fileprivate func configureImages(_ images: ([Image])) {
+        guard images.count >= 2 else {
+            return
+        }
+        
+        self.container.addTopSeperator()
         self.container.addImage(imageEntity: images.first!)
 //
-        for image in images {
+        for image in images[1..<images.count] {
             self.container.addSeperator()
             self.container.addImage(imageEntity: image)
         }
@@ -111,9 +157,9 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
 
         switch self.type! {
         case .screenshot:
-//            self.concateScreenshot(uiImages)
-//            self.navigationItem.title = "长截图"
-//            activeCropMode()
+            self.concateScreenshot(images)
+            self.navigationItem.title = "长截图"
+            activeCropMode()
             break
         case .movie:
 //            MovieConcate(cells: self.container.cells, images: uiImages).scrollCells()
@@ -144,15 +190,19 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         if isDev() {
             loadUIImageHandler = {
-                self.type = .normal
-                let library = ImagesLibrary()
-                library.reload {
-                    let album = Album.selectAllPhotoAlbum(albums: library.albums)!
-                    let images = Array(album.items[0..<min(album.items.count, 4)])
-                    self.loadedImages = images
-                    
-                    self.configureImages(images)
-                }
+                self.type = .screenshot
+//                let library = ImagesLibrary()
+//                library.reload {
+//                    let album = Album.selectAllPhotoAlbum(albums: library.albums)!
+//                    let images = Array(album.items[0..<min(album.items.count, 2)])
+//                    self.loadedImages = images
+//
+//                    self.configureImages(images)
+//                }
+//
+                let images = [ImageMocker(image: UIImage(named: "IMG_3146")!), ImageMocker(image: UIImage(named: "IMG_3147")!)]
+                self.loadedImages = images
+                self.configureImages(images)
             }
         }
         
@@ -528,7 +578,7 @@ extension ComposeController {
                 if self.containerWidthConstraint.multiplier < minScale {
                     self.scaleContainerWrapper(scale: minScale/self.containerWidthConstraint.multiplier)
                 }
-                
+         
                 self.resetGapToContainer()
                 self.scroll.layoutIfNeeded()
                 self.updateAfterWrapperResize()
