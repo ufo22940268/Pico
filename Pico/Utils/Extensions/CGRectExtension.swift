@@ -28,4 +28,10 @@ extension CGRect {
         rect.origin.y = frameHeight - self.origin.y - self.height
         return rect
     }
+    
+    func convertLBCToLTC(frameHeight: CGFloat) -> CGRect {
+        var rect = self
+        rect.origin.y = frameHeight - self.origin.y - self.height
+        return rect
+    }
 }

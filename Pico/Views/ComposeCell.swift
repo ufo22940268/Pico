@@ -221,9 +221,6 @@ extension ComposeCell : RecycleCell {
         options.resizeMode = .exact
         let width = UIScreen.main.pixelSize.width
         let height = CGFloat(imageEntity.assetSize.height)/CGFloat(imageEntity.assetSize.width)*width
-//        loadingTag = imageManager.requestImage(for: imageEntity.asset, targetSize: CGSize(width: width, height: height), contentMode: .aspectFill, options: options) { (uiImage, config) in
-//            self.setImage(uiImage: uiImage!)
-//        }
         loadingTag = imageEntity.resolve(completion: { (uiImage) in
             self.setImage(uiImage: uiImage!)
         }, targetWidth: width, resizeMode: .exact, contentMode: .aspectFill)
