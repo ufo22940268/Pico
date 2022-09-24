@@ -34,7 +34,7 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
     @IBOutlet var collection: UICollectionView!
     
     var delegate: SelectImageDelegate!
-    let maxSelectCount = 10
+    let maxSelectCount = 50
     
     let imageManager = PHCachingImageManager.default() as! PHCachingImageManager
     let fullsizeImageManager = PHImageManager()

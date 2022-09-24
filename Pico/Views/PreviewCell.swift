@@ -127,7 +127,7 @@ class PreviewCell: UIView, RecycleCell {
             }
             self.setNeedsDisplay()
             self.setNeedsLayout()
-        }, targetWidth: UIScreen.main.bounds.width, resizeMode: .exact, contentMode: .aspectFill)
+        }, targetWidth: UIScreen.main.pixelSize.width, resizeMode: .exact, contentMode: .aspectFill)
     }
     
     func unloadImage() {
