@@ -76,8 +76,6 @@ class PreviewCell: UIView, RecycleCell {
         let ratio = pixelCropSize.width/pixelCropSize.height
         widthAnchor.constraint(equalTo: heightAnchor, multiplier: ratio).isActive = true
         
-        backgroundColor = UIColor.yellow
-        
         imageView = UIImageView(frame: CGRect.zero)
         addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -86,6 +84,7 @@ class PreviewCell: UIView, RecycleCell {
         imageView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         imageView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         imageView.isOpaque = false
+        imageView.contentMode = .scaleToFill
         
         pixelView = PixelView(frame: CGRect.zero)
         addSubview(pixelView)
@@ -118,17 +117,16 @@ class PreviewCell: UIView, RecycleCell {
         options.resizeMode = .exact
         loadingSeq = image.resolve(completion: { (uiImage) in
             if let uiImage = uiImage {
-//                let croppedImage = uiImage.cropImage(
-//                    toRect: self.imageCrop.applying(CGAffineTransform(scaleX: uiImage.size.width, y: uiImage.size.height)).convertLTCToLBC(frameHeight: uiImage.size.height))
                 let ciImage: CIImage = CIImage(image: uiImage)!.cropped(to: self.imageCrop.applying(CGAffineTransform(scaleX: uiImage.size.width, y: uiImage.size.height)))
                 self.decorator.setImage(ciImage)
                 self.decorator?.boundWidth = self.bounds.width
                 self.decorator?.boundHeight = self.bounds.height
-                self.imageView.image = UIImage(ciImage: self.decorator.lastImage)
+                self.imageView.image = self.decorator.lastImage.convertToUIImage()
                 self.pixelView.image = UIImage(ciImage: self.decorator!.pixellateImages.first!.value)
-                self.displayCrop()
-                self.setNeedsDisplay()
+                self.displayPixel()
             }
+            self.setNeedsDisplay()
+            self.setNeedsLayout()
         }, targetWidth: UIScreen.main.bounds.width, resizeMode: .exact, contentMode: .aspectFill)
     }
     
@@ -148,10 +146,10 @@ extension PreviewCell {
         guard decorator.isImageLoaded() else {return}
         
         decorator.updateCrop(with: normalizedRect, identifier: identifier)
-        displayCrop()
+        displayPixel()
     }
     
-    func displayCrop() {
+    func displayPixel() {
         guard decorator.isImageLoaded() else {return}
 
         pixelView.updatePixelRects(Array(decorator.cropRects.values))

@@ -208,7 +208,7 @@ extension PreviewView {
     func reloadVisibleCells() {
         let displayRect = convert(superview!.bounds, from: superview).intersection(bounds)
         findIntersectCellsAndConvert(with: displayRect)?.forEach {
-            $0.displayCrop()
+            $0.displayPixel()
             $0.displaySign()
         }
     }
