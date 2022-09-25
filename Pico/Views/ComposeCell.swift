@@ -171,7 +171,7 @@ class ComposeCell: UIView, EditDelegator {
     }
         
     func exportSnapshot(callback: @escaping (CIImage) -> Void, wrapperBounds: CGRect, targetWidth: CGFloat) {
-        var inter = getIntersection(wrapperBounds: wrapperBounds)
+        var inter = self.getIntersection(wrapperBounds: wrapperBounds)
         self.imageEntity.resolve(completion: { (img) in
             if let img = img {
                 inter = inter.applying(CGAffineTransform(scaleX: img.size.width, y: img.size.height))
