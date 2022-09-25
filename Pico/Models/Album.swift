@@ -16,10 +16,14 @@ class Album {
     func populateItems() {
         self.items.removeAll()
         fetchResult.enumerateObjects({ (asset, count, stop) in
-            if asset.mediaType == .image {
+            if asset.mediaType == .image && self.isNormalSize(asset) {
                 self.items.append(Image(asset: asset))
             }
         })
+    }
+    
+    func isNormalSize(_ asset: PHAsset) -> Bool {
+        return asset.pixelWidth < 8000 && asset.pixelHeight < 8000
     }
     
     func reload() {

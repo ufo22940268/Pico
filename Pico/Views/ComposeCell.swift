@@ -181,7 +181,7 @@ class ComposeCell: UIView, EditDelegator {
             } else {
                 print("parse \(String(describing: img)) error")
             }
-        }, targetWidth: targetWidth, isSynchronize: false)
+        }, targetWidth: targetWidth, resizeMode: .exact, isSynchronize: false)
     }
     
     func exportSnapshot(wrapperBounds: CGRect) -> UIImage {
