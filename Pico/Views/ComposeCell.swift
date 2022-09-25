@@ -170,7 +170,7 @@ class ComposeCell: UIView, EditDelegator {
         return inter
     }
         
-    func exportSnapshot(callback: @escaping (CIImage) -> Void, wrapperBounds: CGRect) {
+    func exportSnapshot(callback: @escaping (CIImage) -> Void, wrapperBounds: CGRect, targetWidth: CGFloat) {
         var inter = getIntersection(wrapperBounds: wrapperBounds)
         self.imageEntity.resolve(completion: { (img) in
             if let img = img {
@@ -181,7 +181,7 @@ class ComposeCell: UIView, EditDelegator {
             } else {
                 print("parse \(String(describing: img)) error")
             }
-        })
+        }, targetWidth: targetWidth, isSynchronize: false)
     }
     
     func exportSnapshot(wrapperBounds: CGRect) -> UIImage {

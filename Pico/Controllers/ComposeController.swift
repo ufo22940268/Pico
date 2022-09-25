@@ -192,17 +192,20 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         if isDev() {
             loadUIImageHandler = {
                 self.type = .normal
-//                let library = ImagesLibrary()
-//                library.reload {
-//                    let album = Album.selectAllPhotoAlbum(albums: library.albums)!
-//                    let images = Array(album.items[0..<min(album.items.count, 2)])
-//                    self.loadedImages = images
-//
-//                    self.configureImages(images)
-//                }
-//
-                let images = [ImageMocker(image: UIImage(named: "IMG_3146")!), ImageMocker(image: UIImage(named: "IMG_3147")!)]
-                self.configureImages((1...50).map {images[$0%2]})
+                
+                //Photo library
+                let library = ImagesLibrary()
+                library.reload {
+                    let album = Album.selectAllPhotoAlbum(albums: library.albums)!
+                    let images = Array(album.items[0..<min(album.items.count, 50)])
+                    self.loadedImages = images
+
+                    self.configureImages(images)
+                }
+
+                //Mocker
+//                let images = [ImageMocker(image: UIImage(named: "IMG_3146")!), ImageMocker(image: UIImage(named: "IMG_3147")!)]
+//                self.configureImages((1...50).map {images[$0%2]})
 //                self.configureImages(images)
             }
         }
