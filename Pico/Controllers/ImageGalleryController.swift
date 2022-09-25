@@ -19,16 +19,7 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
 
     let imageCellSize = 100*UIScreen.main.scale
     
-    var images = [Image]() {
-        willSet(newImages) {
-//            imageManager.stopCachingImagesForAllAssets()
-            imageManager.startCachingImages(for: newImages.map {$0.asset},
-                                            targetSize: CGSize(width: imageCellSize, height: imageCellSize),
-                                            contentMode: .default,
-                                            options: options)
-        }
-    }
-    
+    var images = [Image]()
     var selectImages = [Image]() 
     
     @IBOutlet var collection: UICollectionView!
@@ -37,7 +28,6 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
     let maxSelectCount = 50
     
     let imageManager = PHCachingImageManager.default() as! PHCachingImageManager
-    let fullsizeImageManager = PHImageManager()
     
     let options: PHImageRequestOptions = {
         let ops = PHImageRequestOptions()
@@ -111,7 +101,7 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
             imageManager.cancelImageRequest(PHImageRequestID(cell.tag))
         }
         
-        let id = imageManager.requestImage(for: image.asset, targetSize: imageSize, contentMode: .default, options: options) { [weak self] (uiImage, _) in
+        let id = imageManager.requestImage(for: image.asset, targetSize: imageSize, contentMode: .default, options: options) {(uiImage, _) in
             if let uiImage = uiImage {
                 cell.image.image = uiImage
             }
@@ -134,7 +124,7 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         let scale = UIScreen.main.bounds.width/CGFloat(image.assetSize.width)
         let imageSize = CGSize(width: image.assetSize.width, height: image.assetSize.height).applying(CGAffineTransform(scaleX: scale, y: scale))
         if let complete = complete {
-            imageManager.requestImage(for: image.asset, targetSize: imageSize, contentMode: .default, options: options) { [weak self] (uiImage, info) in
+            imageManager.requestImage(for: image.asset, targetSize: imageSize, contentMode: .default, options: options) {(uiImage, info) in
                 complete(uiImage!)
             }
         } else {
@@ -216,16 +206,11 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
     }
     
     func updateAfterSelectionChanged(reloadAll: Bool = false) {
-        delegate.onImageSelected(selectedImages: selectImages)
-        
+        delegate.onImageSelected(selectedImages: selectImages)        
         if reloadAll {
             self.collectionView?.reloadData()
         } else {
-            UIView.animate(withDuration: 0.01, animations: {
-                self.collection.performBatchUpdates({
-                    self.collection.reloadItems(at: self.collectionView!.indexPathsForVisibleItems)
-                }, completion: nil)
-            })
+            self.collection.reloadItems(at: self.collectionView!.indexPathsForVisibleItems)
         }
     }
 
