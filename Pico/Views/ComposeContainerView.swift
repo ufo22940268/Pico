@@ -266,9 +266,8 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
                         } else {
                             canvas = CIImage.concateImages(images: [canvas!, img], needScale: false)
                         }
-                        print("leave \(index) \(img.extent)")
-                        group.leave()
                     }
+                    group.leave()
                 }, wrapperBounds: cell.convert(wrapperBounds, from: self), targetWidth: CGFloat(targetWidth!))
                 group.wait()
             }
