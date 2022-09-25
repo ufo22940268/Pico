@@ -782,6 +782,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pico/WeixinSDK",
 				);
+				"OTHER_SWIFT_FLAGS[sdk=iphonesimulator*]" = "-D IOS_SIMULATOR";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bettycc.Pico;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
