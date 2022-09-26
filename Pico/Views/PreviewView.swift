@@ -166,7 +166,7 @@ extension PreviewView {
     
     func undo() {
         if areas.count > 0 {
-            let removedCropRect = areas.removeLast()
+            _ = areas.removeLast()
             syncCropsToCell()
             reloadVisibleCells()
         }

@@ -76,6 +76,8 @@ class PreviewCell: UIView, RecycleCell {
         let ratio = pixelCropSize.width/pixelCropSize.height
         widthAnchor.constraint(equalTo: heightAnchor, multiplier: ratio).isActive = true
         
+        setupPlaceholder()
+        
         imageView = UIImageView(frame: CGRect.zero)
         addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -112,6 +114,7 @@ class PreviewCell: UIView, RecycleCell {
             return
         }
         
+        showPlaceholder()
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
         options.resizeMode = .exact
@@ -125,9 +128,10 @@ class PreviewCell: UIView, RecycleCell {
                 self.pixelView.image = UIImage(ciImage: self.decorator!.pixellateImages.first!.value)
                 self.displayPixel()
             }
+            self.showContentView()
             self.setNeedsDisplay()
             self.setNeedsLayout()
-        }, targetWidth: UIScreen.main.pixelSize.width, resizeMode: .exact, contentMode: .aspectFill)
+        }, targetWidth: UIScreen.main.pixelSize.width, resizeMode: .fast, contentMode: .aspectFill)
     }
     
     func unloadImage() {
@@ -215,3 +219,11 @@ extension PreviewCell {
     }
 }
 
+extension PreviewCell : LoadingPlaceholder {
+    
+    func contentViewVisible(_ show: Bool) {
+        imageView.isHidden = !show
+        pixelView.isHidden = !show
+        signView.isHidden = !show
+    }
+}
