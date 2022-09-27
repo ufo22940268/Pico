@@ -103,31 +103,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                 })
             }
         }
-        
-        
-//        let frameResult = FrameDetector(upImage: uiImages.first!!, downImage: uiImages[1]!).detect()
-//        let dispatchGroup = DispatchGroup()
-//        for index in 0..<uiImages.count - 1 {
-//            let upImage = uiImages[index]
-//            let downImage = uiImages[index + 1]
-//            dispatchGroup.enter()
-//            OverlapDetector(upImage: upImage!, downImage: downImage!, frameResult: frameResult).detect {upOverlap, downOverlap in
-//                DispatchQueue.main.async {
-//                    if upOverlap > 0 && downOverlap > 0 {
-//                        let imageHeight = uiImages[0]!.size.height
-//                        print(index, "up", upOverlap, "down", downOverlap)
-//                        self.container.cells[index].scrollDown(percentage: upOverlap/imageHeight)
-//                        self.container.cells[index + 1].scrollUp(percentage: -downOverlap/imageHeight)
-//                    }
-//                    dispatchGroup.leave()
-//                }
-//            }
-//
-//            dispatchGroup.notify(queue: .main) {
-//                self.hideLoading()
-//                self.resetGapToContainer()
-//            }
-//        }
     }
     
     func configureImages(_ images: ([Image])) {
@@ -197,7 +172,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                 let library = ImagesLibrary()
                 library.reload {
                     let album = Album.selectAllPhotoAlbum(albums: library.albums)!
-                    let images = Array(album.items[0..<min(album.items.count, 50)])
+                    let images = Array(album.items[0..<min(album.items.count, 2)])
                     self.loadedImages = images
 
                     self.configureImages(images)
@@ -228,7 +203,13 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         container.setEditDelegator(delegator: self)
         container.scrollDelegator = self
         
+        setupScrollView()
+    }
+    
+    func setupScrollView() {
         scroll.delegate = self
+        scroll.maximumZoomScale = 2
+        scroll.minimumZoomScale = 0.4
     }
     
     func showLoading() {
@@ -605,6 +586,20 @@ extension ComposeController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateSideSliderButtons()
         updateContainerImages()
+    }
+    
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return containerWrapper
+    }
+    
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        centerContainerWrapper()
+    }
+    
+    fileprivate func centerContainerWrapper() {
+        let offsetX = max((scroll.bounds.width - scroll.contentSize.width) * 0.5, 0)
+        let offsetY = max((scroll.bounds.height - scroll.contentSize.height) * 0.5, 0)
+        scroll.contentInset = UIEdgeInsets(top: offsetY, left: offsetX, bottom: 0, right: 0)
     }
 }
 
