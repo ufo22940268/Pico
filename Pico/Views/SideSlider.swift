@@ -48,9 +48,10 @@ class SideSlider: UIView, SliderSelectable {
         }
     }
     
-    func updateSlider(midPoint: CGPoint) {
+    func updateSlider(midPoint: CGPoint, transform: CGAffineTransform) {
         topConstraint.constant = midPoint.y
         setNeedsLayout()
+        self.transform = transform
     }
     
     func setupAnimation() {

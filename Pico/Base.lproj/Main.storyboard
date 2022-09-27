@@ -241,7 +241,6 @@
                                     <constraint firstItem="FDD-5R-i7y" firstAttribute="leading" secondItem="Qfn-Hc-ipw" secondAttribute="leading" priority="250" identifier="containerWrapperLeading" id="GC6-2T-RVc"/>
                                     <constraint firstAttribute="bottom" secondItem="FDD-5R-i7y" secondAttribute="bottom" id="I0i-Za-MXD"/>
                                     <constraint firstItem="3Jb-z4-kgp" firstAttribute="width" secondItem="Qfn-Hc-ipw" secondAttribute="width" id="VRi-gu-AyE"/>
-                                    <constraint firstItem="FDD-5R-i7y" firstAttribute="centerX" secondItem="Qfn-Hc-ipw" secondAttribute="centerX" id="bkM-s9-ajj"/>
                                     <constraint firstItem="FDD-5R-i7y" firstAttribute="top" secondItem="Qfn-Hc-ipw" secondAttribute="top" id="gGw-MB-a4S"/>
                                 </constraints>
                             </scrollView>
@@ -301,7 +300,6 @@
                         <outlet property="containerTrailingConstraint" destination="GHB-58-3aE" id="W3Z-kD-ujB"/>
                         <outlet property="containerWidthConstraint" destination="VRi-gu-AyE" id="Kvb-Yq-Bvy"/>
                         <outlet property="containerWrapper" destination="FDD-5R-i7y" id="Hcy-ki-a2b"/>
-                        <outlet property="containerWrapperCenterXConstraint" destination="bkM-s9-ajj" id="2mg-qE-HZq"/>
                         <outlet property="containerWrapperLeadingConstraint" destination="GC6-2T-RVc" id="w4G-0b-WH5"/>
                         <outlet property="containerWrapperTrailingConstraint" destination="8tj-WS-eFi" id="gQk-t9-RtI"/>
                         <outlet property="loadingIndicator" destination="3fT-eg-GIo" id="FGP-ea-JSz"/>

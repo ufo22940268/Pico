@@ -243,8 +243,10 @@ extension ComposeCell : RecycleCell {
         options.resizeMode = .exact
         let width = UIScreen.main.pixelSize.width
         loadingTag = imageEntity.resolve(completion: { (uiImage) in
-            self.setImage(uiImage: uiImage!)
-            self.showContentView()
+            UIView.transition(with: self, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                self.setImage(uiImage: uiImage!)
+                self.showContentView()
+            }, completion: nil)
         }, targetWidth: width, resizeMode: .fast, contentMode: .aspectFill)
     }
     

@@ -44,13 +44,8 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     var loadUIImageHandler:(() -> Void)?
     
     @IBOutlet weak var containerWidthConstraint: NSLayoutConstraint!
-    @IBOutlet var containerWrapperCenterXConstraint: NSLayoutConstraint!
+//    @IBOutlet var containerWrapperCenterXConstraint: NSLayoutConstraint!
     @IBOutlet var panGesture: UIPanGestureRecognizer!
-    
-    var maskCenterXConstraint: NSLayoutConstraint!
-    var maskHeightToContainerWrapperConstraint: NSLayoutConstraint!
-    var maskCenterXToContainerConstraint: NSLayoutConstraint!
-    var maskCenterXToContainerWrapperConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     
@@ -305,19 +300,22 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                 activeConstraint.constant = containerTrailingConstraintConstant.addConstant(delta: calibrateDirection*abs(calibratedTranslateX))
             }
             
-            /// Update container wrapper
-            switch direction {
-            case "left":
-                containerWrapperTrailingConstraint.constant = containerWrapperTrailingConstraint.constant + (shrink ? 1 : -1)*abs(calibratedTranslateX)
-            case "right":
-                containerWrapperLeadingConstraint.constant = containerWrapperLeadingConstraint.constant + (shrink ? 1 : -1)*abs(calibratedTranslateX)
-            default:
-                break
-            }
-            
-            updateSeperatorSliderButtons()
+//            /// Update container wrapper
+//            switch direction {
+//            case "left":
+//                containerWrapperTrailingConstraint.constant = containerWrapperTrailingConstraint.constant + (shrink ? 1 : -1)*abs(calibratedTranslateX)
+//            case "right":
+//                containerWrapperLeadingConstraint.constant = containerWrapperLeadingConstraint.constant + (shrink ? 1 : -1)*abs(calibratedTranslateX)
+//            default:
+//                break
+//            }
+//
+//            updateSeperatorSliderButtons()
+
             
             sender.setTranslation(CGPoint.zero, in: container)
+            
+            centerContainerWrapper()
         }
     }
     
@@ -390,6 +388,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         }
         
         scroll.contentInset = UIEdgeInsets(top: -topInset, left: 0, bottom: -bottomInset, right: 0)
+        centerContainerWrapper()
     }
     
     func editStateChanged(state: EditState) {
@@ -403,16 +402,16 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         }
         
         if case .editing(let direction, _) = state, ["left", "right"].contains(direction) {
-            containerWrapperCenterXConstraint.isActive = false
-            containerWrapperLeadingConstraint.constant = containerWrapper.frame.minX
-            containerWrapperTrailingConstraint.constant = scroll.frame.width - containerWrapper.frame.maxX
+//            containerWrapperCenterXConstraint.isActive = false
+//            containerWrapperLeadingConstraint.constant = containerWrapper.frame.minX
+//            containerWrapperTrailingConstraint.constant = scroll.frame.width - containerWrapper.frame.maxX
         } else if case .inactive(let fromDirections) = state {
             if let fromDirections = fromDirections {
                 if ["left", "right"].contains(fromDirections) {
                     self.containerWrapperLeadingConstraint.constant = 0
                     self.containerWrapperTrailingConstraint.constant = 0
                     UIViewPropertyAnimator(duration: 0.15, curve: .linear, animations: {
-                        self.containerWrapperCenterXConstraint.isActive = true
+//                        self.containerWrapperCenterXConstraint.isActive = true
                         self.scroll.layoutIfNeeded()
                     }).startAnimation()
                 } else {
@@ -423,6 +422,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                 }
             }
         }
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -569,7 +569,8 @@ extension ComposeController: UIScrollViewDelegate {
         let midX = (min(container.frame.maxX, containerWrapper.bounds.maxX) - max(container.frame.minX, containerWrapper.bounds.minX)) / 2
         if let firstSeperator = container.seperators.first {
             let midPoint = firstSeperator.convert(CGPoint(x: midX, y: 0.0), from: containerWrapper)
-            container.updateSeperatorSliderButtons(midPoint: midPoint)
+            let transform = containerWrapper.transform.inverted()
+            container.updateSeperatorSliderButtons(midPoint: midPoint, transform: transform)
         }
     }
     
@@ -578,8 +579,9 @@ extension ComposeController: UIScrollViewDelegate {
             let fillScrollHeight = containerWrapper.bounds.height >= scroll.bounds.height
             let scrollMidPoint = containerWrapper.convert(CGPoint(x: 0, y: scroll.bounds.midY), from: scroll)
             let midPoint = container.leftSlider.convert(CGPoint(x: 0, y: fillScrollHeight ? scrollMidPoint.y : containerWrapper.bounds.midY), from: containerWrapper)
-            container.leftSlider.updateSlider(midPoint: midPoint)
-            container.rightSlider.updateSlider(midPoint: midPoint)
+            let transform = containerWrapper.transform.inverted()
+            container.leftSlider.updateSlider(midPoint: midPoint, transform: transform)
+            container.rightSlider.updateSlider(midPoint: midPoint, transform: transform)
         }
     }
     
@@ -594,11 +596,16 @@ extension ComposeController: UIScrollViewDelegate {
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         centerContainerWrapper()
+        updateSideSliderButtons()
+        updateSeperatorSliderButtons()
     }
     
     fileprivate func centerContainerWrapper() {
-        let offsetX = max((scroll.bounds.width - scroll.contentSize.width) * 0.5, 0)
-        let offsetY = max((scroll.bounds.height - scroll.contentSize.height) * 0.5, 0)
+        let scrollBounds = scroll.bounds
+        let offsetX = max((scrollBounds.width - scroll.contentSize.width) * 0.5, 0)
+        let offsetY = max((scrollBounds.height - scroll.contentSize.height) * 0.5, 0)
+
+//        print("contentSize: \(scroll.contentSize) offsetX: \(offsetX) scroll.bounds: \(scrollBounds) transform: \(containerWrapper.transform)")
         scroll.contentInset = UIEdgeInsets(top: offsetY, left: offsetX, bottom: 0, right: 0)
     }
 }
