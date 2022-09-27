@@ -8,7 +8,11 @@
 
 import UIKit
 import MonkeyKing
-
+  
+enum UserDefaultKeys : String {
+    case shownOnboarding =  "shownOnboarding"
+}
+  
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -18,9 +22,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         MonkeyKing.registerAccount(.weChat(appID: "wxef5f2473557d61a0", appKey: "wxef5f2473557d61a0", miniAppID: nil))
-        
+
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.window?.rootViewController = UIStoryboard(name: "Onboarding", bundle: nil).instantiateInitialViewController()
+        var rootVC: UIViewController
+        if UserDefaults.standard.bool(forKey: UserDefaultKeys.shownOnboarding.rawValue) {
+            rootVC = Storyboards.Main.instance.instantiateInitialViewController()!
+        } else {
+            rootVC = Storyboards.Onboarding.instance.instantiateInitialViewController()!
+        }
+        
+        self.window?.rootViewController = rootVC
         self.window?.makeKeyAndVisible()
         
         return true
