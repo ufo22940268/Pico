@@ -69,6 +69,9 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="6TD-Is-RzD"/>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="string" keyPath="direction" value="middle"/>
+            </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="button" destination="8ER-9v-Fki" id="LEn-aM-nRg"/>
             </connections>
@@ -230,7 +233,6 @@
                                     </state>
                                     <userDefinedRuntimeAttributes>
                                         <userDefinedRuntimeAttribute type="string" keyPath="layer.borderWidth" value="0"/>
-                                        <userDefinedRuntimeAttribute type="string" keyPath="direction" value="left"/>
                                     </userDefinedRuntimeAttributes>
                                     <connections>
                                         <action selector="onToggle:" destination="SbF-3v-z2y" eventType="touchUpInside" id="tLI-KF-KFk"/>
@@ -291,7 +293,6 @@
                                     </state>
                                     <userDefinedRuntimeAttributes>
                                         <userDefinedRuntimeAttribute type="string" keyPath="layer.borderWidth" value="0"/>
-                                        <userDefinedRuntimeAttribute type="string" keyPath="direction" value="right"/>
                                     </userDefinedRuntimeAttributes>
                                     <connections>
                                         <action selector="onToggle:" destination="SbF-3v-z2y" eventType="touchUpInside" id="Q2E-DS-Wc5"/>
