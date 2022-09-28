@@ -11,6 +11,7 @@
 		4201F006210ED73400A6EBA5 /* GestureExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4201F005210ED73400A6EBA5 /* GestureExtension.swift */; };
 		4201F00821119A0700A6EBA5 /* CIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4201F00721119A0700A6EBA5 /* CIImageExtension.swift */; };
 		4201F00A211305DA00A6EBA5 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4201F009211305DA00A6EBA5 /* UIColorExtension.swift */; };
+		420D3D2F215E0620006614A4 /* SliderButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420D3D2E215E0620006614A4 /* SliderButton.swift */; };
 		420EF44820F965FA006CCDD3 /* AutoConcate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420EF44720F965FA006CCDD3 /* AutoConcate.swift */; };
 		420EF44A20F9665D006CCDD3 /* MovieConcate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420EF44920F9665D006CCDD3 /* MovieConcate.swift */; };
 		420EF44C20FCA784006CCDD3 /* PreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420EF44B20FCA784006CCDD3 /* PreviewController.swift */; };
@@ -112,6 +113,7 @@
 		4201F005210ED73400A6EBA5 /* GestureExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureExtension.swift; sourceTree = "<group>"; };
 		4201F00721119A0700A6EBA5 /* CIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CIImageExtension.swift; sourceTree = "<group>"; };
 		4201F009211305DA00A6EBA5 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		420D3D2E215E0620006614A4 /* SliderButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderButton.swift; sourceTree = "<group>"; };
 		420EF44720F965FA006CCDD3 /* AutoConcate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoConcate.swift; sourceTree = "<group>"; };
 		420EF44920F9665D006CCDD3 /* MovieConcate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieConcate.swift; sourceTree = "<group>"; };
 		420EF44B20FCA784006CCDD3 /* PreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewController.swift; sourceTree = "<group>"; };
@@ -364,6 +366,7 @@
 				42BF6E1A213C87B500458E78 /* PreviewCell.swift */,
 				42D69DC02151EF1A00BAD5BD /* PixelView.swift */,
 				4219B2F821549A230060F393 /* RecycleList.swift */,
+				420D3D2E215E0620006614A4 /* SliderButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -571,6 +574,7 @@
 				423F1C1820ECA9730083DB6D /* SeperatorSlider.swift in Sources */,
 				42338F8A213001E500BD961C /* Test.swift in Sources */,
 				42C4067120F44E820074B728 /* RGBAImage.swift in Sources */,
+				420D3D2F215E0620006614A4 /* SliderButton.swift in Sources */,
 				42C84780215C9EE300A3ECF8 /* Storyboards.swift in Sources */,
 				42C84782215CA11800A3ECF8 /* OnboardingViewController.swift in Sources */,
 				42A18C4B20EAF5A600DD4AA5 /* AppDelegate.swift in Sources */,

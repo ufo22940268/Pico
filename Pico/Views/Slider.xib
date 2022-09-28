@@ -222,7 +222,7 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xkK-DT-VS0">
                             <rect key="frame" x="2" y="0.0" width="38" height="473"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Sy-2k-fkg" customClass="SideSliderButton" customModule="Pico" customModuleProvider="target">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Sy-2k-fkg" customClass="SliderButton" customModule="Pico" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="33.5" width="38" height="34"/>
                                     <color key="backgroundColor" name="Slider"/>
                                     <state key="normal">
@@ -283,7 +283,7 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gGb-i3-fOx">
                             <rect key="frame" x="0.0" y="0.0" width="38" height="473"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Oz-1H-aZ8" customClass="SideSliderButton" customModule="Pico" customModuleProvider="target">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Oz-1H-aZ8" customClass="SliderButton" customModule="Pico" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="33.5" width="38" height="34"/>
                                     <color key="backgroundColor" name="Slider"/>
                                     <state key="normal">
