@@ -224,7 +224,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     func updateSeperatorSliderButtons(midPoint: CGPoint, transform: CGAffineTransform) {
         seperators.forEach { (slider) in
             slider.updateButtonPosition(midPoint: midPoint)
-            slider.button.transform = transform
+            slider.button.scale = transform.a
         }
     }
     
