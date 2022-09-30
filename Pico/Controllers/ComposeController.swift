@@ -161,7 +161,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         if isDev() {
             loadUIImageHandler = {
-                self.type = .screenshot
+                self.type = .normal
                 
                 //Photo library
                 let library = ImagesLibrary()
@@ -572,7 +572,7 @@ extension ComposeController: UIScrollViewDelegate {
         let midX = (min(container.frame.maxX, containerWrapper.bounds.maxX) - max(container.frame.minX, containerWrapper.bounds.minX)) / 2
         if let firstSeperator = container.seperators.first {
             let midPoint = firstSeperator.convert(CGPoint(x: midX, y: 0.0), from: containerWrapper)
-            container.updateSeperatorSliderButtons(midPoint: midPoint, transform: sliderButtonTransform)
+            container.updateSeperatorSliders(midPoint: midPoint, transform: sliderButtonTransform)
         }
     }
     
