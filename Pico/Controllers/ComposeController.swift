@@ -161,7 +161,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         if isDev() {
             loadUIImageHandler = {
-                self.type = .normal
+                self.type = .screenshot
                 
                 //Photo library
                 let library = ImagesLibrary()
@@ -582,8 +582,10 @@ extension ComposeController: UIScrollViewDelegate {
             let fillScrollHeight = containerWrapper.bounds.height >= scroll.bounds.height
             let scrollMidPoint = containerWrapper.convert(CGPoint(x: 0, y: scroll.bounds.midY), from: scroll)
             let midPoint = container.leftSlider.convert(CGPoint(x: 0, y: fillScrollHeight ? scrollMidPoint.y : containerWrapper.bounds.midY), from: containerWrapper)
-            container.leftSlider.updateSlider(midPoint: midPoint, transform: sliderButtonTransform)
-            container.rightSlider.updateSlider(midPoint: midPoint, transform: sliderButtonTransform)
+            container.leftSlider.update(midPoint: midPoint)
+            container.leftSlider.updateScale(sliderButtonTransform.a)
+            container.rightSlider.update(midPoint: midPoint)
+            container.rightSlider.updateScale(sliderButtonTransform.a)
         }
     }
     
@@ -612,8 +614,6 @@ extension ComposeController: UIScrollViewDelegate {
         let scrollBounds = scroll.bounds
         let offsetX = max((scrollBounds.width - scroll.contentSize.width) * 0.5, 0)
         let offsetY = max((scrollBounds.height - scroll.contentSize.height) * 0.5, 0)
-
-//        print("contentSize: \(scroll.contentSize) offsetX: \(offsetX) scroll.bounds: \(scrollBounds) transform: \(containerWrapper.transform)")
         scroll.contentInset = UIEdgeInsets(top: offsetY, left: offsetX, bottom: 0, right: 0)
     }
 }

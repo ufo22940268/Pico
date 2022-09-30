@@ -19,11 +19,24 @@ class SliderConstants {
     static let buttonHeight = CGFloat(20)
 }
 
+class ArrowImage : UIImageView {
+    
+    var scale: CGFloat = 1.0 {
+        didSet {
+            invalidateIntrinsicContentSize()
+        }
+    }
+    
+    override var intrinsicContentSize: CGSize {
+        return super.intrinsicContentSize.applying(CGAffineTransform(scaleX: scale, y: scale))
+    }
+}
+
 
 class SeperatorSlider: UIView, SliderSelectable {
     
-    var aboveArrow: UIImageView!
-    var belowArrow: UIImageView!
+    var aboveArrow: ArrowImage!
+    var belowArrow: ArrowImage!
     var animations = [UIViewPropertyAnimator]()
     var index: Int!
     weak var editDelegator:EditDelegator?
@@ -43,6 +56,7 @@ class SeperatorSlider: UIView, SliderSelectable {
     }
     
     var directionEnum: SliderDirection!
+    var arrowGapConstraints = [NSLayoutConstraint: ScalableConstant]()
     
     override func awakeFromNib() {
         
@@ -51,16 +65,16 @@ class SeperatorSlider: UIView, SliderSelectable {
         buttonCenterXConstraint = button.centerXAnchor.constraint(equalTo: centerXAnchor)
         buttonCenterXConstraint.isActive = true
         
-        aboveArrow = UIImageView(image: UIImage(named: "angle-double-down-solid"))
+        aboveArrow = ArrowImage(image: UIImage(named: "angle-double-down-solid"))
         aboveArrow.tintColor = UIColor(named: "Slider")
         aboveArrow.isHidden = true
         aboveArrow.translatesAutoresizingMaskIntoConstraints = false
-        belowArrow = UIImageView(image: UIImage(named: "angle-double-up-solid"))
+        belowArrow = ArrowImage(image: UIImage(named: "angle-double-up-solid"))
         belowArrow.tintColor = UIColor(named: "Slider")
         belowArrow.isHidden = true
         belowArrow.translatesAutoresizingMaskIntoConstraints = false
         
-        if  showBelowArrow() {
+        if showBelowArrow() {
             setupBelowArrow(arrow: belowArrow)
         }
 
@@ -150,8 +164,17 @@ class SeperatorSlider: UIView, SliderSelectable {
     
     func updateScale(_ scale: CGFloat) {
         button.scale = scale
+        
         if directionEnum! == .middle {
             middleTopCosntraint.constant = -button.bounds.height/2
+        }
+        
+        //Update scale for arrows
+        aboveArrow.scale = scale
+        belowArrow.scale = scale
+        
+        for (constraint, scaleConstant) in arrowGapConstraints {
+            constraint.constant = scaleConstant.finalConstant(byScale: scale)
         }
     }
     
@@ -188,20 +211,28 @@ class SeperatorSlider: UIView, SliderSelectable {
     
     fileprivate func setupAboveArrow(arrow: UIImageView) {
         addSubview(arrow)
-        addConstraint(NSLayoutConstraint(item: arrow, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: -SliderConstants.gap-15))
+        var gapConstant = ScalableConstant()
+        gapConstant.constant = -SliderConstants.gap-15
+        gapConstant.scale = 1
+        let gap = NSLayoutConstraint(item: arrow, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: -SliderConstants.gap-15)
+        arrowGapConstraints[gap] = gapConstant
+        addConstraint(gap)
         addConstraint(NSLayoutConstraint(item: arrow, attribute: .centerX, relatedBy: .equal, toItem: button, attribute: .centerX, multiplier: 1, constant: 0) )
-        addConstraint(NSLayoutConstraint(item: arrow, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: SliderConstants.width))
-        addConstraint(NSLayoutConstraint(item: arrow, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: SliderConstants.height))
         validArrows.append(arrow)
         
     }
     
     fileprivate func setupBelowArrow(arrow: UIImageView) {
         addSubview(arrow)
-        addConstraint(NSLayoutConstraint(item: arrow, attribute: .top, relatedBy: .equal, toItem: button, attribute: .bottom, multiplier: 1, constant: SliderConstants.gap))
+        
+        var gapConstant = ScalableConstant()
+        gapConstant.constant = SliderConstants.gap
+        gapConstant.scale = 1
+
+        let gap = NSLayoutConstraint(item: arrow, attribute: .top, relatedBy: .equal, toItem: button, attribute: .bottom, multiplier: 1, constant: SliderConstants.gap)
+        arrowGapConstraints[gap] = gapConstant
+        addConstraint(gap)
         addConstraint(NSLayoutConstraint(item: arrow, attribute: .centerX, relatedBy: .equal, toItem: button, attribute: .centerX, multiplier: 1, constant: 0) )
-        addConstraint(NSLayoutConstraint(item: arrow, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: SliderConstants.width))
-        addConstraint(NSLayoutConstraint(item: arrow, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: SliderConstants.height))
         validArrows.append(arrow)
     }
 }

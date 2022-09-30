@@ -27,6 +27,10 @@ struct ScalableConstant {
     func finalConstant() -> CGFloat {
         return scale*constant
     }
+    
+    func finalConstant(byScale: CGFloat) -> CGFloat {
+        return byScale*constant
+    }
 }
 
 extension UIScreen {

@@ -17,7 +17,7 @@ class SideSlider: UIView, SliderSelectable {
     @IBOutlet weak var button: SliderButton!
     @IBOutlet weak var topConstraint: NSLayoutConstraint!
     weak var delegate: EditDelegator?
-    var arrow: UIImageView!
+    var arrow: ArrowImage!
     var arrowAnimator: UIViewPropertyAnimator!
     
     override func awakeFromNib() {
@@ -25,7 +25,7 @@ class SideSlider: UIView, SliderSelectable {
         
         let uiImage: UIImage? = direction == "left" ? UIImage(named: "angle-double-left-solid") : UIImage(named: "angle-double-right-solid")
         
-        arrow = UIImageView(image: uiImage)
+        arrow = ArrowImage(image: uiImage)
         arrow.tintColor = UIColor(named: "Slider")
         addSubview(arrow)
         arrow.isHidden = true
@@ -41,9 +41,13 @@ class SideSlider: UIView, SliderSelectable {
         button.setup(direction: SliderDirection.parse(direction: direction))
     }
     
-    func updateSlider(midPoint: CGPoint, transform: CGAffineTransform) {
+    func update(midPoint: CGPoint) {
         topConstraint.constant = midPoint.y
-        button.scale = transform.a
+    }
+    
+    func updateScale(_ scale: CGFloat) {
+        button.scale = scale
+        arrow.scale = scale
     }
     
     func setupAnimation() {
