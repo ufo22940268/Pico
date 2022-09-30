@@ -602,6 +602,12 @@ extension ComposeController: UIScrollViewDelegate {
         updateSeperatorSliderButtons()
     }
     
+    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+        centerContainerWrapper()
+        updateSideSliderButtons()
+        updateSeperatorSliderButtons()
+    }
+    
     fileprivate func centerContainerWrapper() {
         let scrollBounds = scroll.bounds
         let offsetX = max((scrollBounds.width - scroll.contentSize.width) * 0.5, 0)
