@@ -50,12 +50,6 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         return updated
     }
     
-    func refreshSelectImageCells() {
-        collectionView?.reloadItems(at: selectImages.map {getIndexPath(image: $0)}.filter {
-            collectionView!.indexPathsForVisibleItems.contains($0)
-        })
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         updateAfterSelectionChanged()
     }
@@ -120,18 +114,6 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         return cell
     }
     
-    func loadForfViewImageCache(image: Image, isSync: Bool = false, _ complete: ((UIImage) -> Void)? = nil) {
-        let scale = UIScreen.main.bounds.width/CGFloat(image.assetSize.width)
-        let imageSize = CGSize(width: image.assetSize.width, height: image.assetSize.height).applying(CGAffineTransform(scaleX: scale, y: scale))
-        if let complete = complete {
-            imageManager.requestImage(for: image.asset, targetSize: imageSize, contentMode: .default, options: options) {(uiImage, info) in
-                complete(uiImage!)
-            }
-        } else {
-            imageManager.startCachingImages(for: [image.asset], targetSize: imageSize, contentMode: .default, options: options)
-        }
-    }
-    
     func getSelectSequence(image: Image) -> Int? {
         return selectImages.index(of: image)
     }
@@ -170,43 +152,25 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
         return CGSize(width: size, height: size)
     }
     
-    func getImagesFromViewCache(images inputImages: [Image]? = nil,  _ callback: @escaping ([UIImage]) -> Void) {
-        let finalImages = inputImages as! [Image]
-        var images = [UIImage?](repeating: nil, count: finalImages.count)
-        let group = DispatchGroup()
-        for (index, selectImage) in finalImages.enumerated() {
-            group.enter()
-            self.loadForfViewImageCache(image: selectImage) {
-                images[index] = $0
-                group.leave()
-            }
-        }
-        group.notify(queue: .main, execute: {
-            callback(images as! [UIImage])
-        })
-    }
-        
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectImage = images[indexPath.item]
         if selectImages.contains(selectImage) {
             selectImages.remove(at: selectImages.index(of: selectImage)!)
         } else {
-            guard selectImages.count < maxSelectCount  else {
+            guard selectImages.count < maxSelectCount else {
                 let ac = UIAlertController(title: nil, message: "最多只能选择\(maxSelectCount)张图片", preferredStyle: .alert)
                 ac.addAction(UIAlertAction(title: "ok", style: .default))
                 self.present(ac, animated: true, completion: nil)
                 return
             }
             selectImages.append(selectImage)
-            
-            loadForfViewImageCache(image: selectImage)
         }
         
         updateAfterSelectionChanged()
     }
     
     func updateAfterSelectionChanged(reloadAll: Bool = false) {
-        delegate.onImageSelected(selectedImages: selectImages)        
+        delegate.onImageSelected(selectedImages: selectImages)
         if reloadAll {
             self.collectionView?.reloadData()
         } else {

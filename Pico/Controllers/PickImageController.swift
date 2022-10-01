@@ -94,9 +94,6 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
         let screenshots = Album.getRecentScreenshots(images: images)
         self.recentScreenshotItem.isEnabled = screenshots.count >= 2
         self.recentScreenshots = screenshots
-        if let recentScreenshots = self.recentScreenshots {
-            recentScreenshots.forEach {self.imageGallery.loadForfViewImageCache(image: $0)}
-        }
     }
     
     func reloadAlbums(notify: Bool = false) {
@@ -158,13 +155,6 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
             doneImage = #imageLiteral(resourceName: "mobile-solid")
         }
         doneItem.image = doneImage
-        
-        
-//        UIView.transition(with: doneItem.customView!,
-//                          duration: 0.75,
-//                          options: .transitionCrossDissolve,
-//                          animations: { self.doneItem.image = doneImage },
-//                          completion: nil)
     }
     
     func onImageSelected(selectedImages: [Image]) {
@@ -176,7 +166,6 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
         return (containsOtherThanScreenshot.isEmpty && (!imageGallery.selectImages.isEmpty)) ?  Intention.screenshot : Intention.normal
     }
     
-    
     @IBAction func onDone(_ sender: UIBarButtonItem) {
         let intention = getUserIntention()
         if intention == .normal {
@@ -185,8 +174,6 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
             performSegue(withIdentifier: "composeScreenshot", sender: self)
         }
     }
-    
-    
     
     fileprivate func prepareForNormalConcatenate(_ segue: UIStoryboardSegue) {
         let compose = segue.destination as! ComposeController
