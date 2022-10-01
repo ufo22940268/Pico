@@ -243,6 +243,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         } else if case .changed = sender.state {
             panView.scrollVertical(sender)
             container.showSeperators(show: false)
+            container.showActiveSeperator()
         } else if sender.state == .ended {
             container.showSeperators(show: true)
         }
