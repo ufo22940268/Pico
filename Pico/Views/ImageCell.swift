@@ -25,6 +25,7 @@ class PickImageCell: UICollectionViewCell {
     }
 
     func select(number: Int) {
+        print(number)
         selectedSequence.isHidden = false
         sequence.text = String(number + 1)
     }
