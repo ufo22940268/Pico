@@ -209,7 +209,8 @@ extension PreviewCell : RecycleCell {
         options.resizeMode = .exact
         loadingSeq = image.resolve(completion: { (uiImage) in
             if let uiImage = uiImage {
-                let ciImage: CIImage = CIImage(image: uiImage)!.cropped(to: self.imageCrop.applying(CGAffineTransform(scaleX: uiImage.size.width, y: uiImage.size.height)))
+                let ciImage: CIImage = CIImage(image: uiImage)!
+                    .cropped(to: self.imageCrop.applying(CGAffineTransform(scaleX: UIScreen.main.pixelSize.width, y: uiImage.size.ratio*UIScreen.main.pixelSize.width)))
                 self.decorator.setImage(ciImage)
                 self.decorator?.boundWidth = self.bounds.width
                 self.decorator?.boundHeight = self.bounds.height
