@@ -105,8 +105,6 @@ class PreviewCell: UIView {
         super.init(coder: aDecoder)
     }
     
-
-    
 }
 
 // MARK: - Pixellate
@@ -115,7 +113,7 @@ extension PreviewCell {
     func updateCrop(with normalizedRect: CGRect, identifier: CropArea) {
         guard decorator.isImageLoaded() else {return}
         
-        decorator.updateCrop(with: normalizedRect, identifier: identifier)
+        decorator.updatePixelCrop(with: normalizedRect, identifier: identifier)
         displayPixel()
     }
     
@@ -154,7 +152,7 @@ extension PreviewCell {
     
     func removeCrop(by identifier: CropArea) {
         guard decorator.isImageLoaded() else {return}
-        decorator.removeCrop(by: identifier)
+        decorator.removePixelCrop(by: identifier)
     }
     
     func sync(with areas: [CropArea: CGRect]) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="MIE-CQ-9z1">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="SDp-bB-QNW">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -343,9 +343,8 @@
                                     <constraint firstItem="bEx-xN-zR0" firstAttribute="leading" secondItem="QGp-s0-rHz" secondAttribute="leading" priority="750" id="yqh-mR-IfS"/>
                                 </constraints>
                             </scrollView>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="cL7-PC-7Dn">
-                                <rect key="frame" x="169" y="315" width="37" height="37"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="cL7-PC-7Dn">
+                                <rect key="frame" x="169" y="347" width="37" height="37"/>
                                 <color key="color" name="headerColor" catalog="System" colorSpace="catalog"/>
                             </activityIndicatorView>
                             <view opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hT0-KK-yMI" customClass="PreviewCover" customModule="Pico" customModuleProvider="target">
@@ -485,8 +484,10 @@
                             <constraint firstItem="MqJ-uF-SXN" firstAttribute="leading" secondItem="hT0-KK-yMI" secondAttribute="leading" id="crr-K6-Lkm"/>
                             <constraint firstItem="M7h-il-qUt" firstAttribute="trailing" secondItem="MqJ-uF-SXN" secondAttribute="trailing" id="d4S-OX-9LN"/>
                             <constraint firstItem="sVd-lL-Emf" firstAttribute="leading" secondItem="BxA-5P-rMi" secondAttribute="leading" id="fPo-Um-FVW"/>
+                            <constraint firstItem="cL7-PC-7Dn" firstAttribute="centerX" secondItem="BxA-5P-rMi" secondAttribute="centerX" id="gzu-Iq-5Rr"/>
                             <constraint firstItem="BxA-5P-rMi" firstAttribute="bottom" secondItem="vrl-il-R3D" secondAttribute="bottom" id="iEj-ev-p5x"/>
                             <constraint firstItem="MqJ-uF-SXN" firstAttribute="bottom" secondItem="vrl-il-R3D" secondAttribute="top" constant="-1" id="iSl-wo-BrI"/>
+                            <constraint firstItem="cL7-PC-7Dn" firstAttribute="centerY" secondItem="BxA-5P-rMi" secondAttribute="centerY" id="kdT-5e-mJk"/>
                             <constraint firstItem="vrl-il-R3D" firstAttribute="leading" secondItem="MqJ-uF-SXN" secondAttribute="leading" id="oWS-CZ-gZt"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="BxA-5P-rMi"/>
@@ -535,7 +536,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="h2r-xB-xzJ" kind="relationship" relationship="rootViewController" id="qc9-Ra-JBo"/>
+                        <segue destination="ycZ-tp-DN7" kind="relationship" relationship="rootViewController" id="ieP-kN-gwb"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BqK-2l-fzQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -591,6 +592,7 @@
         <image name="user-edit-solid" width="24" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="ieP-kN-gwb"/>
         <segue reference="p86-VW-Pye"/>
     </inferredMetricsTieBreakers>
 </document>
