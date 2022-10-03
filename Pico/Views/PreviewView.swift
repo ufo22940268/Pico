@@ -209,7 +209,7 @@ extension PreviewView {
     func reloadVisibleCells() {
         let displayRect = convert(superview!.bounds, from: superview).intersection(bounds)
         findIntersectCellsAndConvert(with: displayRect)?.forEach {
-            $0.displayPixel()
+            $0.updatePixelView()
             $0.displaySign()
         }
     }
@@ -227,7 +227,8 @@ extension PreviewView {
             let rectInUICoordinate = viewRect.applying(transform.scaledBy(x: bounds.width, y: bounds.height))
             findIntersectCellsAndConvert(with: rectInUICoordinate)?.forEach { cell in
                 let intersectionCrop = cell.convert(rectInUICoordinate.intersection(cell.frame), from: self).applying(CGAffineTransform(scaleX: 1/CGFloat(cell.bounds.width), y: 1/CGFloat(cell.bounds.height)))
-                cell.updateCrop(with: intersectionCrop, identifier: viewCrop)
+                cell.updatePixelCrop(with: intersectionCrop, identifier: viewCrop)
+                cell.updatePixelView()
             }
         }
     }

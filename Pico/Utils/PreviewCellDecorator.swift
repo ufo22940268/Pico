@@ -87,7 +87,9 @@ class PreviewCellDecorator {
     
     func updatePixelCrop(with normalizedRect: CGRect, identifier: CropArea) {
         cropRects[identifier] = normalizedRect
-        renderPixelCrop(with: normalizedRect)
+        if forExport {            
+            renderPixelCrop(with: normalizedRect)
+        }
     }
     
     func removePixelCrop(by identifier: CropArea) {
