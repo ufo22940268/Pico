@@ -68,7 +68,12 @@ class OverlapDetector {
             group.leave()
         })
         setupRectRequest(request: upRectReqeust)
-        try! VNImageRequestHandler(cgImage: upImage.cgImage!, options: [:]).perform([upRectReqeust])
+        do {
+            try VNImageRequestHandler(cgImage: upImage.cgImage!, options: [:]).perform([upRectReqeust])
+        } catch {
+            print("VNImageRequestHandler error: \(error)")
+            return completeHandler(RectangleResult.empty())
+        }
 
         //Handle down image
         group.enter()
@@ -197,20 +202,29 @@ class OverlapDetector {
             prepares = prepares.sorted(by: { (tp1, tp2) -> Bool in
                 tp1.upRect.height < tp2.upRect.height
             })
-
+            
             let group = DispatchGroup()
             var imageOverlaps = [Int: (TranslationPrepare, CGFloat)]()
             for (index, prepare) in prepares.enumerated() {
                 group.enter()
                 let request = VNTranslationalImageRegistrationRequest(targetedCGImage: prepare.downImage, options: [:], completionHandler: {(request, error) in
-                    if let alignTransform = (request.results?.first as? VNImageTranslationAlignmentObservation)?.alignmentTransform, self.isTransformValid(alignTransform) {
 //                        print("index: \(index) clipHeight: \(prepare.upRect.height) \t \(alignTransform)")
-                        let imageOverlap = alignTransform.ty
-                        imageOverlaps[index] = (prepare, imageOverlap)
+                    if error == nil {
+                        if let alignTransform = (request.results?.first as? VNImageTranslationAlignmentObservation)?.alignmentTransform, self.isTransformValid(alignTransform) {
+                            let imageOverlap = alignTransform.ty
+                            imageOverlaps[index] = (prepare, imageOverlap)
+                        }
+                    } else {
+                        print("translation callback error: \(String(describing: error))")
                     }
                     group.leave()
                 })
-                try! VNImageRequestHandler(cgImage: prepare.upImage, options: [:]).perform([request])
+
+                do {
+                    try VNImageRequestHandler(cgImage: prepare.upImage, options: [:]).perform([request])
+                } catch {
+                    print("translation error: \(error)")
+                }
             }
             
             group.notify(queue: .main, execute: {
@@ -239,7 +253,12 @@ class OverlapDetector {
         detectOverlapRectangles(completeHandler: handleRectangle)
     }
     
-    struct TranslationPrepare:Hashable {
+    struct TranslationPrepare : Hashable, CustomStringConvertible {
+        
+        var description: String {
+            return "prepare: \(upImage) \(downImage)"
+        }
+        
         var hashValue: Int {
             return Int(upImage.width*upImage.height)
         }
@@ -265,6 +284,10 @@ class OverlapDetector {
             let maxClipThreshold = min(upRectInLTC.height, downRectInLTC.height)*clipPercent
             clipHeight = maxClipThreshold
         }
+        
+//        clipHeight = min(clipHeight, 300)
+//        clipHeight = 500
+        print("clipHeight: \(clipHeight)")
         
         upRectInLTC.origin.y = upRectInLTC.origin.y + (upRectInLTC.height - clipHeight)
         upRectInLTC.size.height = clipHeight
