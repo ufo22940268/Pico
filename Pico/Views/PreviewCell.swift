@@ -118,12 +118,12 @@ extension PreviewCell {
         decorator.updatePixelCrop(with: normalizedRect, identifier: identifier)
     }
     
-    func updatePixelView() {
+    func updatePixelRects() {
         guard decorator.isImageLoaded() else {return}
         
-        self.pixelView.image = pixelImage
         pixelView.updatePixelRects(Array(decorator.cropRects.values))
     }
+    
     
     func displaySign() {
         guard decorator.isImageLoaded() else {return}
@@ -166,6 +166,10 @@ extension PreviewCell {
         setNeedsDisplay()
     }
     
+    func updatePixelImageInPixelView() {
+        self.pixelView.image = pixelImage
+    }
+    
     func setPixelScale(_ scale: PreviewPixellateScale) {
         pixelScale = scale
         decorator?.updatePixelScale(scale)
@@ -202,7 +206,7 @@ extension PreviewCell : RecycleCell {
     }
     
     var pixelImage:UIImage {
-        return UIImage(ciImage: self.decorator!.pixellateImages[pixelScale]!)
+        return self.decorator!.pixellateImages[pixelScale]!.convertToUIImage()
     }
     
     func loadImage() { 
@@ -217,12 +221,14 @@ extension PreviewCell : RecycleCell {
         loadingSeq = image.resolve(completion: { (uiImage) in
             if let uiImage = uiImage {
                 let ciImage: CIImage = CIImage(image: uiImage)!
+                    .transformed(by: CGAffineTransform(scaleX: UIScreen.main.pixelSize.width/uiImage.size.width, y: UIScreen.main.pixelSize.width/uiImage.size.width))
                     .cropped(to: self.imageCrop.applying(CGAffineTransform(scaleX: UIScreen.main.pixelSize.width, y: uiImage.size.ratio*UIScreen.main.pixelSize.width)))
                 self.decorator.setImage(ciImage)
                 self.decorator?.boundWidth = self.bounds.width
                 self.decorator?.boundHeight = self.bounds.height
                 self.imageView.image = self.decorator.lastImage.convertToUIImage()
-                self.updatePixelView()
+                self.updatePixelRects()
+                self.updatePixelImageInPixelView()
             }
             self.showContentView()
             self.setNeedsDisplay()
