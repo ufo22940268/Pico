@@ -17,6 +17,12 @@ enum PreviewMode {
     case none, pixellate, sign, frame
 }
 
+extension UIScrollView {
+    func scrollToBottom() {
+        contentOffset = CGPoint(x: 0, y: contentSize.height - bounds.height)
+    }
+}
+
 struct SelectRegion {
     var startPoint: CGPoint!
     var endPoint: CGPoint!
@@ -78,9 +84,20 @@ class PreviewController: UIViewController {
         
     let minScale = CGFloat(0.5)
     let maxScale = CGFloat(2.0)
+    let toolbarHeight = CGFloat(44)
     
     @IBOutlet var pixelItems: [UIBarButtonItem]!
-    let bottomToolbarHeight = CGFloat(44)
+    
+    var subToolbarOpen : Bool = false
+    
+    var bottomToolbarHeight : CGFloat {
+        if subToolbarOpen {
+            return 44
+        } else {
+            return 0
+        }
+    }
+    
     var isDev: Bool = true
     
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
@@ -90,17 +107,33 @@ class PreviewController: UIViewController {
             case .pixellate:
                 cover.isUserInteractionEnabled = true
                 self.pixelllateGesture.isEnabled = true
+                onSubToolbarOpen(true)
+                scrollToBottomIfNeeded()
             case .sign:
-                scroll.setContentOffset(CGPoint(x: 0.0, y: scroll.contentSize.height - scroll.frame.height + bottomToolbarHeight), animated: true)
+                onSubToolbarOpen(true)
+                scrollToBottom()
                 break
             case .frame:
+                onSubToolbarOpen(true)
+                scrollToBottomIfNeeded()
                 break
             case .none:
                 cover.isUserInteractionEnabled = false
                 self.pixelllateGesture.isEnabled = false
                 hideToolbarItems()
+                onSubToolbarOpen(false)
             }
         }
+    }
+    
+    func scrollToBottomIfNeeded() {
+        if scroll.contentSize.height - (scroll.contentOffset.y + scroll.bounds.height) < toolbarHeight {
+            scrollToBottom()
+        }
+    }
+    
+    func scrollToBottom() {
+        scroll.setContentOffset(CGPoint(x: 0, y: scroll.contentSize.height - scroll.bounds.height + bottomToolbarHeight), animated: true)
     }
     
     func forDev() -> Bool {
@@ -138,7 +171,7 @@ class PreviewController: UIViewController {
                 let library = ImagesLibrary()
                 library.reload {
                     let album = Album.selectAllPhotoAlbum(albums: library.albums)!
-                    self.imageEntities = Array(album.items[0..<min(album.items.count, 3)])
+                    self.imageEntities = Array(album.items[0..<min(album.items.count, 5)])
                     self.cropRects = (0..<self.imageEntities.count).map {_ in CGRect(origin: CGPoint.zero, size: CGSize(width: 1, height: 1))}
                     self.preview.imageEntities = self.imageEntities
                     self.setupAfterLoaded()
@@ -212,49 +245,6 @@ class PreviewController: UIViewController {
         allToolbars.forEach {$0?.isHidden = true}
     }
 
-    func showToolbarItem(_ item: UIToolbar) {
-        hideToolbarItems()
-        item.isHidden = false
-    }
-    
-    @IBAction func onShareClick(_ sender: Any) {
-        let shareManager: ShareManager = ShareManager(viewController: self)
-        shareManager.showActions()
-    }
-    
-    @IBAction func onPixellateItemClick(_ sender: Any) {
-        if mode == .pixellate {
-            mode = .none
-        } else {
-            showToolbarItem(pixellateToolbar)
-            mode = .pixellate
-        }
-    }
-    
-    @IBAction func onSignItemClick(_ sender: Any) {
-        if mode == .sign {
-            mode = .none
-        } else {
-            showToolbarItem(signToolbar)
-            mode = .sign
-        }
-    }
-    
-    @IBAction func onPixelItemClick(_ sender: UIBarButtonItem) {
-        let tagToScale = [
-            0: PreviewPixellateScale.small,
-            1: .middle,
-            2: .large
-        ]
-        
-        
-        
-        preview.setPixelScale(scale: tagToScale[sender.tag]!)
-        preview.updatePixelInCells()
-        preview.setNeedsDisplay()
-        
-        updatePixelSelection(tag: sender.tag)
-    }
     
     func updatePixelSelection(tag: Int) {
         pixelItems.forEach { item in
@@ -316,9 +306,51 @@ extension PreviewController {
     }
 }
 
-// MARK: - Sign
+// MARK: - Toolbar
 extension PreviewController {
     
+    func showToolbarItem(_ item: UIToolbar) {
+        hideToolbarItems()
+        item.isHidden = false
+    }
+    
+    @IBAction func onShareClick(_ sender: Any) {
+        let shareManager: ShareManager = ShareManager(viewController: self)
+        shareManager.showActions()
+    }
+    
+    @IBAction func onPixellateItemClick(_ sender: Any) {
+        if mode == .pixellate {
+            mode = .none
+        } else {
+            showToolbarItem(pixellateToolbar)
+            mode = .pixellate
+        }
+    }
+    
+    @IBAction func onSignItemClick(_ sender: Any) {
+        if mode == .sign {
+            mode = .none
+        } else {
+            showToolbarItem(signToolbar)
+            mode = .sign
+        }
+    }
+    
+    @IBAction func onPixelItemClick(_ sender: UIBarButtonItem) {
+        let tagToScale = [
+            0: PreviewPixellateScale.small,
+            1: .middle,
+            2: .large
+        ]
+        
+        preview.setPixelScale(scale: tagToScale[sender.tag]!)
+        preview.updatePixelInCells()
+        preview.setNeedsDisplay()
+        
+        updatePixelSelection(tag: sender.tag)
+    }
+
     func onSignChanged(sign: String?) {
         let showItems = sign != nil
         signCancelItem.isEnabled = showItems
@@ -327,7 +359,7 @@ extension PreviewController {
         signAlignRightItem.isEnabled = showItems
         preview.reloadVisibleCells()
     }
-
+    
     @IBAction func onEditSign(_ sender: Any) {
         let alert = UIAlertController(title: "签名编辑", message: "请输入你的签名", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
@@ -356,6 +388,13 @@ extension PreviewController {
         }))
         alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    func onSubToolbarOpen(_ open: Bool) {
+        subToolbarOpen = open
+        var newInset = scroll.contentInset
+        newInset.bottom = bottomToolbarHeight
+        scroll.contentInset = newInset
     }
 }
 

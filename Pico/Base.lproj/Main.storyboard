@@ -466,7 +466,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="QGp-s0-rHz" firstAttribute="bottom" secondItem="vrl-il-R3D" secondAttribute="top" id="1Di-CR-xLu"/>
+                            <constraint firstItem="QGp-s0-rHz" firstAttribute="bottom" secondItem="vrl-il-R3D" secondAttribute="top" priority="250" id="1Di-CR-xLu"/>
                             <constraint firstItem="sVd-lL-Emf" firstAttribute="bottom" secondItem="vrl-il-R3D" secondAttribute="top" constant="-0.5" id="1fz-mX-3BP"/>
                             <constraint firstItem="bEx-xN-zR0" firstAttribute="width" secondItem="Mfd-mL-Qls" secondAttribute="width" id="2eT-Dy-80Y"/>
                             <constraint firstItem="M7h-il-qUt" firstAttribute="leading" secondItem="MqJ-uF-SXN" secondAttribute="leading" id="9PT-Vf-o9B"/>
