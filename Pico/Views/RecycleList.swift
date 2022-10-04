@@ -71,8 +71,8 @@ extension LoadingPlaceholder where Self : UIView {
         let image = UIImageView(image: #imageLiteral(resourceName: "image-regular.pdf"))
         image.translatesAutoresizingMaskIntoConstraints = false
         addSubview(image)
-        image.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0).isActive = true
-        image.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 1.0).isActive = true
+        image.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        image.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         image.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         image.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         image.contentMode = .center
