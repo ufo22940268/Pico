@@ -167,6 +167,7 @@ extension PreviewCell {
     }
     
     func updatePixelImageInPixelView() {
+        guard decorator.isImageLoaded() else {return}
         self.pixelView.image = pixelImage
     }
     
@@ -232,7 +233,6 @@ extension PreviewCell : RecycleCell {
             }
             self.showContentView()
             self.setNeedsDisplay()
-            self.setNeedsLayout()
         }, targetWidth: UIScreen.main.pixelSize.width, resizeMode: .fast, contentMode: .aspectFill)
     }
     
