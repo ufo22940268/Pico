@@ -225,7 +225,6 @@ class PreviewController: UIViewController {
                 let imageRect = selection.applying(preview.transform)
                 preview.updatePixellate(uiRect: imageRect)
             }
-
         } else if sender.state == .ended {
             cover.clearSelection()
             preview.closeLastRectCrop()

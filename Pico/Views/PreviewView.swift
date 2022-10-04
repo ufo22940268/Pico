@@ -30,9 +30,9 @@ struct CropArea: Hashable {
 }
 
 enum PreviewPixellateScale: Int {
-    case small = 11
-    case middle = 21
-    case large = 31
+    case small = 21
+    case middle = 31
+    case large = 41
 }
 
 struct PreviewConstants {
@@ -80,7 +80,6 @@ class PreviewView: UIStackView, RecycleList {
     var selection: CGRect?
     var areas: [CropArea] = [CropArea]()
     var labelView: UILabel!
-    var pixellateImages = [PreviewPixellateScale: CIImage]()
     
     var pixellateImage: CIImage?
     var signFontSize = CGFloat(20)
@@ -116,16 +115,6 @@ class PreviewView: UIStackView, RecycleList {
     func setupCells(images: [Image], crops: [CGRect], fillContainer: Bool = true) -> Void {
         cells = imageEntities.enumerated().map { (index, image) in
             addCell(with: image, hasCrop: crops[index])
-        }
-    }
-    
-    func applyPixel(image: CIImage, pixelScale: PreviewPixellateScale) -> CIImage {
-        return image.applyingFilter("CIPixellate", parameters: ["inputScale": pixelScale.rawValue])
-    }
-    
-    func preparePixellateImages(_ image: CIImage) {
-        for scale in [PreviewPixellateScale.small, .middle, .large] {
-            pixellateImages[scale] = applyPixel(image: image, pixelScale: scale)
         }
     }
     
