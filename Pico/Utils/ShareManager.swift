@@ -93,6 +93,7 @@ class ShareManager: NSObject {
     
     func saveToPhoto(image: UIImage) {
         if UIDevice.current.isSimulator {
+            raise(SIGTRAP)
             print("saved image with size \(image.size) to photos")
         } else {
             UIImageWriteToSavedPhotosAlbum(image, self, #selector(afterSaveToPhoto(_:didFinishSavingWithError:contextInfo:)), nil)

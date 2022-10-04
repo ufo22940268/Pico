@@ -50,6 +50,11 @@ extension CIImage {
         return canvas
     }
     
+    func resizeTo(width: CGFloat) -> CIImage {
+        let scale = width/extent.width
+        return transformed(by: CGAffineTransform(scaleX: scale, y: scale))
+    }
+
     static func resizeToSameWidth(images: [CIImage]) -> [CIImage] {
         let minWidth = images.min { (c1, c2) -> Bool in
             return c1.extent.width < c2.extent.width

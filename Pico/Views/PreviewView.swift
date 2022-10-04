@@ -127,26 +127,76 @@ class PreviewView: UIStackView, RecycleList {
         return croppedImages
     }
     
+    fileprivate func cropImageForExport(image: CIImage, cropRect: CGRect) -> CIImage {
+        let imageCrop = cropRect.applying(CGAffineTransform(scaleX: image.extent.width, y: image.extent.height))
+        
+        return image.cropped(to: imageCrop).transformed(by: CGAffineTransform(translationX: 0, y: -imageCrop.minY))
+    }
+    
     func renderImageForExport(imageEntities: [Image], cropRects: [CGRect], complete:  @escaping (UIImage) -> Void) {
-        Image.resolve(images: imageEntities, completion: { originalImages in
-            let filteredOriginalImages = originalImages as! [UIImage]
-            
-            var croppedImages = self.cropImagesForExport(images: filteredOriginalImages, cropRects: cropRects)
-            var finalImages = [CIImage]()
-            croppedImages = CIImage.resizeToSameWidth(images: croppedImages)
-            
-            for (index, croppedImage) in croppedImages.enumerated() {
-                let cell = self.cells[index]
-                finalImages.append(PreviewCellDecorator(image: croppedImage, cell: cell).composeImageForExport())
+//        Image.resolve(images: imageEntities, completion: { originalImages in
+//            let filteredOriginalImages = originalImages as! [UIImage]
+//
+//            var croppedImages = self.cropImagesForExport(images: filteredOriginalImages, cropRects: cropRects)
+//            var finalImages = [CIImage]()
+//            croppedImages = CIImage.resizeToSameWidth(images: croppedImages)
+//
+//            for (index, croppedImage) in croppedImages.enumerated() {
+//                let cell = self.cells[index]
+//                finalImages.append(PreviewCellDecorator(image: croppedImage, cell: cell).composeImageForExport())
+//            }
+//
+//            finalImages = PreviewFrameDecorator(images: finalImages, frameType: self.frameType).addFrames()
+//
+//            let canvas = CIImage.concateImages(images: finalImages, needScale: false)
+//
+//            let uiCanvas = canvas.convertToUIImage()
+//
+//            complete(uiCanvas)
+//        })
+        
+        let minWidth = cropRects.enumerated().map { offset, crop in
+            return crop.width * CGFloat(imageEntities[offset].asset.pixelWidth)
+        }.min()!
+        var canvas: CIImage? = nil
+        let group = DispatchGroup()
+        let queue = DispatchQueue(label: "com.bettycc.pico.preview.export")
+        queue.async {
+            imageEntities.enumerated().forEach { offset, entity in
+                group.enter()
+                self.renderSingleCellForExport(entity: entity, minWidth: minWidth, crop: cropRects[offset], offset: offset, complete: { (ciImage) in
+                    autoreleasepool {
+                        if canvas == nil {
+                            canvas = ciImage
+                        } else {
+                            canvas = CIImage.concateImages(images: [canvas!, ciImage], needScale: false)
+                        }
+                    }
+                    group.leave()
+                })
+                group.wait()
             }
             
-            finalImages = PreviewFrameDecorator(images: finalImages, frameType: self.frameType).addFrames()
-            
-            let canvas = CIImage.concateImages(images: finalImages, needScale: false)
-            
-            let uiCanvas = canvas.convertToUIImage()
-            
-            complete(uiCanvas)
+            group.notify(queue: .global()) {
+                let uiCanvas = canvas!.convertToUIImage()
+                complete(uiCanvas)
+            }
+        }
+        
+    }
+    
+    func renderSingleCellForExport(entity: Image, minWidth: CGFloat, crop: CGRect, offset: Int, complete: @escaping (CIImage) -> Void) {
+        let _ = entity.resolve(completion: { (uiImage) in
+            var ciImage = CIImage(image: uiImage!)!
+            ciImage = self.cropImageForExport(image: ciImage, cropRect: crop).resizeTo(width: minWidth)
+            ciImage = PreviewCellDecorator(image: ciImage, cell: self.cells[offset]).composeImageForExport()
+            let frameDecorator = PreviewFrameDecorator(image: ciImage, frameType: self.frameType)
+            if offset == 0 {
+                ciImage = frameDecorator.renderTopFrame()
+            } else {
+                ciImage = frameDecorator.renderNormalFrame()
+            }
+            complete(ciImage)
         })
     }
 }

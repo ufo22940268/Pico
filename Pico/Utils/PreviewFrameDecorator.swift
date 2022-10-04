@@ -11,7 +11,7 @@ import UIKit
 
 class PreviewFrameDecorator {
     
-    var images: [CIImage]!
+    var image: CIImage!
     var frameType: PreviewFrameType!
     var frameWidth: CGFloat!
     
@@ -19,13 +19,13 @@ class PreviewFrameDecorator {
         case sider, top, bottom
     }
 
-    init(images: [CIImage], frameType: PreviewFrameType) {
-        self.images = images
+    init(image: CIImage, frameType: PreviewFrameType) {
+        self.image = image
         self.frameType = frameType
-        self.frameWidth = PreviewConstants.frameWidth*(images.first!.extent.width/UIScreen.main.bounds.width)
+        self.frameWidth = PreviewConstants.frameWidth*(image.extent.width/UIScreen.main.bounds.width)
     }
     
-    func addTopFrame(for image: CIImage) -> CIImage {
+    func renderTopFrame() -> CIImage {
         var directions:[FrameDecoratorDirection]
         switch frameType! {
         case .full:
@@ -41,7 +41,7 @@ class PreviewFrameDecorator {
         return renderFrame(for: image, directions: directions)
     }
     
-    func addFrame(for image: CIImage) -> CIImage {
+    func renderNormalFrame() -> CIImage {
         var directions:[FrameDecoratorDirection]
         switch frameType! {
         case .full:
@@ -78,17 +78,5 @@ class PreviewFrameDecorator {
         canvas = canvas.clampedToExtent().cropped(to: rect)
         canvas = image.transformed(by: CGAffineTransform(translationX: (canvasWidth - image.extent.width)/2, y: canvasHeight > image.extent.height ? frameWidth : 0)).composited(over: canvas)
         return canvas
-    }
-    
-    func addFrames() -> [CIImage] {
-        var newImages = [CIImage]()
-        for (index, image) in images.enumerated() {
-            if index == 0 {
-                newImages.append(addTopFrame(for: image))
-            } else {
-                newImages.append(addFrame(for: image))
-            }
-        }
-        return newImages
     }
 }
