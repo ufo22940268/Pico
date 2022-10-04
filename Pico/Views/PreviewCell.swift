@@ -204,7 +204,7 @@ extension PreviewCell : RecycleCell {
         return UIImage(ciImage: self.decorator!.pixellateImages[pixelScale]!)
     }
     
-    func loadImage() {
+    func loadImage() { 
         guard loadingSeq == Int32(0) else {
             return
         }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="SDp-bB-QNW">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ycZ-tp-DN7">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -379,7 +379,7 @@
                                 </items>
                             </toolbar>
                             <toolbar hidden="YES" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MqJ-uF-SXN" userLabel="Pixellate Toolbar">
-                                <rect key="frame" x="0.0" y="578" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="578.5" width="375" height="44"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="lUn-pa-V9K"/>
                                     <barButtonItem title="Item" image="pixel-small" id="WoI-Hl-ng6" userLabel="small">
@@ -408,7 +408,7 @@
                                 </items>
                             </toolbar>
                             <toolbar hidden="YES" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M7h-il-qUt" userLabel="Sign Toolbar">
-                                <rect key="frame" x="0.0" y="578" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="578.5" width="375" height="44"/>
                                 <items>
                                     <barButtonItem image="ban-solid" id="fch-nv-6BW" userLabel="Cancel">
                                         <connections>
@@ -442,7 +442,7 @@
                                 </items>
                             </toolbar>
                             <toolbar hidden="YES" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sVd-lL-Emf" userLabel="Frame Toolbar">
-                                <rect key="frame" x="0.0" y="579" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="578.5" width="375" height="44"/>
                                 <items>
                                     <barButtonItem image="ban-solid" id="Ov6-XX-tTQ" userLabel="Cancel">
                                         <connections>
@@ -467,7 +467,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="QGp-s0-rHz" firstAttribute="bottom" secondItem="vrl-il-R3D" secondAttribute="top" id="1Di-CR-xLu"/>
-                            <constraint firstItem="sVd-lL-Emf" firstAttribute="bottom" secondItem="vrl-il-R3D" secondAttribute="top" id="1fz-mX-3BP"/>
+                            <constraint firstItem="sVd-lL-Emf" firstAttribute="bottom" secondItem="vrl-il-R3D" secondAttribute="top" constant="-0.5" id="1fz-mX-3BP"/>
                             <constraint firstItem="bEx-xN-zR0" firstAttribute="width" secondItem="Mfd-mL-Qls" secondAttribute="width" id="2eT-Dy-80Y"/>
                             <constraint firstItem="M7h-il-qUt" firstAttribute="leading" secondItem="MqJ-uF-SXN" secondAttribute="leading" id="9PT-Vf-o9B"/>
                             <constraint firstItem="QGp-s0-rHz" firstAttribute="leading" secondItem="Mfd-mL-Qls" secondAttribute="leading" id="Ark-YJ-Wvh"/>
@@ -478,7 +478,7 @@
                             <constraint firstItem="MqJ-uF-SXN" firstAttribute="trailing" secondItem="hT0-KK-yMI" secondAttribute="trailing" id="S2O-7H-aR8"/>
                             <constraint firstItem="vrl-il-R3D" firstAttribute="trailing" secondItem="MqJ-uF-SXN" secondAttribute="trailing" id="TqJ-zx-aOV"/>
                             <constraint firstItem="BxA-5P-rMi" firstAttribute="bottom" secondItem="hT0-KK-yMI" secondAttribute="bottom" id="Zdf-M2-tWo"/>
-                            <constraint firstItem="M7h-il-qUt" firstAttribute="bottom" secondItem="vrl-il-R3D" secondAttribute="top" constant="-1" id="ay7-bn-ho1"/>
+                            <constraint firstItem="M7h-il-qUt" firstAttribute="bottom" secondItem="vrl-il-R3D" secondAttribute="top" constant="-0.5" id="ay7-bn-ho1"/>
                             <constraint firstItem="hT0-KK-yMI" firstAttribute="trailing" secondItem="QGp-s0-rHz" secondAttribute="trailing" id="bOC-lk-gjb"/>
                             <constraint firstAttribute="trailing" secondItem="QGp-s0-rHz" secondAttribute="trailing" id="cn9-ym-s5f"/>
                             <constraint firstItem="MqJ-uF-SXN" firstAttribute="leading" secondItem="hT0-KK-yMI" secondAttribute="leading" id="crr-K6-Lkm"/>
@@ -486,7 +486,7 @@
                             <constraint firstItem="sVd-lL-Emf" firstAttribute="leading" secondItem="BxA-5P-rMi" secondAttribute="leading" id="fPo-Um-FVW"/>
                             <constraint firstItem="cL7-PC-7Dn" firstAttribute="centerX" secondItem="BxA-5P-rMi" secondAttribute="centerX" id="gzu-Iq-5Rr"/>
                             <constraint firstItem="BxA-5P-rMi" firstAttribute="bottom" secondItem="vrl-il-R3D" secondAttribute="bottom" id="iEj-ev-p5x"/>
-                            <constraint firstItem="MqJ-uF-SXN" firstAttribute="bottom" secondItem="vrl-il-R3D" secondAttribute="top" constant="-1" id="iSl-wo-BrI"/>
+                            <constraint firstItem="MqJ-uF-SXN" firstAttribute="bottom" secondItem="vrl-il-R3D" secondAttribute="top" constant="-0.5" id="iSl-wo-BrI"/>
                             <constraint firstItem="cL7-PC-7Dn" firstAttribute="centerY" secondItem="BxA-5P-rMi" secondAttribute="centerY" id="kdT-5e-mJk"/>
                             <constraint firstItem="vrl-il-R3D" firstAttribute="leading" secondItem="MqJ-uF-SXN" secondAttribute="leading" id="oWS-CZ-gZt"/>
                         </constraints>
@@ -592,7 +592,7 @@
         <image name="user-edit-solid" width="24" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ieP-kN-gwb"/>
+        <segue reference="fvF-Lz-IAD"/>
         <segue reference="p86-VW-Pye"/>
     </inferredMetricsTieBreakers>
 </document>
