@@ -133,7 +133,10 @@ class PreviewController: UIViewController {
     }
     
     func scrollToBottom() {
-        scroll.setContentOffset(CGPoint(x: 0, y: scroll.contentSize.height - scroll.bounds.height + bottomToolbarHeight), animated: true)
+        guard scroll.contentSize.height > scroll.bounds.height else {
+            return
+        }
+        scroll.setContentOffset(CGPoint(x: scroll.contentOffset.x, y: scroll.contentSize.height - scroll.bounds.height + bottomToolbarHeight), animated: true)
     }
     
     func forDev() -> Bool {
@@ -222,8 +225,7 @@ class PreviewController: UIViewController {
             selectRegion.endPoint = currentPoint
             if let selection = selectRegion.toRect(), insidePreview(selection: selection) {
                 cover.drawSelection(rect: cover.convert(selection.applying(CGAffineTransform(scaleX: preview.bounds.width, y: preview.bounds.height)), from: preview) )
-                let imageRect = selection.applying(preview.transform)
-                preview.updatePixellate(uiRect: imageRect)
+                preview.updatePixellate(uiRect: selection)
             }
         } else if sender.state == .ended {
             cover.clearSelection()
@@ -391,9 +393,10 @@ extension PreviewController {
     
     func onSubToolbarOpen(_ open: Bool) {
         subToolbarOpen = open
-        var newInset = scroll.contentInset
-        newInset.bottom = bottomToolbarHeight
-        scroll.contentInset = newInset
+//        var newInset = scroll.contentInset
+//        newInset.bottom = bottomToolbarHeight
+//        scroll.contentInset = newInset
+        centerPreview()
     }
 }
 
