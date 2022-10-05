@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="SDp-bB-QNW">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="MIE-CQ-9z1">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -359,21 +359,21 @@
                                     <constraint firstAttribute="height" constant="44" id="kyl-Lc-oyz"/>
                                 </constraints>
                                 <items>
-                                    <barButtonItem title="pixellate" image="preview_tab_pixellate" id="Jpo-TY-qG5">
-                                        <connections>
-                                            <action selector="onPixellateItemClick:" destination="ycZ-tp-DN7" id="TAA-Jw-D5W"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="4iH-i3-ZWA"/>
                                     <barButtonItem title="sign" image="preview_tab_sign" id="ini-6o-mkw">
                                         <connections>
                                             <action selector="onSignItemClick:" destination="ycZ-tp-DN7" id="Bwm-Fb-YBT"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="HbI-EF-9ax"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="4iH-i3-ZWA"/>
                                     <barButtonItem title="Item" image="full-frame" id="9JI-Fm-4o5" userLabel="Frame">
                                         <connections>
                                             <action selector="onFrameItemClick:" destination="ycZ-tp-DN7" id="7EU-DE-eeZ"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="HbI-EF-9ax"/>
+                                    <barButtonItem title="pixellate" image="preview_tab_pixellate" id="Jpo-TY-qG5">
+                                        <connections>
+                                            <action selector="onPixellateItemClick:" destination="ycZ-tp-DN7" id="TAA-Jw-D5W"/>
                                         </connections>
                                     </barButtonItem>
                                 </items>
@@ -515,6 +515,9 @@
                         <outletCollection property="pixelItems" destination="WoI-Hl-ng6" collectionClass="NSMutableArray" id="6Qy-0P-EEZ"/>
                         <outletCollection property="pixelItems" destination="EuN-aH-fgk" collectionClass="NSMutableArray" id="4Ne-Y5-uxH"/>
                         <outletCollection property="pixelItems" destination="fVP-Kp-X7O" collectionClass="NSMutableArray" id="QUl-0y-yYD"/>
+                        <outletCollection property="tabToolbarItems" destination="ini-6o-mkw" collectionClass="NSMutableArray" id="nOI-Ef-CRS"/>
+                        <outletCollection property="tabToolbarItems" destination="9JI-Fm-4o5" collectionClass="NSMutableArray" id="7Cm-26-42B"/>
+                        <outletCollection property="tabToolbarItems" destination="Jpo-TY-qG5" collectionClass="NSMutableArray" id="jsP-Wa-KTR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kmb-T7-QMy" userLabel="First Responder" sceneMemberID="firstResponder"/>

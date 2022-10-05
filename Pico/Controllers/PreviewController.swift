@@ -88,6 +88,7 @@ class PreviewController: UIViewController {
     
     @IBOutlet var pixelItems: [UIBarButtonItem]!
     
+    @IBOutlet var tabToolbarItems: [UIBarButtonItem]!
     var subToolbarOpen : Bool = false
     
     var bottomToolbarHeight : CGFloat {
@@ -104,24 +105,39 @@ class PreviewController: UIViewController {
     var mode:PreviewMode = .none {
         willSet(mode) {
             switch mode {
+            case .sign:
+                onSubToolbarOpen(true)
+                scrollToBottom()
+                activeToolbarItem(at: 0)
+                break
+            case .frame:
+                onSubToolbarOpen(true)
+                scrollToBottomIfNeeded()
+                activeToolbarItem(at: 1)
+                break
             case .pixellate:
                 cover.isUserInteractionEnabled = true
                 self.pixelllateGesture.isEnabled = true
                 onSubToolbarOpen(true)
                 scrollToBottomIfNeeded()
-            case .sign:
-                onSubToolbarOpen(true)
-                scrollToBottom()
-                break
-            case .frame:
-                onSubToolbarOpen(true)
-                scrollToBottomIfNeeded()
+                activeToolbarItem(at: 2)
                 break
             case .none:
                 cover.isUserInteractionEnabled = false
                 self.pixelllateGesture.isEnabled = false
                 hideToolbarItems()
                 onSubToolbarOpen(false)
+                activeToolbarItem(at: nil)
+            }
+        }
+    }
+    
+    func activeToolbarItem(at position: Int?) {
+        tabToolbarItems.enumerated().forEach {offset, item in
+            if offset == position {
+                item.tintColor = UIColor.system
+            } else {
+                item.tintColor = UIColor.gray
             }
         }
     }
@@ -164,6 +180,7 @@ class PreviewController: UIViewController {
         
         scroll.layoutIfNeeded()
         preview.loadImages(scrollView: scroll)
+        activeToolbarItem(at: nil)
     }
     
     override func viewDidLoad() {
@@ -393,9 +410,6 @@ extension PreviewController {
     
     func onSubToolbarOpen(_ open: Bool) {
         subToolbarOpen = open
-//        var newInset = scroll.contentInset
-//        newInset.bottom = bottomToolbarHeight
-//        scroll.contentInset = newInset
         centerPreview()
     }
 }
