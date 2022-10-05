@@ -78,11 +78,17 @@ class PreviewCellDecorator {
     
     
     func toUICoordinate(from rect: CGRect) -> CGRect {
-        return rect.applying(CGAffineTransform(scaleX: boundWidth, y: boundHeight))
+        return rect.applying(CGAffineTransform(scaleX: imageSize.width, y: imageSize.height))
+    }
+    
+    var imageSize: CGSize {
+        return lastImage.extent.size
     }
     
     func renderPixelCrop(with rect: CGRect)  {
-        lastImage = pixellateImages[pixellateScale]!.cropped(to: toUICoordinate(from: rect).convertLTCToLBC(frameHeight: boundHeight)).composited(over: lastImage)
+        lastImage = pixellateImages[pixellateScale]!
+            .cropped(to: toUICoordinate(from: rect).convertLTCToLBC(frameHeight: imageSize.height))
+            .composited(over: lastImage)
     }
     
     func updatePixelCrop(with normalizedRect: CGRect, identifier: CropArea) {

@@ -130,7 +130,9 @@ class PreviewView: UIStackView, RecycleList {
     fileprivate func cropImageForExport(image: CIImage, cropRect: CGRect) -> CIImage {
         let imageCrop = cropRect.applying(CGAffineTransform(scaleX: image.extent.width, y: image.extent.height))
         
-        return image.cropped(to: imageCrop).transformed(by: CGAffineTransform(translationX: 0, y: -imageCrop.minY))
+        return image.cropped(to: imageCrop)
+            .resetOffset()
+//            .transformed(by: CGAffineTransform(translationX: 0, y: -imageCrop.minY))
     }
     
     func renderImageForExport(imageEntities: [Image], cropRects: [CGRect], complete:  @escaping (UIImage) -> Void) {
