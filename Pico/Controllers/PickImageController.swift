@@ -269,6 +269,7 @@ extension PickImageController {
 }
 
 extension PickImageController: PHPhotoLibraryChangeObserver {
+    
     func photoLibraryDidChange(_ changeInstance: PHChange) {
         guard let collectionView = self.imageGallery.collection else { return }
         // Change notifications may be made on a background queue.
