@@ -218,7 +218,7 @@ class PreviewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         centerPreview()
-    }    
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -289,6 +289,7 @@ extension PreviewController: UIScrollViewDelegate {
         let offsetY = max((scroll.bounds.height - scroll.contentSize.height) * 0.5, 0)
         scroll.contentInset = UIEdgeInsets(top: offsetY, left: offsetX, bottom: bottomToolbarHeight, right: 0)
     }
+    
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         centerPreview()

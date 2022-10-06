@@ -32,7 +32,7 @@ class ShareManager: NSObject {
     
     init(viewController: UIViewController) {
         self.viewController = viewController
-        self.imageGenerator = viewController as! ShareImageGenerator
+        self.imageGenerator = viewController as? ShareImageGenerator
         alertVC = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         okAction = UIAlertAction(title: "OK", style: .default)
         okAction.isEnabled = false

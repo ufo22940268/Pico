@@ -245,6 +245,9 @@
                             </scrollView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="479-VI-HKL">
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="T2H-kV-f5l"/>
+                                </constraints>
                                 <items>
                                     <barButtonItem title="Item" image="clone-regular" id="b6H-km-LJ3" userLabel="Slide">
                                         <connections>
@@ -295,7 +298,6 @@
                         </userDefinedRuntimeAttributes>
                     </navigationItem>
                     <connections>
-                        <outlet property="bottomConstraint" destination="2Gc-LI-0x1" id="lvg-t4-Nbw"/>
                         <outlet property="container" destination="3Jb-z4-kgp" id="M0F-LT-kJO"/>
                         <outlet property="containerLeadingConstraint" destination="7bH-SJ-Ixx" id="rez-I9-IEM"/>
                         <outlet property="containerTrailingConstraint" destination="GHB-58-3aE" id="W3Z-kD-ujB"/>
@@ -306,7 +308,6 @@
                         <outlet property="loadingIndicator" destination="3fT-eg-GIo" id="FGP-ea-JSz"/>
                         <outlet property="panGesture" destination="rOY-HI-ftD" id="MOz-FL-lRy"/>
                         <outlet property="scroll" destination="Qfn-Hc-ipw" id="lun-dp-7Ar"/>
-                        <outlet property="topConstraint" destination="bre-SP-3Ha" id="ILm-lm-TFt"/>
                         <outletCollection property="slideTypeItems" destination="b6H-km-LJ3" collectionClass="NSMutableArray" id="dY2-kF-hPD"/>
                         <outletCollection property="slideTypeItems" destination="Jv1-Pt-f0v" collectionClass="NSMutableArray" id="pRp-mm-16S"/>
                     </connections>
@@ -348,7 +349,7 @@
                                 <color key="color" name="headerColor" catalog="System" colorSpace="catalog"/>
                             </activityIndicatorView>
                             <view opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hT0-KK-yMI" customClass="PreviewCover" customModule="Pico" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="-44" width="375" height="711"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="JII-QL-bxo" appends="YES" id="3O4-IY-mcr"/>
                                 </connections>
@@ -470,10 +471,10 @@
                             <constraint firstItem="sVd-lL-Emf" firstAttribute="bottom" secondItem="vrl-il-R3D" secondAttribute="top" constant="-0.5" id="1fz-mX-3BP"/>
                             <constraint firstItem="bEx-xN-zR0" firstAttribute="width" secondItem="Mfd-mL-Qls" secondAttribute="width" id="2eT-Dy-80Y"/>
                             <constraint firstItem="M7h-il-qUt" firstAttribute="leading" secondItem="MqJ-uF-SXN" secondAttribute="leading" id="9PT-Vf-o9B"/>
+                            <constraint firstItem="BxA-5P-rMi" firstAttribute="top" secondItem="QGp-s0-rHz" secondAttribute="top" id="ApI-fM-o3v"/>
                             <constraint firstItem="QGp-s0-rHz" firstAttribute="leading" secondItem="Mfd-mL-Qls" secondAttribute="leading" id="Ark-YJ-Wvh"/>
                             <constraint firstItem="BxA-5P-rMi" firstAttribute="trailing" secondItem="sVd-lL-Emf" secondAttribute="trailing" id="GRK-SN-W8c"/>
                             <constraint firstItem="hT0-KK-yMI" firstAttribute="leading" secondItem="QGp-s0-rHz" secondAttribute="leading" id="KVb-kn-sWa"/>
-                            <constraint firstItem="QGp-s0-rHz" firstAttribute="top" secondItem="Mfd-mL-Qls" secondAttribute="top" id="McI-6U-wpX"/>
                             <constraint firstItem="hT0-KK-yMI" firstAttribute="centerY" secondItem="QGp-s0-rHz" secondAttribute="centerY" id="MgU-T9-mel"/>
                             <constraint firstItem="MqJ-uF-SXN" firstAttribute="trailing" secondItem="hT0-KK-yMI" secondAttribute="trailing" id="S2O-7H-aR8"/>
                             <constraint firstItem="vrl-il-R3D" firstAttribute="trailing" secondItem="MqJ-uF-SXN" secondAttribute="trailing" id="TqJ-zx-aOV"/>
@@ -594,7 +595,7 @@
         <image name="user-edit-solid" width="24" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="POO-oW-Ira"/>
+        <segue reference="fvF-Lz-IAD"/>
         <segue reference="K7U-HG-x3b"/>
     </inferredMetricsTieBreakers>
 </document>
