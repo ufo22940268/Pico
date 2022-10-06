@@ -120,11 +120,16 @@ class PreviewCellDecorator {
     }
     
     func pixelImage(image: CIImage, pixelScale: PreviewPixellateScale) -> CIImage {
-        let scale = !forExport ? CGFloat(pixelScale.rawValue) : CGFloat(pixelScale.rawValue)*exportRatio
+        let scale = Int(!forExport ? CGFloat(pixelScale.rawValue) : CGFloat(pixelScale.rawValue)*exportRatio)
+        let compatibleSize = CGSize(width: Int(image.extent.width) - Int(image.extent.width)%scale, height: Int(image.extent.height) - Int(image.extent.height)%scale)
+        let compatibleImage = image.cropped(to: CGRect(origin: image.extent.origin, size: compatibleSize))
         
-        let inputCenter = forExport ? CIVector(cgPoint: CGPoint(x: lastImage.extent.midX, y: lastImage.extent.midY)) : CIVector(cgPoint: CGPoint(x: UIScreen.main.pixelBounds.midX, y: UIScreen.main.pixelBounds.midY))
+//        let inputCenter = forExport ? CIVector(cgPoint: CGPoint(x: compatibleImage.extent.midX, y: compatibleImage.extent.midY)) : CIVector(cgPoint: CGPoint(x: UIScreen.main.pixelBounds.midX, y: UIScreen.main.pixelBounds.midY))
         
-        var pixelImage = image.applyingFilter("CIPixellate", parameters: ["inputScale": scale, "inputCenter": inputCenter])
+        let inputCenter = CIVector(cgPoint: CGPoint(x: Int(compatibleImage.extent.width)/scale/2*scale, y: Int(compatibleImage.extent.height)/scale/2*scale))
+        
+        var pixelImage = compatibleImage.applyingFilter("CIPixellate", parameters: ["inputScale": scale]).resetOffset()
+        pixelImage = pixelImage.transformed(by: CGAffineTransform(scaleX: image.extent.width/pixelImage.extent.width, y: image.extent.height/pixelImage.extent.height))
 //        pixelImage = pixelImage.cropped(to: CGRect(origin: CGPoint.zero, size: lastImage.extent.size))
         
         return pixelImage
