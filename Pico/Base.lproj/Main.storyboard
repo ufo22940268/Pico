@@ -172,6 +172,12 @@
                                 <action selector="onClickCanncel:" destination="M0x-L9-9tl" id="WhO-yB-noZ"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="rl6-nr-6wz"/>
+                        <barButtonItem enabled="NO" title="最近截图" id="j3o-LW-0EB" userLabel="Recent Screenshots">
+                            <connections>
+                                <segue destination="h2r-xB-xzJ" kind="show" identifier="composeRecentScreenshot" id="p86-VW-Pye"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="MlG-F4-Pt3"/>
                         <barButtonItem enabled="NO" title="竖向拼接" image="clone-regular" id="YC7-Tx-url">
                             <connections>
@@ -180,13 +186,7 @@
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" title="所有图片" id="Wls-ep-VAL">
-                        <barButtonItem key="rightBarButtonItem" enabled="NO" title="最近截图" id="j3o-LW-0EB" userLabel="Recent Screenshots">
-                            <connections>
-                                <segue destination="h2r-xB-xzJ" kind="show" identifier="composeRecentScreenshot" id="p86-VW-Pye"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="所有图片" id="Wls-ep-VAL"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <connections>
                         <outlet property="cancelItem" destination="CjG-Lh-uqX" id="WJQ-eP-gzP"/>

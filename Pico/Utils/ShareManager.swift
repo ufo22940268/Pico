@@ -99,7 +99,7 @@ class ShareManager: NSObject {
             UIImageWriteToSavedPhotosAlbum(image, self, #selector(afterSaveToPhoto(_:didFinishSavingWithError:contextInfo:)), nil)
         }
     }
-    
+
     func shareToWechat(image: UIImage, destination: ShareDestination) {
         var monkeyMessage: MonkeyKing.Message
         if destination == .session {
