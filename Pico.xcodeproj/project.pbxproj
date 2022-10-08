@@ -65,6 +65,7 @@
 		42C84780215C9EE300A3ECF8 /* Storyboards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C8477F215C9EE300A3ECF8 /* Storyboards.swift */; };
 		42C84782215CA11800A3ECF8 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C84781215CA11800A3ECF8 /* OnboardingViewController.swift */; };
 		42C89D6F210998AB00792EED /* VNRectangleObservationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C89D6E210998AB00792EED /* VNRectangleObservationExtension.swift */; };
+		42D5FBE6216AEC36003047C6 /* ScreenDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D5FBE5216AEC36003047C6 /* ScreenDetector.swift */; };
 		42D69DC12151EF1A00BAD5BD /* PixelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D69DC02151EF1A00BAD5BD /* PixelView.swift */; };
 		42D69DC32153456D00BAD5BD /* MonkeyKing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D69DC22153456D00BAD5BD /* MonkeyKing.framework */; };
 		42DA302A210B551A00C19AB8 /* SideSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DA3029210B551A00C19AB8 /* SideSlider.swift */; };
@@ -179,6 +180,7 @@
 		42C8477F215C9EE300A3ECF8 /* Storyboards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storyboards.swift; sourceTree = "<group>"; };
 		42C84781215CA11800A3ECF8 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		42C89D6E210998AB00792EED /* VNRectangleObservationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VNRectangleObservationExtension.swift; sourceTree = "<group>"; };
+		42D5FBE5216AEC36003047C6 /* ScreenDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenDetector.swift; sourceTree = "<group>"; };
 		42D69DC02151EF1A00BAD5BD /* PixelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelView.swift; sourceTree = "<group>"; };
 		42D69DC22153456D00BAD5BD /* MonkeyKing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MonkeyKing.framework; path = Carthage/Build/iOS/MonkeyKing.framework; sourceTree = "<group>"; };
 		42DA3029210B551A00C19AB8 /* SideSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideSlider.swift; sourceTree = "<group>"; };
@@ -343,6 +345,7 @@
 				42E93CE72136979C00FB0433 /* FrameDetector.swift */,
 				4251DEFB213E60F500B63E94 /* PreviewCellDecorator.swift */,
 				4251DEFD213E613500B63E94 /* PreviewFrameDecorator.swift */,
+				42D5FBE5216AEC36003047C6 /* ScreenDetector.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -556,6 +559,7 @@
 				420EF44820F965FA006CCDD3 /* AutoConcate.swift in Sources */,
 				42143E0020F83D7900000487 /* GalleryDetailController.swift in Sources */,
 				420EF45220FD5665006CCDD3 /* PreviewCover.swift in Sources */,
+				42D5FBE6216AEC36003047C6 /* ScreenDetector.swift in Sources */,
 				42D69DC12151EF1A00BAD5BD /* PixelView.swift in Sources */,
 				42A18C7A20EAF8A500DD4AA5 /* ImageGalleryController.swift in Sources */,
 				420EF44C20FCA784006CCDD3 /* PreviewController.swift in Sources */,

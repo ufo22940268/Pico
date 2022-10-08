@@ -1,6 +1,23 @@
 import UIKit
 import Photos
+import Vision
 
+extension Array where Element: FloatingPoint {
+    
+    func sum() -> Element {
+        return self.reduce(0, +)
+    }
+    
+    func avg() -> Element {
+        return self.sum() / Element(self.count)
+    }
+    
+    func std() -> Element {
+        let mean = self.avg()
+        let v = self.reduce(0, { $0 + ($1-mean)*($1-mean) })
+        return sqrt(v / (Element(self.count) - 1))
+    }
+}
 /// Wrap a PHAsset
 public class Image: Equatable {
     
@@ -102,8 +119,65 @@ extension Image {
     }
 }
 
+extension Image {
+    
+    static func detectType(image: UIImage, complete: @escaping (AssetImageType) -> Void) {
+        ImageClassifier(image: image).detectType(complete: complete)
+    }
+}
+
+
 // MARK: - Equatable
 
 public func == (lhs: Image, rhs: Image) -> Bool {
     return lhs.asset == rhs.asset
+}
+
+enum AssetImageType {
+    case normal, movie
+}
+
+class ImageClassifier {
+    
+    var image: UIImage!
+    let movieResolutions = [
+        ScreenDetector.allScreenshotSizes.map{CGSize(width: $0.height, height: $0.width)},
+        [CGSize(width: 1920, height: 1080), CGSize(width: 1280, height: 720)]
+    ].joined()
+    
+    init(image: UIImage) {
+        self.image = image
+    }
+    
+    func charactersInMovie(_ characters: [VNRectangleObservation]) -> Bool {
+        let heights = characters.map {$0.topLeft.y - $0.bottomLeft.y}
+        let ys = characters.map {$0.topLeft.y}
+        let torlerence = CGFloat(0.0001)
+        print("heights: \(heights.std()), ys: \(ys.std())")
+        return heights.std() < torlerence && ys.std() < torlerence
+    }
+    
+    func conformsToMovieResolution() -> Bool {
+        let size = image.size
+        return movieResolutions.contains(size)
+    }
+    
+    func detectType(complete: @escaping (AssetImageType) -> Void) {
+        let request = VNDetectTextRectanglesRequest { (request, error) in
+            var type: AssetImageType = .normal
+            if let result = request.results?.first, let characterBoxes = (result as! VNTextObservation).characterBoxes {
+                if self.conformsToMovieResolution() && self.charactersInMovie(characterBoxes) {
+                    type = .movie
+                }
+            } else {
+                print("detect type error: \(error.debugDescription)")
+            }
+            
+            complete(type)
+        }
+        request.regionOfInterest = CGRect(origin: CGPoint.zero, size: CGSize(width: 1, height: 0.3))
+        request.reportCharacterBoxes = true
+        
+        try! VNImageRequestHandler(cgImage: image.cgImage!, options: [:]).perform([request])
+    }
 }
