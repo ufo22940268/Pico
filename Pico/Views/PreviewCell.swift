@@ -87,7 +87,6 @@ class PreviewCell: UIView {
         imageView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         imageView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         imageView.isOpaque = false
-        imageView.contentMode = .scaleToFill
         
         pixelView = PixelView(frame: CGRect.zero)
         addSubview(pixelView)
@@ -223,7 +222,7 @@ extension PreviewCell : RecycleCell {
                 self.decorator?.boundHeight = self.bounds.height
                 self.imageView.image = uiImage
                 self.imageView.cropRect = self.imageCrop
-                self.pixelView.cropRect = self.imageCrop
+//                self.pixelView.cropRect = self.imageCrop
                 
                 self.showContentView()
                 self.setNeedsDisplay()
