@@ -152,7 +152,7 @@ class ImageClassifier {
     func charactersInMovie(_ characters: [VNRectangleObservation]) -> Bool {
         let heights = characters.map {$0.topLeft.y - $0.bottomLeft.y}
         let ys = characters.map {$0.topLeft.y}
-        let torlerence = CGFloat(0.0001)
+        let torlerence = CGFloat(0.01)
         print("heights: \(heights.std()), ys: \(ys.std())")
         return heights.std() < torlerence && ys.std() < torlerence
     }
@@ -175,7 +175,7 @@ class ImageClassifier {
             
             complete(type)
         }
-        request.regionOfInterest = CGRect(origin: CGPoint.zero, size: CGSize(width: 1, height: 0.3))
+        request.regionOfInterest = CGRect(origin: CGPoint.zero, size: CGSize(width: 1, height: 0.5))
         request.reportCharacterBoxes = true
         
         try! VNImageRequestHandler(cgImage: image.cgImage!, options: [:]).perform([request])
