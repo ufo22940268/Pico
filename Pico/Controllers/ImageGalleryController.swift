@@ -162,6 +162,9 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectImage = images[indexPath.item]
+        if selectImages.count < 6 {
+            selectImage.cache()
+        }
         guard selectImages.count < maxSelectCount else {
             let ac = UIAlertController(title: nil, message: "最多只能选择\(maxSelectCount)张图片", preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: "ok", style: .default))
@@ -176,6 +179,7 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDelega
     
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         let selectImage = images[indexPath.item]
+        selectImage.uncache()
         if selectImages.contains(selectImage) {
             selectImages.remove(at: selectImages.index(of: selectImage)!)
         }

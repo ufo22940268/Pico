@@ -22,7 +22,20 @@ extension Array where Element: FloatingPoint {
 public class Image: Equatable {
     
     public var asset: PHAsset
+    let imageManager = PHImageManager.default()
+    let cacheImageManager:PHCachingImageManager = {
+        let manager = PHCachingImageManager.default() as! PHCachingImageManager
+        manager.allowsCachingHighQualityImages = true
+        return manager
+    } ()
     
+    var cacheOptions:PHImageRequestOptions {
+        let options = PHImageRequestOptions()
+        options.resizeMode = .fast
+        options.isNetworkAccessAllowed = true
+        options.deliveryMode = .highQualityFormat
+        return options
+    }
     
     var assetSize:CGSize {
         return CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
@@ -34,11 +47,23 @@ public class Image: Equatable {
         self.asset = asset
     }
     
+    func cache() {
+        let width = UIScreen.main.pixelSize.width
+        let height = CGFloat(asset.pixelHeight)/CGFloat(asset.pixelWidth)*width
+        cacheImageManager.startCachingImages(for: [asset], targetSize: CGSize(width: width, height: height), contentMode: .aspectFill, options: cacheOptions)
+    }
+    
+    func uncache() {
+        let width = UIScreen.main.pixelSize.width
+        let height = CGFloat(asset.pixelHeight)/CGFloat(asset.pixelWidth)*width
+        cacheImageManager.stopCachingImages(for: [asset], targetSize: CGSize(width: width, height: height), contentMode: .aspectFill, options: cacheOptions)
+    }
+    
     /// Resolve UIImage synchronously
     ///
     /// - Parameter size: The target size
     /// - Returns: The resolved UIImage, otherwise nil
-    public func resolve(completion: @escaping (UIImage?) -> Void, targetWidth: CGFloat? = nil, targetSize: CGSize? = nil, deliveryMode: PHImageRequestOptionsDeliveryMode = .highQualityFormat, resizeMode: PHImageRequestOptionsResizeMode = .fast, contentMode: PHImageContentMode = .default, isSynchronize: Bool = false) -> Int32 {
+    public func resolve(completion: @escaping (UIImage?) -> Void, targetWidth: CGFloat? = nil, targetSize: CGSize? = nil, deliveryMode: PHImageRequestOptionsDeliveryMode = .highQualityFormat, resizeMode: PHImageRequestOptionsResizeMode = .fast, contentMode: PHImageContentMode = .default, isSynchronize: Bool = false, cache:Bool = false) -> Int32 {
         var size:CGSize
         
         if targetSize != nil {
@@ -55,7 +80,8 @@ public class Image: Equatable {
         options.resizeMode = resizeMode
         options.isSynchronous = isSynchronize
         
-        return PHImageManager.default().requestImage(
+        let manager = cache ? cacheImageManager : imageManager
+        return manager.requestImage(
             for: asset,
             targetSize: size,
             contentMode: contentMode,
@@ -78,7 +104,7 @@ class ImageMocker: Image {
         self.uiImage = image
     }
     
-    override func resolve(completion: @escaping (UIImage?) -> Void, targetWidth: CGFloat?, targetSize: CGSize?, deliveryMode: PHImageRequestOptionsDeliveryMode, resizeMode: PHImageRequestOptionsResizeMode, contentMode: PHImageContentMode, isSynchronize: Bool = false) -> Int32 {
+    override func resolve(completion: @escaping (UIImage?) -> Void, targetWidth: CGFloat?, targetSize: CGSize?, deliveryMode: PHImageRequestOptionsDeliveryMode, resizeMode: PHImageRequestOptionsResizeMode, contentMode: PHImageContentMode, isSynchronize: Bool = false, cache:Bool = false) -> Int32 {
         completion(uiImage)
         return Int32.random(in: 1...10000)
     }

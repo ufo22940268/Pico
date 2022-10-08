@@ -208,7 +208,7 @@ extension PreviewCell : RecycleCell {
     }
     
     var pixelImage:UIImage {
-        return self.decorator!.pixellateImages[pixelScale]!.convertToUIImage()
+        return self.decorator!.pixellateUIImages[pixelScale]!
     }
     
     func loadImage() { 
@@ -219,24 +219,27 @@ extension PreviewCell : RecycleCell {
         showPlaceholder()
         loadingSeq = image.resolve(completion: { (uiImage) in
             if let uiImage = uiImage {
-//                var ciImage: CIImage = CIImage(image: uiImage)!
-//                ciImage = ciImage.cropped(to: self.imageCrop.applying(CGAffineTransform(scaleX: ciImage.extent.width, y: ciImage.extent.height)))
-//                ciImage = ciImage.transformed(by: CGAffineTransform(scaleX: UIScreen.main.pixelSize.width/ciImage.extent.width, y: UIScreen.main.pixelSize.width/ciImage.extent.width))
-                self.decorator.setImage(CIImage(image: uiImage)!)
                 self.decorator?.boundWidth = self.bounds.width
                 self.decorator?.boundHeight = self.bounds.height
-                UIView.transition(with: self.imageView, duration: 0.3, options: .transitionCrossDissolve, animations: {
-                    self.imageView.image = uiImage
-                    self.imageView.cropRect = self.imageCrop
-                    self.pixelView.cropRect = self.imageCrop
-                }, completion: { success in
-                    self.updatePixelRects()
-                    self.updatePixelImageInPixelView()
-                })
+                self.imageView.image = uiImage
+                self.imageView.cropRect = self.imageCrop
+                self.pixelView.cropRect = self.imageCrop
+                
+                self.showContentView()
+                self.setNeedsDisplay()
+
+                DispatchQueue.global().async {
+                    self.decorator.setImage(CIImage(image: uiImage)!)
+                    DispatchQueue.main.async {
+                        self.updatePixelRects()
+                        self.updatePixelImageInPixelView()
+                    }
+                }
+            } else {
+                self.showContentView()
+                self.setNeedsDisplay()
             }
-            self.showContentView()
-            self.setNeedsDisplay()
-        }, targetWidth: UIScreen.main.pixelSize.width, resizeMode: .fast, contentMode: .aspectFill)
+        }, targetWidth: UIScreen.main.pixelSize.width, resizeMode: .fast, contentMode: .aspectFill, cache: true)
     }
     
     func unloadImage() {

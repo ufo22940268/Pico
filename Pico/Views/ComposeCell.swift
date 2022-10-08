@@ -251,11 +251,9 @@ extension ComposeCell : RecycleCell {
         options.resizeMode = .exact
         let width = UIScreen.main.pixelSize.width
         loadingTag = imageEntity.resolve(completion: { (uiImage) in
-            UIView.transition(with: self, duration: 0.3, options: .transitionCrossDissolve, animations: {
-                self.setImage(uiImage: uiImage!)
-                self.showContentView()
-            }, completion: nil)
-        }, targetWidth: width, resizeMode: .fast, contentMode: .aspectFill)
+            self.setImage(uiImage: uiImage!)
+            self.showContentView()
+        }, targetWidth: width, resizeMode: .fast, contentMode: .aspectFill, cache: true)
     }
     
     func unloadImage() {
