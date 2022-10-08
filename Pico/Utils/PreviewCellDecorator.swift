@@ -75,6 +75,7 @@ class PreviewCellDecorator {
         self.image = nil
         self.lastImage = nil
         pixellateImages.removeAll()
+        pixellateUIImages.removeAll()
     }
     
     
