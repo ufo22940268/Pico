@@ -79,7 +79,7 @@ class PreviewCell: UIView {
         
         setupPlaceholder()
         
-        imageView = UINib(nibName: "CropImageView", bundle: .main).instantiate(withOwner: self, options: nil).first! as? CropImageView
+        imageView = CropImageView(frame: CGRect.zero)
         addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1).isActive = true
@@ -226,9 +226,9 @@ extension PreviewCell : RecycleCell {
                 self.decorator?.boundWidth = self.bounds.width
                 self.decorator?.boundHeight = self.bounds.height
                 UIView.transition(with: self.imageView, duration: 0.3, options: .transitionCrossDissolve, animations: {
-//                    self.imageView.image = self.decorator.lastImage.convertToUIImage()
                     self.imageView.image = uiImage
                     self.imageView.cropRect = self.imageCrop
+                    self.pixelView.cropRect = self.imageCrop
                 }, completion: { success in
                     self.updatePixelRects()
                     self.updatePixelImageInPixelView()

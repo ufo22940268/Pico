@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class PixelView : UIImageView {
+class PixelView : CropImageView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
