@@ -168,6 +168,7 @@ extension PreviewCell {
     func updatePixelImageInPixelView() {
         guard decorator.isImageLoaded() else {return}
         self.pixelView.image = pixelImage
+        self.pixelView.cropRect = self.imageCrop
     }
     
     func setPixelScale(_ scale: PreviewPixellateScale) {
@@ -222,7 +223,6 @@ extension PreviewCell : RecycleCell {
                 self.decorator?.boundHeight = self.bounds.height
                 self.imageView.image = uiImage
                 self.imageView.cropRect = self.imageCrop
-//                self.pixelView.cropRect = self.imageCrop
                 
                 self.showContentView()
                 self.setNeedsDisplay()

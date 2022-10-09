@@ -37,7 +37,7 @@ class Album {
     }
     
     static func isScreenshot(image: Image) -> Bool {
-        return image.assetSize.width == UIScreen.main.bounds.width*UIScreen.main.scale &&  image.assetSize.height == UIScreen.main.bounds.height*UIScreen.main.scale
+        return ScreenDetector.isScreenshot(size: image.assetSize)
     }
     
     
