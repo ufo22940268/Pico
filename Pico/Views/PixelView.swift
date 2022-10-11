@@ -31,5 +31,5 @@ class PixelView : CropImageView {
         rects.forEach{addPixelRects(rect: $0, in: path)}
         mask(withPath: path, inverse: false)
         setNeedsDisplay()
-    }
+    }
 }
