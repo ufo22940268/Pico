@@ -24,82 +24,91 @@ struct RectangleResult {
 
 class OverlapDetector {
     
-    var upImage: UIImage!
+    var upImages = [UIImage:CGFloat]()
     var downImage: UIImage!
     var frameResult: FrameDetectResult!
     
     init(upImage: UIImage, downImage: UIImage, frameResult: FrameDetectResult = FrameDetectResult.zero()) {
-        self.upImage = upImage
-        self.downImage = downImage
+        let cropRect = CGRect(origin: CGPoint(x: 0, y: frameResult.topGap), size: CGSize(width: upImage.size.width, height: upImage.size.height - frameResult.topGap - frameResult.bottomGap))
+
+        let divideCount = 20
+        let unitHeight = cropRect.height/4
+        Array(1...divideCount).forEach { i in
+            var rect = cropRect
+            rect.size.height = unitHeight
+            rect.origin.y = rect.origin.y + (cropRect.height - unitHeight)
+
+            let shift: CGFloat = CGFloat(i - 1)*((cropRect.height - unitHeight)/CGFloat(divideCount - 1))
+            rect.origin.y = rect.origin.y - shift
+
+            self.upImages[upImage.cropImage(toRect: rect)] = shift
+        }
+        
+        self.downImage = downImage.cropImage(toRect: cropRect)
+
+//        self.upImages[upImage.cropImage(toRect: cropRect)] = 0
+//        self.downImage = downImage.cropImage(toRect: cropRect)
+        
         self.frameResult = frameResult
     }
     
-    func translation(regionHeight originHeight: CGFloat, fromMiddle:Bool = true,  complete: @escaping (CGFloat?, CGFloat?, CGFloat?) -> Void) {
-        var regionHeight = originHeight
-        let height = regionHeight*CGFloat(upImage.size.height)
-        let leftHeight = CGFloat(upImage.size.height) - CGFloat(height)
+    func translation(regionHeight: CGFloat, upImage: UIImage,  complete: @escaping (CGFloat?, CGFloat?) -> Void) {
+        let regionHeightInPixel = regionHeight*CGFloat(self.downImage.size.height)
+        let leftRegionHeightInPixel = CGFloat(self.downImage.size.height) - CGFloat(regionHeightInPixel)
         let request = VNTranslationalImageRegistrationRequest(targetedCGImage: downImage.cgImage!, completionHandler: { (req, error) in
             if let first = req.results?.first, let obs = first as? VNImageTranslationAlignmentObservation {
-                print(regionHeight, obs.alignmentTransform)
-                if obs.alignmentTransform.ty < 0 && obs.alignmentTransform.tx == 0 {
-                    let upShift = leftHeight
-                    let downShift = CGFloat(self.upImage.size.height) - (abs(obs.alignmentTransform.ty) + leftHeight)
-                    print(regionHeight, obs.alignmentTransform, upShift, downShift)
-                    complete(upShift, downShift, abs(obs.alignmentTransform.ty))
+                if obs.alignmentTransform.ty < 0 && obs.alignmentTransform.tx == 0  {
+                    let detectAreaHeight = (upImage.size.height - abs(obs.alignmentTransform.ty))/upImage.size.height
+                    if detectAreaHeight > 1/3 {
+                        print(upImage.size, self.downImage.size, obs.alignmentTransform)
+                        let upShift:CGFloat = 0
+                        let downShift = upImage.size.height - abs(obs.alignmentTransform.ty)
+                        complete(upShift, downShift)
+                    } else {
+                        complete(nil, nil)
+                    }
                 } else {
-                    complete(nil, nil, nil)
+                    complete(nil, nil)
                 }
             }
         })
         
-        if fromMiddle {
-            request.regionOfInterest = CGRect(x: 0, y: 0.5 - regionHeight/2, width:1, height:regionHeight)
-        } else {
-            request.regionOfInterest = CGRect(x: 0, y: 1 - regionHeight, width:1, height:regionHeight)
-        }
-
+//        request.regionOfInterest = CGRect(x: 0, y: 0, width:1, height:regionHeight)
         try! VNImageRequestHandler(cgImage: upImage.cgImage!, options: [:]).perform([request])
     }
     
     func detect(completeHandler: @escaping (CGFloat, CGFloat) -> Void) {
-        let heights = stride(from: 1, through: 9, by: 1).map { (index) -> [CGFloat] in
-            let f = CGFloat(index)/10
-//            return stride(from: 1, to: 9, by: 2).map {f + CGFloat($0)/1000}
-            return [f]
-        }.joined()
         
+//        let strideLength = 10
+//        var heights = stride(from: 1, to: strideLength + 1, by: 1).map {CGFloat($0)/CGFloat(strideLength)}.reversed()
+        
+        let heights = [CGFloat(1)]
+
         let group = DispatchGroup()
         var upOverlap:CGFloat? = nil
         var downOverlap:CGFloat? = nil
-        var tyOverlap:CGFloat? = nil
         
-//        for regionHeight in heights {
-//            group.enter()
-//            count = count + 1
-//            translation(regionHeight: regionHeight, fromMiddle: true) { (up, down, ty) in
-//                if let down = down {
-//                    if downOverlap == nil || up! + down < upOverlap! + downOverlap! {
-//                        upOverlap = up
-//                        downOverlap = down
-//                        tyOverlap = ty
-////                        print("down: \(down)")
-//                    }
-//                }
-//                group.leave()
-//            }
-//        }
-        
-        for regionHeight in heights {
-            group.enter()
-            translation(regionHeight: regionHeight, fromMiddle: false) { (up, down, ty) in
-                if let down = down {
-                    if downOverlap == nil || up! + down < upOverlap! + downOverlap! {
-                        upOverlap = up
-                        downOverlap = down
-                        tyOverlap = ty
+        for (upImage, shift) in upImages.sorted(by: {$0.value < $1.value}) {
+            for regionHeight in heights {
+                group.enter()
+                translation(regionHeight: regionHeight, upImage: upImage) { (up, down) in
+                    if let down = down, let up = up {
+                        let upPlusShift = up + shift
+                        if downOverlap == nil  {
+                            upOverlap = upPlusShift
+                            downOverlap = down
+                        }
                     }
+                    group.leave()
                 }
-                group.leave()
+                group.wait()
+                
+                if downOverlap != nil {
+                    break
+                }
+            }
+            if downOverlap != nil {
+                break
             }
         }
 

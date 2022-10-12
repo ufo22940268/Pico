@@ -58,7 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        }
         
 //        Test().runA()
-        Test().run()
+//        Test().run()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
