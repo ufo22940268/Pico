@@ -24,6 +24,8 @@ class Test {
     func run() {
         var upImage = UIImage(named: "upImage")!.cgImage!
         var downImage = UIImage(named: "downImage")!.cgImage!
+        
+        
 //        downImage = (downImage.cropping(to: CGRect(origin: CGPoint(x: 0, y:400), size: CGSize(width: downImage.width, height: 469))))!
         
         
@@ -88,12 +90,11 @@ class Test {
 //        downImage = downImage.cropping(to: downRect)!
         
         let upImage = UIImage(named: "upImage")!.cgImage!
-        let downImage = UIImage(named: "downImage")!.cgImage!
+        let downImage = UIImage(named: "Slice")!.cgImage!
         
         var normHeight = CGFloat(1)
         let height = normHeight*CGFloat(upImage.height)
         let leftHeight = CGFloat(upImage.height) - CGFloat(height)
-        print("height:\(height)\t left height: \(leftHeight)")
         
         let request = VNTranslationalImageRegistrationRequest(targetedCGImage: downImage, completionHandler: { (req, error) in
             // ty should be the gap from top to middle of up image
