@@ -57,7 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            print("move", up, down)
 //        }
         
-        Test().runA()
+//        Test().runA()
 //        Test().run()
     }
 
