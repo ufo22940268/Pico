@@ -86,6 +86,9 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
         scrollUpAnimation = UIViewPropertyAnimator(duration: 0.15, curve: .easeIn, animations: {
             self.selectAlbumContainerView.transform = CGAffineTransform(translationX: 0, y: 0)
         })
+        scrollUpAnimation?.addCompletion({ (pos) in
+            self.selectAlbumController.selectAlbum(for: self.selectAlbum)
+        })
         scrollUpAnimation!.startAnimation()
     }
     
