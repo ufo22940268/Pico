@@ -70,6 +70,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     fileprivate func concateScreenshot(_ images: ([Image])) {
         detectFrame(images: Array(images[0..<2])) { (frameResult) in
             print("frameResult: \(frameResult)")
+            
             let dispatchGroup = DispatchGroup()
             for index in 0..<images.count - 1 {
                 dispatchGroup.enter()
@@ -81,8 +82,12 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                             if upOverlap >= 0 && downOverlap >= 0 {
                                 let hasError = upOverlap == 0 && downOverlap == 0
                                 let imageHeight = uiImages[0].size.height
-                                self.container.cells[index].scrollDown(percentage: (!hasError ? upOverlap + frameResult.topGap : 0)/imageHeight)
-                                self.container.cells[index + 1].scrollUp(percentage: -(!hasError ? downOverlap + frameResult.bottomGap : 0)/imageHeight)
+                                let upImageScrollDown: (CGFloat) = (!hasError ? upOverlap + frameResult.topGap : 0)
+                                let downImageScrollUp: (CGFloat) = (!hasError ? downOverlap + frameResult.bottomGap : 0)
+                                
+                                print("imageScroll: \(upImageScrollDown) \(downImageScrollUp)")
+                                self.container.cells[index].scrollDown(percentage: upImageScrollDown/imageHeight)
+                                self.container.cells[index + 1].scrollUp(percentage: -downImageScrollUp/imageHeight)
                             }
                             dispatchGroup.leave()
                         }
@@ -171,7 +176,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
 //                }
 
                 //Mocker
-                let images = [ImageMocker(image: UIImage(named: "IMG_0009")!), ImageMocker(image: UIImage(named: "IMG_0010")!)]
+                let images = [ImageMocker(image: UIImage(named: "IMG_3975")!), ImageMocker(image: UIImage(named: "IMG_3976")!)]
                 self.configureImages(images)
             }
         }
