@@ -509,6 +509,14 @@ extension ComposeController {
         updateSideSliderButtons()
         updateSeperatorSliderButtons()
     }
+    
+    @IBAction func onDoubleTap(_ sender: UITapGestureRecognizer) {
+        if scroll.zoomScale == 1.0 {
+            scroll.setZoomScale(scroll.minimumZoomScale, animated: true)
+        }  else if scroll.zoomScale == scroll.minimumZoomScale {
+            scroll.setZoomScale(1.0, animated: true)
+        }
+    }
 }
 
 

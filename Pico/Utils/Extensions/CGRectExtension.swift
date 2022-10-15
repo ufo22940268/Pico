@@ -34,4 +34,15 @@ extension CGRect {
         rect.origin.y = frameHeight - self.origin.y - self.height
         return rect
     }
+
+    var minusOnePixel:CGRect {
+        guard width > 1 && height > 1 else {
+            return self
+        }
+        
+        var newRect = self
+        newRect.size.width = width - 1
+        newRect.size.height = height - 1
+        return newRect
+    }
 }

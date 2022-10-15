@@ -325,6 +325,11 @@
                         <action selector="onScroll:" destination="h2r-xB-xzJ" id="wTo-pY-uEq"/>
                     </connections>
                 </panGestureRecognizer>
+                <tapGestureRecognizer delaysTouchesBegan="YES" numberOfTapsRequired="2" id="KsA-Kn-DZW">
+                    <connections>
+                        <action selector="onDoubleTap:" destination="h2r-xB-xzJ" id="lqi-ho-Prr"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2311" y="-170"/>
         </scene>
