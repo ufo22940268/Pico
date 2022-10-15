@@ -38,8 +38,7 @@ class Album {
     
     static func isScreenshot(image: Image) -> Bool {
         return ScreenDetector.isScreenshot(size: image.assetSize)
-    }
-    
+    }    
     
     static func getRecentScreenshots(images: [Image]) -> [Image] {
         var screenshots = images
