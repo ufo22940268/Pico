@@ -38,7 +38,7 @@
 		425F9B3820EB402300B0F2CF /* ImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 425F9B3620EB402300B0F2CF /* ImageCell.xib */; };
 		425F9B3C20EB66AF00B0F2CF /* PickImageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425F9B3B20EB66AF00B0F2CF /* PickImageController.swift */; };
 		4266A1722101B92F009F92D6 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4266A1712101B92F009F92D6 /* UIViewExtension.swift */; };
-		426A3A3A21425C6800FDDC5C /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426A3A3921425C6700FDDC5C /* UIImageExtension.swift */; };
+		426A3A3A21425C6800FDDC5C /* ImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426A3A3921425C6700FDDC5C /* ImageExtension.swift */; };
 		428006F020EB7C610091BE9B /* ComposeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428006EF20EB7C610091BE9B /* ComposeController.swift */; };
 		428006F420EB99610091BE9B /* ComposeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 428006F320EB99610091BE9B /* ComposeCell.xib */; };
 		4288D7AF2169E718007B67FB /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4288D7AE2169E718007B67FB /* SettingViewController.swift */; };
@@ -148,7 +148,7 @@
 		425F9B3B20EB66AF00B0F2CF /* PickImageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickImageController.swift; sourceTree = "<group>"; };
 		4266A1712101B92F009F92D6 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		426A3A342141FC0A00FDDC5C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		426A3A3921425C6700FDDC5C /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
+		426A3A3921425C6700FDDC5C /* ImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtension.swift; sourceTree = "<group>"; };
 		428006EF20EB7C610091BE9B /* ComposeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeController.swift; sourceTree = "<group>"; };
 		428006F320EB99610091BE9B /* ComposeCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ComposeCell.xib; sourceTree = "<group>"; };
 		4288D7AE2169E718007B67FB /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
@@ -252,7 +252,7 @@
 				4201F009211305DA00A6EBA5 /* UIColorExtension.swift */,
 				428C51F3211D6D5700A34E9B /* CGRectExtension.swift */,
 				420186F0212ABFD300EF903F /* CGSizeExtension.swift */,
-				426A3A3921425C6700FDDC5C /* UIImageExtension.swift */,
+				426A3A3921425C6700FDDC5C /* ImageExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -572,7 +572,7 @@
 				420EF44C20FCA784006CCDD3 /* PreviewController.swift in Sources */,
 				425F9B3720EB402300B0F2CF /* ImageCell.swift in Sources */,
 				4251DEFE213E613500B63E94 /* PreviewFrameDecorator.swift in Sources */,
-				426A3A3A21425C6800FDDC5C /* UIImageExtension.swift in Sources */,
+				426A3A3A21425C6800FDDC5C /* ImageExtension.swift in Sources */,
 				42C89D6F210998AB00792EED /* VNRectangleObservationExtension.swift in Sources */,
 				420EF45020FCC024006CCDD3 /* UIImageViewExtension.swift in Sources */,
 				423F1C1420EBB4530083DB6D /* ComposeCell.swift in Sources */,

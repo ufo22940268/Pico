@@ -69,6 +69,8 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
 
     fileprivate func concateScreenshot(_ images: ([Image])) {
         detectFrame(images: Array(images[0..<2])) { (frameResult) in
+            print("frameResult: \(frameResult)")
+            
             let dispatchGroup = DispatchGroup()
             for index in 0..<images.count - 1 {
                 dispatchGroup.enter()
@@ -77,11 +79,15 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
                     let downImage = uiImages[1]
                     OverlapDetector(upImage: upImage, downImage: downImage, frameResult: frameResult).detect {upOverlap, downOverlap in
                         DispatchQueue.main.async {
-                            if upOverlap > 0 && downOverlap > 0 {
+                            if upOverlap >= 0 && downOverlap >= 0 {
+                                let hasError = upOverlap == 0 && downOverlap == 0
                                 let imageHeight = uiImages[0].size.height
-                                print(index, "up", upOverlap, "down", downOverlap)
-                                self.container.cells[index].scrollDown(percentage: upOverlap/imageHeight)
-                                self.container.cells[index + 1].scrollUp(percentage: -downOverlap/imageHeight)
+                                let upImageScrollDown: (CGFloat) = (!hasError ? upOverlap + frameResult.topGap : 0)
+                                let downImageScrollUp: (CGFloat) = (!hasError ? downOverlap + frameResult.bottomGap : 0)
+                                
+                                print("imageScroll: \(upImageScrollDown) \(downImageScrollUp)")
+                                self.container.cells[index].scrollDown(percentage: upImageScrollDown/imageHeight)
+                                self.container.cells[index + 1].scrollUp(percentage: -downImageScrollUp/imageHeight)
                             }
                             dispatchGroup.leave()
                         }
@@ -157,21 +163,21 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         if isDev() {
             loadUIImageHandler = {
-                self.type = .normal
+                self.type = .screenshot
                 
-                //Photo library
-                let library = ImagesLibrary()
-                library.reload {
-                    let album = Album.selectAllPhotoAlbum(albums: library.albums)!
-                    let images = Array(album.items[0..<min(album.items.count, 2)])
-                    self.loadedImages = images
-
-                    self.configureImages(images)
-                }
+//                //Photo library
+//                let library = ImagesLibrary()
+//                library.reload {
+//                    let album = Album.selectAllPhotoAlbum(albums: library.albums)!
+//                    let images = Array(album.items[0..<min(album.items.count, 2)])
+//                    self.loadedImages = images
+//
+//                    self.configureImages(images)
+//                }
 
                 //Mocker
-//                let images = [ImageMocker(image: UIImage(named: "IMG_0009")!), ImageMocker(image: UIImage(named: "IMG_0010")!)]
-//                self.configureImages(images)
+                let images = [ImageMocker(image: UIImage(named: "IMG_3975")!), ImageMocker(image: UIImage(named: "IMG_3976")!)]
+                self.configureImages(images)
             }
         }
         
