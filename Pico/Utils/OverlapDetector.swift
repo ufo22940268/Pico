@@ -28,7 +28,7 @@ class OverlapDetector {
     var downImage:CGImage!
     var frameResult: FrameDetectResult!
     var cropFrame:CGRect!
-    var rawUpImage:CGImage!
+    var upImage:CGImage!
     
     fileprivate func generateUpImages(by divideCount: Int, _ cropRect: CGRect, _ upImage: UIImage) {
         let unitHeight = cropRect.height/CGFloat(divideCount/3)
@@ -54,7 +54,7 @@ class OverlapDetector {
     init(upImage: UIImage, downImage: UIImage, frameResult: FrameDetectResult = FrameDetectResult.zero()) {
         let cropRect = CGRect(origin: CGPoint(x: 0, y: frameResult.topGap), size: CGSize(width: upImage.size.width, height: upImage.size.height - frameResult.topGap - frameResult.bottomGap))
 
-        rawUpImage = upImage.cropToCGImage(in: cropRect)
+        self.upImage = upImage.cropToCGImage(in: cropRect)
         
 //        generateUpImages(by: 4, cropRect, upImage)
 //        generateUpImages(by: 8, cropRect, upImage)
@@ -94,7 +94,7 @@ class OverlapDetector {
                     let imageRegion = CGRect(origin: CGPoint.zero, size: self.cropFrame.size)
                     let upRegion = CGRect(origin: CGPoint(x: 0, y: imageRegion.height - upImageShift - downShift), size: CGSize(width: imageRegion.width, height: detectHeight))
                     let downRegion = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: imageRegion.width, height: detectHeight))
-                    self.isRegionTheSame(upRegion: self.rawUpImage.cropping(to: upRegion)!, downRegion: self.downImage.cropping(to: downRegion)!, complete: {same in
+                    self.isRegionTheSame(upRegion: self.upImage.cropping(to: upRegion)!, downRegion: self.downImage.cropping(to: downRegion)!, complete: {same in
                         if same {
                             complete(upShift, downShift)
                         } else {
@@ -154,7 +154,7 @@ class OverlapDetector {
             if let obsList = req.results {
                 for obs in obsList {
                     if let obs = obs as? VNRectangleObservation {
-                        let rect = obs.toRect(size: self.rawUpImage.size).convertLBCToLTC(frameHeight: self.rawUpImage.size.height)
+                        let rect = obs.toRect(size: self.upImage.size).convertLBCToLTC(frameHeight: self.upImage.size.height)
                         upRects.append(rect)
                     }
                 }
@@ -162,7 +162,7 @@ class OverlapDetector {
             group.leave()
         }
         configureRectangleRequest(upRequest)
-        try! VNImageRequestHandler(cgImage: rawUpImage, options: [:]).perform([upRequest])
+        try! VNImageRequestHandler(cgImage: upImage, options: [:]).perform([upRequest])
 
         var downRects = [CGRect]()
         group.enter()
@@ -198,7 +198,7 @@ class OverlapDetector {
         
         
         //Sort by the sum of overlaps
-        let upImageHeight = self.rawUpImage.size.height
+        let upImageHeight = self.upImage.size.height
         binds.sort { (lbind, rbind) -> Bool in
             let lOverlap = (upImageHeight - lbind.0.maxY) + lbind.1.minY
             let rOverlap = (upImageHeight - rbind.0.maxY) + rbind.1.minY
@@ -255,6 +255,21 @@ class OverlapDetector {
             })
         }
         
+        //Detect edge scrop area.
+        if downOverlap == nil {
+            group.enter()
+            translation(regionHeight: 1, upImage: upImage, upImageShift: 0, validOverlap: false, complete: {up, down in
+                if let down = down, let up = up {
+                    let upPlusShift = up + 0
+                    if downOverlap == nil  {
+                        upOverlap = upPlusShift
+                        downOverlap = down
+                    }
+                }
+                group.leave()
+            })
+        }
+        
         //Detect rectangle areas
         if downOverlap == nil {
             group.enter()
@@ -262,9 +277,9 @@ class OverlapDetector {
                 let rectGroup = DispatchGroup()
                 for (upRect, downRect) in self.rectanglesWithSameSize(upRects, downRects) {
                     rectGroup.enter()
-                    self.isRegionTheSame(upRegion: self.rawUpImage.cropping(to: upRect)!, downRegion: self.downImage.cropping(to: downRect)!, complete: {same in
+                    self.isRegionTheSame(upRegion: self.upImage.cropping(to: upRect)!, downRegion: self.downImage.cropping(to: downRect)!, complete: {same in
                         if same {
-                            upOverlap = CGFloat(self.rawUpImage.height) - upRect.maxY + upRect.height/2
+                            upOverlap = CGFloat(self.upImage.height) - upRect.maxY + upRect.height/2
                             downOverlap = downRect.minY + downRect.height/2
                         }
                         rectGroup.leave()

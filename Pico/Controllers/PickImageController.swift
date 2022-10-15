@@ -22,7 +22,7 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
     var photoLibrary:PHPhotoLibrary!
     var recentScreenshots: [Image]!
     
-    @IBOutlet weak var selectAlbumContainer: UIView!
+    @IBOutlet weak var selectAlbumContainerView: UIView!
     
     var scrollUpAnimation: UIViewPropertyAnimator?
     var scrollDownAnimation: UIViewPropertyAnimator?
@@ -33,6 +33,9 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
     enum Intention {
         case normal, screenshot
     }
+    
+    @IBOutlet weak var selectAlbumBottomConstraint: NSLayoutConstraint!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,7 +48,14 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
         }
         
         photoLibrary = PHPhotoLibrary.shared()
-        photoLibrary.register(self)                
+        photoLibrary.register(self)
+        
+        selectAlbumContainerView.isHidden = true
+        if #available(iOS 11.0, *) {
+            let window = UIApplication.shared.keyWindow
+            let bottomPadding = window?.safeAreaInsets.bottom ?? 0
+            selectAlbumBottomConstraint.constant = selectAlbumBottomConstraint.constant + bottomPadding
+        }
     }
     
     @objc func onClickSelectAlbum(_ sender: PickNavigationButton) {
@@ -69,20 +79,27 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
     }
     
     func showSelectAlbumViewController() {
+        self.selectAlbumContainerView.isHidden = false
+        navigationController?.toolbar.isHidden = true
+        
+        self.selectAlbumContainerView.transform = CGAffineTransform(translationX: 0, y: self.selectAlbumContainerView.frame.height)
         scrollUpAnimation = UIViewPropertyAnimator(duration: 0.15, curve: .easeIn, animations: {
-            self.selectAlbumContainer.frame = self.selectAlbumContainer.frame.offsetBy(dx: 0, dy: -self.selectAlbumContainer.frame.height)
+            self.selectAlbumContainerView.transform = CGAffineTransform(translationX: 0, y: 0)
         })
         scrollUpAnimation!.startAnimation()
-        
-        navigationController?.toolbar.isHidden = true
     }
     
     func hideSelectAlbumViewController() {
-        scrollDownAnimation = UIViewPropertyAnimator(duration: 0.15, curve: .easeIn, animations: {
-            self.selectAlbumContainer.frame = self.selectAlbumContainer.frame.offsetBy(dx: 0, dy: self.selectAlbumContainer.frame.height)
+        
+        self.selectAlbumContainerView.transform = CGAffineTransform(translationX: 0, y: 0)
+        scrollDownAnimation = UIViewPropertyAnimator(duration: 0.15, curve: .easeOut, animations: {
+            self.selectAlbumContainerView.transform = CGAffineTransform(translationX: 0, y: self.selectAlbumContainerView.frame.height)
+        })
+        scrollDownAnimation?.addCompletion({ (pos) in
+            self.selectAlbumContainerView.isHidden = true
+            self.navigationController?.toolbar.isHidden = false
         })
         scrollDownAnimation!.startAnimation()
-        navigationController?.toolbar.isHidden = false
     }
 
     override func didReceiveMemoryWarning() {
