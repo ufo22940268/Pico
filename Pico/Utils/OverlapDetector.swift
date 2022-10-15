@@ -71,7 +71,7 @@ class OverlapDetector {
     func translation(regionHeight: CGFloat, upImage: CGImage, upImageShift: CGFloat, validOverlap:Bool = true,  complete: @escaping (CGFloat?, CGFloat?) -> Void) {
         let request = VNTranslationalImageRegistrationRequest(targetedCGImage: downImage, completionHandler: { (req, error) in
             if let first = req.results?.first, let obs = first as? VNImageTranslationAlignmentObservation {
-                if obs.alignmentTransform.ty < 0 && abs(obs.alignmentTransform.tx) < 200  {
+                if obs.alignmentTransform.ty < 0 && abs(obs.alignmentTransform.tx) < 10  {
                     
                     let upShift:CGFloat = 0
                     let downShift = CGFloat(upImage.height) + obs.alignmentTransform.ty
