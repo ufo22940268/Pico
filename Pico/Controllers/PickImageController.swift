@@ -24,6 +24,7 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
     
     @IBOutlet weak var selectAlbumContainerView: UIView!
     
+    @IBOutlet weak var settingBarButton: UIBarButtonItem!
     var scrollUpAnimation: UIViewPropertyAnimator?
     var scrollDownAnimation: UIViewPropertyAnimator?
     @IBOutlet weak var recentScreenshotItem: UIBarButtonItem!
@@ -90,6 +91,16 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
             self.selectAlbumController.selectAlbum(for: self.selectAlbum)
         })
         scrollUpAnimation!.startAnimation()
+        
+        self.settingBarButton.tintColor = .clear
+
+        let iconAnimator = UIViewPropertyAnimator(duration: 0.15, curve: .linear) {
+            self.settingBarButton.tintColor = .clear
+        }
+        iconAnimator.addCompletion({ (pos) in
+            self.settingBarButton.isEnabled = false
+        })
+        iconAnimator.startAnimation()
     }
     
     func hideSelectAlbumViewController() {
@@ -103,6 +114,15 @@ class PickImageController: UIViewController, SelectImageDelegate, AlbumSelectDel
             self.navigationController?.toolbar.isHidden = false
         })
         scrollDownAnimation!.startAnimation()
+        
+        self.settingBarButton.tintColor = .system
+        let iconAnimator = UIViewPropertyAnimator(duration: 0.15, curve: .linear) {
+            self.settingBarButton.tintColor = .system
+        }
+        iconAnimator.addCompletion({ (pos) in
+            self.settingBarButton.isEnabled = true
+        })
+        iconAnimator.startAnimation()
     }
 
     override func didReceiveMemoryWarning() {

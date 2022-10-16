@@ -200,6 +200,7 @@
                         <outlet property="recentScreenshotItem" destination="j3o-LW-0EB" id="jux-Od-QF9"/>
                         <outlet property="selectAlbumBottomConstraint" destination="PvJ-1M-nxz" id="F9c-BX-V29"/>
                         <outlet property="selectAlbumContainerView" destination="8fy-vO-tKd" id="KyL-vc-fCH"/>
+                        <outlet property="settingBarButton" destination="8k2-M6-ijd" id="1cA-G7-lLl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pJb-OQ-6NM" userLabel="First Responder" sceneMemberID="firstResponder"/>
