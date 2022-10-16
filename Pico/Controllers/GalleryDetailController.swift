@@ -153,7 +153,7 @@ extension GalleryDetailController: UICollectionViewDelegateFlowLayout {
         return 0
     }
     
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateSelectView(for: imageEntities[collectionView.currentPage - 1])
     }
 }
