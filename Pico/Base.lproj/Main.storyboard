@@ -38,7 +38,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView verifyAmbiguity="ignoreSizes" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="v7e-oK-rfd">
+                            <imageView hidden="YES" verifyAmbiguity="ignoreSizes" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="v7e-oK-rfd">
                                 <rect key="frame" x="0.0" y="20" width="375" height="495"/>
                             </imageView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lhF-Jh-ejd">
@@ -56,21 +56,49 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="tiN-NI-JN0"/>
                                 </items>
                             </toolbar>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="KZy-01-ePF">
+                                <rect key="frame" x="0.0" y="20" width="375" height="495"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="kNJ-ko-DVj">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell" id="PkH-Jb-bap" customClass="GalleryDetailCell" customModule="Pico" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </view>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="cUL-RS-b3p" id="lpe-vf-lW5"/>
+                                </connections>
+                            </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="v7e-oK-rfd" firstAttribute="leading" secondItem="yIE-aC-4nt" secondAttribute="leading" id="1VE-zp-1VB"/>
+                            <constraint firstItem="KZy-01-ePF" firstAttribute="trailing" secondItem="yIE-aC-4nt" secondAttribute="trailing" id="28l-Cm-EsS"/>
                             <constraint firstItem="yIE-aC-4nt" firstAttribute="trailing" secondItem="v7e-oK-rfd" secondAttribute="trailing" id="45m-6j-KO4"/>
+                            <constraint firstItem="KZy-01-ePF" firstAttribute="bottom" secondItem="lhF-Jh-ejd" secondAttribute="top" id="63l-Ug-uWo"/>
                             <constraint firstItem="lhF-Jh-ejd" firstAttribute="leading" secondItem="v7e-oK-rfd" secondAttribute="leading" id="GLr-a3-xAB"/>
                             <constraint firstItem="lhF-Jh-ejd" firstAttribute="bottom" secondItem="yIE-aC-4nt" secondAttribute="bottom" id="J5A-BT-WNi"/>
                             <constraint firstItem="v7e-oK-rfd" firstAttribute="top" secondItem="yIE-aC-4nt" secondAttribute="top" id="K0n-YZ-afW"/>
+                            <constraint firstItem="KZy-01-ePF" firstAttribute="leading" secondItem="yIE-aC-4nt" secondAttribute="leading" id="NPh-X4-jT9"/>
                             <constraint firstItem="v7e-oK-rfd" firstAttribute="bottom" secondItem="lhF-Jh-ejd" secondAttribute="top" id="Qco-ri-5kj"/>
+                            <constraint firstItem="KZy-01-ePF" firstAttribute="top" secondItem="yIE-aC-4nt" secondAttribute="top" id="RxT-H0-nMO"/>
                             <constraint firstItem="lhF-Jh-ejd" firstAttribute="trailing" secondItem="v7e-oK-rfd" secondAttribute="trailing" id="snA-la-AL1"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="yIE-aC-4nt"/>
                     </view>
                     <connections>
                         <outlet property="checkItem" destination="K8t-BO-3ei" id="yWW-D5-xnp"/>
+                        <outlet property="collectionView" destination="KZy-01-ePF" id="lzR-hC-973"/>
                         <outlet property="image" destination="v7e-oK-rfd" id="eoK-ZJ-CSe"/>
                     </connections>
                 </viewController>
@@ -718,6 +746,6 @@
         <image name="user-edit-solid" width="24" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="K7U-HG-x3b"/>
+        <segue reference="9B5-ts-Cuz"/>
     </inferredMetricsTieBreakers>
 </document>

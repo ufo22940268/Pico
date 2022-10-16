@@ -26,7 +26,7 @@ class ImagesLibrary {
         }
     }
     
-    fileprivate func reloadSync() {
+    func reloadSync() {
         let types: [PHAssetCollectionType] = [.smartAlbum, .album]
         
         albumsFetchResults = types.map {
