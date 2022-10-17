@@ -456,6 +456,10 @@ extension ComposeController {
         hightlightSlideItem(index: -1)
     }
     
+    func resetEditState() {
+        container.resetEditState()
+    }
+    
     fileprivate func activeSlideMode() {
         hightlightSlideItem(index: 0)
         container.sliderType = .slide

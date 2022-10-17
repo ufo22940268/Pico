@@ -54,8 +54,18 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     var leftSlider: SideSlider!
     var rightSlider: SideSlider!
     
-    var sliderType: SliderType = .crop
-
+    var allSlider: [SliderSelectable] {
+        return Array([seperators as [SliderSelectable], [leftSlider as SliderSelectable, rightSlider as SliderSelectable]].joined())
+    }
+    
+    var sliderType: SliderType = .crop {
+        willSet(newType) {
+            if newType != sliderType {
+                resetEditState()
+            }
+        }
+    }
+    
     func addImage(imageEntity: Image) {
         // Do any additional setup after loading the view.
         let view = UINib(nibName: "ComposeCell", bundle: nil).instantiate(withOwner: self, options: nil).first as! ComposeCell
@@ -231,6 +241,13 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
             slider.updateScale(transform.a)
         }
     }
+    
+    func resetEditState() {
+        for slider in allSlider {
+            slider.updateSelectState(false)
+        }
+    }
+    
     
     /// Call after slider type changed
     func updateSliderType() {
