@@ -298,7 +298,6 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
             print("finish")
             
             group.notify(queue: .global(), execute: {
-                print("quitttttttttttttttt")
                 let snapshot = canvas!.convertToUIImage()
                 callback(snapshot)
             })

@@ -9,10 +9,6 @@
 import UIKit
 import MonkeyKing
   
-enum UserDefaultKeys : String {
-    case shownOnboarding =  "shownOnboarding"
-}
-  
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -23,6 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         MonkeyKing.registerAccount(.weChat(appID: "wxef5f2473557d61a0", appKey: "wxef5f2473557d61a0", miniAppID: nil))
 
+        UserDefaultKeys.setupUserDefaults()
+        
         self.window = UIWindow(frame: UIScreen.main.bounds)
         var rootVC: UIViewController
         if UserDefaults.standard.bool(forKey: UserDefaultKeys.shownOnboarding.rawValue) {
