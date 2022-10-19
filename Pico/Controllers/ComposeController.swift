@@ -16,7 +16,7 @@ enum SliderType {
 class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     
     @IBOutlet weak var container: ComposeContainerView!
-    @IBOutlet weak var scroll: UIScrollView!
+    @IBOutlet weak var scroll: ZoomScrollView!
     @IBOutlet weak var containerWrapper: UIView!
     
     @IBOutlet var containerLeadingConstraint: NSLayoutConstraint!
@@ -44,6 +44,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     @IBOutlet var panGesture: UIPanGestureRecognizer!
     
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
+    
     
     enum ConcatenateType {
         case screenshot
@@ -152,6 +153,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         container.updateSliderType()
         
         updateContainerImages()
+        setupScrollView()
     }
     
     func isDev() -> Bool {
@@ -198,14 +200,10 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         
         container.setEditDelegator(delegator: self)
         container.scrollDelegator = self
-        
-        setupScrollView()
     }
     
     func setupScrollView() {
         scroll.delegate = self
-        scroll.maximumZoomScale = 2
-        scroll.minimumZoomScale = 0.4
     }
     
     func showLoading() {
@@ -513,14 +511,6 @@ extension ComposeController {
         updateSideSliderButtons()
         updateSeperatorSliderButtons()
     }
-    
-    @IBAction func onDoubleTap(_ sender: UITapGestureRecognizer) {
-        if scroll.zoomScale == 1.0 {
-            scroll.setZoomScale(scroll.minimumZoomScale, animated: true)
-        }  else if scroll.zoomScale == scroll.minimumZoomScale {
-            scroll.setZoomScale(1.0, animated: true)
-        }
-    }
 }
 
 
@@ -538,7 +528,6 @@ extension ComposeController: UIScrollViewDelegate {
             container.updateSeperatorSliders(midPoint: midPoint, transform: sliderButtonTransform)
         }
     }
-    
     
     fileprivate func updateSideSliderButtons() {
         if container.leftSlider != nil {

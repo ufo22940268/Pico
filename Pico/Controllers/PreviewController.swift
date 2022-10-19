@@ -172,8 +172,6 @@ class PreviewController: UIViewController {
         
         updatePixelSelection(tag: 0)
         
-        scroll.maximumZoomScale = 2.0
-        scroll.minimumZoomScale = 0.5
         scroll.delegate = self
         
         onSignChanged(sign: nil)

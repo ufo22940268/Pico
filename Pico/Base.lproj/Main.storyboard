@@ -247,7 +247,7 @@
                                 <rect key="frame" x="169" y="347" width="37" height="37"/>
                                 <color key="color" name="headerColor" catalog="System" colorSpace="catalog"/>
                             </activityIndicatorView>
-                            <scrollView hidden="YES" verifyAmbiguity="off" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qfn-Hc-ipw">
+                            <scrollView hidden="YES" verifyAmbiguity="off" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qfn-Hc-ipw" customClass="ZoomScrollView" customModule="Pico" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
                                     <view verifyAmbiguity="off" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" restorationIdentifier="ContainerWrapper" translatesAutoresizingMaskIntoConstraints="NO" id="FDD-5R-i7y" userLabel="ContainerWrapper">
@@ -354,11 +354,6 @@
                         <action selector="onScroll:" destination="h2r-xB-xzJ" id="wTo-pY-uEq"/>
                     </connections>
                 </panGestureRecognizer>
-                <tapGestureRecognizer delaysTouchesBegan="YES" numberOfTapsRequired="2" id="KsA-Kn-DZW">
-                    <connections>
-                        <action selector="onDoubleTap:" destination="h2r-xB-xzJ" id="lqi-ho-Prr"/>
-                    </connections>
-                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2311" y="-170"/>
         </scene>
@@ -370,7 +365,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView verifyAmbiguity="off" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QGp-s0-rHz">
+                            <scrollView verifyAmbiguity="off" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QGp-s0-rHz" customClass="ZoomScrollView" customModule="Pico" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
                                 <subviews>
                                     <view verifyAmbiguity="off" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bEx-xN-zR0" customClass="PreviewView" customModule="Pico" customModuleProvider="target">
