@@ -42,8 +42,14 @@ enum EditState {
     }
 }
 
-class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
+class SliderPlaceholder: UIView {
+    weak var rootView: UIView?
+    var frameInRootView: CGRect? {
+        return rootView?.convert(frame, from: self.superview)
+    }
+}
 
+class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     
     var editState = EditState.inactive(fromDirections: nil)
     weak var editDelegator: EditDelegator?
@@ -54,8 +60,8 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     var leftSlider: SideSlider!
     var rightSlider: SideSlider!
     
-    var allSlider: [SliderSelectable] {
-        return Array([seperators as [SliderSelectable], [leftSlider as SliderSelectable, rightSlider as SliderSelectable]].joined())
+    var allSlider: [Slider] {
+        return Array([seperators as [Slider], [leftSlider as Slider, rightSlider as Slider]].joined())
     }
     
     var sliderType: SliderType = .crop {
@@ -65,7 +71,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
             }
         }
     }
-    
+        
     func addImage(imageEntity: Image) {
         // Do any additional setup after loading the view.
         let view = UINib(nibName: "ComposeCell", bundle: nil).instantiate(withOwner: self, options: nil).first as! ComposeCell
@@ -80,28 +86,53 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         cells.append(view)        
     }
     
-    func addTopSeperator() {
+    func addTopSeperator(toView view: UIView) {
         let seperator = UINib(nibName: "Slider", bundle: nil).instantiate(withOwner: self, options: nil).map {$0 as! UIView}.filter {$0.restorationIdentifier == "top"}.first as! SeperatorSlider
         seperator.editDelegator = self
-        self.addArrangedSubview(seperator)
+        
+        let placeholder = SliderPlaceholder()
+        placeholder.rootView = view
+        self.addArrangedSubview(placeholder)
+        placeholder.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0).isActive = true
+        placeholder.heightAnchor.constraint(equalToConstant: 0).isActive = true
+        seperator.placeholder = placeholder
+
+        view.addSubview(seperator)
 
         seperator.index = seperators.count
         seperators.append(seperator)
     }
     
-    func addSeperator() {
+    func addMiddleSeperator(toView view: UIView) {
         let seperator = UINib(nibName: "Slider", bundle: nil).instantiate(withOwner: self, options: nil).first as! SeperatorSlider
         seperator.editDelegator = self
-        self.addArrangedSubview(seperator)
+        
+        let placeholder = SliderPlaceholder()
+        placeholder.rootView = view
+        self.addArrangedSubview(placeholder)
+        placeholder.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0).isActive = true
+        placeholder.heightAnchor.constraint(equalToConstant: 0).isActive = true
+        seperator.placeholder = placeholder
+        
+        view.addSubview(seperator)
         
         seperator.index = seperators.count
         seperators.append(seperator)
     }
 
-    func addBottomSeperator() {
+    func addBottomSeperator(toView view: UIView) {
         let seperator = UINib(nibName: "Slider", bundle: nil).instantiate(withOwner: self, options: nil).map {$0 as! UIView}.filter {$0.restorationIdentifier == "bottom"}.first as! SeperatorSlider
         seperator.editDelegator = self
-        self.addArrangedSubview(seperator)
+        
+        let placeholder = SliderPlaceholder()
+        placeholder.rootView = view
+        self.addArrangedSubview(placeholder)
+        placeholder.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0).isActive = true
+        placeholder.heightAnchor.constraint(equalToConstant: 0).isActive = true
+        seperator.placeholder = placeholder
+        
+        view.addSubview(seperator)
+
         
         seperator.index = seperators.count
         seperators.append(seperator)
@@ -235,10 +266,9 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         editDelegator = delegator
     }
     
-    func updateSeperatorSliders(midPoint: CGPoint, transform: CGAffineTransform) {
+    func updateSeperatorSliders(midPoint: CGPoint) {
         seperators.forEach { (slider) in
             slider.updateButtonPosition(midPoint: midPoint)
-            slider.updateScale(transform.a)
         }
     }
     

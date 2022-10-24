@@ -75,6 +75,12 @@ class SliderButton : UIButton {
     var iconView: SliderIconView!
     var direction: SliderDirection!
     
+    var calculatedSize: CGSize {
+        let width = scale * direction.buttonSize.width
+        let height = width * direction.buttonSize.height/direction.buttonSize.width
+        return CGSize(width: width, height: height)
+    }
+    
     func setup(direction: SliderDirection) {
         self.direction = direction
         translatesAutoresizingMaskIntoConstraints = false
@@ -107,9 +113,15 @@ class SliderButton : UIButton {
     
     var scale: CGFloat = 1.0 {
         didSet {
-            widthConstraint.constant = scale * direction.buttonSize.width
-            iconView.scale = scale
         }
+    }
+    
+    func setScale(_ scale: CGFloat) {
+        self.scale = scale
+        print("new width: \(scale * direction.buttonSize.width)")
+        widthConstraint.constant = scale * direction.buttonSize.width
+        iconView.scale = scale
+        updateCorner()
     }
     
     override var bounds: CGRect {
@@ -121,17 +133,15 @@ class SliderButton : UIButton {
     fileprivate func updateCorner() {
         switch direction! {
         case .left:
-            roundCorners([.topRight, .bottomRight], radius: bounds.height/2)
+            roundCorners([.topRight, .bottomRight], radius: calculatedSize.height/2)
         case .right:
-            roundCorners([.topLeft, .bottomLeft], radius: bounds.height/2)
+            roundCorners([.topLeft, .bottomLeft], radius: calculatedSize.height/2)
         case .top:
-            roundCorners([.bottomLeft, .bottomRight], radius: bounds.height)
+            roundCorners([.bottomLeft, .bottomRight], radius: calculatedSize.height)
         case .middle:
-            roundCorners([.bottomLeft, .bottomRight, .topLeft, .topRight], radius: bounds.height/2)
+            roundCorners([.bottomLeft, .bottomRight, .topLeft, .topRight], radius: calculatedSize.height/2)
         case .bottom:
-            roundCorners([.topLeft, .topRight], radius: bounds.height)
-        default:
-            break
+            roundCorners([.topLeft, .topRight], radius: calculatedSize.height)
         }
     }
     

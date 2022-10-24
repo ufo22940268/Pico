@@ -45,7 +45,7 @@
                         <constraint firstItem="ban-IM-6C4" firstAttribute="leading" secondItem="Buh-HB-ZaF" secondAttribute="leading" id="FWz-vT-JIQ"/>
                         <constraint firstItem="8ER-9v-Fki" firstAttribute="top" secondItem="Buh-HB-ZaF" secondAttribute="top" id="Pcu-j3-47A"/>
                         <constraint firstItem="8ER-9v-Fki" firstAttribute="centerX" secondItem="Buh-HB-ZaF" secondAttribute="centerX" id="fkD-5D-Ath"/>
-                        <constraint firstItem="8ER-9v-Fki" firstAttribute="height" secondItem="Buh-HB-ZaF" secondAttribute="height" id="jxt-TG-6dQ"/>
+                        <constraint firstAttribute="height" secondItem="8ER-9v-Fki" secondAttribute="height" id="jxt-TG-6dQ"/>
                         <constraint firstAttribute="trailing" secondItem="ban-IM-6C4" secondAttribute="trailing" id="qpe-ht-DYc"/>
                     </constraints>
                     <variation key="default">
@@ -69,7 +69,7 @@
             </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="button" destination="8ER-9v-Fki" id="LEn-aM-nRg"/>
-                <outlet property="middleTopCosntraint" destination="tmO-2T-M7f" id="Qkf-LC-INw"/>
+                <outlet property="middleTopConstraint" destination="tmO-2T-M7f" id="AzO-zm-par"/>
             </connections>
             <point key="canvasLocation" x="210.5" y="-103.5"/>
         </view>

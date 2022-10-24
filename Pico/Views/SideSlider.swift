@@ -9,8 +9,9 @@
 import Foundation
 import UIKit
 
-class SideSlider: UIView, SliderSelectable {
+class SideSlider: UIView, Slider {
     
+    var placeholder: SliderPlaceholder!
     
     @objc var direction: String!
 
