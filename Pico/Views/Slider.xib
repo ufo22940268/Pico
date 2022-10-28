@@ -200,7 +200,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="YZD-Wk-jpK">
-                    <rect key="frame" x="0.0" y="0.0" width="40" height="473"/>
+                    <rect key="frame" x="0.0" y="0.0" width="52" height="473"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mqP-DA-OvO" userLabel="line">
                             <rect key="frame" x="0.0" y="0.0" width="2" height="473"/>
@@ -210,10 +210,10 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xkK-DT-VS0">
-                            <rect key="frame" x="2" y="0.0" width="38" height="473"/>
+                            <rect key="frame" x="2" y="0.0" width="50" height="473"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Sy-2k-fkg" customClass="SliderButton" customModule="Pico" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="33.5" width="38" height="34"/>
+                                    <rect key="frame" x="0.0" y="33.5" width="50" height="34"/>
                                     <color key="backgroundColor" name="Slider"/>
                                     <state key="normal">
                                         <color key="titleColor" red="1" green="0.21595210109999999" blue="0.14619663590000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -245,7 +245,6 @@
             <gestureRecognizers/>
             <constraints>
                 <constraint firstItem="YZD-Wk-jpK" firstAttribute="top" secondItem="spV-JP-zHd" secondAttribute="top" id="9MR-CY-duT"/>
-                <constraint firstItem="YZD-Wk-jpK" firstAttribute="width" secondItem="SbF-3v-z2y" secondAttribute="width" id="LEA-Wb-t9G"/>
                 <constraint firstItem="YZD-Wk-jpK" firstAttribute="height" secondItem="spV-JP-zHd" secondAttribute="height" id="Pek-oZ-8cu"/>
                 <constraint firstItem="spV-JP-zHd" firstAttribute="bottom" secondItem="YZD-Wk-jpK" secondAttribute="bottom" id="dd8-1S-hNV"/>
                 <constraint firstItem="YZD-Wk-jpK" firstAttribute="leading" secondItem="SbF-3v-z2y" secondAttribute="leading" id="qtj-ev-U6k"/>
@@ -267,13 +266,13 @@
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="P1H-q3-HwR">
-                    <rect key="frame" x="0.0" y="0.0" width="40" height="473"/>
+                    <rect key="frame" x="-12" y="0.0" width="52" height="473"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gGb-i3-fOx">
-                            <rect key="frame" x="0.0" y="0.0" width="38" height="473"/>
+                            <rect key="frame" x="0.0" y="0.0" width="50" height="473"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Oz-1H-aZ8" customClass="SliderButton" customModule="Pico" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="33.5" width="38" height="34"/>
+                                    <rect key="frame" x="0.0" y="33.5" width="50" height="34"/>
                                     <color key="backgroundColor" name="Slider"/>
                                     <state key="normal">
                                         <color key="titleColor" red="1" green="0.21595210109999999" blue="0.14619663590000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -293,7 +292,7 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cfM-PM-xaE" userLabel="line">
-                            <rect key="frame" x="38" y="0.0" width="2" height="473"/>
+                            <rect key="frame" x="50" y="0.0" width="2" height="473"/>
                             <color key="backgroundColor" name="Slider"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="2" id="56A-66-wPh"/>
@@ -311,11 +310,10 @@
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
             <gestureRecognizers/>
             <constraints>
-                <constraint firstItem="P1H-q3-HwR" firstAttribute="width" secondItem="GdX-aC-Miv" secondAttribute="width" id="G0j-Wl-FGB"/>
                 <constraint firstItem="Lgo-Ve-Avb" firstAttribute="bottom" secondItem="P1H-q3-HwR" secondAttribute="bottom" id="PIY-cx-742"/>
                 <constraint firstItem="P1H-q3-HwR" firstAttribute="top" secondItem="Lgo-Ve-Avb" secondAttribute="top" id="WS1-kp-nph"/>
                 <constraint firstItem="P1H-q3-HwR" firstAttribute="height" secondItem="Lgo-Ve-Avb" secondAttribute="height" id="YHx-2K-iyu"/>
-                <constraint firstItem="P1H-q3-HwR" firstAttribute="leading" secondItem="GdX-aC-Miv" secondAttribute="leading" id="dQg-a6-su9"/>
+                <constraint firstItem="P1H-q3-HwR" firstAttribute="trailing" secondItem="GdX-aC-Miv" secondAttribute="trailing" id="dQg-a6-su9"/>
                 <constraint firstItem="P1H-q3-HwR" firstAttribute="height" secondItem="GdX-aC-Miv" secondAttribute="height" id="rSI-C0-KxO"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
