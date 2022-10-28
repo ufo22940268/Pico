@@ -51,7 +51,13 @@ class SliderPlaceholder: UIView {
         if ["top", "middle", "bottom"].contains(label) {
             if let container = self.superview, let wrapper = container.superview {
                 let containerBounds = container.convert(wrapper.bounds.intersection(container.frame), from: wrapper)
-                return rootView?.convert(frame.intersection(containerBounds), from: self.superview)
+                var newFrame = frame
+                //Very strange. The minY of bottom placeholder is large than container bounds.
+                if label == "bottom" {
+                    newFrame = newFrame.offsetBy(dx: 0, dy: -0.1)
+                }
+                let rect = rootView?.convert(newFrame.intersection(containerBounds), from: self.superview)
+                return rect
             } else {
                 return nil
             }
@@ -64,6 +70,7 @@ class SliderPlaceholder: UIView {
         super.init(frame: CGRect.zero)
         self.label = label
         translatesAutoresizingMaskIntoConstraints = false
+        accessibilityHint = label
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -115,7 +122,6 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         let placeholder = SliderPlaceholder(label: "top")
         placeholder.rootView = view
         self.addArrangedSubview(placeholder)
-//        placeholder.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0).isActive = true
         placeholder.heightAnchor.constraint(equalToConstant: 0).isActive = true
         seperator.placeholder = placeholder
 
@@ -152,7 +158,6 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         seperator.placeholder = placeholder
         
         view.addSubview(seperator)
-
         
         seperator.index = seperators.count
         seperators.append(seperator)
@@ -173,6 +178,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
             placeholder.topAnchor.constraint(equalTo: wrapper.topAnchor).isActive = true
         }
         seperator.placeholder = placeholder
+        
 
         view.addSubview(seperator)
 
