@@ -257,7 +257,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             }
             
             let translate = sender.translation(in: container)
-            let translateX = translate.x
+            var translateX = translate.x
             
             guard translateX != 0 else {
                 return
@@ -266,10 +266,8 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             let shrink = (translateX > 0 && direction == "right") || (translateX < 0 && direction == "left")
             
             
-            let newCenterX = centerXOfContainerConstraint.constant + translateX/2
-            
-            if !horizontalScrollOverEdge(onDirection: direction, shrink: shrink, translateX) {
-                /// Move container
+            if !horizontalScrollOverEdge(onDirection: direction, shrink: shrink, &translateX) {
+                let newCenterX = centerXOfContainerConstraint.constant + translateX/2
                 if shrink {
                     wrapperWidthConstraint.constant = wrapperWidthConstraint.constant - abs(translateX)
                 } else {
@@ -290,7 +288,10 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         return container.convert(containerWrapper.bounds.intersection(container.frame), from: containerWrapper)
     }
     
-    func horizontalScrollOverEdge(onDirection direction: String, shrink: Bool, _ translateX: CGFloat) -> Bool {
+    let minimunGapBetweenSlides: CGFloat = 30
+    
+    func horizontalScrollOverEdge(onDirection direction: String, shrink: Bool, _ translateX: inout CGFloat) -> Bool {
+        let validAreaWidth = validAreaForHorizontalScrolling.width
         let finalWidth = validAreaForHorizontalScrolling.width + (shrink ? -1 : 1)*abs(translateX)
         var maxWidth: CGFloat
         if direction == "left" {
@@ -298,7 +299,19 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         } else {
             maxWidth = scroll.bounds.width - validAreaForHorizontalScrolling.minX
         }
-        return !(finalWidth <= maxWidth && finalWidth > 30)
+        
+        if (validAreaWidth == maxWidth && !shrink) || (validAreaWidth == minimunGapBetweenSlides && shrink) {
+            return true
+        } else {
+            if finalWidth > maxWidth {
+                let absTranlsateX = (maxWidth - validAreaWidth) - (shrink ? -1 : 1)
+                translateX = (translateX/abs(translateX))*absTranlsateX
+            } else if finalWidth < minimunGapBetweenSlides {
+                let absTranlsateX = (minimunGapBetweenSlides - validAreaWidth) - (shrink ? -1 : 1)
+                translateX = (translateX/abs(translateX))*absTranlsateX
+            }
+            return false
+        }
     }
     
     func keepHorizontalPosition(inDirection direction: String,  translate: CGFloat) {
