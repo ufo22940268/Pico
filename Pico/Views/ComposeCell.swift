@@ -56,9 +56,7 @@ class ComposeCell: UIView, EditDelegator {
     
     var originFrame: CGRect?
     
-    var bottomConstant = ScalableConstant()
-    var topConstant = ScalableConstant()
-    var imageManager = PHCachingImageManager.default() as! PHCachingImageManager    
+    var imageManager = PHCachingImageManager.default() as! PHCachingImageManager
     var loadingTag = Int32(0)
 
     override func awakeFromNib() {
@@ -97,20 +95,18 @@ class ComposeCell: UIView, EditDelegator {
         
         let deltaTranslateY = (shrink ? -1 : 1) * absTranslateY
         if case .above = position {
-            let newContraint: CGFloat = bottomConstant.constant + deltaTranslateY
+            let newContraint: CGFloat = bottomConstraint.constant + deltaTranslateY
             if newContraint < 0 {
                 if !(shrink && frame.height - absTranslateY < 60) {
-                    bottomConstant.constant = newContraint
-                    bottomConstraint.constant = bottomConstant.finalConstant()
+                    bottomConstraint.constant = newContraint
                     onCellScrollDelegator?.onCellScroll(translate: Float(translateY), cellIndex: index, position: position)
                 }
             }
         } else if case .below = position {
-            let newContraint: CGFloat = topConstant.constant - deltaTranslateY
+            let newContraint: CGFloat = topConstraint.constant - deltaTranslateY
             if newContraint > 0 {
                 if !(shrink && frame.height - absTranslateY < 10) {
-                    topConstant.constant = newContraint
-                    topConstraint.constant = topConstant.finalConstant()
+                    topConstraint.constant = newContraint
                     onCellScrollDelegator?.onCellScroll(translate: Float(translateY), cellIndex: index, position: position)
                 }
             }
@@ -205,16 +201,6 @@ class ComposeCell: UIView, EditDelegator {
         
         return imageCache.convertToUIImage()
    }
-    
-    func multiplyScale(scale: CGFloat) {
-        let topConstraint = self.constraints.filter {$0.identifier == "top"}.first!
-        topConstant.scale = topConstant.scale*scale
-        topConstraint.constant = topConstant.finalConstant()
-        
-        let bottomConstraint = self.constraints.filter {$0.identifier == "bottom"}.first!
-        bottomConstant.scale = bottomConstant.scale*scale
-        bottomConstraint.constant = bottomConstant.finalConstant()
-    }
 }
 
 
