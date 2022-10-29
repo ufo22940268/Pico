@@ -17,6 +17,7 @@ class SliderConstants {
     static let animatorDuration = 0.5
     
     static let buttonHeight = CGFloat(20)
+    static let buttonWidth = CGFloat(50)
 }
 
 class ArrowImage : UIImageView {
@@ -46,7 +47,7 @@ class SeperatorSlider: UIView, Slider {
     
     @objc var direction = "middle"
     @IBOutlet weak var button: SliderButton!
-    @IBOutlet var buttonCenterXConstraint: NSLayoutConstraint!
+    var buttonLeadingConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var middleTopConstraint: NSLayoutConstraint!
     fileprivate func showAboveArrow() -> Bool {
@@ -78,8 +79,8 @@ class SeperatorSlider: UIView, Slider {
         
         directionEnum = SliderDirection.parse(direction: direction)
         
-        buttonCenterXConstraint = button.centerXAnchor.constraint(equalTo: centerXAnchor)
-        buttonCenterXConstraint.isActive = true
+        buttonLeadingConstraint = button.leadingAnchor.constraint(equalTo: leadingAnchor)
+        buttonLeadingConstraint.isActive = true
         
         aboveArrow = ArrowImage(image: UIImage(named: "angle-double-down-solid"))
         aboveArrow.tintColor = UIColor(named: "Slider")
@@ -177,7 +178,7 @@ class SeperatorSlider: UIView, Slider {
     }
     
     func updateButtonPosition(midPoint: CGPoint) {
-        buttonCenterXConstraint.constant = (midPoint.x - bounds.midX)
+        buttonLeadingConstraint.constant = midPoint.x - SliderConstants.buttonWidth/2
     }
         
     fileprivate func setupAnimations() {
