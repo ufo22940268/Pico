@@ -11,12 +11,51 @@ import UIKit
 
 
 protocol ZoomScrollViewDelegate: class {
-    func onChangeTo(scale: CGFloat)
+    func onChangeTo(destinationRect: CGRect?)
+
+    func onResetZoomScale()
+}
+
+extension UIScrollView {
+    func zoom(toPoint zoomPoint : CGPoint, scale : CGFloat, animated : Bool) -> CGRect {
+        var scale = CGFloat.minimum(scale, maximumZoomScale)
+        scale = CGFloat.maximum(scale, self.minimumZoomScale)
+        
+        var translatedZoomPoint : CGPoint = .zero
+        translatedZoomPoint.x = zoomPoint.x + contentOffset.x
+        translatedZoomPoint.y = zoomPoint.y + contentOffset.y
+        
+        let zoomFactor = 1.0 / zoomScale
+        
+        translatedZoomPoint.x *= zoomFactor
+        translatedZoomPoint.y *= zoomFactor
+        
+        var destinationRect : CGRect = .zero
+        destinationRect.size.width = frame.width / scale
+        destinationRect.size.height = frame.height / scale
+        destinationRect.origin.x = translatedZoomPoint.x - destinationRect.width * 0.5
+        destinationRect.origin.y = translatedZoomPoint.y - destinationRect.height * 0.5
+        
+        if animated {
+            UIView.animate(withDuration: 0.55, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0.6, options: [.allowUserInteraction], animations: {
+                self.zoom(to: destinationRect, animated: false)
+            }, completion: {
+                completed in
+                if let delegate = self.delegate, delegate.responds(to: #selector(UIScrollViewDelegate.scrollViewDidEndZooming(_:with:atScale:))), let view = delegate.viewForZooming?(in: self) {
+                    delegate.scrollViewDidEndZooming!(self, with: view, atScale: scale)
+                }
+            })
+        } else {
+            zoom(to: destinationRect, animated: false)
+        }
+        
+        return destinationRect
+    }
 }
 
 class ZoomScrollView: UIScrollView {
     
-    var maxZoomScale:CGFloat = 2.0    
+    var maxZoomScale:CGFloat = 2.0
     
     weak var zoomDelegate: ZoomScrollViewDelegate?
     
@@ -38,25 +77,26 @@ class ZoomScrollView: UIScrollView {
             return
         }
         
+        var newScale:CGFloat
         
-        self.layoutIfNeeded()
-        UIView.animate(withDuration: 0.15) {
-            var newScale:CGFloat
-            if self.zoomScale < 1.0 {
-                self.setZoomScale(1.0, animated: false)
-                newScale = 1.0
-            } else if self.zoomScale >= 1.0 && self.zoomScale < self.maxZoomScale {
-                let touchPoint = gesture.location(in: self)
-                let size = self.bounds.size.applying(CGAffineTransform(scaleX: 1.0/self.maxZoomScale, y: 1.0/self.maxZoomScale))
-                self.zoom(to: CGRect(origin: touchPoint.applying(CGAffineTransform(translationX: -size.width/2, y: -size.height/2)), size: size), animated: false)
-                newScale = self.maxZoomScale
-            } else {
-                self.setZoomScale(1.0, animated: false)
-                newScale = 1.0
+        if self.zoomScale >= 1.0 && self.zoomScale < self.maxZoomScale {
+            let touchPoint = gesture.location(in: self)
+            newScale = self.maxZoomScale
+            
+            
+            UIView.animate(withDuration: 0.3) {
+                var destinationRect = self.zoom(toPoint: touchPoint, scale: self.maxZoomScale, animated: false)
+                self.zoomDelegate?.onChangeTo(destinationRect: destinationRect)
+                self.superview!.layoutIfNeeded()
             }
-
-            self.zoomDelegate?.onChangeTo(scale: newScale)
-            self.layoutIfNeeded()
+        } else {
+            newScale = 1.0
+            
+            UIView.animate(withDuration: 0.3) {
+                self.setZoomScale(newScale, animated: false)
+                self.zoomDelegate?.onResetZoomScale()
+                self.superview!.layoutIfNeeded()
+            }
         }
     }
     
