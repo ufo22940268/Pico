@@ -548,9 +548,6 @@ extension ComposeController: UIScrollViewDelegate {
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         updateSliders()
-        centerContainerWrapper()
-        
-//        updateSideSliderButtons()
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
