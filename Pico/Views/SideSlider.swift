@@ -16,7 +16,6 @@ class SideSlider: UIView, Slider {
     @objc var direction: String!
 
     @IBOutlet weak var button: SliderButton!
-    @IBOutlet weak var topConstraint: NSLayoutConstraint!
     weak var delegate: EditDelegator?
     var arrow: ArrowImage!
     var arrowAnimator: UIViewPropertyAnimator!
@@ -38,10 +37,6 @@ class SideSlider: UIView, Slider {
         }
         
         button.setup(direction: SliderDirection.parse(direction: direction))
-    }
-    
-    func update(midPoint: CGPoint) {
-        topConstraint.constant = midPoint.y
     }
     
     func updateScale(_ scale: CGFloat) {
