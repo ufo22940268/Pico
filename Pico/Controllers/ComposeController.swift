@@ -191,16 +191,11 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         container.scrollDelegator = self
     }
     
-    func setupScrollView() {
-        scroll.delegate = self
-        scroll.zoomDelegate = self
-        syncSeperatorFrames()
-        
-        let rightButton = container.rightSlider.button!
-        let leftButton = container.leftSlider.button!
-
+    func buildVisibleAreaLayoutGuide() -> UILayoutGuide {
         let visibleAreaLayoutGuide = UILayoutGuide()
         self.view.addLayoutGuide(visibleAreaLayoutGuide)
+        
+        //Vertical axis
         visibleAreaLayoutGuide.topAnchor.constraint(greaterThanOrEqualTo: scroll.topAnchor).isActive = true
         let topToWrapper = visibleAreaLayoutGuide.topAnchor.constraint(lessThanOrEqualTo: containerWrapper.topAnchor)
         topToWrapper.priority = .defaultLow
@@ -209,10 +204,34 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         let bottomToWrapper = visibleAreaLayoutGuide.bottomAnchor.constraint(greaterThanOrEqualTo: containerWrapper.bottomAnchor)
         bottomToWrapper.priority = .defaultLow
         bottomToWrapper.isActive = true
-        visibleAreaLayoutGuide.widthAnchor.constraint(equalToConstant: 0).isActive = true
+        
+        //Horizontal axis
+        visibleAreaLayoutGuide.leadingAnchor.constraint(greaterThanOrEqualTo: scroll.leadingAnchor).isActive = true
+        let leadingToWrapper = visibleAreaLayoutGuide.leadingAnchor.constraint(lessThanOrEqualTo: containerWrapper.leadingAnchor)
+        leadingToWrapper.priority = .defaultLow
+        leadingToWrapper.isActive = true
+        visibleAreaLayoutGuide.trailingAnchor.constraint(lessThanOrEqualTo: scroll.trailingAnchor).isActive = true
+        let trailingToWrapper = visibleAreaLayoutGuide.trailingAnchor.constraint(greaterThanOrEqualTo: containerWrapper.trailingAnchor)
+        trailingToWrapper.priority = .defaultLow
+        trailingToWrapper.isActive = true
+
+        return visibleAreaLayoutGuide
+    }
+    
+    func setupScrollView() {
+        scroll.delegate = self
+        scroll.zoomDelegate = self
+        syncSeperatorFrames()
+        
+        let rightButton = container.rightSlider.button!
+        let leftButton = container.leftSlider.button!
+
+        let visibleAreaLayoutGuide = buildVisibleAreaLayoutGuide()
         
         rightButton.centerYAnchor.constraint(equalTo: visibleAreaLayoutGuide.centerYAnchor).isActive = true
         leftButton.centerYAnchor.constraint(equalTo: visibleAreaLayoutGuide.centerYAnchor).isActive = true
+        
+        container.seperators.forEach {$0.button.centerXAnchor.constraint(equalTo: visibleAreaLayoutGuide.centerXAnchor).isActive = true}        
     }
     
     func syncSeperatorFrames() {

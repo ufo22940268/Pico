@@ -47,7 +47,6 @@ class SeperatorSlider: UIView, Slider {
     
     @objc var direction = "middle"
     @IBOutlet weak var button: SliderButton!
-    var buttonLeadingConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var middleTopConstraint: NSLayoutConstraint!
     fileprivate func showAboveArrow() -> Bool {
@@ -78,9 +77,6 @@ class SeperatorSlider: UIView, Slider {
     override func awakeFromNib() {
         
         directionEnum = SliderDirection.parse(direction: direction)
-        
-        buttonLeadingConstraint = button.leadingAnchor.constraint(equalTo: leadingAnchor)
-        buttonLeadingConstraint.isActive = true
         
         aboveArrow = ArrowImage(image: UIImage(named: "angle-double-down-solid"))
         aboveArrow.tintColor = UIColor(named: "Slider")
@@ -178,7 +174,7 @@ class SeperatorSlider: UIView, Slider {
     }
     
     func updateButtonPosition(midPoint: CGPoint) {
-        buttonLeadingConstraint.constant = midPoint.x - SliderConstants.buttonWidth/2
+//        buttonLeadingConstraint.constant = midPoint.x - SliderConstants.buttonWidth/2
     }
         
     fileprivate func setupAnimations() {
