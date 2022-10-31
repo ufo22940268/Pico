@@ -132,7 +132,8 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         default:
             self.navigationItem.title = "竖向拼接"
             hideLoading()
-            activeSlideMode()
+//            activeSlideMode()
+            activeCropMode()
         }
         
         scroll.layoutIfNeeded()
@@ -286,7 +287,9 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     }
     
     var visibleContainerRect: CGRect {
-        let scrollRect = container.convert(scroll.bounds, from: scroll)
+        let window = UIApplication.shared.windows.first!
+        let scrollRectInWindow = scroll.convert(window.bounds, from: window).intersection(scroll.bounds)
+        let scrollRect = container.convert(scrollRectInWindow, from: scroll)
         return scrollRect.intersection(container.bounds)
     }
     
@@ -520,15 +523,23 @@ extension ComposeController: UIScrollViewDelegate {
     }
 
     fileprivate func updateSideSliderButtons() {
+//        if container.leftSlider != nil {
+//            let midPoint = container.leftSlider.convert(CGPoint(x: 0, y: visibleContainerRect.midY), from: container)
+//            container.leftSlider.update(midPoint: midPoint)
+//            container.rightSlider.update(midPoint: midPoint)
+//        }
+    }
+    
+    fileprivate func updateSideSliderButtons(toDestinationRect destinationRect: CGRect) {
         if container.leftSlider != nil {
-            let fillScrollHeight = containerWrapper.bounds.height >= scroll.bounds.height
-            let scrollMidPoint = containerWrapper.convert(CGPoint(x: 0, y: scroll.bounds.midY), from: scroll)
-            let midPoint = container.leftSlider.convert(CGPoint(x: 0, y: fillScrollHeight ? scrollMidPoint.y : containerWrapper.bounds.midY), from: containerWrapper)
+            let rectInSliderCoordinate = container.leftSlider.convert(destinationRect, from: containerWrapper)
+            let midPoint = CGPoint(x: 0, y: rectInSliderCoordinate.midY - rectInSliderCoordinate.minY)
+            print(rectInSliderCoordinate, midPoint)
             container.leftSlider.update(midPoint: midPoint)
             container.rightSlider.update(midPoint: midPoint)
         }
     }
-    
+
     fileprivate func updateSliders() {
         updateSeperatorSliderButtons()
         updateSideSliderButtons()
@@ -536,10 +547,7 @@ extension ComposeController: UIScrollViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        updateSideSliderButtons()
-//        updateSeperatorSliderButtons()
-        updateContainerImages()
-        syncSeperatorFrames()
+        updateSliders()
     }
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
@@ -573,9 +581,10 @@ extension ComposeController: UIScrollViewDelegate {
 }
 
 extension ComposeController: ZoomScrollViewDelegate {
-    func onChangeTo(destinationRect: CGRect?) {
+    func onZoomTo(destinationRect: CGRect?) {
         if let destinationRect = destinationRect {
             updateSeperatorSliderButtons(toDestinationRect: destinationRect)
+            updateSideSliderButtons(toDestinationRect: destinationRect)
         }
     }
     

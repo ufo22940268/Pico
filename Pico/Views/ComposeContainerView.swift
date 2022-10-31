@@ -67,7 +67,7 @@ class SliderPlaceholder: UIView {
             return rootView?.convert(frame, from: self.superview)
         }
     }
-    
+        
     init(label: String) {
         super.init(frame: CGRect.zero)
         self.label = label

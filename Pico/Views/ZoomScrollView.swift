@@ -11,7 +11,7 @@ import UIKit
 
 
 protocol ZoomScrollViewDelegate: class {
-    func onChangeTo(destinationRect: CGRect?)
+    func onZoomTo(destinationRect: CGRect?)
 
     func onResetZoomScale()
 }
@@ -83,10 +83,10 @@ class ZoomScrollView: UIScrollView {
             let touchPoint = gesture.location(in: self)
             newScale = self.maxZoomScale
             
-            
             UIView.animate(withDuration: 0.3) {
-                var destinationRect = self.zoom(toPoint: touchPoint, scale: self.maxZoomScale, animated: false)
-                self.zoomDelegate?.onChangeTo(destinationRect: destinationRect)
+                let destinationRect = self.zoom(toPoint: touchPoint, scale: self.maxZoomScale, animated: false)
+                print("destinationRect", destinationRect)
+                self.zoomDelegate?.onZoomTo(destinationRect: destinationRect)
                 self.superview!.layoutIfNeeded()
             }
         } else {
