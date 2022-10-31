@@ -71,7 +71,7 @@
             <rect key="frame" x="0.0" y="0.0" width="376" height="30"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
-                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="rA9-BK-yhQ">
+                <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="rA9-BK-yhQ">
                     <rect key="frame" x="0.0" y="0.0" width="376" height="76"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m8q-Jn-26T" userLabel="line">
@@ -81,11 +81,11 @@
                                 <constraint firstAttribute="height" constant="2" id="BBm-94-d8e"/>
                             </constraints>
                         </view>
-                        <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jzx-gj-LrB">
-                            <rect key="frame" x="153" y="2" width="70" height="74"/>
+                        <view opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jzx-gj-LrB">
+                            <rect key="frame" x="0.0" y="2" width="376" height="74"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0M1-nQ-DQC" customClass="SliderButton" customModule="Pico" customModuleProvider="target">
-                                    <rect key="frame" x="20" y="0.0" width="30" height="74"/>
+                                    <rect key="frame" x="20" y="0.0" width="30" height="34"/>
                                     <color key="backgroundColor" name="Slider"/>
                                     <state key="normal">
                                         <color key="titleColor" red="1" green="0.21595210109999999" blue="0.14619663590000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -99,13 +99,12 @@
                                 </button>
                             </subviews>
                             <constraints>
-                                <constraint firstItem="0M1-nQ-DQC" firstAttribute="width" secondItem="jzx-gj-LrB" secondAttribute="width" id="LPl-2n-JrV"/>
-                                <constraint firstItem="0M1-nQ-DQC" firstAttribute="height" secondItem="jzx-gj-LrB" secondAttribute="height" id="UFN-MR-2EN"/>
                                 <constraint firstItem="0M1-nQ-DQC" firstAttribute="top" secondItem="jzx-gj-LrB" secondAttribute="top" id="c2q-hJ-F6k"/>
                             </constraints>
                         </view>
                     </subviews>
                     <constraints>
+                        <constraint firstItem="jzx-gj-LrB" firstAttribute="width" secondItem="rA9-BK-yhQ" secondAttribute="width" id="Amj-Zj-lTx"/>
                         <constraint firstItem="m8q-Jn-26T" firstAttribute="width" secondItem="rA9-BK-yhQ" secondAttribute="width" id="jVg-Hm-Ecm"/>
                     </constraints>
                 </stackView>
@@ -135,7 +134,7 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B4X-9M-Fgr" customClass="UIStackView">
                     <rect key="frame" x="0.0" y="-4" width="376" height="34"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wZH-WN-ppM" userLabel="line">
+                        <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wZH-WN-ppM" userLabel="line">
                             <rect key="frame" x="0.0" y="32" width="376" height="2"/>
                             <color key="backgroundColor" name="Slider"/>
                             <constraints>
@@ -158,7 +157,6 @@
                     </subviews>
                     <constraints>
                         <constraint firstItem="wZH-WN-ppM" firstAttribute="bottom" secondItem="OxF-rH-3u9" secondAttribute="bottom" id="2A4-OD-TKO"/>
-                        <constraint firstItem="OxF-rH-3u9" firstAttribute="centerY" secondItem="B4X-9M-Fgr" secondAttribute="centerY" id="9C7-gr-JZY"/>
                         <constraint firstItem="wZH-WN-ppM" firstAttribute="leading" secondItem="B4X-9M-Fgr" secondAttribute="leading" id="9gr-xG-JZz"/>
                         <constraint firstAttribute="trailing" secondItem="wZH-WN-ppM" secondAttribute="trailing" id="LJw-6J-b2A"/>
                         <constraint firstItem="OxF-rH-3u9" firstAttribute="height" secondItem="B4X-9M-Fgr" secondAttribute="height" id="ddy-iy-ync"/>
