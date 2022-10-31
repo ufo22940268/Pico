@@ -200,7 +200,7 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xkK-DT-VS0">
                             <rect key="frame" x="2" y="0.0" width="50" height="473"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Sy-2k-fkg" customClass="SliderButton" customModule="Pico" customModuleProvider="target">
+                                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Sy-2k-fkg" customClass="SliderButton" customModule="Pico" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="33.5" width="50" height="34"/>
                                     <color key="backgroundColor" name="Slider"/>
                                     <state key="normal">
@@ -217,7 +217,6 @@
                             <constraints>
                                 <constraint firstItem="1Sy-2k-fkg" firstAttribute="leading" secondItem="xkK-DT-VS0" secondAttribute="leading" id="9vU-oi-HV4"/>
                                 <constraint firstItem="1Sy-2k-fkg" firstAttribute="width" secondItem="xkK-DT-VS0" secondAttribute="width" id="PaW-wF-uct"/>
-                                <constraint firstItem="1Sy-2k-fkg" firstAttribute="top" secondItem="xkK-DT-VS0" secondAttribute="top" constant="33.5" id="gHx-jM-x9j"/>
                             </constraints>
                         </view>
                     </subviews>
@@ -245,7 +244,6 @@
             </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="button" destination="1Sy-2k-fkg" id="9Tc-9P-Hqj"/>
-                <outlet property="topConstraint" destination="gHx-jM-x9j" id="iEb-69-3gx"/>
             </connections>
             <point key="canvasLocation" x="82" y="439.5"/>
         </view>
@@ -259,7 +257,7 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gGb-i3-fOx">
                             <rect key="frame" x="0.0" y="0.0" width="50" height="473"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Oz-1H-aZ8" customClass="SliderButton" customModule="Pico" customModuleProvider="target">
+                                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Oz-1H-aZ8" customClass="SliderButton" customModule="Pico" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="33.5" width="50" height="34"/>
                                     <color key="backgroundColor" name="Slider"/>
                                     <state key="normal">
@@ -274,7 +272,6 @@
                                 </button>
                             </subviews>
                             <constraints>
-                                <constraint firstItem="2Oz-1H-aZ8" firstAttribute="top" secondItem="gGb-i3-fOx" secondAttribute="top" constant="33.5" id="IUa-KN-aN7"/>
                                 <constraint firstItem="2Oz-1H-aZ8" firstAttribute="leading" secondItem="gGb-i3-fOx" secondAttribute="leading" id="ggG-Sa-Sf0"/>
                                 <constraint firstItem="2Oz-1H-aZ8" firstAttribute="width" secondItem="gGb-i3-fOx" secondAttribute="width" id="ysR-Mb-fa8"/>
                             </constraints>
@@ -311,7 +308,6 @@
             </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="button" destination="2Oz-1H-aZ8" id="lS2-ux-GCu"/>
-                <outlet property="topConstraint" destination="IUa-KN-aN7" id="SQN-JV-bRK"/>
             </connections>
             <point key="canvasLocation" x="372" y="440"/>
         </view>

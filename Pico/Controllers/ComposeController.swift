@@ -137,7 +137,6 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         }
         
         scroll.layoutIfNeeded()
-        updateSideSliderButtons()
         updateSeperatorSliderButtons()
         container.updateSliderType()
         
@@ -168,7 +167,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
 //                }
 
                 //Mocker
-                let images = [ImageMocker(image: UIImage(named: "IMG_3975")!), ImageMocker(image: UIImage(named: "IMG_3976")!)]
+                let images = [ImageMocker(image: UIImage(named: "IMG_0009")!), ImageMocker(image: UIImage(named: "IMG_0010")!)]
                 self.configureImages(images)
             }
         }
@@ -196,6 +195,24 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         scroll.delegate = self
         scroll.zoomDelegate = self
         syncSeperatorFrames()
+        
+        let rightButton = container.rightSlider.button!
+        let leftButton = container.leftSlider.button!
+
+        let visibleAreaLayoutGuide = UILayoutGuide()
+        self.view.addLayoutGuide(visibleAreaLayoutGuide)
+        visibleAreaLayoutGuide.topAnchor.constraint(greaterThanOrEqualTo: scroll.topAnchor).isActive = true
+        let topToWrapper = visibleAreaLayoutGuide.topAnchor.constraint(lessThanOrEqualTo: containerWrapper.topAnchor)
+        topToWrapper.priority = .defaultLow
+        topToWrapper.isActive = true
+        visibleAreaLayoutGuide.bottomAnchor.constraint(lessThanOrEqualTo: scroll.bottomAnchor).isActive = true
+        let bottomToWrapper = visibleAreaLayoutGuide.bottomAnchor.constraint(greaterThanOrEqualTo: containerWrapper.bottomAnchor)
+        bottomToWrapper.priority = .defaultLow
+        bottomToWrapper.isActive = true
+        visibleAreaLayoutGuide.widthAnchor.constraint(equalToConstant: 0).isActive = true
+        
+        rightButton.centerYAnchor.constraint(equalTo: visibleAreaLayoutGuide.centerYAnchor).isActive = true
+        leftButton.centerYAnchor.constraint(equalTo: visibleAreaLayoutGuide.centerYAnchor).isActive = true
     }
     
     func syncSeperatorFrames() {
@@ -522,27 +539,8 @@ extension ComposeController: UIScrollViewDelegate {
         container.updateSeperatorSliders(midPoint: midPoint)
     }
 
-    fileprivate func updateSideSliderButtons() {
-//        if container.leftSlider != nil {
-//            let midPoint = container.leftSlider.convert(CGPoint(x: 0, y: visibleContainerRect.midY), from: container)
-//            container.leftSlider.update(midPoint: midPoint)
-//            container.rightSlider.update(midPoint: midPoint)
-//        }
-    }
-    
-    fileprivate func updateSideSliderButtons(toDestinationRect destinationRect: CGRect) {
-        if container.leftSlider != nil {
-            let rectInSliderCoordinate = container.leftSlider.convert(destinationRect, from: containerWrapper)
-            let midPoint = CGPoint(x: 0, y: rectInSliderCoordinate.midY - rectInSliderCoordinate.minY)
-            print(rectInSliderCoordinate, midPoint)
-            container.leftSlider.update(midPoint: midPoint)
-            container.rightSlider.update(midPoint: midPoint)
-        }
-    }
-
     fileprivate func updateSliders() {
         updateSeperatorSliderButtons()
-        updateSideSliderButtons()
         syncSeperatorFrames()
     }
     
@@ -584,7 +582,7 @@ extension ComposeController: ZoomScrollViewDelegate {
     func onZoomTo(destinationRect: CGRect?) {
         if let destinationRect = destinationRect {
             updateSeperatorSliderButtons(toDestinationRect: destinationRect)
-            updateSideSliderButtons(toDestinationRect: destinationRect)
+//            updateSideSliderButtons(toDestinationRect: destinationRect)
         }
     }
     
