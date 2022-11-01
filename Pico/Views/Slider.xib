@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -131,7 +131,7 @@
             <rect key="frame" x="0.0" y="0.0" width="376" height="30"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B4X-9M-Fgr" customClass="UIStackView">
+                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B4X-9M-Fgr" customClass="UIStackView">
                     <rect key="frame" x="0.0" y="-4" width="376" height="34"/>
                     <subviews>
                         <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wZH-WN-ppM" userLabel="line">
@@ -156,10 +156,10 @@
                         </button>
                     </subviews>
                     <constraints>
-                        <constraint firstItem="wZH-WN-ppM" firstAttribute="bottom" secondItem="OxF-rH-3u9" secondAttribute="bottom" id="2A4-OD-TKO"/>
                         <constraint firstItem="wZH-WN-ppM" firstAttribute="leading" secondItem="B4X-9M-Fgr" secondAttribute="leading" id="9gr-xG-JZz"/>
+                        <constraint firstAttribute="bottom" secondItem="wZH-WN-ppM" secondAttribute="bottom" id="Eil-GV-xd0"/>
                         <constraint firstAttribute="trailing" secondItem="wZH-WN-ppM" secondAttribute="trailing" id="LJw-6J-b2A"/>
-                        <constraint firstItem="OxF-rH-3u9" firstAttribute="height" secondItem="B4X-9M-Fgr" secondAttribute="height" id="ddy-iy-ync"/>
+                        <constraint firstItem="OxF-rH-3u9" firstAttribute="bottom" secondItem="wZH-WN-ppM" secondAttribute="top" id="T1p-TO-c6V"/>
                     </constraints>
                 </view>
             </subviews>

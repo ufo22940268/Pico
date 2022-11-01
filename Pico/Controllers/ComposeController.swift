@@ -167,7 +167,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
 //                }
 
                 //Mocker
-                let images = [ImageMocker(image: UIImage(named: "IMG_0009")!), ImageMocker(image: UIImage(named: "IMG_0010")!)]
+                let images = [ImageMocker(image: #imageLiteral(resourceName: "IMG_3975.jpg")), ImageMocker(image: #imageLiteral(resourceName: "IMG_3976.jpg"))]
                 self.configureImages(images)
             }
         }
@@ -231,7 +231,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         rightButton.centerYAnchor.constraint(equalTo: visibleAreaLayoutGuide.centerYAnchor).isActive = true
         leftButton.centerYAnchor.constraint(equalTo: visibleAreaLayoutGuide.centerYAnchor).isActive = true
         
-        container.seperators.forEach {$0.button.centerXAnchor.constraint(equalTo: visibleAreaLayoutGuide.centerXAnchor).isActive = true}        
+        container.seperators.forEach {$0.button.centerXAnchor.constraint(equalTo: visibleAreaLayoutGuide.centerXAnchor).isActive = true}
     }
     
     func syncSeperatorFrames() {

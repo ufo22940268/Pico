@@ -85,7 +85,6 @@ class ZoomScrollView: UIScrollView {
             
             UIView.animate(withDuration: 0.3) {
                 let destinationRect = self.zoom(toPoint: touchPoint, scale: self.maxZoomScale, animated: false)
-                print("destinationRect", destinationRect)
                 self.zoomDelegate?.onZoomTo(destinationRect: destinationRect)
                 self.superview!.layoutIfNeeded()
             }

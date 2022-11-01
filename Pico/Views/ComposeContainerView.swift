@@ -179,10 +179,10 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
             placeholder.widthAnchor.constraint(equalToConstant: 0).isActive = true
             placeholder.topAnchor.constraint(equalTo: wrapper.topAnchor).isActive = true
         }
-        seperator.placeholder = placeholder
         
 
         view.addSubview(seperator)
+        seperator.placeholder = placeholder
 
         leftSlider = seperator
     }
@@ -200,9 +200,9 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
             placeholder.widthAnchor.constraint(equalToConstant: 0).isActive = true
             placeholder.topAnchor.constraint(equalTo: wrapper.topAnchor).isActive = true
         }
-        seperator.placeholder = placeholder
 
         view.addSubview(seperator)
+        seperator.placeholder = placeholder
 
         rightSlider = seperator
     }
