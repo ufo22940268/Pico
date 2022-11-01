@@ -120,6 +120,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     func addTopSeperator(toView view: UIView) {
         let seperator = UINib(nibName: "Slider", bundle: nil).instantiate(withOwner: self, options: nil).map {$0 as! UIView}.filter {$0.restorationIdentifier == "top"}.first as! SeperatorSlider
         seperator.editDelegator = self
+        seperator.accessibilityHint = "top"
         
         let placeholder = SliderPlaceholder(label: "top")
         placeholder.rootView = view
@@ -135,6 +136,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     
     func addMiddleSeperator(toView view: UIView) {
         let seperator = UINib(nibName: "Slider", bundle: nil).instantiate(withOwner: self, options: nil).first as! SeperatorSlider
+        seperator.accessibilityHint = "middle"
         seperator.editDelegator = self
         
         let placeholder = SliderPlaceholder(label: "middle")
@@ -151,6 +153,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
 
     func addBottomSeperator(toView view: UIView) {
         let seperator = UINib(nibName: "Slider", bundle: nil).instantiate(withOwner: self, options: nil).map {$0 as! UIView}.filter {$0.restorationIdentifier == "bottom"}.first as! SeperatorSlider
+        seperator.accessibilityHint = "bottom"
         seperator.editDelegator = self
         
         let placeholder = SliderPlaceholder(label: "bottom")
@@ -167,7 +170,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     
     func addLeftSeperator(toView view: UIView) {
         let seperator = UINib(nibName: "Slider", bundle: nil).instantiate(withOwner: self, options: nil).map {$0 as! UIView}.filter {$0.restorationIdentifier == "left"}.first as! SideSlider
-        
+        seperator.accessibilityHint = "left"
         seperator.addEditDelegator(editDelegator: self)
         
         let placeholder = SliderPlaceholder(label: "left")
@@ -189,6 +192,7 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
     
     func addRightSeperator(toView view: UIView) {
         let seperator = UINib(nibName: "Slider", bundle: nil).instantiate(withOwner: self, options: nil).map {$0 as! UIView}.filter {$0.restorationIdentifier == "right"}.first as! SideSlider
+        seperator.accessibilityHint = "right"
         seperator.addEditDelegator(editDelegator: self)
         
         let placeholder = SliderPlaceholder(label: "right")
