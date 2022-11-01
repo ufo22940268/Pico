@@ -192,8 +192,10 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         container.scrollDelegator = self
     }
     
+    var lg: UILayoutGuide!
     func buildVisibleAreaLayoutGuide() -> UILayoutGuide {
         let visibleAreaLayoutGuide = UILayoutGuide()
+        lg = visibleAreaLayoutGuide
         self.view.addLayoutGuide(visibleAreaLayoutGuide)
         
         //Vertical axis
@@ -228,6 +230,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         let leftButton = container.leftSlider.button!
 
         let visibleAreaLayoutGuide = buildVisibleAreaLayoutGuide()
+        visibleAreaLayoutGuide.identifier = "guidedddddddds"
         
         rightButton.centerYAnchor.constraint(equalTo: visibleAreaLayoutGuide.centerYAnchor).isActive = true
         leftButton.centerYAnchor.constraint(equalTo: visibleAreaLayoutGuide.centerYAnchor).isActive = true
@@ -565,6 +568,7 @@ extension ComposeController: UIScrollViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        print(containerWrapper.transform, lg)
         updateSliders()
     }
     
@@ -573,6 +577,7 @@ extension ComposeController: UIScrollViewDelegate {
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        print(containerWrapper.transform, lg)
         updateSliders()
     }
     

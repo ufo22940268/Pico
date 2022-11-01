@@ -57,20 +57,6 @@ class SeperatorSlider: UIView, Slider {
         return ["top", "middle"].contains(direction)
     }
     
-    var frameDelegate: ((CGRect) -> Void)?
-    
-    override var frame: CGRect {
-        didSet {
-            frameDelegate?(frame)
-        }
-    }
-    
-    override var bounds: CGRect {
-        didSet {
-            frameDelegate?(frame)
-        }
-    }
-    
     var directionEnum: SliderDirection!
     var arrowGapConstraints = [NSLayoutConstraint: ScalableConstant]()
     

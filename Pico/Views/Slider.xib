@@ -65,13 +65,13 @@
                 <outlet property="button" destination="8ER-9v-Fki" id="LEn-aM-nRg"/>
                 <outlet property="middleTopConstraint" destination="tmO-2T-M7f" id="AzO-zm-par"/>
             </connections>
-            <point key="canvasLocation" x="210.5" y="-103.5"/>
+            <point key="canvasLocation" x="214" y="-104"/>
         </view>
         <view autoresizesSubviews="NO" contentMode="scaleToFill" restorationIdentifier="top" id="rHX-Ga-oeX" userLabel="Top seperator slider" customClass="SeperatorSlider" customModule="Pico" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="376" height="30"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
-                <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="rA9-BK-yhQ">
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="rA9-BK-yhQ">
                     <rect key="frame" x="0.0" y="0.0" width="376" height="76"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m8q-Jn-26T" userLabel="line">
@@ -81,11 +81,11 @@
                                 <constraint firstAttribute="height" constant="2" id="BBm-94-d8e"/>
                             </constraints>
                         </view>
-                        <view opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jzx-gj-LrB">
+                        <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jzx-gj-LrB">
                             <rect key="frame" x="0.0" y="2" width="376" height="74"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0M1-nQ-DQC" customClass="SliderButton" customModule="Pico" customModuleProvider="target">
-                                    <rect key="frame" x="20" y="0.0" width="30" height="34"/>
+                                    <rect key="frame" x="20" y="0.0" width="30" height="74"/>
                                     <color key="backgroundColor" name="Slider"/>
                                     <state key="normal">
                                         <color key="titleColor" red="1" green="0.21595210109999999" blue="0.14619663590000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -99,6 +99,7 @@
                                 </button>
                             </subviews>
                             <constraints>
+                                <constraint firstItem="0M1-nQ-DQC" firstAttribute="height" secondItem="jzx-gj-LrB" secondAttribute="height" id="5PG-Uk-69z"/>
                                 <constraint firstItem="0M1-nQ-DQC" firstAttribute="top" secondItem="jzx-gj-LrB" secondAttribute="top" id="c2q-hJ-F6k"/>
                             </constraints>
                         </view>
@@ -125,24 +126,17 @@
             <connections>
                 <outlet property="button" destination="0M1-nQ-DQC" id="d4e-P9-mAT"/>
             </connections>
-            <point key="canvasLocation" x="225" y="-232"/>
+            <point key="canvasLocation" x="240" y="-233"/>
         </view>
         <view autoresizesSubviews="NO" contentMode="scaleToFill" restorationIdentifier="bottom" id="VBg-zA-fFX" userLabel="Bottom seperator slider" customClass="SeperatorSlider" customModule="Pico" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="376" height="30"/>
+            <rect key="frame" x="0.0" y="0.0" width="366" height="33"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B4X-9M-Fgr" customClass="UIStackView">
-                    <rect key="frame" x="0.0" y="-4" width="376" height="34"/>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="kZW-dd-2P0">
+                    <rect key="frame" x="0.0" y="-3" width="376" height="36"/>
                     <subviews>
-                        <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wZH-WN-ppM" userLabel="line">
-                            <rect key="frame" x="0.0" y="32" width="376" height="2"/>
-                            <color key="backgroundColor" name="Slider"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="2" id="N3g-wa-M5l"/>
-                            </constraints>
-                        </view>
-                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OxF-rH-3u9" customClass="SliderButton" customModule="Pico" customModuleProvider="target">
-                            <rect key="frame" x="163" y="0.0" width="50" height="34"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OxF-rH-3u9" customClass="SliderButton" customModule="Pico" customModuleProvider="target">
+                            <rect key="frame" x="173" y="0.0" width="30" height="34"/>
                             <color key="backgroundColor" name="Slider"/>
                             <state key="normal">
                                 <color key="titleColor" red="1" green="0.21595210109999999" blue="0.14619663590000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -154,22 +148,25 @@
                                 <action selector="onToggle:" destination="VBg-zA-fFX" eventType="touchUpInside" id="eh9-c7-OnX"/>
                             </connections>
                         </button>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wZH-WN-ppM" userLabel="line">
+                            <rect key="frame" x="0.0" y="34" width="376" height="2"/>
+                            <color key="backgroundColor" name="Slider"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="2" id="N3g-wa-M5l"/>
+                            </constraints>
+                        </view>
                     </subviews>
                     <constraints>
-                        <constraint firstItem="wZH-WN-ppM" firstAttribute="leading" secondItem="B4X-9M-Fgr" secondAttribute="leading" id="9gr-xG-JZz"/>
-                        <constraint firstAttribute="bottom" secondItem="wZH-WN-ppM" secondAttribute="bottom" id="Eil-GV-xd0"/>
-                        <constraint firstAttribute="trailing" secondItem="wZH-WN-ppM" secondAttribute="trailing" id="LJw-6J-b2A"/>
-                        <constraint firstItem="OxF-rH-3u9" firstAttribute="bottom" secondItem="wZH-WN-ppM" secondAttribute="top" id="T1p-TO-c6V"/>
+                        <constraint firstItem="wZH-WN-ppM" firstAttribute="width" secondItem="kZW-dd-2P0" secondAttribute="width" id="ftj-d4-IRc"/>
                     </constraints>
-                </view>
+                </stackView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
             <gestureRecognizers/>
             <constraints>
-                <constraint firstItem="B4X-9M-Fgr" firstAttribute="leading" secondItem="VBg-zA-fFX" secondAttribute="leading" id="DKj-v8-7Ou"/>
-                <constraint firstItem="wZH-WN-ppM" firstAttribute="width" secondItem="2z1-RW-7aG" secondAttribute="width" id="J5L-6F-iUZ"/>
-                <constraint firstItem="2z1-RW-7aG" firstAttribute="bottom" secondItem="B4X-9M-Fgr" secondAttribute="bottom" id="vL7-PO-x3h"/>
-                <constraint firstAttribute="trailing" secondItem="B4X-9M-Fgr" secondAttribute="trailing" id="xue-cN-sTE"/>
+                <constraint firstItem="kZW-dd-2P0" firstAttribute="leading" secondItem="2z1-RW-7aG" secondAttribute="leading" id="TYW-94-zfe"/>
+                <constraint firstItem="kZW-dd-2P0" firstAttribute="trailing" secondItem="2z1-RW-7aG" secondAttribute="trailing" constant="10" id="ThY-mO-MFF"/>
+                <constraint firstItem="2z1-RW-7aG" firstAttribute="bottom" secondItem="kZW-dd-2P0" secondAttribute="bottom" id="rpu-2m-N6y"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="2z1-RW-7aG"/>
@@ -179,7 +176,7 @@
             <connections>
                 <outlet property="button" destination="OxF-rH-3u9" id="lH0-vY-nwF"/>
             </connections>
-            <point key="canvasLocation" x="225" y="62"/>
+            <point key="canvasLocation" x="232" y="59"/>
         </view>
         <view autoresizesSubviews="NO" contentMode="scaleToFill" restorationIdentifier="left" id="SbF-3v-z2y" userLabel="Left Slider" customClass="SideSlider" customModule="Pico" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="40" height="473"/>
