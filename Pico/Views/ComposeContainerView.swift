@@ -175,9 +175,9 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         if let wrapper = superview {
             wrapper.addSubview(placeholder)
             placeholder.leadingAnchor.constraint(equalTo: wrapper.leadingAnchor).isActive = true
-            placeholder.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 1.0).isActive = true
             placeholder.widthAnchor.constraint(equalToConstant: 0).isActive = true
             placeholder.topAnchor.constraint(equalTo: wrapper.topAnchor).isActive = true
+            placeholder.bottomAnchor.constraint(equalTo: wrapper.bottomAnchor).isActive = true
         }
         
 
@@ -196,9 +196,9 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         if let wrapper = superview {
             wrapper.addSubview(placeholder)
             placeholder.trailingAnchor.constraint(equalTo: wrapper.trailingAnchor).isActive = true
-            placeholder.heightAnchor.constraint(equalTo: wrapper.heightAnchor, multiplier: 1.0).isActive = true
             placeholder.widthAnchor.constraint(equalToConstant: 0).isActive = true
             placeholder.topAnchor.constraint(equalTo: wrapper.topAnchor).isActive = true
+            placeholder.bottomAnchor.constraint(equalTo: wrapper.bottomAnchor).isActive = true
         }
 
         view.addSubview(seperator)

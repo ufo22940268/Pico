@@ -105,18 +105,18 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         }
         
         self.loadedImages = images
-        self.container.addTopSeperator(toView: self.view)
+        self.container.addTopSeperator(toView: self.scroll)
         self.container.addImage(imageEntity: images.first!)
-//
+
         for image in images[1..<images.count] {
-            self.container.addMiddleSeperator(toView: self.view)
+            self.container.addMiddleSeperator(toView: self.scroll)
             self.container.addImage(imageEntity: image)
         }
         
-        self.container.addBottomSeperator(toView: self.view)
+        self.container.addBottomSeperator(toView: self.scroll)
         
-        self.container.addLeftSeperator(toView: self.view)
-        self.container.addRightSeperator(toView: self.view)
+        self.container.addLeftSeperator(toView: self.scroll)
+        self.container.addRightSeperator(toView: self.scroll)
         
         self.container.subviews.filter{$0.isKind(of: SeperatorSlider.self)}.forEach {self.container.bringSubviewToFront($0)}
         self.container.subviews.filter{$0.isKind(of: SideSlider.self)}.forEach {
@@ -167,7 +167,8 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
 //                }
 
                 //Mocker
-                let images = [ImageMocker(image: #imageLiteral(resourceName: "IMG_3975.jpg")), ImageMocker(image: #imageLiteral(resourceName: "IMG_3976.jpg"))]
+//                let images = [ImageMocker(image: #imageLiteral(resourceName: "IMG_3975.jpg")), ImageMocker(image: #imageLiteral(resourceName: "IMG_3976.jpg"))]
+                let images = [ImageMocker(image: #imageLiteral(resourceName: "IMG_3978.jpg")), ImageMocker(image: #imageLiteral(resourceName: "IMG_3978.jpg")), ImageMocker(image: #imageLiteral(resourceName: "IMG_3978.jpg"))]
                 self.configureImages(images)
             }
         }
@@ -576,6 +577,7 @@ extension ComposeController: UIScrollViewDelegate {
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+        print(containerWrapper.frame, containerWrapper.transform)
         updateSliders()
     }
     
