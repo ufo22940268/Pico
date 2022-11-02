@@ -60,6 +60,8 @@ class SeperatorSlider: UIView, Slider {
     var directionEnum: SliderDirection!
     var arrowGapConstraints = [NSLayoutConstraint: ScalableConstant]()
     
+    var buttonLeadingConstraint: NSLayoutConstraint!
+    
     override func awakeFromNib() {
         
         directionEnum = SliderDirection.parse(direction: direction)
@@ -93,6 +95,9 @@ class SeperatorSlider: UIView, Slider {
         }
         
         backgroundColor = UIColor.yellow
+        
+        buttonLeadingConstraint = button.leadingAnchor.constraint(equalTo: leadingAnchor)
+        buttonLeadingConstraint.isActive = true
         
         button.setup(direction: SliderDirection.parse(direction: direction))
     }
@@ -160,7 +165,7 @@ class SeperatorSlider: UIView, Slider {
     }
     
     func updateButtonPosition(midPoint: CGPoint) {
-//        buttonLeadingConstraint.constant = midPoint.x - SliderConstants.buttonWidth/2
+        buttonLeadingConstraint.constant = midPoint.x - SliderConstants.buttonWidth/2
     }
         
     fileprivate func setupAnimations() {

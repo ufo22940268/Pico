@@ -192,50 +192,10 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         container.scrollDelegator = self
     }
     
-    var lg: UILayoutGuide!
-    func buildVisibleAreaLayoutGuide() -> UILayoutGuide {
-        let visibleAreaLayoutGuide = UILayoutGuide()
-        lg = visibleAreaLayoutGuide
-        self.view.addLayoutGuide(visibleAreaLayoutGuide)
-        
-        //Vertical axis
-        visibleAreaLayoutGuide.topAnchor.constraint(greaterThanOrEqualTo: scroll.topAnchor).isActive = true
-        let topToWrapper = visibleAreaLayoutGuide.topAnchor.constraint(lessThanOrEqualTo: containerWrapper.topAnchor)
-        topToWrapper.priority = .defaultLow
-        topToWrapper.isActive = true
-        visibleAreaLayoutGuide.bottomAnchor.constraint(lessThanOrEqualTo: scroll.bottomAnchor).isActive = true
-        let bottomToWrapper = visibleAreaLayoutGuide.bottomAnchor.constraint(greaterThanOrEqualTo: containerWrapper.bottomAnchor)
-        bottomToWrapper.priority = .defaultLow
-        bottomToWrapper.isActive = true
-        
-        //Horizontal axis
-        visibleAreaLayoutGuide.leadingAnchor.constraint(greaterThanOrEqualTo: scroll.leadingAnchor).isActive = true
-        let leadingToWrapper = visibleAreaLayoutGuide.leadingAnchor.constraint(lessThanOrEqualTo: containerWrapper.leadingAnchor)
-        leadingToWrapper.priority = .defaultLow
-        leadingToWrapper.isActive = true
-        visibleAreaLayoutGuide.trailingAnchor.constraint(lessThanOrEqualTo: scroll.trailingAnchor).isActive = true
-        let trailingToWrapper = visibleAreaLayoutGuide.trailingAnchor.constraint(greaterThanOrEqualTo: containerWrapper.trailingAnchor)
-        trailingToWrapper.priority = .defaultLow
-        trailingToWrapper.isActive = true
-
-        return visibleAreaLayoutGuide
-    }
-    
     func setupScrollView() {
         scroll.delegate = self
         scroll.zoomDelegate = self
         syncSeperatorFrames()
-        
-        let rightButton = container.rightSlider.button!
-        let leftButton = container.leftSlider.button!
-
-        let visibleAreaLayoutGuide = buildVisibleAreaLayoutGuide()
-        visibleAreaLayoutGuide.identifier = "guidedddddddds"
-        
-        rightButton.centerYAnchor.constraint(equalTo: visibleAreaLayoutGuide.centerYAnchor).isActive = true
-        leftButton.centerYAnchor.constraint(equalTo: visibleAreaLayoutGuide.centerYAnchor).isActive = true
-        
-        container.seperators.forEach {$0.button.centerXAnchor.constraint(equalTo: visibleAreaLayoutGuide.centerXAnchor).isActive = true}
     }
     
     func syncSeperatorFrames() {
@@ -561,14 +521,20 @@ extension ComposeController: UIScrollViewDelegate {
     fileprivate func updateSeperatorSliderButtons(toMidPoint midPoint: CGPoint) {
         container.updateSeperatorSliders(midPoint: midPoint)
     }
+    
+    fileprivate func updateSideSliderButtons() {
+        let midPoint = CGPoint(x: 0, y: container.leftSlider.convert(visibleContainerRect, from: container).midY)
+        container.updateSideSliders(midPoint: midPoint)
+    }
 
     fileprivate func updateSliders() {
         updateSeperatorSliderButtons()
         syncSeperatorFrames()
+        updateSeperatorSliderButtons()
+        updateSideSliderButtons()
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print(containerWrapper.transform, lg)
         updateSliders()
     }
     
@@ -577,12 +543,10 @@ extension ComposeController: UIScrollViewDelegate {
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        print(containerWrapper.transform, lg)
         updateSliders()
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        print(containerWrapper.frame, containerWrapper.transform)
         updateSliders()
     }
     
@@ -605,15 +569,15 @@ extension ComposeController: UIScrollViewDelegate {
 }
 
 extension ComposeController: ZoomScrollViewDelegate {
+    func onResetZoomScale() {
+        
+    }
+    
     func onZoomTo(destinationRect: CGRect?) {
         if let destinationRect = destinationRect {
             updateSeperatorSliderButtons(toDestinationRect: destinationRect)
 //            updateSideSliderButtons(toDestinationRect: destinationRect)
         }
-    }
-    
-    func onResetZoomScale() {
-        updateSeperatorSliderButtons(toMidPoint: CGPoint(x: scroll.bounds.width/2, y: 0))
     }
 }
 

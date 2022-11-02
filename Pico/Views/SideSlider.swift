@@ -19,6 +19,7 @@ class SideSlider: UIView, Slider {
     weak var delegate: EditDelegator?
     var arrow: ArrowImage!
     var arrowAnimator: UIViewPropertyAnimator!
+    var buttonTopConstraint: NSLayoutConstraint!
     
     override func awakeFromNib() {
         let uiImage: UIImage? = direction == "left" ? UIImage(named: "angle-double-left-solid") : UIImage(named: "angle-double-right-solid")
@@ -36,12 +37,18 @@ class SideSlider: UIView, Slider {
             arrow.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
         }
         
+        buttonTopConstraint = button.topAnchor.constraint(equalTo: topAnchor)
+        buttonTopConstraint.isActive = true
         button.setup(direction: SliderDirection.parse(direction: direction))
     }
     
     func updateScale(_ scale: CGFloat) {
         button.scale = scale
         arrow.scale = scale
+    }
+    
+    func updateButtonPosition(midPoint point: CGPoint) {
+        buttonTopConstraint.constant = point.y - SliderConstants.buttonWidth/2
     }
     
     func setupAnimation() {
