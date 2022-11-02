@@ -315,6 +315,12 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
         }
     }
     
+    func updateSideSliders(midPoint: CGPoint) {
+        print("midPoint: \(midPoint)")
+        leftSlider.updateButtonPosition(midPoint: midPoint)
+        rightSlider.updateButtonPosition(midPoint: midPoint)
+    }
+    
     func resetEditState() {
         for slider in allSlider {
             slider.updateSelectState(false)

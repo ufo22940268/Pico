@@ -71,6 +71,17 @@ class ZoomScrollView: UIScrollView {
         addGestureRecognizer(tapGestureRecognizer)
     }
     
+    func getDestinationRect(onPoint touchPoint: CGPoint, scale: CGFloat) -> CGRect {
+        let contentRect = CGRect(origin: contentOffset, size: contentSize)
+        
+        var displaySize = frame.size.applying(CGAffineTransform(scaleX: 1/scale, y: 1/scale))
+        var displayRect = CGRect(origin: CGPoint.zero, size: displaySize)
+        var displayOriginPoint = touchPoint.applying(CGAffineTransform(translationX: displaySize.width/2, y: displaySize.height/2))
+        displayRect.origin = displayOriginPoint
+        
+        return displayRect
+    }
+    
     @objc func onDoubleTap(_ gesture: UITapGestureRecognizer) {
         
         if locationInSeperator(gesture: gesture) {
@@ -84,7 +95,10 @@ class ZoomScrollView: UIScrollView {
             newScale = self.maxZoomScale
             
             UIView.animate(withDuration: 0.3) {
+//                let destinationRect = self.getDestinationRect(onPoint: touchPoint, scale: newScale)
+//                print("destinationRect", destinationRect)
                 let destinationRect = self.zoom(toPoint: touchPoint, scale: self.maxZoomScale, animated: false)
+                self.zoom(to: destinationRect, animated: false)
                 self.zoomDelegate?.onZoomTo(destinationRect: destinationRect)
                 self.superview!.layoutIfNeeded()
             }
