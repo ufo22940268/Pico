@@ -528,7 +528,6 @@ extension ComposeController: UIScrollViewDelegate {
     }
 
     fileprivate func updateSliders() {
-        updateSeperatorSliderButtons()
         syncSeperatorFrames()
         updateSeperatorSliderButtons()
         updateSideSliderButtons()
@@ -559,12 +558,7 @@ extension ComposeController: UIScrollViewDelegate {
     }
     
     override func viewDidLayoutSubviews() {
-        switch editState {
-        case .inactive:
-            centerContainerWrapper()
-        default:
-            break
-        }
+        updateSliders()
     }
 }
 
@@ -574,10 +568,6 @@ extension ComposeController: ZoomScrollViewDelegate {
     }
     
     func onZoomTo(destinationRect: CGRect?) {
-        if let destinationRect = destinationRect {
-            updateSeperatorSliderButtons(toDestinationRect: destinationRect)
-//            updateSideSliderButtons(toDestinationRect: destinationRect)
-        }
     }
 }
 
