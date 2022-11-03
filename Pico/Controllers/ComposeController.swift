@@ -288,7 +288,9 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
     
     var visibleContainerRect: CGRect {
         let window = UIApplication.shared.windows.first!
-        let scrollRectInWindow = scroll.convert(window.bounds, from: window).intersection(scroll.bounds)
+        let scrollRectInWindow = scroll.convert(window.bounds, from: window)
+            .intersection(scroll.bounds)
+            .intersection(containerWrapper.frame)
         let scrollRect = container.convert(scrollRectInWindow, from: scroll)
         return scrollRect.intersection(container.bounds)
     }
