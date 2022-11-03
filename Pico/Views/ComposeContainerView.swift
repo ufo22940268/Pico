@@ -300,6 +300,16 @@ class ComposeContainerView: UIStackView, EditDelegator, OnCellScroll {
  
     func editStateChanged(state: EditState) {
         self.editState = state
+        if case let .editing(direction, seperatorIndex) = state {
+            if state.maybeVertical() {                
+                for (index, seperator) in seperators.enumerated() {
+                    if index != seperatorIndex! {
+                        seperator.updateSelectState(false)
+                    }
+                }
+            }
+        }
+        
         updateSlidersWhenEditChanged()
         updateComposeCells(state: state)
         editDelegator?.editStateChanged(state: editState)
