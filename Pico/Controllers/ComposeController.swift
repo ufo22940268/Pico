@@ -132,8 +132,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         default:
             self.navigationItem.title = "竖向拼接"
             hideLoading()
-//            activeSlideMode()
-            activeCropMode()
+            activeSlideMode()
         }
         
         scroll.layoutIfNeeded()
@@ -192,6 +191,10 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         container.scrollDelegator = self
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        updateSliders()
+    }
+    
     func setupScrollView() {
         scroll.delegate = self
         scroll.zoomDelegate = self
@@ -246,7 +249,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
         }
         
         scroll.layoutIfNeeded()
-        updateSliders()
+        updateSliders(center: false)
     }
     
     fileprivate func onScrollHorizontal(_ sender: UIPanGestureRecognizer, _ direction: String) {
@@ -279,7 +282,7 @@ class ComposeController: UIViewController, EditDelegator, OnCellScroll {
             sender.setTranslation(CGPoint.zero, in: container)
         }
         scroll.layoutIfNeeded()
-        updateSliders()
+        updateSliders(center: false)
     }
     
     var containerRectAfterCroppedByWrapper: CGRect {
@@ -529,14 +532,19 @@ extension ComposeController: UIScrollViewDelegate {
         container.updateSideSliders(midPoint: midPoint)
     }
 
-    fileprivate func updateSliders() {
+    fileprivate func updateSliders(center: Bool = true) {
         syncSeperatorFrames()
+
+        if center {
+            centerContainerWrapper()
+        }
+
         updateSeperatorSliderButtons()
         updateSideSliderButtons()
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        updateSliders()
+        updateSliders(center: false)
     }
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
@@ -551,7 +559,6 @@ extension ComposeController: UIScrollViewDelegate {
         updateSliders()
     }
     
-    
     fileprivate func centerContainerWrapper() {
         let scrollBounds = scroll.bounds
         let offsetX = max((scrollBounds.width - scroll.contentSize.width) * 0.5, 0)
@@ -560,7 +567,7 @@ extension ComposeController: UIScrollViewDelegate {
     }
     
     override func viewDidLayoutSubviews() {
-        updateSliders()
+        updateSliders(center: false)
     }
 }
 
