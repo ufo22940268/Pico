@@ -133,10 +133,10 @@
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="kZW-dd-2P0">
-                    <rect key="frame" x="0.0" y="-43" width="376" height="76"/>
+                    <rect key="frame" x="0.0" y="-43" width="366" height="76"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H4k-aD-cVH">
-                            <rect key="frame" x="0.0" y="0.0" width="376" height="74"/>
+                            <rect key="frame" x="0.0" y="0.0" width="366" height="74"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OxF-rH-3u9" customClass="SliderButton" customModule="Pico" customModuleProvider="target">
                                     <rect key="frame" x="20" y="0.0" width="30" height="74"/>
@@ -158,7 +158,7 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wZH-WN-ppM" userLabel="line">
-                            <rect key="frame" x="0.0" y="74" width="376" height="2"/>
+                            <rect key="frame" x="0.0" y="74" width="366" height="2"/>
                             <color key="backgroundColor" name="Slider"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="2" id="N3g-wa-M5l"/>
@@ -175,7 +175,7 @@
             <gestureRecognizers/>
             <constraints>
                 <constraint firstItem="kZW-dd-2P0" firstAttribute="leading" secondItem="2z1-RW-7aG" secondAttribute="leading" id="TYW-94-zfe"/>
-                <constraint firstItem="kZW-dd-2P0" firstAttribute="trailing" secondItem="2z1-RW-7aG" secondAttribute="trailing" constant="10" id="ThY-mO-MFF"/>
+                <constraint firstItem="kZW-dd-2P0" firstAttribute="trailing" secondItem="2z1-RW-7aG" secondAttribute="trailing" id="ThY-mO-MFF"/>
                 <constraint firstItem="2z1-RW-7aG" firstAttribute="bottom" secondItem="kZW-dd-2P0" secondAttribute="bottom" id="rpu-2m-N6y"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
